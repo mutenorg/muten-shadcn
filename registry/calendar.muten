@@ -1,0 +1,9 @@
+# Calendar - a month grid with variants. The PAGE owns the selected value (text) per mode:
+#   mode: "single" | "range" | "multiple"   months: 1 | 2   caption: "label" | "dropdown"
+#   selected encodes the value: single -> "yyyy-mm-dd"; range -> "from/to"; multiple -> "d1,d2,...".
+#   state { date = "" : text }   action pick(d: text) mutates date { date.set(d) }
+#   Calendar(selected: date, mode: "single", months: 1, caption: "label", onSelect: pick)
+# shadcn-for-muten · Custom · host JS is src/components/Calendar.js (copied by `muten add calendar`).
+part Calendar(selected: text, mode: text, months: number, caption: text, onSelect: action) {
+  Custom Calendar inputs(selected: $selected, mode: $mode, months: $months, caption: $caption) on(select: $onSelect) class("calendar")
+}

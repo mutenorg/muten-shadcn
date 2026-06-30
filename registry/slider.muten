@@ -1,0 +1,7 @@
+# Slider - a draggable range control. The PAGE owns the value (number) + the action that sets it:
+#   state { vol = 50 : number }   action setVol(v: number) mutates vol { vol.set(v) }
+#   Slider(value: vol, min: 0, max: 100, onInput: setVol)
+# shadcn-for-muten · Custom · the host JS is src/components/Slider.js (copied by `muten add slider`).
+part Slider(value: number, min: number, max: number, onInput: action) {
+  Custom Slider inputs(value: $value, min: $min, max: $max) on(input: $onInput) class("slider")
+}

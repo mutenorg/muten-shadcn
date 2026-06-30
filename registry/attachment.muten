@@ -1,0 +1,12 @@
+# Attachment - a file attachment chip (icon + name + size).
+#   Attachment(name: "report.pdf", size: "2.4 MB")
+# shadcn-for-muten · part · no deps · styles via the semantic .attachment* classes in globals.css.
+part Attachment(name: text, size: text) {
+  Stack class("attachment") {
+    Icon "lucide:paperclip" class("size-4 text-muted-foreground shrink-0")
+    Stack class("flex flex-col") {
+      Span "{$name}" class("attachment-name")
+      Span "{$size}" class("attachment-size")
+    }
+  }
+}

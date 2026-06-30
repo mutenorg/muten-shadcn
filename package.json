@@ -1,0 +1,14 @@
+{
+  "name": "@muten/shadcn",
+  "version": "0.0.1",
+  "description": "shadcn-style component registry for muten - own-the-source parts you add with `muten add`.",
+  "type": "module",
+  "files": ["registry", "registry.json", "globals.css", "muten.plugin.js", "README.md"],
+  "exports": {
+    "./globals.css": "./globals.css",
+    "./registry.json": "./registry.json",
+    "./registry/*": "./registry/*"
+  },
+  "keywords": ["muten", "muten-plugin", "muten-registry", "components", "ui", "shadcn"],
+  "license": "MIT"
+}

@@ -1,0 +1,16 @@
+# Command - a command palette (search + grouped item list). The PAGE provides the search input + the items:
+#   Command {
+#     SearchField bind(q) "Type a command…" class("command-input")
+#     CommandList { CommandGroup(label: "Suggestions") { CommandItem(onSelect: run) { Icon … Span "Calendar" } … } }
+#   }
+# Put inside a Dialog for the modal palette. shadcn-for-muten · part · no deps · styles via the .command* classes.
+part Command() { Stack class("command") { slot } }
+part CommandList() { Stack class("command-list") { slot } }
+part CommandGroup(label: text) {
+  Stack class("flex flex-col") {
+    Span "{$label}" class("command-group-label")
+    slot
+  }
+}
+part CommandItem(onSelect: action) { Button -> $onSelect class("command-item") { slot } }
+part CommandShortcut(keys: text) { Span "{$keys}" class("command-shortcut") }

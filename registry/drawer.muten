@@ -1,0 +1,12 @@
+# Drawer - a panel that slides up from the bottom edge. The PAGE owns the bool + open/close actions:
+#   state { open = false : bool }   action close mutates open { open.set(false) }   Drawer(open: open, onClose: close) { … }
+# shadcn-for-muten · part · no deps · backdrop click closes; styles via the semantic .drawer* classes.
+part Drawer(open: bool, onClose: action) {
+  Stack class("drawer-overlay", "drawer-overlay-open" when $open) {
+    Button -> $onClose class("drawer-backdrop")
+    Stack class("drawer-content") {
+      Stack class("drawer-handle")
+      slot
+    }
+  }
+}

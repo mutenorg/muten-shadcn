@@ -1,0 +1,8 @@
+# Switch - a toggle. The PAGE owns the bool + the action that flips it (container/presentational):
+#   state { on = false : bool }   action toggle mutates on { on.toggle() }   Switch(on: on, onToggle: toggle)
+# shadcn-for-muten · part · no deps · styles via the semantic .switch* classes in globals.css.
+part Switch(on: bool, onToggle: action) {
+  Button -> $onToggle aria(pressed: $on) class("switch", "switch-on" when $on, "switch-off" when not $on) {
+    Stack class("switch-thumb", "switch-thumb-on" when $on, "switch-thumb-off" when not $on)
+  }
+}

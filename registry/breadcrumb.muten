@@ -1,0 +1,7 @@
+# Breadcrumb + sub-components.
+# Compose: Breadcrumb { BreadcrumbLink(label,href) BreadcrumbSeparator BreadcrumbLink(...) BreadcrumbSeparator BreadcrumbPage(label) }
+# shadcn-for-muten · part · no deps · styles via the semantic .breadcrumb* classes in globals.css.
+part Breadcrumb() { Nav class("breadcrumb") aria(label: "breadcrumb") { slot } }
+part BreadcrumbLink(label: text, href: text) { Link "{$label}" -> "{$href}" class("breadcrumb-link") }
+part BreadcrumbPage(label: text) { Span "{$label}" class("breadcrumb-page") }
+part BreadcrumbSeparator() { Icon "lucide:chevron-right" class("breadcrumb-separator") }

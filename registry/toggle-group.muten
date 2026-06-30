@@ -1,0 +1,8 @@
+# Toggle Group - single-select toolbar. The PAGE owns a `text` state + an action that sets it:
+#   state { align = "left" : text }   action setAlign(v: text) mutates align { align.set(v) }
+#   ToggleGroup { ToggleGroupItem(value: "left", current: align, onSelect: setAlign) { Icon "lucide:align-left" } … }
+# shadcn-for-muten · part · no deps · styles via the semantic .toggle-group + .toggle* classes in globals.css.
+part ToggleGroup() { Stack class("toggle-group") { slot } }
+part ToggleGroupItem(value: text, current: text, onSelect: action) {
+  Button -> $onSelect($value) aria(pressed: $value == $current) class("toggle", "toggle-on" when $value == $current) { slot }
+}

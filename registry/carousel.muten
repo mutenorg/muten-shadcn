@@ -1,0 +1,6 @@
+# Carousel - a slide carousel over a list. The PAGE owns the slides (list<text>):
+#   state { slides = ["1", "2", "3", "4", "5"] : list<text> }   Carousel(items: slides)
+# shadcn-for-muten · Custom · host JS is src/components/Carousel.js. Slides render as text; edit the .js for images/rich slides.
+part Carousel(items: list) {
+  Custom Carousel inputs(items: $items) class("carousel")
+}

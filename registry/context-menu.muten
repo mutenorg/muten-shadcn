@@ -1,0 +1,8 @@
+# Context Menu - right-click an area to open a menu of items. The PAGE owns the items + the action:
+#   state { items = ["Back", "Forward", "Reload"] : list<text>  picked = "" : text }
+#   action onPick(v: text) mutates picked { picked.set(v) }
+#   ContextMenu(label: "Right-click here", items: items, onSelect: onPick)
+# shadcn-for-muten · Custom · host JS is src/components/ContextMenu.js (copied by `muten add context-menu`).
+part ContextMenu(label: text, items: list, onSelect: action) {
+  Custom ContextMenu inputs(label: $label, items: $items) on(select: $onSelect) class("context-menu-wrap")
+}

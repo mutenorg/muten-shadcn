@@ -1,0 +1,4 @@
+# Message Scroller - a scrollable column of chat messages (max-h-96 by default; eject to change).
+#   MessageScroller { Marker(label: "Today") Message(variant: "received") { … } Message(variant: "sent") { … } }
+# shadcn-for-muten · part · no deps · styles via the semantic .message-scroller class in globals.css.
+part MessageScroller() { Stack class("message-scroller") { slot } }

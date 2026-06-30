@@ -1,0 +1,7 @@
+# Field + sub-components: a labelled form control with description / error.
+# Compose: Field { FieldLabel(label) <a control, e.g. SearchField class("input")> FieldDescription(label) }
+# shadcn-for-muten · part · no deps · styles via the semantic .field* + .label classes in globals.css.
+part Field() { Stack class("field") { slot } }
+part FieldLabel(label: text) { Span "{$label}" class("label") }
+part FieldDescription(label: text) { Span "{$label}" class("field-description") }
+part FieldError(label: text) { Span "{$label}" class("field-error") }

@@ -1,0 +1,9 @@
+# Tooltip - shows on hover (pure CSS, no state needed). The slot is the trigger.
+#   Tooltip(label: "Add to library") { Button "Hover me" class("btn btn-outline") }
+# shadcn-for-muten · part · no deps · styles via the semantic .tooltip* classes in globals.css.
+part Tooltip(label: text) {
+  Stack class("tooltip-wrap") {
+    slot
+    Span "{$label}" class("tooltip-content")
+  }
+}

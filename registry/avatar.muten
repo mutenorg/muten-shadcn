@@ -1,0 +1,7 @@
+# Avatar - a user's initials in a circle (AvatarFallback). Pass a name; built-in initial() takes the first letter.
+# shadcn-for-muten · part · no deps · styles via the semantic .avatar* classes. For a photo, swap the inner Span for `Image "{$src}" alt("{$name}")`.
+part Avatar(name: text) {
+  Stack class("avatar") {
+    Stack class("avatar-fallback") { Span "{initial($name)}" }
+  }
+}

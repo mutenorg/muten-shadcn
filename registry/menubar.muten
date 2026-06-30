@@ -1,0 +1,14 @@
+# Menubar - a bar of menus (File / Edit / View). The PAGE owns which is open via a text state:
+#   state { bar = "" : text }   action open(v: text) mutates bar { if bar == v { bar.set("") } else { bar.set(v) } }
+#   action close mutates bar { bar.set("") }
+#   Menubar { MenubarMenu(label: "File", name: "file", current: bar, onOpen: open) { MenubarItem(label: "New", onSelect: close) … } }
+# shadcn-for-muten · part · no deps · styles via the semantic .menubar* classes (items reuse .dropdown-item).
+part Menubar() { Stack class("menubar") { slot } }
+part MenubarMenu(label: text, name: text, current: text, onOpen: action) {
+  Stack class("menubar-item") {
+    Button "{$label}" -> $onOpen($name) aria(expanded: $name == $current) class("menubar-trigger", "menubar-trigger-active" when $name == $current)
+    Stack class("menubar-content", "menubar-content-open" when $name == $current) { slot }
+  }
+}
+part MenubarItem(label: text, onSelect: action) { Button "{$label}" -> $onSelect class("dropdown-item") }
+part MenubarSeparator() { Stack class("dropdown-separator") }

@@ -1,0 +1,11 @@
+# Popover - a button that opens a floating panel below it. The PAGE owns the bool + the toggle action:
+#   state { open = false : bool }   action t mutates open { open.toggle() }
+#   Popover(label: "Open", open: open, onToggle: t) { … any content … }
+# shadcn-for-muten · part · no deps · the backdrop catches outside clicks; styles via the semantic .popover* classes.
+part Popover(label: text, open: bool, onToggle: action) {
+  Stack class("popover") {
+    Button "{$label}" -> $onToggle aria(expanded: $open) class("btn btn-outline")
+    when $open { Button -> $onToggle class("popover-backdrop") }
+    Stack class("popover-content", "popover-content-open" when $open) { slot }
+  }
+}

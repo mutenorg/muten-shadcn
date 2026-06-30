@@ -1,0 +1,9 @@
+# Empty - an empty-state placeholder. Centered title + description in a dashed border; drop an Icon/Button via the slot.
+# shadcn-for-muten · part · no deps · styles via the semantic .empty* classes in globals.css.
+part Empty(title: text, description: text) {
+  Stack class("empty") {
+    slot
+    Span "{$title}" class("empty-title")
+    Span "{$description}" class("empty-description")
+  }
+}

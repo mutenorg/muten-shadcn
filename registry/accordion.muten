@@ -1,0 +1,16 @@
+# Accordion - stacked expandable sections. The PAGE owns a bool per item + a toggle action per item:
+#   state { a1 = true : bool  a2 = false : bool }   action t1 mutates a1 { a1.toggle() }
+#   Accordion { AccordionItem(title: "…", open: a1, onToggle: t1) { … } AccordionItem(title: "…", open: a2, onToggle: t2) { … } }
+# shadcn-for-muten · part · no deps · the content always renders and animates open via the .accordion-panel grid trick.
+part Accordion() { Stack class("accordion") { slot } }
+part AccordionItem(title: text, open: bool, onToggle: action) {
+  Stack class("accordion-item") {
+    Button -> $onToggle aria(expanded: $open) class("accordion-trigger") {
+      Span "{$title}"
+      Icon "lucide:chevron-down" class("accordion-chevron", "accordion-chevron-open" when $open)
+    }
+    Stack class("accordion-panel", "accordion-panel-open" when $open) {
+      Stack class("accordion-content") { slot }
+    }
+  }
+}

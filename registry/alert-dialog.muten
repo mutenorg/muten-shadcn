@@ -1,0 +1,13 @@
+# Alert Dialog - a modal that REQUIRES an explicit choice (no backdrop dismiss). The PAGE owns the bool:
+#   state { open = false : bool }   action confirm mutates open { open.set(false) … }   action cancel mutates open { open.set(false) }
+#   AlertDialog(open: open) { AlertDialogTitle(label) AlertDialogDescription(label) AlertDialogFooter { Button "Cancel" -> cancel … } }
+# shadcn-for-muten · part · no deps · reuses the .dialog* classes; the backdrop is a plain Stack (not clickable).
+part AlertDialog(open: bool) {
+  Stack class("dialog-overlay", "dialog-overlay-open" when $open) {
+    Stack class("dialog-backdrop")
+    Stack class("dialog-content") { slot }
+  }
+}
+part AlertDialogTitle(label: text) { Title "{$label}" h2 class("dialog-title") }
+part AlertDialogDescription(label: text) { Span "{$label}" class("dialog-description") }
+part AlertDialogFooter() { Stack class("dialog-footer") { slot } }

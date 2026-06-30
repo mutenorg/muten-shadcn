@@ -1,0 +1,3 @@
+# Spinner - a loading indicator (shadcn uses the lucide loader, spun with animate-spin).
+# shadcn-for-muten · part · no deps · styles via the semantic .spinner class in globals.css.
+part Spinner() { Icon "lucide:loader-circle" class("spinner") }

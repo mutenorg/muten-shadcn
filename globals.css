@@ -1,0 +1,379 @@
+/* @muten/shadcn - the authentic shadcn "zinc" dark tokens (Tailwind v4 @theme) + every component as a
+   SEMANTIC class (shadcn-named: .card, .badge, .alert, .btn, ...), each @apply-ing the exact shadcn utility
+   string. The parts (Card, Badge, ...) and your .muten pages reference these semantic names - no utility soup
+   in the markup. In your app's stylesheet:  @import "tailwindcss";  @import "@muten/shadcn/globals.css"; */
+
+/* Scan THIS plugin's parts so any utility used inside them is generated, even though they're imported from
+   node_modules (which Tailwind's auto-scan skips). Relative to this file. */
+@source "./registry";
+@theme {
+  --color-background: hsl(0 0% 3.9%);
+  --color-foreground: hsl(0 0% 98%);
+  --color-card: hsl(0 0% 3.9%);
+  --color-card-foreground: hsl(0 0% 98%);
+  --color-popover: hsl(0 0% 3.9%);
+  --color-popover-foreground: hsl(0 0% 98%);
+  --color-primary: hsl(0 0% 98%);
+  --color-primary-foreground: hsl(0 0% 9%);
+  --color-secondary: hsl(0 0% 14.9%);
+  --color-secondary-foreground: hsl(0 0% 98%);
+  --color-muted: hsl(0 0% 14.9%);
+  --color-muted-foreground: hsl(0 0% 63.9%);
+  --color-accent: hsl(0 0% 14.9%);
+  --color-accent-foreground: hsl(0 0% 98%);
+  --color-destructive: hsl(0 62.8% 30.6%);
+  --color-destructive-foreground: hsl(0 0% 98%);
+  --color-border: hsl(0 0% 14.9%);
+  --color-input: hsl(0 0% 14.9%);
+  --color-ring: hsl(0 0% 83.1%);
+
+  /* shadcn radius scale: rounded-sm/md/lg derive from --radius, exactly like shadcn's tailwind config. */
+  --radius: 0.5rem;
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+}
+
+/* shadcn's base: every border/outline defaults to the token (so a bare `border` is subtle, not currentColor). */
+@layer base {
+  * { border-color: var(--color-border); outline-color: color-mix(in srgb, var(--color-ring) 50%, transparent); }
+}
+
+@layer components {
+  /* ---- Button (buttonVariants) - sizes default in .btn; .btn-sm/-lg/-icon override ---- */
+  .btn { @apply inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium outline-none transition-all duration-200 active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50 focus-visible:ring-[3px] focus-visible:ring-ring/50 h-9 px-4 py-2; }
+  .btn-default { @apply bg-primary text-primary-foreground shadow hover:bg-primary/90; }
+  .btn-destructive { @apply bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90; }
+  .btn-outline { @apply border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground; }
+  .btn-secondary { @apply bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80; }
+  .btn-ghost { @apply hover:bg-accent hover:text-accent-foreground; }
+  .btn-link { @apply text-primary underline-offset-4 hover:underline; }
+  .btn-sm { @apply h-8 rounded-md px-3 text-xs; }
+  .btn-lg { @apply h-10 rounded-md px-8; }
+  .btn-icon { @apply h-9 w-9 px-0; }
+
+  /* ---- Form controls ---- */
+  .input { @apply flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm outline-none transition-[color,box-shadow] duration-200 placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50; }
+  .textarea { @apply flex min-h-16 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm outline-none transition-[color,box-shadow] duration-200 placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50; }
+  .label { @apply text-sm font-medium leading-none; }
+  .native-select { @apply flex h-9 w-full items-center rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm outline-none transition-[color,box-shadow] duration-200 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50; }
+
+  /* ---- Card ---- */
+  .card { @apply rounded-xl border bg-card text-card-foreground shadow; }
+  .card-header { @apply flex flex-col space-y-1.5 p-6; }
+  .card-title { @apply font-semibold leading-none tracking-tight; }
+  .card-description { @apply text-sm text-muted-foreground; }
+  .card-content { @apply p-6 pt-0; }
+  .card-footer { @apply flex flex-row items-center p-6 pt-0; }
+
+  /* ---- Badge (badgeVariants) ---- */
+  .badge { @apply inline-flex items-center justify-center rounded-md border px-2 py-0.5 text-xs font-semibold w-fit whitespace-nowrap shrink-0 gap-1 transition-colors duration-200; }
+  .badge-default { @apply border-transparent bg-primary text-primary-foreground; }
+  .badge-secondary { @apply border-transparent bg-secondary text-secondary-foreground; }
+  .badge-destructive { @apply border-transparent bg-destructive text-destructive-foreground; }
+  .badge-outline { @apply text-foreground; }
+
+  /* ---- Alert ---- */
+  .alert { @apply relative w-full rounded-lg border px-4 py-3 text-sm flex flex-row gap-3 items-start; }
+  .alert-default { @apply bg-background text-foreground; }
+  .alert-destructive { @apply border-destructive/50 text-destructive; }
+  .alert-title { @apply font-medium leading-none tracking-tight; }
+  .alert-description { @apply text-sm opacity-90; }
+
+  /* ---- Avatar ---- */
+  .avatar { @apply relative flex size-10 shrink-0 overflow-hidden rounded-full; }
+  .avatar-fallback { @apply flex size-full items-center justify-center rounded-full bg-muted text-sm font-medium select-none; }
+
+  /* ---- Switch (toggle the -on/-off classes from the page state) ---- */
+  .switch { @apply inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent outline-none transition-all duration-200 focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background; }
+  .switch-on { @apply bg-primary; }
+  .switch-off { @apply bg-input; }
+  .switch-thumb { @apply pointer-events-none block size-5 rounded-full bg-background shadow-lg ring-0 transition-transform duration-200; }
+  .switch-thumb-on { @apply translate-x-5; }
+  .switch-thumb-off { @apply translate-x-0; }
+
+  /* ---- Progress (the fill width is the one runtime value, set via style(w) -> --w) ---- */
+  .progress { @apply relative h-2 w-full overflow-hidden rounded-full bg-primary/20; }
+  .progress-indicator { @apply h-full bg-primary transition-all duration-200; width: var(--w); }
+
+  /* ---- Spinner / Skeleton / Separator / Kbd ---- */
+  .spinner { @apply animate-spin size-4 text-muted-foreground; }
+  .skeleton { @apply animate-pulse rounded-md bg-muted; }
+  .separator { @apply shrink-0 bg-border h-px w-full; }
+  .separator-vertical { @apply h-full w-px; }
+  .kbd { @apply pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground; }
+
+  /* ---- Empty ---- */
+  .empty { @apply flex flex-col items-center justify-center gap-2 rounded-lg border border-dashed p-12 text-center; }
+  .empty-title { @apply text-lg font-medium; }
+  .empty-description { @apply text-sm text-muted-foreground; }
+
+  /* ---- Breadcrumb ---- */
+  .breadcrumb { @apply flex flex-row flex-wrap items-center gap-1.5 text-sm text-muted-foreground; }
+  .breadcrumb-link { @apply rounded-sm outline-none transition-colors duration-200 hover:text-foreground focus-visible:text-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50; }
+  .breadcrumb-page { @apply font-normal text-foreground; }
+  .breadcrumb-separator { @apply size-3.5; }
+
+  /* ---- Pagination (links reuse .btn btn-icon) ---- */
+  .pagination { @apply flex flex-row items-center justify-center gap-1; }
+  .pagination-ellipsis { @apply flex size-9 items-center justify-center; }
+
+  /* ---- Field (label reuses .label) ---- */
+  .field { @apply flex flex-col gap-2; }
+  .field-description { @apply text-sm text-muted-foreground; }
+  .field-error { @apply text-sm font-medium text-destructive; }
+
+  /* ---- Item ---- */
+  .item { @apply flex flex-row items-center gap-3 rounded-md border p-3; }
+  .item-content { @apply flex flex-col gap-0.5 min-w-0 flex-1; }
+  .item-title { @apply text-sm font-medium leading-none; }
+  .item-description { @apply text-sm text-muted-foreground; }
+
+  /* ---- Checkbox (toggle .checkbox-checked from the page state; the check Icon shows only when checked) ---- */
+  .checkbox { @apply inline-flex items-center justify-center size-4 shrink-0 rounded-sm border border-primary shadow outline-none transition-[color,box-shadow,background-color] duration-200 focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50; }
+  .checkbox-checked { @apply bg-primary text-primary-foreground; }
+  .checkbox-icon { @apply size-3.5 transition-all duration-200; transform: scale(0); opacity: 0; }
+  .checkbox-icon-on { transform: scale(1); opacity: 1; }
+
+  /* ---- Toggle / Toggle Group (toggle .toggle-on from the page state) ---- */
+  .toggle { @apply inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium h-9 min-w-9 px-2 outline-none transition-all duration-200 active:scale-[0.98] hover:bg-muted hover:text-muted-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50; }
+  .toggle-on { @apply bg-accent text-accent-foreground; }
+  .toggle-group { @apply inline-flex flex-row items-center gap-1; }
+
+  /* ---- Radio Group ---- */
+  .radio-group { @apply flex flex-col gap-3; }
+  .radio-row { @apply flex flex-row items-center gap-2 outline-none cursor-pointer; }
+  .radio { @apply flex items-center justify-center aspect-square size-4 shrink-0 rounded-full border border-primary text-primary shadow outline-none transition-[color,box-shadow] duration-200 focus-visible:ring-[3px] focus-visible:ring-ring/50; }
+  .radio-dot { @apply size-2 rounded-full bg-primary transition-transform duration-200; transform: scale(0); }
+  .radio-dot-on { transform: scale(1); }
+  .radio-label { @apply text-sm font-medium leading-none; }
+
+  /* ---- Collapsible (content wrapped in `when open`) ---- */
+  .collapsible { @apply flex flex-col; }
+  .collapsible-trigger { @apply flex flex-row items-center justify-between gap-2 rounded-md text-sm font-medium outline-none transition-colors duration-200 focus-visible:ring-[3px] focus-visible:ring-ring/50; }
+  .collapsible-panel { @apply overflow-hidden; max-height: 0; transition: max-height 250ms ease; }
+  .collapsible-panel-open { max-height: 24rem; }
+  .collapsible-content { @apply flex flex-col gap-2 pt-2; }
+
+  /* ---- Accordion (chevron rotates via .accordion-chevron-open; content wrapped in `when open`) ---- */
+  .accordion { @apply flex flex-col; }
+  .accordion-item { @apply flex flex-col border-b; }
+  .accordion-trigger { @apply flex flex-row flex-1 items-center justify-between gap-2 py-4 text-sm font-medium outline-none transition-all duration-200 hover:underline focus-visible:ring-[3px] focus-visible:ring-ring/50; }
+  .accordion-chevron { @apply size-4 shrink-0 text-muted-foreground transition-transform duration-200; }
+  .accordion-chevron-open { @apply rotate-180; }
+  /* Smooth height: panel clips + animates max-height (works on the flex container; grid 0fr is overridden by
+     mu-stack's display:flex). 24rem covers typical accordion content; bump it for very long panels. */
+  .accordion-panel { @apply overflow-hidden; max-height: 0; transition: max-height 250ms ease; }
+  .accordion-panel-open { max-height: 24rem; }
+  .accordion-content { @apply pb-4 text-sm text-muted-foreground; }
+
+  /* ---- Tabs (active panel via .hidden toggle so panel state survives switching) ---- */
+  .tabs-list { @apply inline-flex flex-row items-center justify-center gap-1 rounded-lg bg-muted p-1 text-muted-foreground; }
+  .tabs-trigger { @apply inline-flex items-center justify-center gap-1.5 rounded-md px-3 py-1 text-sm font-medium whitespace-nowrap outline-none transition-all duration-200 focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50; }
+  .tabs-trigger-active { @apply bg-background text-foreground shadow-sm; }
+  .tabs-content { @apply mt-2 outline-none; }
+
+  /* ---- Dialog (modal: page owns `open`; overlay always renders, fades+zooms via .dialog-overlay-open) ---- */
+  .dialog-overlay { @apply fixed inset-0 z-50 flex items-center justify-center p-4 opacity-0 invisible; transition: opacity 200ms ease, visibility 200ms ease; }
+  .dialog-overlay-open { @apply opacity-100 visible; }
+  .dialog-backdrop { @apply fixed inset-0 bg-black/80; }
+  .dialog-content { @apply relative z-10 w-full max-w-lg rounded-lg border bg-background p-6 shadow-lg flex flex-col gap-4 scale-95 transition-transform duration-200; }
+  .dialog-overlay-open .dialog-content { @apply scale-100; }
+  .dialog-title { @apply text-lg font-semibold leading-none tracking-tight; }
+  .dialog-description { @apply text-sm text-muted-foreground; }
+  .dialog-footer { @apply flex flex-row justify-end gap-2; }
+
+  /* ---- Tooltip (pure CSS :hover, no state) ---- */
+  .tooltip-wrap { @apply relative inline-flex; }
+  .tooltip-content { @apply pointer-events-none absolute bottom-full left-1/2 z-50 mb-2 -translate-x-1/2 whitespace-nowrap rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground shadow-md opacity-0 invisible; transition: opacity 200ms ease, visibility 200ms ease; }
+  .tooltip-wrap:hover .tooltip-content { @apply opacity-100 visible; }
+
+  /* ---- Dropdown Menu (page owns `open`; absolute panel below the trigger; backdrop catches outside clicks) ---- */
+  .dropdown { @apply relative inline-flex; }
+  .dropdown-backdrop { @apply fixed inset-0 z-40; }
+  .dropdown-content { @apply absolute top-full right-0 z-50 mt-1 min-w-48 rounded-md border bg-popover p-1 text-popover-foreground shadow-md flex flex-col origin-top-right opacity-0 invisible scale-95; transition: opacity 150ms ease, transform 150ms ease, visibility 150ms ease; }
+  .dropdown-content-open { @apply opacity-100 visible scale-100; }
+  .dropdown-item { @apply flex flex-row items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none transition-colors duration-200 hover:bg-accent hover:text-accent-foreground; }
+  .dropdown-label { @apply px-2 py-1.5 text-sm font-semibold; }
+  .dropdown-separator { @apply my-1 h-px bg-muted; }
+
+  /* ---- Popover (page owns `open`; absolute panel below the trigger) ---- */
+  .popover { @apply relative inline-flex; }
+  .popover-backdrop { @apply fixed inset-0 z-40; }
+  .popover-content { @apply absolute top-full left-0 z-50 mt-1 w-72 rounded-md border bg-popover p-4 text-popover-foreground shadow-md flex flex-col gap-2 origin-top opacity-0 invisible scale-95; transition: opacity 150ms ease, transform 150ms ease, visibility 150ms ease; }
+  .popover-content-open { @apply opacity-100 visible scale-100; }
+
+  /* ---- Sheet (side panel; slides in from the right via translate) ---- */
+  .sheet-overlay { @apply fixed inset-0 z-50 opacity-0 invisible; transition: opacity 300ms ease, visibility 300ms ease; }
+  .sheet-overlay-open { @apply opacity-100 visible; }
+  .sheet-backdrop { @apply fixed inset-0 bg-black/80; }
+  .sheet-content { @apply fixed inset-y-0 right-0 z-10 h-full w-3/4 max-w-sm border-l bg-background p-6 shadow-lg flex flex-col gap-4 translate-x-full; transition: transform 300ms ease; }
+  .sheet-overlay-open .sheet-content { @apply translate-x-0; }
+  .sheet-title { @apply text-lg font-semibold text-foreground; }
+  .sheet-description { @apply text-sm text-muted-foreground; }
+
+  /* ---- Drawer (bottom sheet; slides up via translate) ---- */
+  .drawer-overlay { @apply fixed inset-0 z-50 opacity-0 invisible; transition: opacity 300ms ease, visibility 300ms ease; }
+  .drawer-overlay-open { @apply opacity-100 visible; }
+  .drawer-backdrop { @apply fixed inset-0 bg-black/80; }
+  .drawer-content { @apply fixed inset-x-0 bottom-0 z-10 mt-24 flex flex-col gap-4 rounded-t-lg border bg-background p-6 translate-y-full; transition: transform 300ms ease; }
+  .drawer-overlay-open .drawer-content { @apply translate-y-0; }
+  .drawer-handle { @apply mx-auto h-2 w-24 rounded-full bg-muted; }
+
+  /* ---- Hover Card (pure CSS :hover, richer than a tooltip) ---- */
+  .hover-card { @apply relative inline-flex; }
+  .hover-card-trigger { @apply underline underline-offset-4 cursor-pointer; }
+  .hover-card-content { @apply pointer-events-none absolute top-full left-0 z-50 mt-2 w-64 rounded-md border bg-popover p-4 text-popover-foreground shadow-md flex flex-col gap-2 opacity-0 invisible; transition: opacity 200ms ease, visibility 200ms ease; }
+  .hover-card:hover .hover-card-content { @apply opacity-100 visible; }
+
+  /* ---- Select (trigger shows the value; items check when selected) ---- */
+  .select-wrap { @apply relative inline-flex flex-col w-full max-w-xs; }
+  .select-backdrop { @apply fixed inset-0 z-40; }
+  .select-trigger { @apply flex h-9 w-full items-center justify-between gap-2 rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm outline-none transition-[color,box-shadow] duration-200 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50; }
+  .select-content { @apply absolute top-full left-0 z-50 mt-1 w-full min-w-32 rounded-md border bg-popover p-1 text-popover-foreground shadow-md flex flex-col origin-top opacity-0 invisible scale-95; transition: opacity 150ms ease, transform 150ms ease, visibility 150ms ease; }
+  .select-content-open { @apply opacity-100 visible scale-100; }
+  .select-item { @apply flex flex-row items-center justify-between gap-2 rounded-sm px-2 py-1.5 text-sm outline-none transition-colors duration-200 hover:bg-accent hover:text-accent-foreground; }
+
+  /* ---- Scroll Area (styled scrollbars; max-h-72 default - eject the part to change the height) ---- */
+  .scroll-area { @apply relative overflow-auto max-h-72; }
+  .scroll-area::-webkit-scrollbar { width: 8px; height: 8px; }
+  .scroll-area::-webkit-scrollbar-thumb { border-radius: 9999px; background: var(--color-border); }
+  .scroll-area::-webkit-scrollbar-track { background: transparent; }
+
+  /* ---- Chat: Message / Bubble / Marker / Attachment / Message Scroller ---- */
+  .message-scroller { @apply flex flex-col gap-3 overflow-auto max-h-96 p-4; }
+  .message { @apply flex flex-row items-end gap-2; }
+  .message-sent { @apply flex-row-reverse; }
+  .bubble { @apply max-w-[80%] rounded-lg px-3 py-2 text-sm; }
+  .bubble-sent { @apply bg-primary text-primary-foreground; }
+  .bubble-received { @apply bg-muted text-foreground; }
+  .marker { @apply flex flex-row items-center justify-center gap-2 my-1 text-xs text-muted-foreground; }
+  .attachment { @apply inline-flex flex-row items-center gap-2 rounded-md border bg-muted/40 px-3 py-2 text-sm; }
+  .attachment-name { @apply font-medium leading-tight; }
+  .attachment-size { @apply text-xs text-muted-foreground leading-tight; }
+
+  /* ---- Menubar (a bar of menus; page owns which is open via a text state) ---- */
+  .menubar { @apply inline-flex flex-row items-center gap-1 rounded-md border bg-background p-1 shadow-sm; }
+  .menubar-item { @apply relative; }
+  .menubar-trigger { @apply flex flex-row items-center rounded-sm px-3 py-1 text-sm font-medium outline-none transition-colors duration-200 hover:bg-accent hover:text-accent-foreground; }
+  .menubar-trigger-active { @apply bg-accent text-accent-foreground; }
+  .menubar-content { @apply absolute top-full left-0 z-50 mt-1 min-w-48 rounded-md border bg-popover p-1 text-popover-foreground shadow-md flex flex-col origin-top opacity-0 invisible scale-95; transition: opacity 150ms ease, transform 150ms ease, visibility 150ms ease; }
+  .menubar-content-open { @apply opacity-100 visible scale-100; }
+
+  /* ---- Navigation Menu (hover-driven, pure CSS) ---- */
+  .nav-menu { @apply flex flex-row items-center gap-1; }
+  .nav-menu-item { @apply relative; }
+  .nav-menu-trigger { @apply flex flex-row items-center gap-1 rounded-md px-3 py-2 text-sm font-medium transition-colors duration-200 hover:bg-accent hover:text-accent-foreground cursor-default; }
+  .nav-menu-content { @apply absolute top-full left-0 z-50 mt-1.5 min-w-56 rounded-md border bg-popover p-2 text-popover-foreground shadow-md flex flex-col gap-1 opacity-0 invisible translate-y-1; transition: opacity 200ms ease, transform 200ms ease, visibility 200ms ease; }
+  .nav-menu-item:hover .nav-menu-content { @apply opacity-100 visible translate-y-0; }
+  .nav-menu-link { @apply flex flex-col gap-1 rounded-md p-3 outline-none transition-colors duration-200 hover:bg-accent; }
+  .nav-menu-link-title { @apply text-sm font-medium leading-none; }
+  .nav-menu-link-text { @apply text-sm text-muted-foreground leading-snug; }
+
+  /* ---- Combobox (a Select with a search box; page filters items with `where`) ---- */
+  .combobox-trigger { @apply flex h-9 w-full items-center justify-between gap-2 rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm outline-none transition-[color,box-shadow] duration-200 hover:bg-accent/40 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50; }
+  .combobox-content { @apply absolute top-full left-0 z-50 mt-1 w-full rounded-md border bg-popover text-popover-foreground shadow-md flex flex-col origin-top opacity-0 invisible scale-95; transition: opacity 150ms ease, transform 150ms ease, visibility 150ms ease; }
+  .combobox-content-open { @apply opacity-100 visible scale-100; }
+  .combobox-search { @apply flex h-9 w-full border-b border-border bg-transparent px-3 text-sm outline-none placeholder:text-muted-foreground; }
+  .combobox-list { @apply flex flex-col p-1 overflow-auto max-h-60; }
+  .combobox-empty { @apply py-6 text-center text-sm text-muted-foreground; }
+
+  /* ---- Command (a command palette: search + grouped item list) ---- */
+  .command { @apply flex flex-col rounded-lg border bg-popover text-popover-foreground shadow-md overflow-hidden; }
+  .command-input { @apply flex h-11 w-full border-b border-border bg-transparent px-3 text-sm outline-none placeholder:text-muted-foreground; }
+  .command-list { @apply flex flex-col p-1 overflow-auto max-h-72; }
+  .command-group-label { @apply px-2 py-1.5 text-xs font-medium text-muted-foreground; }
+  .command-item { @apply flex flex-row items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none transition-colors duration-200 hover:bg-accent hover:text-accent-foreground cursor-pointer; }
+  .command-shortcut { @apply ml-auto text-xs tracking-widest text-muted-foreground; }
+
+  /* ---- Table - style muten's DataTable to look shadcn: DataTable @rows columns(...) class("data-table") ---- */
+  .data-table { @apply w-full caption-bottom text-sm; }
+  .data-table thead tr { @apply border-b; }
+  .data-table th { @apply h-11 px-3 text-left align-middle font-medium text-muted-foreground whitespace-nowrap; }
+  .data-table tbody tr { @apply border-b transition-colors duration-200 hover:bg-muted/50; }
+  .data-table tbody tr:last-child { @apply border-0; }
+  .data-table td { @apply p-3 align-middle whitespace-nowrap; }
+
+  /* ---- Slider (Custom; the host JS builds .slider-range + .slider-thumb inside .slider) ---- */
+  .slider { @apply relative h-2 w-full rounded-full bg-primary/20 cursor-pointer select-none; touch-action: none; }
+  .slider-range { @apply absolute top-0 left-0 h-full rounded-full bg-primary; }
+  .slider-thumb { @apply absolute top-1/2 size-4 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-primary bg-background shadow transition-transform duration-100; }
+
+  /* ---- Input OTP (Custom; host JS builds N .otp-slot inputs) ---- */
+  .otp { @apply flex flex-row items-center gap-2; }
+  .otp-slot { @apply size-10 rounded-md border border-input bg-transparent text-center text-sm shadow-sm outline-none transition-[color,box-shadow] duration-200 focus:border-ring focus:ring-[3px] focus:ring-ring/50; }
+
+  /* ---- Calendar (Custom; variants: mode single|range|multiple, months 1-2, caption label|dropdown) ---- */
+  .calendar { @apply relative inline-flex flex-col rounded-lg border bg-card p-3 text-card-foreground; }
+  .calendar-nav-prev { @apply absolute top-3 left-3 z-10 inline-flex size-7 items-center justify-center rounded-md border border-input text-sm outline-none transition-colors duration-200 hover:bg-accent; }
+  .calendar-nav-next { @apply absolute top-3 right-3 z-10 inline-flex size-7 items-center justify-center rounded-md border border-input text-sm outline-none transition-colors duration-200 hover:bg-accent; }
+  .calendar-months { @apply flex flex-row gap-4; }
+  .calendar-month { @apply flex flex-col gap-3; }
+  .calendar-caption { @apply flex h-7 flex-row items-center justify-center gap-1; }
+  .calendar-label { @apply text-sm font-medium; }
+  .calendar-select { @apply rounded-md border border-input bg-transparent px-2 py-1 text-sm outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50; }
+  .calendar-grid { @apply grid grid-cols-7 gap-1; }
+  .calendar-dow { @apply flex size-9 items-center justify-center text-xs font-medium text-muted-foreground; }
+  .calendar-day { @apply flex size-9 items-center justify-center rounded-md text-sm outline-none transition-colors duration-200 hover:bg-accent; }
+  .calendar-day-today { @apply bg-accent text-accent-foreground; }
+  .calendar-day-range { @apply bg-accent text-accent-foreground rounded-none; }
+  .calendar-day-selected { @apply bg-primary text-primary-foreground hover:bg-primary; }
+
+  /* ---- Toaster / Toast (Custom; page bumps a trigger counter, the host shows + auto-dismisses) ---- */
+  .toaster { @apply fixed bottom-4 right-4 z-[100] flex flex-col gap-2 w-80 max-w-[calc(100vw-2rem)]; }
+  .toast { @apply rounded-md border bg-background p-4 shadow-lg flex flex-col gap-1 translate-x-full opacity-0; transition: transform 200ms ease, opacity 200ms ease; }
+  .toast-show { @apply translate-x-0 opacity-100; }
+  .toast-destructive { @apply border-destructive/50 bg-destructive text-destructive-foreground; }
+  .toast-title { @apply text-sm font-semibold; }
+  .toast-description { @apply text-sm opacity-90; }
+
+  /* ---- Carousel (Custom; host renders slides from a list + prev/next) ---- */
+  .carousel { @apply relative w-full max-w-xs; }
+  .carousel-viewport { @apply overflow-hidden rounded-lg; }
+  .carousel-track { @apply flex flex-row; transition: transform 300ms ease; }
+  .carousel-slide { @apply flex min-w-full aspect-square items-center justify-center rounded-lg border bg-card text-4xl font-semibold select-none; }
+  .carousel-prev { @apply absolute top-1/2 -left-4 -translate-y-1/2 inline-flex size-8 items-center justify-center rounded-full border border-input bg-background shadow outline-none transition-colors duration-200 hover:bg-accent; }
+  .carousel-next { @apply absolute top-1/2 -right-4 -translate-y-1/2 inline-flex size-8 items-center justify-center rounded-full border border-input bg-background shadow outline-none transition-colors duration-200 hover:bg-accent; }
+
+  /* ---- Chart (Custom; host renders an SVG bar chart from a list of { label, value }) ---- */
+  .chart { @apply w-full max-w-lg; }
+  .chart-svg { @apply w-full h-auto; }
+  .chart-bar { fill: var(--color-primary); transition: opacity 200ms ease; }
+  .chart-bar:hover { opacity: 0.8; }
+  .chart-label { fill: var(--color-muted-foreground); font-size: 11px; }
+
+  /* ---- Resizable (Custom; two panels + a draggable splitter) ---- */
+  .resizable { @apply flex flex-row w-full h-48 rounded-lg border overflow-hidden; }
+  .resizable-panel { @apply flex items-center justify-center bg-card text-sm font-medium; }
+  .resizable-handle { @apply w-1.5 shrink-0 bg-border cursor-col-resize transition-colors duration-200 hover:bg-primary; }
+
+  /* ---- Context Menu (Custom; right-click an area to open a menu of items) ---- */
+  .context-menu-wrap { @apply relative; }
+  .context-area { @apply flex h-40 w-full items-center justify-center rounded-lg border border-dashed text-sm text-muted-foreground select-none; }
+  .context-menu { @apply absolute z-50 min-w-40 rounded-md border bg-popover p-1 text-popover-foreground shadow-md flex flex-col opacity-0 invisible; transition: opacity 150ms ease, visibility 150ms ease; }
+  .context-menu-open { @apply opacity-100 visible; }
+  .context-item { @apply flex rounded-sm px-2 py-1.5 text-sm text-left outline-none transition-colors duration-200 hover:bg-accent hover:text-accent-foreground; }
+
+  /* ---- Typography (prose scale) ---- */
+  .prose-h1 { @apply scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl; }
+  .prose-h2 { @apply scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0; }
+  .prose-h3 { @apply scroll-m-20 text-2xl font-semibold tracking-tight; }
+  .prose-h4 { @apply scroll-m-20 text-xl font-semibold tracking-tight; }
+  .prose-p { @apply leading-7; }
+  .prose-lead { @apply text-xl text-muted-foreground; }
+  .prose-large { @apply text-lg font-semibold; }
+  .prose-small { @apply text-sm font-medium leading-none; }
+  .prose-muted { @apply text-sm text-muted-foreground; }
+  .prose-blockquote { @apply mt-6 border-l-2 pl-6 italic; }
+  .prose-code { @apply relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold; }
+  .prose-list { @apply my-6 ml-6 list-disc; }
+
+  /* ---- Button Group / Input Group (flex-row explicit: they sit on a Stack, a flex-column landmark) ---- */
+  .btn-group { @apply inline-flex flex-row items-center; }
+  .btn-group > * { @apply rounded-none shadow-none; }
+  .btn-group > *:first-child { @apply rounded-l-md; }
+  .btn-group > *:last-child { @apply rounded-r-md; }
+  .btn-group > * + * { @apply -ml-px; }
+  .input-group { @apply flex flex-row h-9 w-full items-center gap-2 rounded-md border border-input bg-transparent px-3 text-sm shadow-sm outline-none transition-[color,box-shadow] duration-200 focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/50; }
+  .input-group-control { @apply h-full flex-1 border-0 bg-transparent p-0 text-sm shadow-none outline-none placeholder:text-muted-foreground; }
+}

@@ -1,0 +1,6 @@
+# Resizable - two panels with a draggable splitter. Pass the panel labels; drag the handle to resize.
+#   Resizable(left: "Sidebar", right: "Content")
+# shadcn-for-muten · Custom · host JS is src/components/Resizable.js (edit it to render real content per panel).
+part Resizable(left: text, right: text) {
+  Custom Resizable inputs(left: $left, right: $right) class("resizable")
+}

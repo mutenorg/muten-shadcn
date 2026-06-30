@@ -1,0 +1,4 @@
+# Scroll Area - a scrollable region with styled scrollbars (max-height 18rem by default; eject to change).
+#   ScrollArea { … long content … }
+# shadcn-for-muten · part · no deps · styles via the semantic .scroll-area class in globals.css.
+part ScrollArea() { Stack class("scroll-area") { slot } }

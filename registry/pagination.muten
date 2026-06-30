@@ -1,0 +1,9 @@
+# Pagination + sub-components (links reuse the .btn classes).
+# Compose: Pagination { PaginationPrevious(href) PaginationLink(label,href,page,current) PaginationEllipsis PaginationNext(href) }
+# shadcn-for-muten · part · no deps · styles via the semantic .pagination* + .btn classes in globals.css.
+part Pagination() { Nav class("pagination") aria(label: "pagination") { slot } }
+# `page` is this link's number, `current` the active-page state - the part highlights itself when they match.
+part PaginationLink(label: text, href: text, page: number, current: number) { Link "{$label}" -> "{$href}" class("btn btn-icon", "btn-outline" when $page == $current, "btn-ghost" when $page != $current) }
+part PaginationPrevious(href: text) { Link "Previous" -> "{$href}" class("btn btn-ghost btn-sm gap-1") }
+part PaginationNext(href: text) { Link "Next" -> "{$href}" class("btn btn-ghost btn-sm gap-1") }
+part PaginationEllipsis() { Span "…" class("pagination-ellipsis") }

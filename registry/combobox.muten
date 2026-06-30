@@ -1,0 +1,24 @@
+# Combobox - a Select with a search box. The PAGE owns the value, the open bool, and the search text; it filters
+# the items with `each … where`:
+#   state { value = "" : text  open = false : bool  q = "" : text  items = [ … ] : list<Opt> }
+#   Combobox(label: value, open: open, onToggle: t) {
+#     SearchField bind(q) "Search…" class("combobox-search")
+#     Stack class("combobox-list") { each items as o where o.name contains q { ComboboxItem(value: o.name, current: value, label: o.name, onSelect: pick) } }
+#   }
+# shadcn-for-muten · part · no deps · styles via the semantic .combobox* + .select-* classes in globals.css.
+part Combobox(label: text, open: bool, onToggle: action) {
+  Stack class("select-wrap") {
+    Button -> $onToggle aria(expanded: $open) class("combobox-trigger") {
+      Span "{$label}"
+      Icon "lucide:chevrons-up-down" class("size-4 opacity-50 shrink-0")
+    }
+    when $open { Button -> $onToggle class("select-backdrop") }
+    Stack class("combobox-content", "combobox-content-open" when $open) { slot }
+  }
+}
+part ComboboxItem(value: text, current: text, label: text, onSelect: action) {
+  Button -> $onSelect($value) class("select-item") {
+    Span "{$label}"
+    when $value == $current { Icon "lucide:check" class("size-4") }
+  }
+}

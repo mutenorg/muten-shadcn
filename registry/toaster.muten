@@ -1,0 +1,9 @@
+# Toaster - fixed toast notifications (bottom-right). The PAGE bumps a `trigger` counter to fire one:
+#   state { toastN = 0 : number }   action notify mutates toastN { toastN.set(toastN + 1) }
+#   Button "Notify" -> notify
+#   Toaster(trigger: toastN, title: "Saved", description: "Your changes are saved.", variant: "default")
+# Auto-dismisses; click a toast to close it early. Use state title/description and change them before bumping for dynamic messages.
+# shadcn-for-muten · Custom · host JS is src/components/Toaster.js (copied by `muten add toaster`).
+part Toaster(trigger: number, title: text, description: text, variant: text) {
+  Custom Toaster inputs(trigger: $trigger, title: $title, description: $description, variant: $variant) class("toaster")
+}

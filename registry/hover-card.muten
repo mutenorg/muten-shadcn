@@ -1,0 +1,9 @@
+# Hover Card - richer content shown on hover (pure CSS, no state). label is the trigger; the slot is the card.
+#   HoverCard(label: "@muten") { Span "The AI-first frontend DSL." class("text-sm") }
+# shadcn-for-muten · part · no deps · styles via the semantic .hover-card* classes in globals.css.
+part HoverCard(label: text) {
+  Stack class("hover-card") {
+    Span "{$label}" class("hover-card-trigger")
+    Stack class("hover-card-content") { slot }
+  }
+}

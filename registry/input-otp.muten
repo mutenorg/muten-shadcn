@@ -1,0 +1,7 @@
+# Input OTP - N single-character boxes synced to one value. The PAGE owns the value (text):
+#   state { code = "" : text }   action setCode(v: text) mutates code { code.set(v) }
+#   InputOtp(value: code, length: 6, onInput: setCode)
+# shadcn-for-muten · Custom · host JS is src/components/InputOtp.js (copied by `muten add input-otp`).
+part InputOtp(value: text, length: number, onInput: action) {
+  Custom InputOtp inputs(value: $value, length: $length) on(input: $onInput) class("otp")
+}

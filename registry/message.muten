@@ -1,0 +1,11 @@
+# Message + Bubble + Marker - chat primitives. variant: sent | received.
+# Compose: Message(variant: "received") { Avatar(name) Bubble(variant: "received") { Span "Hi!" } }
+#          Marker(label: "Today")
+# shadcn-for-muten · part · no deps · styles via the semantic .message* / .bubble / .marker classes.
+part Message(variant: text) {
+  Stack class("message", "message-sent" when $variant == "sent") { slot }
+}
+part Bubble(variant: text) {
+  Stack class("bubble", "bubble-sent" when $variant == "sent", "bubble-received" when $variant == "received") { slot }
+}
+part Marker(label: text) { Span "{$label}" class("marker") }

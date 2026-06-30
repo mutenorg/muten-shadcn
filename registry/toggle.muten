@@ -1,0 +1,6 @@
+# Toggle - a two-state button. The PAGE owns the bool + the toggle action. Put an Icon or text in the slot.
+#   state { bold = false : bool }   action b mutates bold { bold.toggle() }   Toggle(on: bold, onToggle: b) { Icon "lucide:bold" }
+# shadcn-for-muten · part · no deps · styles via the semantic .toggle* classes in globals.css.
+part Toggle(on: bool, onToggle: action) {
+  Button -> $onToggle aria(pressed: $on) class("toggle", "toggle-on" when $on) { slot }
+}

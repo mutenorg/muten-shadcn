@@ -1,0 +1,14 @@
+# Collapsible - a trigger + content that animates open. The PAGE owns the bool + the toggle action.
+#   state { open = false : bool }   action t mutates open { open.toggle() }   Collapsible(label: "…", open: open, onToggle: t) { … }
+# shadcn-for-muten · part · no deps · the content always renders and animates open via the .collapsible-panel grid trick.
+part Collapsible(label: text, open: bool, onToggle: action) {
+  Stack class("collapsible") {
+    Button -> $onToggle aria(expanded: $open) class("collapsible-trigger") {
+      Span "{$label}"
+      Icon "lucide:chevrons-up-down" class("size-4 text-muted-foreground")
+    }
+    Stack class("collapsible-panel", "collapsible-panel-open" when $open) {
+      Stack class("collapsible-content") { slot }
+    }
+  }
+}

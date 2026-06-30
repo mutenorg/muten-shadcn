@@ -1,0 +1,11 @@
+# Radio Group - single choice from a list. The PAGE owns a `text` state + an action that sets it:
+#   state { plan = "pro" : text }   action setPlan(v: text) mutates plan { plan.set(v) }
+#   RadioGroup { RadioGroupItem(value: "pro", current: plan, label: "Pro", onSelect: setPlan) … }
+# shadcn-for-muten · part · no deps · the dot always renders and scales in via .radio-dot-on.
+part RadioGroup() { Stack class("radio-group") { slot } }
+part RadioGroupItem(value: text, current: text, label: text, onSelect: action) {
+  Button -> $onSelect($value) aria(checked: $value == $current) class("radio-row") {
+    Stack class("radio") { Stack class("radio-dot", "radio-dot-on" when $value == $current) }
+    Span "{$label}" class("radio-label")
+  }
+}

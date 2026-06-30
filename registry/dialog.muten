@@ -1,0 +1,13 @@
+# Dialog - a modal. The PAGE owns the bool + open/close actions:
+#   state { open = false : bool }   action close mutates open { open.set(false) }   action show mutates open { open.set(true) }
+#   Button "Open" -> show ...   Dialog(open: open, onClose: close) { DialogTitle(label) DialogDescription(label) … DialogFooter { … } }
+# shadcn-for-muten · part · no deps · the backdrop click closes; styles via the semantic .dialog* classes.
+part Dialog(open: bool, onClose: action) {
+  Stack class("dialog-overlay", "dialog-overlay-open" when $open) {
+    Button -> $onClose class("dialog-backdrop")
+    Stack class("dialog-content") { slot }
+  }
+}
+part DialogTitle(label: text) { Title "{$label}" h2 class("dialog-title") }
+part DialogDescription(label: text) { Span "{$label}" class("dialog-description") }
+part DialogFooter() { Stack class("dialog-footer") { slot } }

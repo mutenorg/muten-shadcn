@@ -1,0 +1,15 @@
+# Dropdown Menu - a button that opens a menu below it. The PAGE owns the bool + the toggle action:
+#   state { open = false : bool }   action t mutates open { open.toggle() }
+#   DropdownMenu(label: "Open", open: open, onToggle: t) { DropdownLabel(label) DropdownItem(label, onSelect) … }
+# Each DropdownItem's action should also close the menu (set open false). The backdrop catches outside clicks.
+# shadcn-for-muten · part · no deps · styles via the semantic .dropdown* classes in globals.css.
+part DropdownMenu(label: text, open: bool, onToggle: action) {
+  Stack class("dropdown") {
+    Button "{$label}" -> $onToggle aria(expanded: $open) class("btn btn-outline")
+    when $open { Button -> $onToggle class("dropdown-backdrop") }
+    Stack class("dropdown-content", "dropdown-content-open" when $open) { slot }
+  }
+}
+part DropdownItem(label: text, onSelect: action) { Button "{$label}" -> $onSelect class("dropdown-item") }
+part DropdownLabel(label: text) { Span "{$label}" class("dropdown-label") }
+part DropdownSeparator() { Stack class("dropdown-separator") }

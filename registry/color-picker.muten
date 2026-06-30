@@ -1,0 +1,7 @@
+# Color Picker - a swatch that opens a saturation/value + hue picker. The PAGE owns the hex value (text):
+#   state { color = "#3b82f6" : text }   action setColor(v: text) mutates color { color.set(v) }
+#   ColorPicker(value: color, onInput: setColor)
+# shadcn-for-muten · Custom · host JS is src/components/ColorPicker.js (copied by `muten add color-picker`).
+part ColorPicker(value: text, onInput: action) {
+  Custom ColorPicker inputs(value: $value) on(input: $onInput) class("color-picker")
+}

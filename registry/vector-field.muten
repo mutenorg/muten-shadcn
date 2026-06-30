@@ -1,0 +1,10 @@
+# Vector Field - paired NumberFields (X / Y) for position or size. The PAGE owns two number states + two actions:
+#   state { px = 0 : number  py = 0 : number }   action setX(v: number) mutates px { px.set(v) }   action setY(v: number) mutates py { py.set(v) }
+#   VectorField(x: px, y: py, min: -9999, max: 9999, step: 1, onX: setX, onY: setY)
+# shadcn-for-muten · part · depends on number-field · styles via the semantic .vector* classes.
+part VectorField(x: number, y: number, min: number, max: number, step: number, onX: action, onY: action) {
+  Stack class("vector-field") {
+    Stack class("vector-axis") { Span "X" class("vector-axis-label")  NumberField(value: $x, min: $min, max: $max, step: $step, onInput: $onX) }
+    Stack class("vector-axis") { Span "Y" class("vector-axis-label")  NumberField(value: $y, min: $min, max: $max, step: $step, onInput: $onY) }
+  }
+}

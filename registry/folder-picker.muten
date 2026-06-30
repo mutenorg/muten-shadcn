@@ -1,0 +1,8 @@
+# Folder Picker - connect a local folder via the File System Access API (showDirectoryPicker). The PAGE gets the
+# folder name; the directory handle stays in the host JS for reading/writing:
+#   state { folder = "" : text }   action onPick(name: text) mutates folder { folder.set(name) }
+#   FolderPicker(label: "Connect folder", onPick: onPick)
+# shadcn-for-muten · Custom · host JS is src/components/FolderPicker.js (copied by `muten add folder-picker`).
+part FolderPicker(label: text, onPick: action) {
+  Custom FolderPicker inputs(label: $label) on(pick: $onPick) class("inline-flex")
+}

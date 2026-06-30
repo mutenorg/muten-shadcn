@@ -1,0 +1,12 @@
+# Split Button - a main action + a caret that opens a dropdown. The PAGE owns the main action + the open bool:
+#   state { open = false : bool }   action t mutates open { open.toggle() }
+#   SplitButton(label: "Export", open: open, onMain: doExport, onToggle: t) { DropdownItem(label: "Export as PNG", onSelect: …) … }
+# shadcn-for-muten · part · no deps · reuses the .btn + .dropdown* classes.
+part SplitButton(label: text, open: bool, onMain: action, onToggle: action) {
+  Stack class("split-button") {
+    Button "{$label}" -> $onMain class("btn btn-default split-button-main")
+    Button -> $onToggle aria(expanded: $open) class("btn btn-default split-button-caret") { Icon "lucide:chevron-down" class("size-4") }
+    when $open { Button -> $onToggle class("dropdown-backdrop") }
+    Stack class("dropdown-content", "dropdown-content-open" when $open) { slot }
+  }
+}

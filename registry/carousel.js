@@ -4,8 +4,9 @@ export function mount(el, inputs, handlers) {
   const viewport = document.createElement('div'); viewport.className = 'carousel-viewport';
   const track = document.createElement('div'); track.className = 'carousel-track';
   viewport.appendChild(track); el.appendChild(viewport);
-  const prev = document.createElement('button'); prev.type = 'button'; prev.className = 'carousel-prev'; prev.textContent = '‹';
-  const next = document.createElement('button'); next.type = 'button'; next.className = 'carousel-next'; next.textContent = '›';
+  const SVG = (p) => '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + p + '</svg>';
+  const prev = document.createElement('button'); prev.type = 'button'; prev.className = 'carousel-prev'; prev.innerHTML = SVG('<path d="m15 18-6-6 6-6"/>'); // lucide chevron-left
+  const next = document.createElement('button'); next.type = 'button'; next.className = 'carousel-next'; next.innerHTML = SVG('<path d="m9 18 6-6-6-6"/>'); // lucide chevron-right
   el.appendChild(prev); el.appendChild(next);
 
   let idx = 0;

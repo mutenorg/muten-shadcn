@@ -1,0 +1,8 @@
+# TreeView - a nested folder/file tree (expandable, selectable, icons + indent). The PAGE owns the selected path:
+#   state { tree = [] : list<text>  picked = "" : text }   action onPick(p: text) mutates picked { picked.set(p) }
+#   TreeView(data: tree, onSelect: onPick)
+# Pass your own nested data ({ name, children?: [...] }); with an empty list it renders a sample file tree you
+# can edit in src/components/TreeView.js. shadcn-for-muten · Custom · multilevel (Collapsible/Accordion are single-level).
+part TreeView(data: list, onSelect: action) {
+  Custom TreeView inputs(data: $data) on(select: $onSelect) class("tree-view")
+}

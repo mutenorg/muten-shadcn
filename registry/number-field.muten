@@ -1,0 +1,7 @@
+# NumberField - a numeric input with -/+ steppers. The PAGE owns the value (number) + the action:
+#   state { size = 16 : number }   action setSize(v: number) mutates size { size.set(v) }
+#   NumberField(value: size, min: 1, max: 512, step: 1, onInput: setSize)
+# shadcn-for-muten · Custom · host JS is src/components/NumberField.js (copied by `muten add number-field`).
+part NumberField(value: number, min: number, max: number, step: number, onInput: action) {
+  Custom NumberField inputs(value: $value, min: $min, max: $max, step: $step) on(input: $onInput) class("number-field")
+}

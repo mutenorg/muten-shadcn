@@ -1,0 +1,6 @@
+# Hotkey - a global keyboard shortcut (Cmd/Ctrl + a key), invisible. The PAGE provides the action to run:
+#   Hotkey(keys: "k", onPress: openPalette)   # Cmd/Ctrl + K
+# shadcn-for-muten · Custom · host JS is src/components/Hotkey.js (copied by `muten add hotkey`).
+part Hotkey(keys: text, onPress: action) {
+  Custom Hotkey inputs(keys: $keys) on(press: $onPress) class("hidden")
+}

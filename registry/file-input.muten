@@ -1,0 +1,8 @@
+# File Input / Dropzone - click or drag-drop files. The PAGE gets the file names (text):
+#   state { picked = "" : text }   action onFiles(v: text) mutates picked { picked.set(v) }
+#   FileInput(label: "Drop a sprite sheet here", accept: "image/*", onFiles: onFiles)
+# Emits the file NAMES; to read bytes, edit src/components/FileInput.js (FileReader -> emit a data URL).
+# shadcn-for-muten · Custom · host JS is src/components/FileInput.js (copied by `muten add file-input`).
+part FileInput(label: text, accept: text, onFiles: action) {
+  Custom FileInput inputs(label: $label, accept: $accept) on(files: $onFiles) class("dropzone")
+}

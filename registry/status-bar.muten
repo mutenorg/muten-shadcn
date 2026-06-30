@@ -1,0 +1,6 @@
+# Status Bar - a thin bottom bar of status items (zoom %, coords, dimensions). Use StatusSpacer to push items apart.
+#   StatusBar { StatusItem(label: "Ready") StatusSpacer StatusItem(label: "32 x 32") StatusItem(label: "100%") }
+# shadcn-for-muten · part · no deps · styles via the semantic .status-* classes in globals.css.
+part StatusBar() { Stack class("status-bar") { slot } }
+part StatusItem(label: text) { Span "{$label}" class("status-item") }
+part StatusSpacer() { Stack class("status-spacer") }

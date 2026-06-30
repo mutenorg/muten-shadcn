@@ -1,0 +1,19 @@
+# Inspector / Property Grid - label:value rows in collapsible sections (the right panel of an editor). The PAGE
+# owns a bool per section + the value states; the row's slot is the value control (a NumberField, Switch, …):
+#   InspectorSection(label: "Transform", open: t, onToggle: tt) {
+#     InspectorRow(label: "X") { NumberField(value: x, …) }   InspectorRow(label: "Y") { NumberField(value: y, …) }
+#   }
+# shadcn-for-muten · part · no deps · styles via the semantic .inspector* classes in globals.css.
+part Inspector() { Stack class("inspector") { slot } }
+part InspectorSection(label: text, open: bool, onToggle: action) {
+  Stack class("inspector-section") {
+    Button -> $onToggle aria(expanded: $open) class("inspector-section-header") {
+      Span "{$label}"
+      Icon "lucide:chevron-down" class("inspector-chevron", "inspector-chevron-open" when $open)
+    }
+    when $open { Stack class("inspector-body") { slot } }
+  }
+}
+part InspectorRow(label: text) {
+  Stack class("inspector-row") { Span "{$label}" class("inspector-row-label")  slot }
+}

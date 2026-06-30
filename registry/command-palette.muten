@@ -1,0 +1,14 @@
+# Command Palette - a top-anchored modal holding a Command (search + items). The PAGE owns the open bool;
+# pair it with Hotkey to open on Cmd/Ctrl+K:
+#   state { open = false : bool }   action openP mutates open { open.set(true) }   action closeP mutates open { open.set(false) }
+#   Hotkey(keys: "k", onPress: openP)
+#   CommandPalette(open: open, onClose: closeP) {
+#     Command { SearchField bind(q) "Type a command…" class("command-input")  CommandList { CommandItem(onSelect: closeP) { … } } }
+#   }
+# shadcn-for-muten · part · no deps · reuses the .dialog* + .command* classes; backdrop click closes.
+part CommandPalette(open: bool, onClose: action) {
+  Stack class("dialog-overlay command-palette", "dialog-overlay-open" when $open) {
+    Button -> $onClose class("dialog-backdrop")
+    Stack class("command-palette-content") { slot }
+  }
+}

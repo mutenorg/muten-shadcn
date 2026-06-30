@@ -1,0 +1,11 @@
+# CanvasViewport - a <canvas> host with pan (drag) + zoom (wheel), and a muten toolbar slot floating on top.
+# The PAGE can react to zoom via onView. The canvas draws a placeholder scene - edit src/components/CanvasHost.js.
+#   action onView(z: number) mutates zoom { zoom.set(z) }
+#   CanvasViewport(onView: onView) { Toolbar { … } }   # the slot renders over the canvas (pointer-events re-enabled)
+# shadcn-for-muten · Custom (the canvas) wrapped in a muten part (the overlay). host JS is src/components/CanvasHost.js.
+part CanvasViewport(onView: action) {
+  Stack class("canvas-viewport") {
+    Custom CanvasHost on(view: $onView) class("canvas-host")
+    Stack class("canvas-overlay") { slot }
+  }
+}

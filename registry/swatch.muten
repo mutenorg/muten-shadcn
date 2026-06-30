@@ -1,0 +1,10 @@
+# Swatch / Swatch Palette - a grid of selectable color swatches (recent colors, a pixel palette). The PAGE owns
+# the selected hex + the list of colors:
+#   state { colors = ["#ef4444", "#3b82f6", "#22c55e"] : list<text>  active = "#3b82f6" : text }
+#   action pick(c: text) mutates active { active.set(c) }
+#   SwatchPalette { each colors as c { Swatch(color: c, current: active, onSelect: pick) } }
+# shadcn-for-muten · part · no deps · the swatch background is set via style(bg).
+part SwatchPalette() { Stack class("swatch-palette") { slot } }
+part Swatch(color: text, current: text, onSelect: action) {
+  Button -> $onSelect($color) aria(pressed: $color == $current) class("swatch", "swatch-active" when $color == $current) style(bg: "{$color}")
+}

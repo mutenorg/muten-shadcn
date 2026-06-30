@@ -1,0 +1,8 @@
+# Segmented Control - a single-select toolbar (tool picker, view switch). The PAGE owns a text state:
+#   state { tool = "select" : text }   action setTool(v: text) mutates tool { tool.set(v) }
+#   SegmentedControl { SegmentedItem(value: "select", current: tool, label: "Select", onSelect: setTool) … }
+# shadcn-for-muten · part · no deps · styles via the semantic .segmented* classes in globals.css.
+part SegmentedControl() { Stack class("segmented") { slot } }
+part SegmentedItem(value: text, current: text, label: text, onSelect: action) {
+  Button "{$label}" -> $onSelect($value) aria(pressed: $value == $current) class("segmented-item", "segmented-item-active" when $value == $current)
+}

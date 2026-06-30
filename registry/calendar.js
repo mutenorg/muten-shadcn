@@ -78,8 +78,9 @@ export function mount(el, inputs, handlers) {
 
   function render() {
     el.innerHTML = '';
-    const prev = document.createElement('button'); prev.type = 'button'; prev.className = 'calendar-nav-prev'; prev.textContent = '‹';
-    const next = document.createElement('button'); next.type = 'button'; next.className = 'calendar-nav-next'; next.textContent = '›';
+    const SVG = (p) => '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + p + '</svg>';
+    const prev = document.createElement('button'); prev.type = 'button'; prev.className = 'calendar-nav-prev'; prev.innerHTML = SVG('<path d="m15 18-6-6 6-6"/>'); // lucide chevron-left
+    const next = document.createElement('button'); next.type = 'button'; next.className = 'calendar-nav-next'; next.innerHTML = SVG('<path d="m9 18 6-6-6-6"/>'); // lucide chevron-right
     prev.addEventListener('click', () => { vm--; if (vm < 0) { vm = 11; vy--; } render(); });
     next.addEventListener('click', () => { vm++; if (vm > 11) { vm = 0; vy++; } render(); });
     el.appendChild(prev); el.appendChild(next);

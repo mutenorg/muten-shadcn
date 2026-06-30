@@ -1,0 +1,7 @@
+# Tag Input - chips you add by typing + Enter, remove with x / Backspace. The PAGE owns a comma-joined text:
+#   state { tags = "sprite,enemy" : text }   action setTags(v: text) mutates tags { tags.set(v) }
+#   TagInput(value: tags, placeholder: "Add tag…", onChange: setTags)
+# shadcn-for-muten · Custom · host JS is src/components/TagInput.js (copied by `muten add tag-input`).
+part TagInput(value: text, placeholder: text, onChange: action) {
+  Custom TagInput inputs(value: $value, placeholder: $placeholder) on(change: $onChange) class("tag-input")
+}

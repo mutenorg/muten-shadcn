@@ -1,0 +1,7 @@
+# Range Slider - two thumbs (a low + high bound). The PAGE owns two numbers + two actions:
+#   state { lo = 20 : number  hi = 80 : number }   action setLo(v: number) mutates lo { lo.set(v) }   action setHi(v: number) mutates hi { hi.set(v) }
+#   RangeSlider(lo: lo, hi: hi, min: 0, max: 100, step: 1, onLo: setLo, onHi: setHi)
+# shadcn-for-muten · Custom · host JS is src/components/RangeSlider.js (copied by `muten add range-slider`).
+part RangeSlider(lo: number, hi: number, min: number, max: number, step: number, onLo: action, onHi: action) {
+  Custom RangeSlider inputs(lo: $lo, hi: $hi, min: $min, max: $max, step: $step) on(lo: $onLo, hi: $onHi) class("range-slider")
+}

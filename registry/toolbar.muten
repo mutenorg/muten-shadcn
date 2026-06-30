@@ -1,0 +1,6 @@
+# Toolbar - a grouped button bar with separators. Put icon buttons inside (class("btn btn-ghost btn-icon")).
+#   Toolbar { ToolbarGroup { Button { Icon "lucide:mouse-pointer-2" } class("btn btn-ghost btn-icon") … } ToolbarSeparator ToolbarGroup { … } }
+# shadcn-for-muten · part · no deps · styles via the semantic .toolbar* classes in globals.css.
+part Toolbar() { Stack class("toolbar") { slot } }
+part ToolbarGroup() { Stack class("toolbar-group") { slot } }
+part ToolbarSeparator() { Stack class("toolbar-separator") }

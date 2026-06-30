@@ -37,6 +37,14 @@
 /* shadcn's base: every border/outline defaults to the token (so a bare `border` is subtle, not currentColor). */
 @layer base {
   * { border-color: var(--color-border); outline-color: color-mix(in srgb, var(--color-ring) 50%, transparent); }
+
+  /* Fully themed scrollbars (track + thumb), so the OS default never clashes with the theme. */
+  * { scrollbar-width: thin; scrollbar-color: var(--color-border) transparent; }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: color-mix(in srgb, var(--color-muted) 60%, transparent); border-radius: 9999px; }
+  ::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 9999px; border: 2px solid transparent; background-clip: padding-box; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--color-muted-foreground); background-clip: padding-box; }
+  ::-webkit-scrollbar-corner { background: transparent; }
 }
 
 @layer components {
@@ -46,11 +54,13 @@
   .btn-destructive { @apply bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90; }
   .btn-outline { @apply border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground; }
   .btn-secondary { @apply bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80; }
-  .btn-ghost { @apply hover:bg-accent hover:text-accent-foreground; }
+  .btn-ghost { @apply text-foreground hover:bg-accent hover:text-accent-foreground; }
   .btn-link { @apply text-primary underline-offset-4 hover:underline; }
   .btn-sm { @apply h-8 rounded-md px-3 text-xs; }
   .btn-lg { @apply h-10 rounded-md px-8; }
-  .btn-icon { @apply h-9 w-9 px-0; }
+  .btn-icon { @apply h-9 w-9 shrink-0 px-0; }
+  /* shadcn sizes any icon inside a button (its [&_svg]:size-4); so `Button { Icon } class("btn btn-ghost btn-icon")` just works */
+  .btn svg, .btn .mu-icon, .btn iconify-icon { width: 1rem; height: 1rem; flex-shrink: 0; }
 
   /* ---- Form controls ---- */
   .input { @apply flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm outline-none transition-[color,box-shadow] duration-200 placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50; }
@@ -72,6 +82,11 @@
   .badge-secondary { @apply border-transparent bg-secondary text-secondary-foreground; }
   .badge-destructive { @apply border-transparent bg-destructive text-destructive-foreground; }
   .badge-outline { @apply text-foreground; }
+  /* Notification count pill (rounded-full, for an unseen counter) + a bare status dot. Default primary;
+     add .badge-count-destructive for a red alert count. */
+  .badge-count { @apply inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-primary px-1.5 text-[10px] font-semibold leading-none text-primary-foreground; }
+  .badge-count-destructive { @apply bg-destructive text-white; }
+  .badge-dot { @apply inline-block size-2 shrink-0 rounded-full bg-primary; }
 
   /* ---- Alert ---- */
   .alert { @apply relative w-full rounded-lg border px-4 py-3 text-sm flex flex-row gap-3 items-start; }
@@ -354,6 +369,133 @@
   .context-menu-open { @apply opacity-100 visible; }
   .context-item { @apply flex rounded-sm px-2 py-1.5 text-sm text-left outline-none transition-colors duration-200 hover:bg-accent hover:text-accent-foreground; }
 
+  /* ---- NumberField / Stepper (Custom; host builds [-] input[number] [+]) ---- */
+  .number-field { @apply inline-flex flex-row h-9 items-center rounded-md border border-input bg-transparent shadow-sm overflow-hidden outline-none transition-[color,box-shadow] duration-200 focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/50; }
+  .number-field-btn { @apply flex size-8 shrink-0 items-center justify-center text-base text-muted-foreground outline-none transition-colors duration-200 hover:bg-accent hover:text-foreground; }
+  .number-field-input { @apply h-full w-14 min-w-0 border-0 bg-transparent text-center text-sm outline-none; -moz-appearance: textfield; }
+  .number-field-input::-webkit-inner-spin-button, .number-field-input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+
+  /* ---- Segmented Control (single-select toolbar; like Tabs but for a toolbar) ---- */
+  .segmented { @apply inline-flex flex-row items-center gap-1 rounded-lg bg-muted p-1 text-muted-foreground; }
+  .segmented-item { @apply inline-flex items-center justify-center gap-1.5 rounded-md px-3 py-1 text-sm font-medium whitespace-nowrap outline-none transition-all duration-200 hover:text-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50; }
+  .segmented-item-active { @apply bg-background text-foreground shadow-sm; }
+
+  /* ---- File Input / Dropzone (Custom; click or drag-drop) ---- */
+  .dropzone { @apply flex flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed border-input p-8 text-center text-sm text-muted-foreground cursor-pointer transition-colors duration-200 hover:border-ring hover:bg-accent/30; }
+  .dropzone-over { @apply border-ring bg-accent/50; }
+  .dropzone-label { @apply pointer-events-none; }
+
+  /* ---- Color Picker (Custom; swatch + popover with a saturation/value square + hue slider + hex) ---- */
+  .color-picker { @apply relative inline-flex; }
+  .color-swatch { @apply inline-flex h-9 items-center gap-2 rounded-md border border-input bg-transparent px-2 text-sm shadow-sm outline-none transition-colors duration-200 hover:bg-accent focus-visible:ring-[3px] focus-visible:ring-ring/50; }
+  .color-swatch-dot { @apply size-5 rounded-sm border border-border shrink-0; }
+  .color-popover { @apply absolute top-full left-0 z-50 mt-1 w-56 rounded-md border bg-popover p-3 text-popover-foreground shadow-md flex flex-col gap-3 origin-top opacity-0 invisible scale-95; transition: opacity 150ms ease, transform 150ms ease, visibility 150ms ease; }
+  .color-popover-open { @apply opacity-100 visible scale-100; }
+  .color-sv { position: relative; width: 100%; height: 8rem; border-radius: calc(var(--radius) - 2px); cursor: crosshair; }
+  .color-sv-cursor, .color-hue-cursor { position: absolute; border: 2px solid #fff; border-radius: 9999px; transform: translate(-50%, -50%); box-shadow: 0 0 0 1px rgba(0,0,0,.4); pointer-events: none; }
+  .color-sv-cursor { width: 12px; height: 12px; }
+  .color-hue { position: relative; height: 0.75rem; border-radius: 9999px; cursor: pointer; background: linear-gradient(to right, #f00, #ff0, #0f0, #0ff, #00f, #f0f, #f00); }
+  .color-hue-cursor { top: 50%; width: 14px; height: 14px; }
+  .color-hex { @apply h-8 w-full rounded-md border border-input bg-transparent px-2 text-sm uppercase outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50; }
+
+  /* ---- Vector Field (paired NumberFields with axis labels) ---- */
+  .vector-field { @apply inline-flex flex-row items-center gap-2; }
+  .vector-axis { @apply inline-flex flex-row items-center gap-1.5; }
+  .vector-axis-label { @apply text-xs font-medium text-muted-foreground w-3 text-center; }
+
+  /* ---- TreeView (Custom; nested folder/file tree, expandable + selectable) ---- */
+  .tree-view { @apply w-full overflow-auto; }
+  .tree { @apply flex flex-col text-sm select-none; }
+  .tree-row { @apply flex flex-row items-center gap-1.5 rounded-md py-1 pr-2 text-left outline-none transition-colors duration-150 hover:bg-accent; }
+  .tree-row-selected { @apply bg-accent text-accent-foreground; }
+  .tree-chevron { @apply flex size-4 shrink-0 items-center justify-center text-[10px] text-muted-foreground; }
+  .tree-chevron-hidden { @apply opacity-0; }
+  .tree-icon { @apply flex size-4 shrink-0 items-center justify-center text-muted-foreground; }
+  .tree-icon svg { width: 1rem; height: 1rem; }
+  .tree-label { @apply truncate; }
+
+  /* ---- Toolbar (grouped buttons with separators) ---- */
+  .toolbar { @apply inline-flex flex-row items-center gap-1 rounded-md border bg-background p-1 shadow-sm; }
+  .toolbar-group { @apply inline-flex flex-row items-center gap-0.5; }
+  .toolbar-separator { @apply mx-1 h-5 w-px shrink-0 bg-border; }
+
+  /* ---- Canvas Viewport (Custom <canvas> with pan/zoom + a muten toolbar slot on top) ---- */
+  .canvas-viewport { @apply relative w-full h-80 overflow-hidden rounded-lg border bg-muted; }
+  .canvas-host { @apply absolute inset-0; }
+  .canvas-host canvas { display: block; width: 100%; height: 100%; touch-action: none; cursor: grab; }
+  .canvas-host canvas:active { cursor: grabbing; }
+  .canvas-overlay { @apply absolute inset-0 p-3 flex flex-col items-start gap-2 pointer-events-none; }
+  .canvas-overlay > * { pointer-events: auto; }
+
+  /* ---- Status Bar ---- */
+  .status-bar { @apply flex flex-row items-center gap-4 h-7 px-3 rounded-md border bg-background text-xs text-muted-foreground; }
+  .status-item { @apply inline-flex flex-row items-center gap-1; }
+  .status-spacer { @apply flex-1; }
+
+  /* ---- Zoom Control ( - 100% + ) ---- */
+  .zoom-control { @apply inline-flex flex-row items-center rounded-md border bg-background shadow-sm overflow-hidden; }
+  .zoom-btn { @apply flex size-7 items-center justify-center text-base text-muted-foreground outline-none transition-colors duration-200 hover:bg-accent hover:text-foreground; }
+  .zoom-value { @apply min-w-12 px-1 text-center text-sm tabular-nums; }
+
+  /* ---- Split Button (main action + dropdown caret) ---- */
+  .split-button { @apply relative inline-flex flex-row items-stretch; }
+  .split-button-main { @apply rounded-r-none; }
+  .split-button-caret { @apply rounded-l-none border-l border-l-white/15 px-2; }
+
+  /* ---- Progress (indeterminate) ---- */
+  .progress-indeterminate { @apply relative h-2 w-full overflow-hidden rounded-full bg-primary/20; }
+  .progress-indeterminate::after { content: ''; position: absolute; top: 0; bottom: 0; left: -40%; width: 40%; border-radius: 9999px; background: var(--color-primary); animation: progress-indeterminate 1.2s ease-in-out infinite; }
+
+  /* ---- Tabs (vertical variant - use with TabsTrigger / TabsContent) ---- */
+  .tabs-list-vertical { @apply inline-flex flex-col items-stretch gap-1 rounded-lg bg-muted p-1 text-muted-foreground; }
+
+  /* ---- Tag Input (Custom; chips + a typing field, Enter adds, Backspace/x removes) ---- */
+  .tag-input { @apply flex flex-row flex-wrap items-center gap-1.5 rounded-md border border-input bg-transparent p-1.5 text-sm shadow-sm min-h-9 outline-none transition-[color,box-shadow] duration-200 focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/50; }
+  .tag-chip { @apply inline-flex flex-row items-center gap-1 rounded-md bg-secondary px-2 py-0.5 text-xs font-medium text-secondary-foreground; }
+  .tag-chip-x { @apply cursor-pointer opacity-60 transition-opacity hover:opacity-100; }
+  .tag-input-field { @apply flex-1 min-w-20 border-0 bg-transparent text-sm outline-none placeholder:text-muted-foreground; }
+
+  /* ---- Swatch / Swatch Palette (single-select color grid; the swatch bg is set via style(bg)) ---- */
+  .swatch-palette { @apply inline-flex flex-row flex-wrap items-center gap-1.5; }
+  .swatch { @apply size-7 rounded-md border border-border shrink-0 outline-none transition-transform duration-150 hover:scale-110 focus-visible:ring-[3px] focus-visible:ring-ring/50; background: var(--bg); }
+  .swatch-active { @apply ring-2 ring-ring ring-offset-2 ring-offset-background; }
+
+  /* ---- Range Slider (Custom; two thumbs, emits lo/hi) ---- */
+  .range-slider { @apply relative h-2 w-full rounded-full bg-primary/20 select-none; touch-action: none; }
+  .range-slider-fill { @apply absolute top-0 h-full rounded-full bg-primary; }
+  .range-slider-thumb { @apply absolute top-1/2 size-4 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-primary bg-background shadow cursor-grab; }
+
+  /* ---- Sidebar (collapsible nav panel) ---- */
+  .sidebar { @apply flex flex-col w-60 shrink-0 border-r bg-card text-card-foreground overflow-hidden; transition: width 200ms ease; }
+  .sidebar-collapsed { @apply w-14; }
+  .sidebar-header { @apply flex flex-row items-center gap-2 h-12 shrink-0 px-3 border-b font-semibold; }
+  .sidebar-group { @apply flex flex-col p-2 gap-0.5; }
+  .sidebar-group-label { @apply px-2 py-1 text-xs font-medium text-muted-foreground; }
+  .sidebar-item { @apply flex flex-row items-center gap-2 rounded-md px-2 py-1.5 text-sm whitespace-nowrap outline-none transition-colors duration-200 hover:bg-accent; }
+  .sidebar-item-active { @apply bg-accent text-accent-foreground font-medium; }
+
+  /* ---- Sortable List (Custom; drag rows to reorder, e.g. layers) ---- */
+  .sortable-list { @apply flex flex-col gap-1; }
+  .sortable-row { @apply flex flex-row items-center gap-2 rounded-md border bg-card px-2 py-1.5 text-sm cursor-grab transition-colors duration-150 hover:bg-accent; }
+  .sortable-dragging { @apply opacity-40; }
+  .sortable-handle { @apply flex size-4 shrink-0 items-center justify-center text-muted-foreground; }
+  .sortable-handle svg { width: 1rem; height: 1rem; }
+  .sortable-label { @apply truncate; }
+
+  /* ---- Inspector / Property Grid (label : value rows, collapsible sections) ---- */
+  .inspector { @apply flex flex-col rounded-lg border bg-card text-card-foreground text-sm divide-y; }
+  .inspector-section { @apply flex flex-col; }
+  .inspector-section-header { @apply flex flex-row items-center justify-between gap-2 px-3 py-2 font-medium outline-none transition-colors duration-200 hover:bg-accent; }
+  .inspector-chevron { @apply size-4 shrink-0 text-muted-foreground transition-transform duration-200; }
+  .inspector-chevron-open { @apply rotate-180; }
+  .inspector-body { @apply flex flex-col gap-2 px-3 pb-3 pt-1; }
+  .inspector-row { @apply flex flex-row items-center justify-between gap-3; }
+  .inspector-row-label { @apply text-muted-foreground shrink-0; }
+
+  /* ---- Command Palette (a Command in a top-anchored modal, opened with a hotkey) ---- */
+  .command-palette { align-items: flex-start; }
+  .command-palette-content { @apply relative z-10 mx-auto w-full max-w-lg; margin-top: 14vh; }
+
   /* ---- Typography (prose scale) ---- */
   .prose-h1 { @apply scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl; }
   .prose-h2 { @apply scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0; }
@@ -377,3 +519,5 @@
   .input-group { @apply flex flex-row h-9 w-full items-center gap-2 rounded-md border border-input bg-transparent px-3 text-sm shadow-sm outline-none transition-[color,box-shadow] duration-200 focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/50; }
   .input-group-control { @apply h-full flex-1 border-0 bg-transparent p-0 text-sm shadow-none outline-none placeholder:text-muted-foreground; }
 }
+
+@keyframes progress-indeterminate { 0% { left: -40%; } 100% { left: 100%; } }

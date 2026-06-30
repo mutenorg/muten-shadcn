@@ -1,8 +1,14 @@
-# TreeView - a nested folder/file tree (expandable, selectable, icons + indent). The PAGE owns the selected path:
-#   state { tree = [] : list<text>  picked = "" : text }   action onPick(p: text) mutates picked { picked.set(p) }
-#   TreeView(data: tree, onSelect: onPick)
-# Pass your own nested data ({ name, children?: [...] }); with an empty list it renders a sample file tree you
-# can edit in src/components/TreeView.js. shadcn-for-muten · Custom · multilevel (Collapsible/Accordion are single-level).
-part TreeView(data: list, onSelect: action) {
-  Custom TreeView inputs(data: $data) on(select: $onSelect) class("tree-view")
+# Tree View - a file/folder tree (Custom). TWO modes:
+#   nested (default): pass a nested `data` of { name, children }; leaves emit their "/path". Leave the keys "".
+#     TreeView(data: fileTree, labelKey: "", valueKey: "", groupKey: "", selected: "", onSelect: pick)
+#   flat (pass keys): feed a FLAT list (e.g. a `query` of rows) and let the tree group + key it for you -
+#     groupKey buckets rows into folders, labelKey is the text, valueKey is the payload a leaf emits:
+#     state { tiles = query tilesets : list<Tile>  tileUrl = "" : text }
+#     action pick(u: text) mutates tileUrl { tileUrl.set(u) }
+#     TreeView(data: tiles, labelKey: "tname", valueKey: "url", groupKey: "folder", selected: tileUrl, onSelect: pick)
+# `selected` highlights + auto-opens that leaf. Folders only expand; only leaves emit select. (muten parts need
+# every arg, so pass "" for the keys you don't use - an empty key = nested mode.)
+# shadcn-for-muten · Custom · host JS is src/components/TreeView.js (copied by `muten add tree-view`).
+part TreeView(data: list, labelKey: text, valueKey: text, groupKey: text, selected: text, onSelect: action) {
+  Custom TreeView inputs(data: $data, labelKey: $labelKey, valueKey: $valueKey, groupKey: $groupKey, selected: $selected) on(select: $onSelect) class("tree-view")
 }

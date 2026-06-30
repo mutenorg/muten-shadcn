@@ -2,8 +2,16 @@
   "name": "@muten/shadcn",
   "version": "0.0.1",
   "description": "shadcn-style component registry for muten - own-the-source parts you add with `muten add`.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mutenorg/muten.git",
+    "directory": "plugins/shadcn"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "type": "module",
-  "files": ["registry", "registry.json", "globals.css", "muten.plugin.js", "README.md"],
+  "files": ["registry", "registry.json", "globals.css", "README.md"],
   "exports": {
     "./globals.css": "./globals.css",
     "./registry.json": "./registry.json",

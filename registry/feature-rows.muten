@@ -1,0 +1,8 @@
+# FeatureRows - a divided list of numbered feature/schedule rows, each with its own side gutters so the index
+# never kisses the edge. A FeatureRow is a 12-col grid (index · title · copy); it stacks on mobile.
+#   FeatureRows {
+#     FeatureRow { Span "01" class("col-span-1")  Title "One command" h3 class("col-span-4")  Text "..." class("col-span-7") }
+#   }
+# shadcn-for-muten · block · no deps · uses .feature-rows / .feature-row from globals.css.
+part FeatureRows() { Stack class("feature-rows") { slot } }
+part FeatureRow() { Stack class("feature-row") { slot } }

@@ -1,0 +1,7 @@
+# Input (part name Input - muten's text-input primitive is `SearchField`, so this wraps it) - a plug-and-play
+# text input. No class props: pass a state to `value` (two-way bound) + a placeholder.
+#   state { email = "" : text }
+#   Input(value: email, placeholder: "you@example.com")
+# For typed fields (email/number/password/date) or validation, use a `Form` over an entity instead.
+# shadcn-for-muten · part · no deps · wraps SearchField + the .input recipe.
+part Input(value: text, placeholder: text) { SearchField bind($value) "{$placeholder}" class("input") }

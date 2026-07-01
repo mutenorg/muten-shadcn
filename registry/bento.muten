@@ -1,0 +1,9 @@
+# BentoGallery - a tiling gallery on a fixed row-height grid, so cells of different column widths always line up.
+# Each BentoCell picks its own col-span (and bg / content) via class:
+#   BentoGallery {
+#     BentoCell class("col-span-4 bg-muted") { Span "01" }
+#     BentoCell class("col-span-2 bg-accent") { Span "02" }
+#   }
+# shadcn-for-muten · block · no deps · uses .bento-gallery / .bento-cell from globals.css.
+part BentoGallery() { Stack class("bento-gallery") { slot } }
+part BentoCell() { Stack class("bento-cell") { slot } }

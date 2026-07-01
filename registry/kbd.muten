@@ -1,0 +1,3 @@
+# Kbd - a keyboard key hint. `Kbd { Span "Ctrl" }` or with class for combos.
+# shadcn-for-muten · part · no deps · uses .kbd from globals.css.
+part Kbd() { Span class("kbd") { slot } }

@@ -1,0 +1,4 @@
+# InputGroup - an input with a leading icon / addon in one bordered field:
+#   InputGroup { Icon "lucide:search"  SearchField bind(q) "Search..." class("input-group-control") }
+# shadcn-for-muten · part · no deps · uses .input-group from globals.css.
+part InputGroup() { Stack class("input-group") { slot } }

@@ -435,12 +435,14 @@
   .command-shortcut { @apply ml-auto text-xs tracking-widest text-muted-foreground; }
 
   /* ---- Table - style muten's DataTable to look shadcn: DataTable @rows columns(...) class("data-table") ---- */
-  .data-table { @apply w-full caption-bottom text-sm; }
-  .data-table thead tr { @apply border-b; }
-  .data-table th { @apply h-11 px-3 text-left align-middle font-medium text-muted-foreground whitespace-nowrap; }
-  .data-table tbody tr { @apply border-b transition-colors duration-200 hover:bg-muted/50; }
-  .data-table tbody tr:last-child { @apply border-0; }
-  .data-table td { @apply p-3 align-middle whitespace-nowrap; }
+  /* .mu-datatable is the base class the DataTable primitive always gets, so a bare `DataTable @rows columns(...)`
+     is styled out of the box (no class needed). Safe: DataTable is a leaf, never reused with another class. */
+  .data-table, .mu-datatable { @apply w-full caption-bottom text-sm; }
+  .data-table thead tr, .mu-datatable thead tr { @apply border-b; }
+  .data-table th, .mu-datatable th { @apply h-11 px-3 text-left align-middle font-medium text-muted-foreground whitespace-nowrap; }
+  .data-table tbody tr, .mu-datatable tbody tr { @apply border-b transition-colors duration-200 hover:bg-muted/50; }
+  .data-table tbody tr:last-child, .mu-datatable tbody tr:last-child { @apply border-0; }
+  .data-table td, .mu-datatable td { @apply p-3 align-middle whitespace-nowrap; }
 
   /* ---- Slider (Custom; the host JS builds .slider-range + .slider-thumb inside .slider) ---- */
   .slider { @apply relative h-2 w-full rounded-full bg-primary/20 cursor-pointer select-none; touch-action: none; }
@@ -714,6 +716,12 @@
   .pricing-period { @apply text-sm text-muted-foreground; }
   .pricing-features { @apply flex flex-col gap-2.5 flex-1; }
   .pricing-feature { @apply flex flex-row items-center gap-2 text-sm; }
+
+  /* ---- StatBand: a divided row of KPI stats (value + label), uniform, 2-up on mobile ---- */
+  .stat-band { @apply grid grid-cols-4 gap-px border-y border-border bg-border overflow-hidden max-sm:grid-cols-2; }
+  .stat { @apply flex flex-col items-center gap-1 bg-background px-6 py-10 text-center; }
+  .stat-value { @apply text-4xl font-bold tracking-tight; }
+  .stat-label { @apply text-sm text-muted-foreground; }
 
   /* ---- LogoCloud: the "trusted by" strip - a wrapping row of logos, muted until hover. GENERIC: an item holds
      ANY logo type - an <img>, an inline SVG/Icon, or a text wordmark - and each is normalized to the same height. ---- */

@@ -1,0 +1,4 @@
+# ButtonGroup - segmented row of buttons that share borders. Put `btn btn-outline` buttons inside:
+#   ButtonGroup { Button "Bold" -> b class("btn btn-outline")  Button "Italic" -> i class("btn btn-outline") }
+# shadcn-for-muten · part · no deps · uses .btn-group from globals.css.
+part ButtonGroup() { Stack class("btn-group") { slot } }

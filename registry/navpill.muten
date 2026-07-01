@@ -1,0 +1,10 @@
+# NavPill - the floating glass navbar, batteries included: a sticky + padded wrapper, the glass pill, AND the
+# scroll animation (settles + returns to rest at the top). Just drop your logo / links / CTA inside; it lays them
+# out with space-between (logo left, the rest right).
+#   NavPill {
+#     Stack class("flex flex-row items-center gap-2") { Icon "lucide:hexagon" class("size-5 text-primary")  Span "Acme" class("font-bold") }
+#     Stack class("flex flex-row items-center gap-6 text-sm text-muted-foreground max-md:hidden") { Link "Features" -> "/" class("link-underline")  Link "Pricing" -> "/" class("link-underline") }
+#     Link "Get started" -> "/" class("btn btn-default btn-sm press")
+#   }
+# shadcn-for-muten · part · no deps · uses .nav-pill + nav-scroll from globals.css.
+part NavPill() { Stack class("sticky top-0 z-50 px-4 pt-4") { Header class("nav-pill nav-scroll mx-auto w-full max-w-5xl") { slot } } }

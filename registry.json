@@ -545,22 +545,90 @@
       "component": "CountUp",
       "description": "Animate a formatted number (2.4M / 94% / 40ms / 99.99%) from 0 when it scrolls into view; lands on the exact target. Custom. Styled form (takes the class): `Custom CountUp inputs(to: \"2.4M\") class(\"text-4xl font-bold\")`. For stat bands + hero metrics.",
       "deps": []
+    },
+    {
+      "name": "navpill",
+      "part": "NavPill",
+      "file": "registry/navpill.muten",
+      "description": "BLOCK: the floating glass navbar (sticky wrapper + glass pill + scroll animation baked in). Drop logo/links/CTA inside.",
+      "deps": []
+    },
+    {
+      "name": "stat-band",
+      "part": "StatBand",
+      "file": "registry/stat-band.muten",
+      "description": "BLOCK: a divided row of KPI stats. Parts: StatBand, Stat(label) - value goes in the slot (Span or Custom CountUp).",
+      "deps": []
+    },
+    {
+      "name": "feature-rows",
+      "part": "FeatureRows",
+      "file": "registry/feature-rows.muten",
+      "description": "BLOCK: numbered feature/schedule rows with side gutters (12-col grid inside). Parts: FeatureRows, FeatureRow.",
+      "deps": []
+    },
+    {
+      "name": "bento",
+      "part": "BentoGallery",
+      "file": "registry/bento.muten",
+      "description": "BLOCK: fixed-row-height tiling gallery; cells pick their col-span. Parts: BentoGallery, BentoCell.",
+      "deps": []
+    },
+    {
+      "name": "button-group",
+      "part": "ButtonGroup",
+      "file": "registry/button-group.muten",
+      "description": "A segmented row of buttons that share borders. Put btn-outline buttons inside.",
+      "deps": []
+    },
+    {
+      "name": "input-group",
+      "part": "InputGroup",
+      "file": "registry/input-group.muten",
+      "description": "An input with a leading icon/addon in one bordered field.",
+      "deps": []
+    },
+    {
+      "name": "skeleton",
+      "part": "Skeleton",
+      "file": "registry/skeleton.muten",
+      "description": "A loading placeholder (pulse). Add size via class: Skeleton class(\"h-4 w-32\").",
+      "deps": []
+    },
+    {
+      "name": "kbd",
+      "part": "Kbd",
+      "file": "registry/kbd.muten",
+      "description": "A keyboard key hint. Kbd { Span \"Ctrl\" }.",
+      "deps": []
+    },
+    {
+      "name": "button",
+      "part": "Btn",
+      "file": "registry/button.muten",
+      "description": "Plug-and-play button (part Btn - Button is a primitive). `Btn(variant: \"default\", onClick: save) { Span \"Save\" }`. variant: default|secondary|outline|ghost|destructive|link.",
+      "deps": []
+    },
+    {
+      "name": "input",
+      "part": "Input",
+      "file": "registry/input.muten",
+      "description": "Plug-and-play text input (part Input wraps SearchField). `Input(value: q, placeholder: \"...\")` - value is two-way bound. For typed/validated fields use a Form.",
+      "deps": []
+    },
+    {
+      "name": "link-btn",
+      "part": "LinkBtn",
+      "file": "registry/link-btn.muten",
+      "description": "A navigation link styled as a button. `LinkBtn(to: \"/signup\", variant: \"default\") { Span \"Get started\" }`.",
+      "deps": []
     }
   ],
   "classComponents": {
     "note": "Size/spacing-driven primitives ship as classes in globals.css (no `muten add` needed once you @import it). Style the muten primitive with these:",
-    "button": "Button \"Save\" -> save class(\"btn btn-default\")   (variants: btn-default|btn-secondary|btn-outline|btn-ghost|btn-destructive|btn-link · sizes: btn-sm|btn-lg|btn-icon)",
-    "input": "SearchField bind(q) class(\"input\")",
     "textarea": "class(\"textarea\")  ·  label: class(\"label\")  ·  native select: class(\"native-select\")",
-    "skeleton": "Stack class(\"skeleton h-4 w-32\")   (add the size utilities)",
-    "kbd": "Span \"Ctrl\" class(\"kbd\")",
     "typography": "Title \"Docs\" h1 class(\"prose-h1\")   (prose-h1..h4 · prose-p|lead|large|small|muted|blockquote|code|list)",
-    "button-group": "Stack class(\"btn-group\") { Button \"A\" class(\"btn btn-outline\") Button \"B\" class(\"btn btn-outline\") }",
-    "input-group": "Stack class(\"input-group\") { Icon \"lucide:search\" SearchField bind(q) class(\"input-group-control\") }",
-    "nav-pill": "Header class(\"nav-pill\")  -  the floating glass navbar; wrap in Stack class(\"sticky top-0 z-50 px-4 pt-4\"). Add `nav-scroll` so it settles + deepens its shadow on scroll and returns to rest at the top.",
-    "feature-rows": "Stack class(\"feature-rows\") { Stack class(\"feature-row\") { Span \"01\" ... } }  -  numbered feature/schedule rows with baked side gutters (grid-cols-12 inside, stacks on mobile).",
-    "bento-gallery": "Stack class(\"bento-gallery\") { Stack class(\"bento-cell col-span-4\") {} Stack class(\"bento-cell col-span-2\") {} }  -  a fixed-row-height tiling gallery; children pick their col-span so every row lines up.",
-    "logo-cloud": "LogoCloud { LogoCloudItem { Span \"Acme\" } LogoCloudItem { Icon \"lucide:hexagon\" Span \"Northwind\" } }  -  a 'trusted by' strip, muted+grayscale until hover; accepts any logo type (image / icon / wordmark).",
+    "table": "DataTable @rows columns(name, email, status)  -  STYLED BY DEFAULT (no class needed). `class(\"data-table\")` still works as an explicit alias. Raw cells; for badge/formatted cells build with each + Stack.",
     "motion": "Page animations, all CSS + reduced-motion safe. Entrance: animate-fade-up|fade-in|scale-in|slide-in (+ d1..d6 stagger). Scroll: reveal|reveal-left|reveal-scale, and nav-scroll on a navbar. Hover/press: hover-lift, hover-glow, arrow-hover (nudges a trailing Icon), link-underline, press, float."
   }
 }

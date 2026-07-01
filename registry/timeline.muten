@@ -1,0 +1,16 @@
+# Timeline - a vertical list of events, each a dot on a connector line + content (title, time, description).
+#   state { events = query events : list<Event> }
+#   Timeline { each events as e { TimelineItem(title: e.title, time: e.time, desc: e.desc) } }
+# Own it with `muten add timeline`.
+# shadcn-for-muten · part · no deps · styles via .timeline / .timeline-* in globals.css.
+part Timeline() { Stack class("timeline") { slot } }
+part TimelineItem(title: text, time: text, desc: text) {
+  Stack class("timeline-item") {
+    Stack class("timeline-dot")
+    Stack class("timeline-content") {
+      Span "{$time}" class("timeline-time")
+      Span "{$title}" class("timeline-title")
+      Span "{$desc}" class("timeline-desc")
+    }
+  }
+}

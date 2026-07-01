@@ -1,0 +1,7 @@
+# Code - a syntax-highlighted code block. `lang` defaults to "muten" (the muten grammar, matching the VS Code
+# extension); pass another lang to render plain. NOTE: muten strings can't hold `{` or `"`, so feed muten source
+# from a .md file (a Markdown component) or a .js snippet, not an inline muten string.
+# shadcn-for-muten · Custom · host JS is src/components/Code.js (copied by `muten add code`); shares highlight.js.
+part Code(code: text, lang: text) {
+  Custom Code inputs(code: $code, lang: $lang) class("code-block")
+}

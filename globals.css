@@ -6,37 +6,159 @@
 /* Scan THIS plugin's parts so any utility used inside them is generated, even though they're imported from
    node_modules (which Tailwind's auto-scan skips). Relative to this file. */
 @source "./registry";
-@theme {
-  --color-background: hsl(0 0% 3.9%);
-  --color-foreground: hsl(0 0% 98%);
-  --color-card: hsl(0 0% 3.9%);
-  --color-card-foreground: hsl(0 0% 98%);
-  --color-popover: hsl(0 0% 3.9%);
-  --color-popover-foreground: hsl(0 0% 98%);
-  --color-primary: hsl(0 0% 98%);
-  --color-primary-foreground: hsl(0 0% 9%);
-  --color-secondary: hsl(0 0% 14.9%);
-  --color-secondary-foreground: hsl(0 0% 98%);
-  --color-muted: hsl(0 0% 14.9%);
-  --color-muted-foreground: hsl(0 0% 63.9%);
-  --color-accent: hsl(0 0% 14.9%);
-  --color-accent-foreground: hsl(0 0% 98%);
-  --color-destructive: hsl(0 62.8% 30.6%);
-  --color-destructive-foreground: hsl(0 0% 98%);
-  --color-border: hsl(0 0% 14.9%);
-  --color-input: hsl(0 0% 14.9%);
-  --color-ring: hsl(0 0% 83.1%);
+/* Make the `dark:` utility variant respond to a `.dark` CLASS (not the OS media query) - shadcn's v4 setup,
+   so a `<html class="dark">` flips both the tokens below AND every dark: utility in the recipes. */
+@custom-variant dark (&:is(.dark, .dark *, [data-theme="dark"], [data-theme="dark"] *));
 
-  /* shadcn radius scale: rounded-sm/md/lg derive from --radius, exactly like shadcn's tailwind config. */
-  --radius: 0.5rem;
+/* shadcn's EXACT default tokens (base color: neutral), verbatim from ui.shadcn.com. :root = light, .dark = dark;
+   an app opts into dark with <html class="dark">. @theme inline maps them to Tailwind's color vars so every
+   bg, text and border utility tracks the active mode (the inline keyword is what lets .dark override them).
+   NOTE: never write an asterisk-slash sequence in this comment - it closes the CSS comment early and drops :root. */
+:root {
+  --radius: 0.625rem;
+  /* refined ease-out for all overlay/disclosure motion - tune here once, every component follows. */
+  --mu-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --mu-motion: 180ms;
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+}
+.dark, [data-theme="dark"] {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
+}
+@theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: oklch(1 0 0); /* not a shadcn token anymore (destructive uses text-white); kept so any untouched recipe still resolves */
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+/* Premium elevation scale - modern 3-layer soft shadows (Vercel/Linear/Stripe feel): a tight contact layer +
+   a mid layer + a wide ambient layer, each roughly doubling blur/offset while opacity stays LOW (4-12%). That
+   is what makes cards float "airy" instead of looking stamped-on. Overrides Tailwind's defaults so every
+   card / dialog / popover / button gets it. Tuned for light surfaces; on dark UIs elevation reads mostly through
+   the border + a lighter surface (see .dark --card), so the shadow stays subtle by design. */
+@theme {
+  --shadow:     0 1px 2px -1px rgb(0 0 0 / 0.06), 0 1px 3px 0 rgb(0 0 0 / 0.04);
+  --shadow-2xs: 0 1px 2px 0 rgb(0 0 0 / 0.04);
+  --shadow-xs:  0 1px 2px -1px rgb(0 0 0 / 0.06), 0 1px 3px 0 rgb(0 0 0 / 0.04);
+  --shadow-sm:  0 1px 2px -1px rgb(0 0 0 / 0.06), 0 2px 4px 0 rgb(0 0 0 / 0.05);
+  --shadow-md:  0 2px 4px -2px rgb(0 0 0 / 0.06), 0 4px 8px -2px rgb(0 0 0 / 0.06), 0 8px 16px -4px rgb(0 0 0 / 0.05);
+  --shadow-lg:  0 2px 4px -2px rgb(0 0 0 / 0.05), 0 8px 16px -4px rgb(0 0 0 / 0.08), 0 16px 32px -8px rgb(0 0 0 / 0.06);
+  --shadow-xl:  0 4px 8px -4px rgb(0 0 0 / 0.06), 0 12px 24px -6px rgb(0 0 0 / 0.10), 0 24px 48px -12px rgb(0 0 0 / 0.08);
+  --shadow-2xl: 0 8px 16px -6px rgb(0 0 0 / 0.08), 0 24px 48px -12px rgb(0 0 0 / 0.12), 0 40px 72px -16px rgb(0 0 0 / 0.10);
 }
 
 /* shadcn's base: every border/outline defaults to the token (so a bare `border` is subtle, not currentColor). */
 @layer base {
-  * { border-color: var(--color-border); outline-color: color-mix(in srgb, var(--color-ring) 50%, transparent); }
+  * { @apply border-border outline-ring/50; }
+  body { @apply bg-background text-foreground; }
+
+  /* muten's runtime emits a "Skip to content" link as the first node; hide it until keyboard-focused (else it
+     shows as raw text at the top-left of every app that only imports this plugin's globals). */
+  .mu-skip-link { @apply absolute -left-[9999px] top-2 z-[1000] rounded-md bg-foreground px-4 py-2 text-sm text-background; }
+  .mu-skip-link:focus { @apply left-2; }
+
+  /* Icons: muten emits an Icon as <span class="mu-icon"><svg>…</svg></span>. The raw <svg> is inline, so it
+     sits on the text baseline INSIDE its span and looks a touch high/low next to a label. Make every icon a
+     centered inline-flex box (default 1em = text size) with a block svg → icon+text align optically EVERYWHERE
+     (nav items, pills, links…), not only inside .btn/.toggle. Size utilities (size-4, text-lg) still win. */
+  .mu-icon { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; width: 1em; height: 1em; line-height: 1; }
+  .mu-icon > svg { display: block; width: 100%; height: 100%; }
+
+  /* Interactive elements get a pointer cursor - Tailwind v4's preflight leaves <button> as the default arrow,
+     which reads as "not clickable" on tabs / accordion triggers / menu items. This covers every button-based part. */
+  button:not(:disabled), [role="tab"], [role="button"], summary, label:has(> input:not([disabled])) { cursor: pointer; }
 
   /* Fully themed scrollbars (track + thumb), so the OS default never clashes with the theme. */
   * { scrollbar-width: thin; scrollbar-color: var(--color-border) transparent; }
@@ -48,40 +170,47 @@
 }
 
 @layer components {
-  /* ---- Button (buttonVariants) - sizes default in .btn; .btn-sm/-lg/-icon override ---- */
-  .btn { @apply inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium outline-none transition-all duration-200 active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50 focus-visible:ring-[3px] focus-visible:ring-ring/50 h-9 px-4 py-2; }
-  .btn-default { @apply bg-primary text-primary-foreground shadow hover:bg-primary/90; }
-  .btn-destructive { @apply bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90; }
-  .btn-outline { @apply border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground; }
-  .btn-secondary { @apply bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80; }
-  .btn-ghost { @apply text-foreground hover:bg-accent hover:text-accent-foreground; }
+  /* ---- Button (buttonVariants) - shadcn new-york-v4 (stable, what `shadcn add button` installs) ----
+     Ported verbatim; the only utilities dropped are `has-[>svg]:px-*` (per-icon padding tweak that needs a
+     raw <svg> child - muten renders icons as iconify-icon). Icon sizing is the `.btn svg` rule below. */
+  .btn { @apply inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium leading-none transition-all shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] active:scale-[0.97] aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 disabled:pointer-events-none disabled:opacity-50 h-8 px-3; }
+  .btn-default { @apply bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 active:bg-primary/80; }
+  .btn-destructive { @apply bg-destructive text-white shadow-xs hover:bg-destructive/90 active:bg-destructive/80 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60; }
+  .btn-outline { @apply border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground active:bg-accent/70 dark:bg-input/30 dark:border-input dark:hover:bg-input/50 dark:active:bg-input/70; }
+  .btn-secondary { @apply bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary/80 active:bg-secondary/70; }
+  .btn-ghost { @apply hover:bg-accent hover:text-accent-foreground active:bg-accent/70 dark:hover:bg-accent/50 dark:active:bg-accent/70; }
   .btn-link { @apply text-primary underline-offset-4 hover:underline; }
-  .btn-sm { @apply h-8 rounded-md px-3 text-xs; }
-  .btn-lg { @apply h-10 rounded-md px-8; }
-  .btn-icon { @apply h-9 w-9 shrink-0 px-0; }
-  /* shadcn sizes any icon inside a button (its [&_svg]:size-4); so `Button { Icon } class("btn btn-ghost btn-icon")` just works */
+  .btn-xs { @apply h-6 gap-1 rounded-md px-2 text-xs; }
+  .btn-sm { @apply h-7 rounded-md gap-1.5 px-2.5; }
+  .btn-lg { @apply h-9 rounded-md px-5; }
+  .btn-icon { @apply size-8; }
+  .btn-icon-xs { @apply size-6 rounded-md; }
+  .btn-icon-sm { @apply size-7; }
+  .btn-icon-lg { @apply size-9; }
+  /* shadcn sizes any icon inside a button (its [&_svg]:size-4); the xs sizes drop to size-3. */
   .btn svg, .btn .mu-icon, .btn iconify-icon { width: 1rem; height: 1rem; flex-shrink: 0; }
+  .btn-xs svg, .btn-xs .mu-icon, .btn-xs iconify-icon, .btn-icon-xs svg, .btn-icon-xs .mu-icon, .btn-icon-xs iconify-icon { width: .75rem; height: .75rem; }
 
   /* ---- Form controls ---- */
-  .input { @apply flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm outline-none transition-[color,box-shadow] duration-200 placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50; }
-  .textarea { @apply flex min-h-16 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm outline-none transition-[color,box-shadow] duration-200 placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50; }
+  .input { @apply flex h-8 w-full min-w-0 rounded-md border border-input bg-transparent px-3 py-1 text-base md:text-sm shadow-xs transition-[color,box-shadow] outline-none selection:bg-primary selection:text-primary-foreground placeholder:text-muted-foreground file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground dark:bg-input/30 focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50; }
+  .textarea { @apply flex field-sizing-content min-h-16 w-full rounded-md border border-input bg-transparent px-3 py-2 text-base md:text-sm shadow-xs transition-[color,box-shadow] outline-none placeholder:text-muted-foreground dark:bg-input/30 focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 disabled:cursor-not-allowed disabled:opacity-50; }
   .label { @apply text-sm font-medium leading-none; }
-  .native-select { @apply flex h-9 w-full items-center rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm outline-none transition-[color,box-shadow] duration-200 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50; }
+  .native-select { @apply flex h-8 w-full items-center rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs outline-none transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive dark:bg-input/30 disabled:cursor-not-allowed disabled:opacity-50; }
 
   /* ---- Card ---- */
-  .card { @apply rounded-xl border bg-card text-card-foreground shadow; }
-  .card-header { @apply flex flex-col space-y-1.5 p-6; }
-  .card-title { @apply font-semibold leading-none tracking-tight; }
+  .card { @apply bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm; }
+  .card-header { @apply grid auto-rows-min items-start gap-1.5 px-6; }
+  .card-title { @apply font-semibold leading-none; }
   .card-description { @apply text-sm text-muted-foreground; }
-  .card-content { @apply p-6 pt-0; }
-  .card-footer { @apply flex flex-row items-center p-6 pt-0; }
+  .card-content { @apply px-6; }
+  .card-footer { @apply flex flex-row items-center px-6; }
 
   /* ---- Badge (badgeVariants) ---- */
-  .badge { @apply inline-flex items-center justify-center rounded-md border px-2 py-0.5 text-xs font-semibold w-fit whitespace-nowrap shrink-0 gap-1 transition-colors duration-200; }
-  .badge-default { @apply border-transparent bg-primary text-primary-foreground; }
-  .badge-secondary { @apply border-transparent bg-secondary text-secondary-foreground; }
-  .badge-destructive { @apply border-transparent bg-destructive text-destructive-foreground; }
-  .badge-outline { @apply text-foreground; }
+  .badge { @apply inline-flex items-center justify-center rounded-md border px-2 py-0.5 text-xs font-medium leading-none w-fit whitespace-nowrap shrink-0 gap-1 overflow-hidden transition-[color,box-shadow] [&>svg]:size-3 [&>svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40; }
+  .badge-default { @apply border-transparent bg-primary text-primary-foreground [a&]:hover:bg-primary/90; }
+  .badge-secondary { @apply border-transparent bg-secondary text-secondary-foreground [a&]:hover:bg-secondary/90; }
+  .badge-destructive { @apply border-transparent bg-destructive text-white [a&]:hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60; }
+  .badge-outline { @apply text-foreground [a&]:hover:bg-accent [a&]:hover:text-accent-foreground; }
   /* Notification count pill (rounded-full, for an unseen counter) + a bare status dot. Default primary;
      add .badge-count-destructive for a red alert count. */
   .badge-count { @apply inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-primary px-1.5 text-[10px] font-semibold leading-none text-primary-foreground; }
@@ -89,11 +218,11 @@
   .badge-dot { @apply inline-block size-2 shrink-0 rounded-full bg-primary; }
 
   /* ---- Alert ---- */
-  .alert { @apply relative w-full rounded-lg border px-4 py-3 text-sm flex flex-row gap-3 items-start; }
-  .alert-default { @apply bg-background text-foreground; }
-  .alert-destructive { @apply border-destructive/50 text-destructive; }
-  .alert-title { @apply font-medium leading-none tracking-tight; }
-  .alert-description { @apply text-sm opacity-90; }
+  .alert { @apply relative w-full rounded-lg border px-4 py-3 text-sm flex flex-row gap-3 items-start bg-card text-card-foreground; }
+  .alert-default { @apply bg-card text-card-foreground; }
+  .alert-destructive { @apply bg-card text-destructive; }
+  .alert-title { @apply font-medium tracking-tight; }
+  .alert-description { @apply text-sm text-muted-foreground; }
 
   /* ---- Avatar ---- */
   .avatar { @apply relative flex size-10 shrink-0 overflow-hidden rounded-full; }
@@ -151,9 +280,12 @@
   .checkbox-icon-on { transform: scale(1); opacity: 1; }
 
   /* ---- Toggle / Toggle Group (toggle .toggle-on from the page state) ---- */
-  .toggle { @apply inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium h-9 min-w-9 px-2 outline-none transition-all duration-200 active:scale-[0.98] hover:bg-muted hover:text-muted-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50; }
+  .toggle { @apply inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium h-8 min-w-8 px-2 outline-none transition-all duration-200 active:scale-[0.98] hover:bg-muted hover:text-muted-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50; }
   .toggle-on { @apply bg-accent text-accent-foreground; }
   .toggle-group { @apply inline-flex flex-row items-center gap-1; }
+  /* size + center any icon inside a toggle (a bare <svg>/iconify sits on the text baseline otherwise -> the
+     "B" looks off). `block` + fixed size makes the flex `items-center` truly center it against the label. */
+  .toggle svg, .toggle .mu-icon, .toggle iconify-icon { display: block; width: 1rem; height: 1rem; flex-shrink: 0; }
 
   /* ---- Radio Group ---- */
   .radio-group { @apply flex flex-col gap-3; }
@@ -183,30 +315,31 @@
   .accordion-content { @apply pb-4 text-sm text-muted-foreground; }
 
   /* ---- Tabs (active panel via .hidden toggle so panel state survives switching) ---- */
-  .tabs-list { @apply inline-flex flex-row items-center justify-center gap-1 rounded-lg bg-muted p-1 text-muted-foreground; }
-  .tabs-trigger { @apply inline-flex items-center justify-center gap-1.5 rounded-md px-3 py-1 text-sm font-medium whitespace-nowrap outline-none transition-all duration-200 focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50; }
-  .tabs-trigger-active { @apply bg-background text-foreground shadow-sm; }
-  .tabs-content { @apply mt-2 outline-none; }
+  .tabs-list { @apply inline-flex h-9 w-fit flex-row items-center justify-center rounded-lg bg-muted p-[3px] text-muted-foreground; }
+  .tabs-trigger { @apply inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent px-2 py-1 text-sm font-medium whitespace-nowrap text-foreground dark:text-muted-foreground outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50; transition: color var(--mu-motion) var(--mu-ease), background-color var(--mu-motion) var(--mu-ease), box-shadow var(--mu-motion) var(--mu-ease), border-color var(--mu-motion) var(--mu-ease); }
+  .tabs-trigger-active { @apply bg-background text-foreground shadow-sm dark:border-input dark:bg-input/30 dark:text-foreground; }
+  /* the panel fades+slides in whenever it goes from display:none (.hidden) to shown - i.e. on every tab switch. */
+  .tabs-content { @apply mt-2 flex-1 outline-none; animation: mu-tab-in var(--mu-motion) var(--mu-ease); }
 
   /* ---- Dialog (modal: page owns `open`; overlay always renders, fades+zooms via .dialog-overlay-open) ---- */
-  .dialog-overlay { @apply fixed inset-0 z-50 flex items-center justify-center p-4 opacity-0 invisible; transition: opacity 200ms ease, visibility 200ms ease; }
+  .dialog-overlay { @apply fixed inset-0 z-50 flex items-center justify-center p-4 opacity-0 invisible; transition: opacity var(--mu-motion) var(--mu-ease), visibility var(--mu-motion) var(--mu-ease); }
   .dialog-overlay-open { @apply opacity-100 visible; }
-  .dialog-backdrop { @apply fixed inset-0 bg-black/80; }
-  .dialog-content { @apply relative z-10 w-full max-w-lg rounded-lg border bg-background p-6 shadow-lg flex flex-col gap-4 scale-95 transition-transform duration-200; }
+  .dialog-backdrop { @apply fixed inset-0 bg-black/50; }
+  .dialog-content { @apply relative z-10 w-full max-w-[calc(100%-2rem)] sm:max-w-lg rounded-lg border bg-background p-6 shadow-lg flex flex-col gap-4 scale-95; transition: scale var(--mu-motion) var(--mu-ease), translate var(--mu-motion) var(--mu-ease); }
   .dialog-overlay-open .dialog-content { @apply scale-100; }
-  .dialog-title { @apply text-lg font-semibold leading-none tracking-tight; }
+  .dialog-title { @apply text-lg font-semibold leading-none; }
   .dialog-description { @apply text-sm text-muted-foreground; }
-  .dialog-footer { @apply flex flex-row justify-end gap-2; }
+  .dialog-footer { @apply flex flex-col-reverse gap-2 sm:flex-row sm:justify-end; }
 
   /* ---- Tooltip (pure CSS :hover, no state) ---- */
   .tooltip-wrap { @apply relative inline-flex; }
-  .tooltip-content { @apply pointer-events-none absolute bottom-full left-1/2 z-50 mb-2 -translate-x-1/2 whitespace-nowrap rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground shadow-md opacity-0 invisible; transition: opacity 200ms ease, visibility 200ms ease; }
-  .tooltip-wrap:hover .tooltip-content { @apply opacity-100 visible; }
+  .tooltip-content { @apply pointer-events-none absolute bottom-full left-1/2 z-50 mb-2 origin-bottom -translate-x-1/2 translate-y-1 scale-95 whitespace-nowrap rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground shadow-md opacity-0 invisible; transition: opacity var(--mu-motion) var(--mu-ease), scale var(--mu-motion) var(--mu-ease), translate var(--mu-motion) var(--mu-ease), visibility var(--mu-motion) var(--mu-ease); }
+  .tooltip-wrap:hover .tooltip-content { @apply opacity-100 visible translate-y-0 scale-100; }
 
   /* ---- Dropdown Menu (page owns `open`; absolute panel below the trigger; backdrop catches outside clicks) ---- */
   .dropdown { @apply relative inline-flex; }
   .dropdown-backdrop { @apply fixed inset-0 z-40; }
-  .dropdown-content { @apply absolute top-full right-0 z-50 mt-1 min-w-48 rounded-md border bg-popover p-1 text-popover-foreground shadow-md flex flex-col origin-top-right opacity-0 invisible scale-95; transition: opacity 150ms ease, transform 150ms ease, visibility 150ms ease; }
+  .dropdown-content { @apply absolute top-full right-0 z-50 mt-1 min-w-48 rounded-md border bg-popover p-1 text-popover-foreground shadow-md flex flex-col origin-top-right opacity-0 invisible scale-95; transition: opacity var(--mu-motion) var(--mu-ease), scale var(--mu-motion) var(--mu-ease), translate var(--mu-motion) var(--mu-ease), visibility var(--mu-motion) var(--mu-ease); }
   .dropdown-content-open { @apply opacity-100 visible scale-100; }
   .dropdown-item { @apply flex flex-row items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none transition-colors duration-200 hover:bg-accent hover:text-accent-foreground; }
   .dropdown-label { @apply px-2 py-1.5 text-sm font-semibold; }
@@ -215,37 +348,37 @@
   /* ---- Popover (page owns `open`; absolute panel below the trigger) ---- */
   .popover { @apply relative inline-flex; }
   .popover-backdrop { @apply fixed inset-0 z-40; }
-  .popover-content { @apply absolute top-full left-0 z-50 mt-1 w-72 rounded-md border bg-popover p-4 text-popover-foreground shadow-md flex flex-col gap-2 origin-top opacity-0 invisible scale-95; transition: opacity 150ms ease, transform 150ms ease, visibility 150ms ease; }
+  .popover-content { @apply absolute top-full left-0 z-50 mt-1 w-72 rounded-md border bg-popover p-4 text-popover-foreground shadow-md flex flex-col gap-2 origin-top opacity-0 invisible scale-95; transition: opacity var(--mu-motion) var(--mu-ease), scale var(--mu-motion) var(--mu-ease), translate var(--mu-motion) var(--mu-ease), visibility var(--mu-motion) var(--mu-ease); }
   .popover-content-open { @apply opacity-100 visible scale-100; }
 
   /* ---- Sheet (side panel; slides in from the right via translate) ---- */
-  .sheet-overlay { @apply fixed inset-0 z-50 opacity-0 invisible; transition: opacity 300ms ease, visibility 300ms ease; }
+  .sheet-overlay { @apply fixed inset-0 z-50 opacity-0 invisible; transition: opacity 260ms var(--mu-ease), visibility 260ms var(--mu-ease); }
   .sheet-overlay-open { @apply opacity-100 visible; }
-  .sheet-backdrop { @apply fixed inset-0 bg-black/80; }
-  .sheet-content { @apply fixed inset-y-0 right-0 z-10 h-full w-3/4 max-w-sm border-l bg-background p-6 shadow-lg flex flex-col gap-4 translate-x-full; transition: transform 300ms ease; }
+  .sheet-backdrop { @apply fixed inset-0 bg-black/50; }
+  .sheet-content { @apply fixed inset-y-0 right-0 z-10 h-full w-3/4 max-w-sm border-l bg-background p-6 shadow-lg flex flex-col gap-4 translate-x-full; transition: translate 260ms var(--mu-ease); }
   .sheet-overlay-open .sheet-content { @apply translate-x-0; }
   .sheet-title { @apply text-lg font-semibold text-foreground; }
   .sheet-description { @apply text-sm text-muted-foreground; }
 
   /* ---- Drawer (bottom sheet; slides up via translate) ---- */
-  .drawer-overlay { @apply fixed inset-0 z-50 opacity-0 invisible; transition: opacity 300ms ease, visibility 300ms ease; }
+  .drawer-overlay { @apply fixed inset-0 z-50 opacity-0 invisible; transition: opacity 260ms var(--mu-ease), visibility 260ms var(--mu-ease); }
   .drawer-overlay-open { @apply opacity-100 visible; }
-  .drawer-backdrop { @apply fixed inset-0 bg-black/80; }
-  .drawer-content { @apply fixed inset-x-0 bottom-0 z-10 mt-24 flex flex-col gap-4 rounded-t-lg border bg-background p-6 translate-y-full; transition: transform 300ms ease; }
+  .drawer-backdrop { @apply fixed inset-0 bg-black/50; }
+  .drawer-content { @apply fixed inset-x-0 bottom-0 z-10 mt-24 flex flex-col gap-4 rounded-t-lg border bg-background p-6 translate-y-full; transition: translate 260ms var(--mu-ease); }
   .drawer-overlay-open .drawer-content { @apply translate-y-0; }
   .drawer-handle { @apply mx-auto h-2 w-24 rounded-full bg-muted; }
 
   /* ---- Hover Card (pure CSS :hover, richer than a tooltip) ---- */
   .hover-card { @apply relative inline-flex; }
   .hover-card-trigger { @apply underline underline-offset-4 cursor-pointer; }
-  .hover-card-content { @apply pointer-events-none absolute top-full left-0 z-50 mt-2 w-64 rounded-md border bg-popover p-4 text-popover-foreground shadow-md flex flex-col gap-2 opacity-0 invisible; transition: opacity 200ms ease, visibility 200ms ease; }
-  .hover-card:hover .hover-card-content { @apply opacity-100 visible; }
+  .hover-card-content { @apply pointer-events-none absolute top-full left-0 z-50 mt-2 w-64 origin-top -translate-y-1 scale-95 rounded-md border bg-popover p-4 text-popover-foreground shadow-md flex flex-col gap-2 opacity-0 invisible; transition: opacity var(--mu-motion) var(--mu-ease), scale var(--mu-motion) var(--mu-ease), translate var(--mu-motion) var(--mu-ease), visibility var(--mu-motion) var(--mu-ease); }
+  .hover-card:hover .hover-card-content { @apply opacity-100 visible translate-y-0 scale-100; }
 
   /* ---- Select (trigger shows the value; items check when selected) ---- */
   .select-wrap { @apply relative inline-flex flex-col w-full max-w-xs; }
   .select-backdrop { @apply fixed inset-0 z-40; }
-  .select-trigger { @apply flex h-9 w-full items-center justify-between gap-2 rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm outline-none transition-[color,box-shadow] duration-200 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50; }
-  .select-content { @apply absolute top-full left-0 z-50 mt-1 w-full min-w-32 rounded-md border bg-popover p-1 text-popover-foreground shadow-md flex flex-col origin-top opacity-0 invisible scale-95; transition: opacity 150ms ease, transform 150ms ease, visibility 150ms ease; }
+  .select-trigger { @apply flex h-8 w-full items-center justify-between gap-2 rounded-md border border-input bg-transparent px-3 py-2 text-sm whitespace-nowrap shadow-xs outline-none transition-[color,box-shadow] data-[placeholder]:text-muted-foreground dark:bg-input/30 dark:hover:bg-input/50 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 disabled:cursor-not-allowed disabled:opacity-50; }
+  .select-content { @apply absolute top-full left-0 z-50 mt-1 w-full min-w-32 rounded-md border bg-popover p-1 text-popover-foreground shadow-md flex flex-col origin-top opacity-0 invisible scale-95; transition: opacity var(--mu-motion) var(--mu-ease), scale var(--mu-motion) var(--mu-ease), translate var(--mu-motion) var(--mu-ease), visibility var(--mu-motion) var(--mu-ease); }
   .select-content-open { @apply opacity-100 visible scale-100; }
   .select-item { @apply flex flex-row items-center justify-between gap-2 rounded-sm px-2 py-1.5 text-sm outline-none transition-colors duration-200 hover:bg-accent hover:text-accent-foreground; }
 
@@ -272,7 +405,7 @@
   .menubar-item { @apply relative; }
   .menubar-trigger { @apply flex flex-row items-center rounded-sm px-3 py-1 text-sm font-medium outline-none transition-colors duration-200 hover:bg-accent hover:text-accent-foreground; }
   .menubar-trigger-active { @apply bg-accent text-accent-foreground; }
-  .menubar-content { @apply absolute top-full left-0 z-50 mt-1 min-w-48 rounded-md border bg-popover p-1 text-popover-foreground shadow-md flex flex-col origin-top opacity-0 invisible scale-95; transition: opacity 150ms ease, transform 150ms ease, visibility 150ms ease; }
+  .menubar-content { @apply absolute top-full left-0 z-50 mt-1 min-w-48 rounded-md border bg-popover p-1 text-popover-foreground shadow-md flex flex-col origin-top opacity-0 invisible scale-95; transition: opacity var(--mu-motion) var(--mu-ease), scale var(--mu-motion) var(--mu-ease), translate var(--mu-motion) var(--mu-ease), visibility var(--mu-motion) var(--mu-ease); }
   .menubar-content-open { @apply opacity-100 visible scale-100; }
 
   /* ---- Navigation Menu (hover-driven, pure CSS) ---- */
@@ -287,7 +420,7 @@
 
   /* ---- Combobox (a Select with a search box; page filters items with `where`) ---- */
   .combobox-trigger { @apply flex h-9 w-full items-center justify-between gap-2 rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm outline-none transition-[color,box-shadow] duration-200 hover:bg-accent/40 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50; }
-  .combobox-content { @apply absolute top-full left-0 z-50 mt-1 w-full rounded-md border bg-popover text-popover-foreground shadow-md flex flex-col origin-top opacity-0 invisible scale-95; transition: opacity 150ms ease, transform 150ms ease, visibility 150ms ease; }
+  .combobox-content { @apply absolute top-full left-0 z-50 mt-1 w-full rounded-md border bg-popover text-popover-foreground shadow-md flex flex-col origin-top opacity-0 invisible scale-95; transition: opacity var(--mu-motion) var(--mu-ease), scale var(--mu-motion) var(--mu-ease), translate var(--mu-motion) var(--mu-ease), visibility var(--mu-motion) var(--mu-ease); }
   .combobox-content-open { @apply opacity-100 visible scale-100; }
   .combobox-search { @apply flex h-9 w-full border-b border-border bg-transparent px-3 text-sm outline-none placeholder:text-muted-foreground; }
   .combobox-list { @apply flex flex-col p-1 overflow-auto max-h-60; }
@@ -345,7 +478,7 @@
   /* ---- Carousel (Custom; host renders slides from a list + prev/next) ---- */
   .carousel { @apply relative w-full max-w-xs; }
   .carousel-viewport { @apply overflow-hidden rounded-lg; }
-  .carousel-track { @apply flex flex-row; transition: transform 300ms ease; }
+  .carousel-track { @apply flex flex-row; transition: translate 260ms var(--mu-ease); }
   .carousel-slide { @apply flex min-w-full aspect-square items-center justify-center rounded-lg border bg-card text-4xl font-semibold select-none; }
   .carousel-prev { @apply absolute top-1/2 -left-4 -translate-y-1/2 inline-flex size-8 items-center justify-center rounded-full border border-input bg-background shadow outline-none transition-colors duration-200 hover:bg-accent; }
   .carousel-next { @apply absolute top-1/2 -right-4 -translate-y-1/2 inline-flex size-8 items-center justify-center rounded-full border border-input bg-background shadow outline-none transition-colors duration-200 hover:bg-accent; }
@@ -375,10 +508,16 @@
   .number-field-input { @apply h-full w-14 min-w-0 border-0 bg-transparent text-center text-sm outline-none; -moz-appearance: textfield; }
   .number-field-input::-webkit-inner-spin-button, .number-field-input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
 
-  /* ---- Segmented Control (single-select toolbar; like Tabs but for a toolbar) ---- */
+  /* ---- Segmented Control (single-select toolbar; like Tabs but for a toolbar). `.segmented-fill` makes the
+     items stretch full-width (a top-level tab bar: Forms · Scheduling · PDF …). Use IconTab for icon+label. ---- */
   .segmented { @apply inline-flex flex-row items-center gap-1 rounded-lg bg-muted p-1 text-muted-foreground; }
-  .segmented-item { @apply inline-flex items-center justify-center gap-1.5 rounded-md px-3 py-1 text-sm font-medium whitespace-nowrap outline-none transition-all duration-200 hover:text-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50; }
+  .segmented-fill { @apply flex w-full; }
+  .segmented-fill .segmented-item { @apply flex-1; }
+  .segmented-item { @apply inline-flex items-center justify-center gap-1.5 rounded-md px-3 h-8 text-sm font-medium leading-none whitespace-nowrap outline-none transition-all duration-200 hover:text-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50; }
   .segmented-item-active { @apply bg-background text-foreground shadow-sm; }
+
+  /* ---- Pill (a hero eyebrow: rounded-full chip with an icon + text in the slot). Bigger than a Badge. ---- */
+  .pill { @apply inline-flex flex-row items-center gap-1.5 rounded-full border px-4 py-1.5 text-sm font-medium leading-none w-fit whitespace-nowrap transition-colors; }
 
   /* ---- File Input / Dropzone (Custom; click or drag-drop) ---- */
   .dropzone { @apply flex flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed border-input p-8 text-center text-sm text-muted-foreground cursor-pointer transition-colors duration-200 hover:border-ring hover:bg-accent/30; }
@@ -389,7 +528,7 @@
   .color-picker { @apply relative inline-flex; }
   .color-swatch { @apply inline-flex h-9 items-center gap-2 rounded-md border border-input bg-transparent px-2 text-sm shadow-sm outline-none transition-colors duration-200 hover:bg-accent focus-visible:ring-[3px] focus-visible:ring-ring/50; }
   .color-swatch-dot { @apply size-5 rounded-sm border border-border shrink-0; }
-  .color-popover { @apply absolute top-full left-0 z-50 mt-1 w-56 rounded-md border bg-popover p-3 text-popover-foreground shadow-md flex flex-col gap-3 origin-top opacity-0 invisible scale-95; transition: opacity 150ms ease, transform 150ms ease, visibility 150ms ease; }
+  .color-popover { @apply absolute top-full left-0 z-50 mt-1 w-56 rounded-md border bg-popover p-3 text-popover-foreground shadow-md flex flex-col gap-3 origin-top opacity-0 invisible scale-95; transition: opacity var(--mu-motion) var(--mu-ease), scale var(--mu-motion) var(--mu-ease), translate var(--mu-motion) var(--mu-ease), visibility var(--mu-motion) var(--mu-ease); }
   .color-popover-open { @apply opacity-100 visible scale-100; }
   .color-sv { position: relative; width: 100%; height: 8rem; border-radius: calc(var(--radius) - 2px); cursor: crosshair; }
   .color-sv-cursor, .color-hue-cursor { position: absolute; border: 2px solid #fff; border-radius: 9999px; transform: translate(-50%, -50%); box-shadow: 0 0 0 1px rgba(0,0,0,.4); pointer-events: none; }
@@ -473,6 +612,13 @@
   .sidebar-group-label { @apply px-2 py-1 text-xs font-medium text-muted-foreground; }
   .sidebar-item { @apply flex flex-row items-center gap-2 rounded-md px-2 py-1.5 text-sm whitespace-nowrap outline-none transition-colors duration-200 hover:bg-accent; }
   .sidebar-item-active { @apply bg-accent text-accent-foreground font-medium; }
+  /* collapsed rail: hide every label + the header wordmark, and center what remains, so the sidebar becomes a
+     clean icon strip instead of clipping text. The `> :not(.mu-icon)` keeps the header's icon, drops its label. */
+  .sidebar-collapsed .sidebar-item-label,
+  .sidebar-collapsed .sidebar-group-label,
+  .sidebar-collapsed .sidebar-header > :not(.mu-icon) { display: none; }
+  .sidebar-collapsed .sidebar-item,
+  .sidebar-collapsed .sidebar-header { @apply justify-center px-0; }
 
   /* ---- Sortable List (Custom; drag rows to reorder, e.g. layers) ---- */
   .sortable-list { @apply flex flex-col gap-1; }
@@ -516,8 +662,159 @@
   .btn-group > *:first-child { @apply rounded-l-md; }
   .btn-group > *:last-child { @apply rounded-r-md; }
   .btn-group > * + * { @apply -ml-px; }
-  .input-group { @apply flex flex-row h-9 w-full items-center gap-2 rounded-md border border-input bg-transparent px-3 text-sm shadow-sm outline-none transition-[color,box-shadow] duration-200 focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/50; }
+  .input-group { @apply flex flex-row h-8 w-full items-center gap-2 rounded-md border border-input bg-transparent px-3 text-sm shadow-sm outline-none transition-[color,box-shadow] duration-200 focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/50; }
   .input-group-control { @apply h-full flex-1 border-0 bg-transparent p-0 text-sm shadow-none outline-none placeholder:text-muted-foreground; }
+
+  /* ---- Stepper (horizontal by default; add .stepper-vertical). Put a state on each .stepper-step:
+     -done (completed, filled) / -active (current, ringed) / bare (upcoming). Compose with `each` + the Step part. ---- */
+  .stepper { @apply flex flex-row items-start w-full; }
+  .stepper-step { @apply relative flex flex-1 flex-col items-center text-center min-w-0; }
+  .stepper-step:not(:last-child)::after { content: ""; @apply absolute top-4 left-1/2 h-0.5 w-full -translate-y-1/2 bg-border transition-colors duration-300; }
+  .stepper-step-done::after { @apply bg-primary; }
+  .stepper-indicator { @apply relative z-10 flex size-8 shrink-0 items-center justify-center rounded-full border bg-background text-sm font-medium text-muted-foreground transition-all duration-300; }
+  .stepper-step-active .stepper-indicator { @apply border-primary text-foreground ring-4 ring-ring/20; }
+  .stepper-step-done .stepper-indicator { @apply border-primary bg-primary text-primary-foreground; }
+  .stepper-step-done .stepper-num { @apply hidden; }
+  .stepper-label { @apply mt-2 px-2 text-xs font-medium text-muted-foreground transition-colors; }
+  .stepper-step-active .stepper-label, .stepper-step-done .stepper-label { @apply text-foreground; }
+  /* vertical variant */
+  .stepper-vertical { @apply flex-col items-stretch; }
+  .stepper-vertical .stepper-step { @apply flex-row items-start gap-3 flex-none pb-8 text-left; }
+  .stepper-vertical .stepper-step:last-child { @apply pb-0; }
+  .stepper-vertical .stepper-step:not(:last-child)::after { @apply top-8 left-4 h-full w-0.5 translate-y-0 -translate-x-1/2; }
+  .stepper-vertical .stepper-label { @apply mt-1 px-0; }
+
+  /* ---- Timeline (vertical event list: dot + connector + content). Compose with `each` + the TimelineItem part. ---- */
+  .timeline { @apply flex flex-col; }
+  .timeline-item { @apply relative flex flex-row gap-4 pb-6; }
+  .timeline-item:last-child { @apply pb-0; }
+  .timeline-item:not(:last-child)::before { content: ""; @apply absolute left-[0.4375rem] top-4 bottom-0 w-0.5 bg-border; }
+  .timeline-dot { @apply relative z-10 mt-1 size-3.5 shrink-0 rounded-full border-2 border-primary bg-background; }
+  .timeline-dot-muted { @apply border-muted-foreground; }
+  .timeline-content { @apply flex flex-col gap-1 pb-1; }
+  .timeline-title { @apply text-sm font-medium leading-none; }
+  .timeline-time { @apply text-xs text-muted-foreground; }
+  .timeline-desc { @apply text-sm text-muted-foreground; }
+
+  /* ═══════════════ BLOCKS - section-level patterns (a landing = compose these) ═══════════════ */
+  /* ---- FeatureGrid: a responsive grid of feature cards (icon + title + copy) ---- */
+  .feature-grid { @apply grid grid-cols-3 gap-4 w-full max-lg:grid-cols-2 max-sm:grid-cols-1; }
+  .feature-card { @apply flex flex-col gap-3 rounded-xl border bg-card p-6 transition-shadow hover:shadow-md; }
+  .feature-card-icon { @apply flex size-10 items-center justify-center rounded-lg bg-primary/10 text-primary; }
+  .feature-card-title { @apply text-base font-semibold leading-none; }
+  .feature-card-desc { @apply text-sm text-muted-foreground leading-relaxed; }
+
+  /* ---- Pricing: a row of tiers (name · price · features · CTA). `.pricing-tier-featured` highlights one. ---- */
+  .pricing-grid { @apply grid grid-cols-3 gap-4 w-full items-start max-lg:grid-cols-2 max-sm:grid-cols-1; }
+  .pricing-tier { @apply flex flex-col gap-5 rounded-2xl border bg-card p-6; }
+  .pricing-tier-featured { @apply border-primary ring-1 ring-primary shadow-lg; }
+  .pricing-name { @apply text-base font-semibold; }
+  .pricing-desc { @apply text-sm text-muted-foreground; }
+  .pricing-price { @apply text-4xl font-bold tracking-tight; }
+  .pricing-period { @apply text-sm text-muted-foreground; }
+  .pricing-features { @apply flex flex-col gap-2.5 flex-1; }
+  .pricing-feature { @apply flex flex-row items-center gap-2 text-sm; }
+
+  /* ---- LogoCloud: the "trusted by" strip - a wrapping row of logos, muted until hover. GENERIC: an item holds
+     ANY logo type - an <img>, an inline SVG/Icon, or a text wordmark - and each is normalized to the same height. ---- */
+  .logo-cloud { @apply flex flex-row flex-wrap items-center justify-center gap-x-10 gap-y-6; }
+  .logo-cloud-item { @apply flex flex-row items-center justify-center gap-2 h-8 leading-none text-muted-foreground opacity-70 grayscale transition duration-300 hover:opacity-100 hover:grayscale-0 [&>img]:h-7 [&>img]:w-auto [&>svg]:h-7 [&>svg]:w-auto [&_.mu-icon]:text-2xl; }
+
+  /* ---- NavPill: the floating glass navbar (the most-used modern header). Wrap it in a sticky, padded container:
+     Stack class("sticky top-0 z-50 px-4 pt-4") { Header class("nav-pill max-w-5xl mx-auto w-full") { ... } } ---- */
+  .nav-pill { @apply flex flex-row items-center justify-between gap-4 rounded-full border border-border/60 bg-background/70 px-2 py-2 pl-5 shadow-lg backdrop-blur-lg; }
+
+  /* ---- FeatureRow: a numbered feature row (index · title · copy) with its own gutters, so `01` never kisses the
+     edge. Compose with a divider wrapper: Stack class("feature-rows") { FeatureRow-like Stacks }. ---- */
+  .feature-rows { @apply flex flex-col gap-px overflow-hidden rounded-xl border bg-border; }
+  .feature-row { @apply grid grid-cols-12 gap-6 bg-card px-6 sm:px-8 py-10 max-md:grid-cols-1 max-md:gap-3; }
+
+  /* ---- BentoGallery: a tiling gallery on a fixed row-height grid, so cells of different column widths always
+     line up (no ragged rows). Children pick their own column span; the fixed auto-rows keep every cell uniform. ---- */
+  .bento-gallery { @apply grid grid-cols-6 gap-4 max-sm:grid-cols-2; grid-auto-rows: 240px; }
+  .bento-cell { @apply relative overflow-hidden rounded-xl; }
+
+  /* ---- Arrow nudge: drop `arrow-hover` on any Button/Link with a trailing Icon - the last icon slides on hover
+     (the classic "call to action" micro-interaction). Respects reduced motion via the global rule below. ---- */
+  .arrow-hover .mu-icon { @apply transition-transform duration-200; }
+  .arrow-hover:hover .mu-icon:last-child { translate: 3px 0; }
 }
 
 @keyframes progress-indeterminate { 0% { left: -40%; } 100% { left: 100%; } }
+@keyframes mu-tab-in { from { opacity: 0; translate: 0 6px; } to { opacity: 1; translate: 0 0; } }
+
+/* ═══════════════ Motion - page animations the library ships (drop on any node via class) ═══════════════
+   Two kinds: (1) ENTRANCE (`animate-*`) plays once on mount - for hero/above-the-fold; add d1..d6 to stagger.
+   (2) SCROLL-REVEAL (`reveal`, `reveal-left`) fades a node up as it scrolls into view, using pure-CSS scroll-driven
+   animations (no JS, no IntersectionObserver). Where the browser lacks support, or the user prefers reduced
+   motion, every one degrades to "just visible" - never a hidden node. */
+@keyframes mu-fade-up     { from { opacity: 0; translate: 0 1.5rem; } to { opacity: 1; translate: 0 0; } }
+@keyframes mu-fade-in     { from { opacity: 0; } to { opacity: 1; } }
+@keyframes mu-scale-in    { from { opacity: 0; scale: 0.94; } to { opacity: 1; scale: 1; } }
+@keyframes mu-slide-in    { from { opacity: 0; translate: -1.5rem 0; } to { opacity: 1; translate: 0 0; } }
+@keyframes mu-reveal-scale{ from { opacity: 0; scale: 0.92; translate: 0 1rem; } to { opacity: 1; scale: 1; translate: 0 0; } }
+/* nav pill: airy + shadowless at the top, settles + deepens its shadow once you scroll, and reverses smoothly
+   when you return to the top (scroll-position driven, so "back to top" is free). */
+@keyframes mu-nav-scroll  { from { scale: 1.015; box-shadow: 0 4px 12px -6px rgb(0 0 0 / 0.10); } to { scale: 0.98; box-shadow: 0 16px 36px -10px rgb(0 0 0 / 0.30); } }
+@keyframes mu-float       { 0%, 100% { translate: 0 0; } 50% { translate: 0 -6px; } }
+
+@layer utilities {
+  .animate-fade-up  { animation: mu-fade-up  0.6s var(--mu-ease) both; }
+  .animate-fade-in  { animation: mu-fade-in  0.6s var(--mu-ease) both; }
+  .animate-scale-in { animation: mu-scale-in 0.5s var(--mu-ease) both; }
+  .animate-slide-in { animation: mu-slide-in 0.6s var(--mu-ease) both; }
+  /* stagger delays (safe names - Tailwind's delay-* is transition-delay, these are animation-delay) */
+  .d1 { animation-delay: 60ms; }  .d2 { animation-delay: 120ms; }  .d3 { animation-delay: 180ms; }
+  .d4 { animation-delay: 240ms; }  .d5 { animation-delay: 300ms; }  .d6 { animation-delay: 360ms; }
+
+  /* hover-lift - a card floats up + deepens its shadow on hover (the classic interactive-card feel) */
+  .hover-lift { transition: translate 300ms var(--mu-ease), box-shadow 300ms var(--mu-ease); }
+  .hover-lift:hover { @apply -translate-y-1 shadow-xl; }
+
+  /* ── Micro-interactions (drop the class on any node) ── */
+  /* link-underline - an underline that grows from the left on hover; perfect for nav links */
+  .link-underline { position: relative; }
+  .link-underline::after { content: ""; position: absolute; left: 0; bottom: -3px; height: 1.5px; width: 100%; background: currentColor; transform-origin: left; scale: 0 1; transition: scale 250ms var(--mu-ease); }
+  .link-underline:hover::after { scale: 1 1; }
+  /* hover-glow - a soft, brand-tinted glow on hover; for CTAs and feature cards */
+  .hover-glow { transition: box-shadow 300ms var(--mu-ease); }
+  .hover-glow:hover { box-shadow: 0 10px 30px -6px color-mix(in srgb, var(--color-primary) 45%, transparent); }
+  /* press - a tactile scale-down while the pointer is held; for any clickable */
+  .press { transition: scale 120ms var(--mu-ease); }
+  .press:active { scale: 0.96; }
+  /* float - a gentle, endless bob; for a hero badge or accent icon */
+  .float { animation: mu-float 3.5s ease-in-out infinite; }
+
+  /* scroll-reveal - scrubs an entrance as the element enters the viewport (pure CSS, no JS) */
+  @supports (animation-timeline: view()) {
+    .reveal       { opacity: 0; animation: mu-fade-up 1s linear both; animation-timeline: view(); animation-range: entry 5% cover 32%; }
+    .reveal-left  { opacity: 0; animation: mu-slide-in 1s linear both; animation-timeline: view(); animation-range: entry 5% cover 32%; }
+    .reveal-scale { opacity: 0; animation: mu-reveal-scale 1s linear both; animation-timeline: view(); animation-range: entry 5% cover 30%; }
+  }
+  /* nav-scroll - the navbar animates with document scroll and returns to rest at the top (pure CSS) */
+  @supports (animation-timeline: scroll()) {
+    .nav-scroll { animation: mu-nav-scroll linear both; animation-timeline: scroll(root); animation-range: 0 140px; }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-up, .animate-fade-in, .animate-scale-in, .animate-slide-in, .reveal, .reveal-left, .reveal-scale, .nav-scroll, .float {
+    animation: none !important; opacity: 1 !important; translate: none !important; scale: none !important;
+  }
+  .arrow-hover:hover .mu-icon:last-child, .hover-lift:hover { translate: none !important; }
+  .press:active { scale: none !important; }
+}
+
+/* ---- Code highlight tokens (the Code component + Markdown docs) - muten grammar colors, theme-friendly ---- */
+.tk-comment   { color: color-mix(in srgb, var(--color-muted-foreground) 90%, transparent); font-style: italic; }
+.tk-string    { color: #9ece6a; }
+.tk-keyword   { color: #7aa2f7; font-weight: 500; }
+.tk-type      { color: #7dcfff; }
+.tk-primitive { color: #bb9af7; }
+.tk-modifier  { color: #f7768e; }
+.tk-method    { color: #7dcfff; }
+.tk-component { color: #e0af68; }
+.tk-constant  { color: #ff9e64; }
+.tk-number    { color: #ff9e64; }
+.tk-operator  { color: var(--color-muted-foreground); }
+.tk-variable  { color: var(--color-foreground); }

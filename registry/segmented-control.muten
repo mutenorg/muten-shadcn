@@ -6,3 +6,9 @@ part SegmentedControl() { Stack class("segmented") { slot } }
 part SegmentedItem(value: text, current: text, label: text, onSelect: action) {
   Button "{$label}" -> $onSelect($value) aria(pressed: $value == $current) class("segmented-item", "segmented-item-active" when $value == $current)
 }
+# Full-width tab bar with icon + label (Forms · Scheduling · PDF …). IconTab is slot-based so you drop an
+# Icon + Span inside:  SegmentedTabs { IconTab(value: "forms", current: tab, onSelect: setTab) { Icon "lucide:file-text"  Span "Forms" } … }
+part SegmentedTabs() { Stack class("segmented segmented-fill") { slot } }
+part IconTab(value: text, current: text, onSelect: action) {
+  Button -> $onSelect($value) aria(pressed: $value == $current) class("segmented-item", "segmented-item-active" when $value == $current) { slot }
+}

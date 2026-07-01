@@ -1,0 +1,17 @@
+# Stepper - a horizontal (default) or vertical progress indicator. Wrap the steps in Stepper (or
+# StepperVertical) and render each with the Step part; state is "done" | "active" | "upcoming".
+#   state { steps = query steps : list<StepItem> }
+#   Stepper { each steps as s { Step(num: s.num, label: s.label, state: s.state) } }
+# A completed step shows a check (the number hides); the current step is ringed. Own it with `muten add stepper`.
+# shadcn-for-muten · part · no deps · styles via .stepper / .stepper-step* in globals.css.
+part Stepper() { Stack class("stepper") { slot } }
+part StepperVertical() { Stack class("stepper stepper-vertical") { slot } }
+part Step(num: text, label: text, state: text) {
+  Stack class("stepper-step stepper-step-{$state}") {
+    Stack class("stepper-indicator") {
+      when $state == "done" { Icon "lucide:check" class("size-4") }
+      Span "{$num}" class("stepper-num")
+    }
+    Span "{$label}" class("stepper-label")
+  }
+}

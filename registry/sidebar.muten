@@ -1,18 +1,19 @@
-# Sidebar - a collapsible nav panel. The PAGE owns a collapsed bool + the active item:
+# AppSidebar - a collapsible nav panel (named AppSidebar, NOT Sidebar, so it never shadows muten's core `Sidebar`
+# <aside> primitive). The PAGE owns a collapsed bool + the active item:
 #   state { collapsed = false : bool  nav = "sprites" : text }   action setNav(v: text) mutates nav { nav.set(v) }
-#   Sidebar(collapsed: collapsed) {
+#   AppSidebar(collapsed: collapsed) {
 #     SidebarHeader { Span "Studio" }
 #     SidebarGroup { SidebarGroupLabel(label: "Assets")
 #       SidebarItem(label: "Sprites", value: "sprites", current: nav, onSelect: setNav) { Icon "lucide:image" class("size-4 shrink-0") } … }
 #   }
 # shadcn-for-muten · part · no deps · styles via the semantic .sidebar* classes in globals.css.
-part Sidebar(collapsed: bool) { Stack class("sidebar", "sidebar-collapsed" when $collapsed) { slot } }
+part AppSidebar(collapsed: bool) { Stack class("sidebar", "sidebar-collapsed" when $collapsed) { slot } }
 part SidebarHeader() { Stack class("sidebar-header") { slot } }
 part SidebarGroup() { Stack class("sidebar-group") { slot } }
 part SidebarGroupLabel(label: text) { Span "{$label}" class("sidebar-group-label") }
 part SidebarItem(label: text, value: text, current: text, onSelect: action) {
   Button -> $onSelect($value) aria(pressed: $value == $current) class("sidebar-item", "sidebar-item-active" when $value == $current) {
     slot
-    Span "{$label}" class("truncate")
+    Span "{$label}" class("sidebar-item-label truncate")
   }
 }

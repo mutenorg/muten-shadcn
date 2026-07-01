@@ -1,0 +1,25 @@
+# Pricing - a row of tiers. PricingTier / PricingTierFeatured take name/price/period/description; the slot holds
+# the feature list (PricingFeature items) + the CTA. Use PricingTierFeatured to highlight the recommended plan.
+#   Pricing {
+#     PricingTierFeatured(name: "Pro", price: "$20", period: "/mo", description: "for pro sites") {
+#       Stack class("pricing-features") { PricingFeature { Span "Image optimization" }  PricingFeature { Span "Bot protection" } }
+#       Button "See Pro plan" -> choose class("btn btn-default w-full mt-auto")
+#     }
+#   }
+# shadcn-for-muten · block · no deps · styles via the semantic .pricing-* classes in globals.css.
+part Pricing() { Stack class("pricing-grid") { slot } }
+part PricingTier(name: text, price: text, period: text, description: text) {
+  Stack class("pricing-tier") {
+    Stack class("gap-1") { Span "{$name}" class("pricing-name")  Span "{$description}" class("pricing-desc") }
+    Stack class("flex flex-row items-baseline gap-1.5") { Span "{$price}" class("pricing-price")  Span "{$period}" class("pricing-period") }
+    slot
+  }
+}
+part PricingTierFeatured(name: text, price: text, period: text, description: text) {
+  Stack class("pricing-tier pricing-tier-featured") {
+    Stack class("gap-1") { Span "{$name}" class("pricing-name")  Span "{$description}" class("pricing-desc") }
+    Stack class("flex flex-row items-baseline gap-1.5") { Span "{$price}" class("pricing-price")  Span "{$period}" class("pricing-period") }
+    slot
+  }
+}
+part PricingFeature() { Stack class("pricing-feature") { Icon "lucide:check" class("size-4 text-primary shrink-0")  slot } }

@@ -95,13 +95,6 @@
       "deps": []
     },
     {
-      "name": "checkbox",
-      "part": "Checkbox",
-      "file": "registry/checkbox.muten",
-      "description": "A checkbox; the page owns the bool + the toggle action.",
-      "deps": []
-    },
-    {
       "name": "toggle",
       "part": "Toggle",
       "file": "registry/toggle.muten",
@@ -200,13 +193,6 @@
       "deps": []
     },
     {
-      "name": "select",
-      "part": "Select",
-      "file": "registry/select.muten",
-      "description": "A value picker with SelectItem; page owns the value text + open bool.",
-      "deps": []
-    },
-    {
       "name": "scroll-area",
       "part": "ScrollArea",
       "file": "registry/scroll-area.muten",
@@ -300,14 +286,6 @@
       "file": "registry/carousel.muten",
       "component": "Carousel",
       "description": "A slide carousel over a list (Custom). Page owns the slides list.",
-      "deps": []
-    },
-    {
-      "name": "chart",
-      "part": "Chart",
-      "file": "registry/chart.muten",
-      "component": "Chart",
-      "description": "An SVG bar chart over a list of { label, value } (Custom).",
       "deps": []
     },
     {

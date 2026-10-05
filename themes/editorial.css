@@ -1,0 +1,65 @@
+/* @muten/shadcn/themes/editorial.css — "Editorial": a warm, quiet, luxury look. A display serif (Fraunces) + a
+   clean sans (Inter), sand/stone neutrals with a terracotta accent, generous radius, soft warm shadows.
+   Import AFTER globals.css:  @import "@muten/shadcn/globals.css";  @import "@muten/shadcn/themes/editorial.css";
+   Works in light (default) and dark. `font-serif` now renders Fraunces, so headings feel editorial for free. */
+
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&display=swap");
+
+/* Tailwind picks these up: `font-sans` → Inter, `font-serif` → Fraunces (use it on headings). */
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Fraunces", ui-serif, Georgia, "Times New Roman", serif;
+}
+
+/* LIGHT — warm sand paper, deep-ink text, terracotta as the single accent (primary = buttons + `text-primary`). */
+:root {
+  --radius: 0.625rem;
+  --background: oklch(0.985 0.007 83);
+  --foreground: oklch(0.24 0.017 55);
+  --card: oklch(0.997 0.004 83);
+  --card-foreground: oklch(0.24 0.017 55);
+  --popover: oklch(0.997 0.004 83);
+  --popover-foreground: oklch(0.24 0.017 55);
+  --primary: oklch(0.62 0.115 46);              /* terracotta */
+  --primary-foreground: oklch(0.99 0.006 83);
+  --secondary: oklch(0.955 0.011 80);
+  --secondary-foreground: oklch(0.30 0.02 50);
+  --muted: oklch(0.955 0.011 80);
+  --muted-foreground: oklch(0.52 0.018 60);
+  --accent: oklch(0.94 0.016 74);               /* subtle warm hover bg (stays neutral, per shadcn) */
+  --accent-foreground: oklch(0.30 0.02 50);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.905 0.012 76);
+  --input: oklch(0.905 0.012 76);
+  --ring: oklch(0.62 0.115 46);
+}
+
+/* DARK — warm near-black, cream text, terracotta glows. */
+/* bridge both selectors: muten sets `data-theme="dark"`, shadcn keys off the `.dark` class (globals.css does the same). */
+.dark, [data-theme="dark"] {
+  --background: oklch(0.195 0.012 58);
+  --foreground: oklch(0.955 0.008 83);
+  --card: oklch(0.235 0.014 58);
+  --card-foreground: oklch(0.955 0.008 83);
+  --popover: oklch(0.235 0.014 58);
+  --popover-foreground: oklch(0.955 0.008 83);
+  --primary: oklch(0.70 0.128 47);              /* terracotta, brighter for dark */
+  --primary-foreground: oklch(0.20 0.012 58);
+  --secondary: oklch(0.28 0.014 58);
+  --secondary-foreground: oklch(0.955 0.008 83);
+  --muted: oklch(0.28 0.014 58);
+  --muted-foreground: oklch(0.72 0.013 72);
+  --accent: oklch(0.30 0.015 58);
+  --accent-foreground: oklch(0.955 0.008 83);
+  --destructive: oklch(0.65 0.19 25);
+  --border: oklch(0.31 0.014 58);
+  --input: oklch(0.33 0.014 58);
+  --ring: oklch(0.70 0.128 47);
+}
+
+/* Editorial polish that the token vars alone can't express. */
+body { font-feature-settings: "liga" 1, "calt" 1; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+/* Fraunces headings: a touch of optical weight + tight tracking reads as "designed", not default-serif. */
+h1, h2, h3, .font-serif { letter-spacing: -0.01em; }
+/* soft, warm-tinted elevation (shadcn ships flat) — reach for it on cards/hero via `shadow-soft`. */
+@theme { --shadow-soft: 0 1px 2px oklch(0.4 0.03 60 / 0.04), 0 8px 24px -12px oklch(0.4 0.05 60 / 0.14); }

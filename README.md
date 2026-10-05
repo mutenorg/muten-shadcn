@@ -94,19 +94,25 @@ Display: **card** (Card / CardHeader / CardTitle / CardDescription / CardContent
 **alert** (Alert / AlertTitle / AlertDescription), **avatar**, **spinner**, **progress**, **empty**,
 **breadcrumb**, **pagination**, **field**, **item**.
 
-Stateful (the page owns the state, the part receives it - see the pattern below): **switch**, **checkbox**,
+Stateful (the page owns the state, the part receives it - see the pattern below): **switch**,
 **toggle**, **toggle-group**, **radio-group**, **collapsible**, **accordion**, **tabs**.
 
 Overlays (the page owns an `open` bool): **dialog**, **alert-dialog**, **tooltip** (pure hover, no state),
-**dropdown-menu**, **popover**, **sheet**, **drawer**, **hover-card** (hover), **select**, **scroll-area**,
+**dropdown-menu**, **popover**, **sheet**, **drawer**, **hover-card** (hover), **scroll-area**,
 **menubar**, **navigation-menu** (hover), **combobox**, **command**.
+
+> **Not here on purpose:** checkbox / select / number / range / date / chart are **native muten primitives** now,
+> so this plugin ships no part for them (a same-named part would be shadowed by the primitive). Use `Checkbox bind(x)`,
+> `Select bind(x) options(a, b) class("native-select")`, `Number`/`Range`/`Date bind(x)`, `Chart @data kind(bar) …`.
+> For a *searchable* dropdown, use **combobox**.
 
 Chat: **message** (Message / Bubble / Marker), **message-scroller**, **attachment**.
 
 ### Custom (eject-only - `muten add` copies a host `.js` into `src/components/`)
 
-The genuinely interactive 20%: **slider**, **input-otp**, **calendar**, **toaster**, **carousel**, **chart**,
-**resizable**, **context-menu**. Each is a thin muten part over a small vanilla-JS host you own and can edit.
+The genuinely interactive 20%: **input-otp**, **toaster**, **carousel**, **resizable**, **context-menu** (+ more,
+see AGENTS.md). Each is a thin muten part over a small vanilla-JS host you own and can edit. (A chart / slider /
+date picker is **native** — `Chart`/`Range`/`Date` — not a Custom; don't `muten add` those.)
 
 `calendar` ships all the shadcn variants: `mode` (`single` / `range` / `multiple`), `months` (1-2 side by side),
 `caption` (`label` / `dropdown`). `selected` encodes the value (`"yyyy-mm-dd"`, `"from/to"`, or `"d1,d2,..."`).

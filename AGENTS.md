@@ -2,12 +2,21 @@
 
 ## Setup (once): `plugins { shadcn {} }` in muten.config + `@import "@muten/shadcn/globals.css";` in src/styles.css. Then everything below is usable directly; `muten add <name>` only ejects a source.
 
+> **Native primitives always win — for a checkbox / select / number / range / date / chart, use the native muten
+> primitive, NOT a plugin part.** muten's core now ships these as primitives, so this plugin does NOT: write
+> `Checkbox bind(agree)`, `Select bind(theme) options(System, Light, Dark) class("native-select")` (the `.native-select`
+> class gives the native `<select>` the shadcn look), `Number bind(qty)`, `Range bind(vol)`, `Date bind(due)`,
+> `Chart @data kind(bar) x(label) y(value)`. A part named the same as a primitive is unreachable (the primitive
+> shadows it), so those parts were removed. For a *searchable* dropdown use the `Combobox` part.
+> **The exact props of every part are in the header comment of `node_modules/@muten/shadcn/registry/<name>.muten` —
+> read it before calling (the one-liners below are the catalog, not the API).**
+
 ## PLUG-AND-PLAY (zero class props)
 - **Btn**(variant, onClick) { slot } · **LinkBtn**(to, variant) { slot } · **Input**(value, placeholder)
 - **DataTable** @rows columns(a, b) - STYLED BY DEFAULT, no class needed.
 - + every Part / Custom below.
 
-## Parts (64) - imported by plugins {}
+## Parts (62) - imported by plugins {}
 
 - **Card** - A surface with CardHeader / CardTitle / CardDescription / CardContent / CardFooter sub-components.  ·  +CardHeader, CardTitle, CardDescription, CardContent, CardFooter
 - **Badge** - A small status descriptor. variant: default | secondary | destructive | outline.
@@ -22,7 +31,6 @@
 - **Pagination** - Page navigation with PaginationLink / Previous / Next / Ellipsis.  ·  +PaginationLink, PaginationPrevious, PaginationNext, PaginationEllipsis
 - **Field** - A labelled form control: FieldLabel / FieldDescription / FieldError.  ·  +FieldLabel, FieldDescription, FieldError
 - **Item** - A bordered row: ItemContent / ItemTitle / ItemDescription.  ·  +ItemContent, ItemTitle, ItemDescription
-- **Checkbox** - A checkbox; the page owns the bool + the toggle action.
 - **Toggle** - A two-state button; the page owns the bool + the toggle action.
 - **ToggleGroup** - Single-select toolbar with ToggleGroupItem; page owns a text state.  ·  +ToggleGroupItem
 - **RadioGroup** - Single choice with RadioGroupItem; page owns a text state.  ·  +RadioGroupItem
@@ -37,7 +45,6 @@
 - **Sheet** - A panel that slides in from the right; page owns the open bool.  ·  +SheetTitle, SheetDescription
 - **Drawer** - A panel that slides up from the bottom; page owns the open bool.
 - **HoverCard** - Richer content shown on hover (pure CSS, no state).
-- **Select** - A value picker with SelectItem; page owns the value text + open bool.  ·  +SelectItem
 - **ScrollArea** - A scrollable region with styled scrollbars.
 - **Message** - Chat Message + Bubble + Marker (variant: sent | received).  ·  +Bubble, Marker
 - **MessageScroller** - A scrollable column of chat messages.
@@ -74,14 +81,13 @@
 - **Input** - Plug-and-play text input (part Input wraps SearchField). `Input(value: q, placeholder: "...")` - value is two-way bound. For typed/validated fields use a Form.
 - **LinkBtn** - A navigation link styled as a button. `LinkBtn(to: "/signup", variant: "default") { Span "Get started" }`.
 
-## Customs (21) - importable; some need a dep
+## Customs (20) - importable; some need a dep
 
 - **Slider** (`slider`) - A draggable range slider (Custom). Page owns the value number.
 - **InputOtp** (`input-otp`) - N single-character boxes synced to one value (Custom). Page owns the value text.
 - **Calendar** (`calendar`) - A month-grid date picker (Custom). Page owns the selected ISO date text.
 - **Toaster** (`toaster`) - Fixed toast notifications (Custom). Page bumps a trigger counter to fire one.
 - **Carousel** (`carousel`) - A slide carousel over a list (Custom). Page owns the slides list.
-- **Chart** (`chart`) - An SVG bar chart over a list of { label, value } (Custom).
 - **GradientBlinds** (`gradient-blinds`) · **needs npm: ogl** - Animated WebGL gradient + diagonal-blinds hero background that follows the cursor and fades into the page (needs ogl).
 - **Resizable** (`resizable`) - Two panels with a draggable splitter (Custom).
 - **ContextMenu** (`context-menu`) - Right-click an area to open a menu of items (Custom).
@@ -105,4 +111,6 @@
 - **table** - DataTable @rows columns(name, email, status)  -  STYLED BY DEFAULT (no class needed). `class("data-table")` still works as an explicit alias. Raw cells; for badge/formatted cells build with each + Stack.
 - **motion** - Page animations, all CSS + reduced-motion safe. Entrance: animate-fade-up|fade-in|scale-in|slide-in (+ d1..d6 stagger). Scroll: reveal|reveal-left|reveal-scale, and nav-scroll on a navbar. Hover/press: hover-lift, hover-glow, arrow-hover (nudges a trailing Icon), link-underline, press, float.
 
-### Gotcha: a part can not be named after a primitive (Button/Link/Form/Image/SearchField/DataTable/Icon/Text/Title/Span) - hence Btn/Input/LinkBtn. `Part(...) class(...)` is a syntax error.
+### Gotcha: a part can not be named after a core primitive — the **primitive wins** and any same-named plugin part is unreachable on import. The primitives include `Button/Link/Form/Image/SearchField/DataTable/Icon/Text/Title/Span` (→ this plugin uses `Btn`/`Input`/`LinkBtn`) AND `Select/Checkbox/Number/Range/Date/Chart` (→ use those primitives directly, see the note at the top). If you write a part call and the oracle says `missing-prop: X is missing the required "bind"`, X is a primitive shadowing the part — switch to the primitive's API.
+
+### Gotcha: a **part takes NO trailing modifiers** — `Part(...) class(...)`, `Part(...) disabled when x`, `Part(...) on(...)` and `Part(...) aria(...)` are all syntax errors (a part call ends at its `)`/`{}`). When you need `class`/`disabled when`/`on`/`aria` on a control, use the **native primitive** (`Button "Save" -> save disabled when not valid class("btn btn-default")`), not the `Btn(...)` part.

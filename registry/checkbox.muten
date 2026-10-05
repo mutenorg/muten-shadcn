@@ -1,8 +1,0 @@
-# Checkbox - the PAGE owns the bool + the action that flips it (container/presentational):
-#   state { agree = false : bool }   action toggle mutates agree { agree.toggle() }   Checkbox(checked: agree, onToggle: toggle)
-# shadcn-for-muten · part · no deps · the check always renders and scales/fades in via .checkbox-icon-on.
-part Checkbox(checked: bool, onToggle: action) {
-  Button -> $onToggle aria(checked: $checked) class("checkbox", "checkbox-checked" when $checked) {
-    Icon "lucide:check" class("checkbox-icon", "checkbox-icon-on" when $checked)
-  }
-}

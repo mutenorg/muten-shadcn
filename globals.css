@@ -175,6 +175,7 @@
      raw <svg> child - muten renders icons as iconify-icon). Icon sizing is the `.btn svg` rule below. */
   .btn { @apply inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium leading-none transition-all shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] active:scale-[0.97] aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 disabled:pointer-events-none disabled:opacity-50 h-8 px-3; }
   .btn-default { @apply bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 active:bg-primary/80; }
+  .btn-primary { @apply bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 active:bg-primary/80; } /* alias of btn-default — tolerate the near-universal `btn-primary` idiom */
   .btn-destructive { @apply bg-destructive text-white shadow-xs hover:bg-destructive/90 active:bg-destructive/80 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60; }
   .btn-outline { @apply border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground active:bg-accent/70 dark:bg-input/30 dark:border-input dark:hover:bg-input/50 dark:active:bg-input/70; }
   .btn-secondary { @apply bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary/80 active:bg-secondary/70; }
@@ -196,6 +197,20 @@
   .textarea { @apply flex field-sizing-content min-h-16 w-full rounded-md border border-input bg-transparent px-3 py-2 text-base md:text-sm shadow-xs transition-[color,box-shadow] outline-none placeholder:text-muted-foreground dark:bg-input/30 focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 disabled:cursor-not-allowed disabled:opacity-50; }
   .label { @apply text-sm font-medium leading-none; }
   .native-select { @apply flex h-8 w-full items-center rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs outline-none transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive dark:bg-input/30 disabled:cursor-not-allowed disabled:opacity-50; }
+
+  /* ---- native primitives styled shadcn-flavored (muten core ships Checkbox/Number/Range/Date/Chart) ---- */
+  .mu-checkbox { @apply inline-flex items-center gap-2 text-sm; }
+  .mu-checkbox input, .mu-field-check { @apply size-4 rounded-[4px] border-input; accent-color: var(--primary); }
+  .mu-number, .mu-date { @apply flex h-8 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs outline-none transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 dark:bg-input/30; }
+  .mu-range { @apply w-full; accent-color: var(--primary); }
+  .mu-chart-bar, .mu-chart-dot, .mu-chart-slice { fill: var(--primary); }
+  .mu-chart-slice { stroke: var(--card); stroke-width: 2.5; }
+  .mu-chart-dot { stroke: var(--card); stroke-width: 2; }
+  .mu-chart-line { fill: none; stroke: var(--primary); stroke-width: 2.25; stroke-linecap: round; stroke-linejoin: round; }
+  .mu-chart-area { stroke: none; } /* fill comes from the inline accent→transparent gradient __chart draws */
+  .mu-chart-grid { stroke: var(--border); stroke-opacity: 0.55; }
+  .mu-chart-tick, .mu-chart-xlabel { fill: var(--muted-foreground); font-size: 10px; font-variant-numeric: tabular-nums; }
+  .mu-chart-total { fill: var(--foreground); font-size: 15px; font-weight: 650; font-variant-numeric: tabular-nums; }
 
   /* ---- Card ---- */
   .card { @apply bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm; }
@@ -746,6 +761,16 @@
      (the classic "call to action" micro-interaction). Respects reduced motion via the global rule below. ---- */
   .arrow-hover .mu-icon { @apply transition-transform duration-200; }
   .arrow-hover:hover .mu-icon:last-child { translate: 3px 0; }
+
+  /* ---- Touch targets. These components are sized for a mouse (h-8 = 32px); Apple HIG asks for >=44px and
+     Material for >=48dp before a finger hits reliably. `pointer: coarse` is the browser telling us there IS a
+     finger, so the SAME app adapts on a phone with no mobile build, no second plugin and no decision for the
+     author to make. Inside @layer components on purpose: a class("h-14") on the Button still wins.
+     Deliberately NOT everything h-8: `btn-xs`/`switch` are small by intent, and badges/avatars aren't targets. ---- */
+  @media (pointer: coarse) {
+    .btn, .input, .toggle, .select-trigger, .native-select { @apply h-11; }
+    .btn-sm { @apply h-10; }
+  }
 }
 
 @keyframes progress-indeterminate { 0% { left: -40%; } 100% { left: 100%; } }
@@ -762,8 +787,11 @@
 @keyframes mu-slide-in    { from { opacity: 0; translate: -1.5rem 0; } to { opacity: 1; translate: 0 0; } }
 @keyframes mu-reveal-scale{ from { opacity: 0; scale: 0.92; translate: 0 1rem; } to { opacity: 1; scale: 1; translate: 0 0; } }
 /* nav pill: airy + shadowless at the top, settles + deepens its shadow once you scroll, and reverses smoothly
-   when you return to the top (scroll-position driven, so "back to top" is free). */
-@keyframes mu-nav-scroll  { from { scale: 1.015; box-shadow: 0 4px 12px -6px rgb(0 0 0 / 0.10); } to { scale: 0.98; box-shadow: 0 16px 36px -10px rgb(0 0 0 / 0.30); } }
+   when you return to the top (scroll-position driven, so "back to top" is free).
+   It scrubs the SHADOW ONLY. It used to scrub `scale: 1.015 → 0.98` as well, which resized the navbar by 3.5% of
+   its own width on every scroll — a visible jump on each landing, and blurred nav text for the whole animation.
+   A navbar is furniture: it may deepen, it must never change size. */
+@keyframes mu-nav-scroll  { from { box-shadow: 0 4px 12px -6px rgb(0 0 0 / 0.10); } to { box-shadow: 0 16px 36px -10px rgb(0 0 0 / 0.30); } }
 @keyframes mu-float       { 0%, 100% { translate: 0 0; } 50% { translate: 0 -6px; } }
 
 @layer utilities {

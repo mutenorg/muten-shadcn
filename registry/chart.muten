@@ -1,7 +1,0 @@
-# Chart - an SVG bar chart over a list of { label, value }. The PAGE owns the data:
-#   entity Metric { label text  value number }   state { data = query data : list<Metric> }   mock { data: [ … ] }
-#   Chart(data: data)
-# shadcn-for-muten · Custom · host JS is src/components/Chart.js (edit it for line/area/pie variants).
-part Chart(data: list) {
-  Custom Chart inputs(data: $data) class("chart")
-}

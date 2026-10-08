@@ -1,0 +1,29 @@
+# Modal - THE adaptive modal: a Dialog on a wide screen, a Drawer from the bottom on a phone (mode "auto"), or forced
+# with mode "dialog" | "drawer". The page owns the open bool; the overlay, the ✕, Esc, the phone's Back button and a
+# drag down on the drawer all call onClose. Content goes in the slot; the buttons in a ModalFooter (it sticks under
+# the scrolling body): the way out (cx-exit) on the left, the action (cx-go) filling the rest.
+#   state { editing = false : bool }   action edit() mutates editing { editing.set(true) }   action done() mutates editing { editing.set(false) }
+#   Modal(open: editing, onClose: done, title: "Editar servicio", description: "Lo que cambies se ve en tu tienda al guardar.") {
+#     Field { … }
+#     ModalFooter { Btn(variant: "outline", onClick: done) class("cx-exit") { Span "Cancelar" }  Btn(onClick: save) class("cx-go") { Span "Guardar cambios" } }
+#   }
+# mode: auto | dialog | drawer | sheet (a panel from a side) · side: right | left | top | bottom (for sheet)
+# role: dialog | alertdialog · dismiss: on | off (off: no ✕ and the backdrop does not close it; only its buttons do)
+# size: "" | tall (a list that pages)   ·   shadcn-for-muten · part + Custom (ModalBehavior) · kit.css (.cx-modal).
+part Modal(open: bool, onClose: action, title: text, description: text = "", mode: text = "auto", size: text = "", side: text = "right", role: text = "dialog", dismiss: text = "on") {
+  Stack class("cx-modal-root") data(open: $open) {
+    when $dismiss != "off" { Button "" -> $onClose class("cx-overlay") aria(label: "Cerrar", hidden: "true") data(closes: "true") }
+    when $dismiss == "off" { Stack class("cx-overlay") aria(hidden: "true") }
+    Stack class("cx-modal") data(mode: $mode, size: $size, side: $side) aria(role: $role, modal: "true", label: $title) {
+      Stack class("cx-handle") aria(hidden: "true")
+      Stack class("cx-modal-head") data(drag: "true") {
+        Span "{$title}" class("cx-modal-title")
+        Span "{$description}" class("cx-modal-desc")
+      }
+      when $dismiss != "off" { Button -> $onClose class("cn-button cn-button-variant-ghost cn-button-size-icon-sm group/button cx-modal-x") aria(label: "Cerrar") { Icon "lucide:x" } }
+      Stack class("cx-modal-body") { slot }
+      ModalBehavior(open: $open, onClose: $onClose)
+    }
+  }
+}
+part ModalFooter() { Stack class("cx-modal-foot") data(slot: "modal-footer") { slot } }

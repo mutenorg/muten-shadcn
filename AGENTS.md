@@ -11,6 +11,53 @@
 > **The exact props of every part are in the header comment of `node_modules/@muten/shadcn/registry/<name>.muten` —
 > read it before calling (the one-liners below are the catalog, not the API).**
 
+## Nova + the system kit
+
+The newer half of the plugin is shadcn's **Nova** style plus a kit of generic, data-driven components (agenda,
+inbox, order board, booking, app shell…). It is 1:1 with the reference artifact the bench page `plugins/playground`
+shows. Setup, on top of the install above:
+
+```css
+/* src/styles.css, after globals.css */
+@import "@muten/shadcn/nova.css";   /* shadcn's Nova source, scoped under .style-nova */
+@import "@muten/shadcn/kit.css";    /* muten adapters + the kit's layout and motion */
+```
+
+```html
+<!-- index.html: the style class on <html>, and Geist -->
+<html class="style-nova">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap">
+```
+
+```
+# src/app.muten: once, in the shell (a shell cannot call plugin parts, so the Custom directly)
+shell { Stack { Custom KitLayer class("cx-kit-host")  slot } }
+```
+
+`KitLayer` loads the kit core once: the icon sprite, the tooltip on anything with `data-name`, the Island, the one
+adaptive modal (Dialog wide, Drawer on a phone) the kit's components share, and the wheels. Every component's exact
+props are in the header comment of its `registry/<name>.muten`; the data shapes are documented there too.
+
+| Group | Parts |
+|---|---|
+| Atoms | `Btn` (variant, size, tone), `Txt`, `Badge`/`StatusBadge`/`ToneBadge`/`Chip`, `Avatar`/`AvatarGroup`/`Who`, `Kbd`, `Spinner`, `Skeleton`, `Indicator`, `Separator`, `Progress` |
+| Lists and cards | `Item…`, `Price`, `Card…` (with the action zone), `FixedCard`/`Row3`/`EmptyMini`, `StatCard`/`StatGrid`, `Spark` |
+| Controls | `Switch`/`SwitchRow`, `Tabs`, `SegmentedControl`, `ChoiceList`, `Sortable`, `SaveButton`, `NavButton` |
+| Fields | `Field…`, `Input`/`TextArea`, `InputGroup`/`SearchInput`, `MoneyField`, `PhoneField`, `InputOtp`, `PasswordField` |
+| Notices | `Alert`, `Band`, `Island`, `Modal`/`ModalFooter`, `SettingsForm`/`DirtyBar` |
+| Menus and content | `Combobox`, `RowMenu`, `Accordion`, `StoreQr` |
+| Values | `ScaleSlider`, `RangeSlider`, `Slider`, `ColorPicker` |
+| Collections | `TagInput`, `PaginationNav`, `VirtualList`, `Carousel`/`CarouselSlide` |
+| Data | `TableView` (filters as data, chips, bulk), `OrderBoard`, `OrderCards` |
+| Dates and files | `Booking`, `Calendar`, `DateField`, `TimeField`, `ImageUpload` |
+| Structure | `PhoneShell`, `ShareButton`, `AppShell` (Sidebar, page header, detail Sheet, ⌘K) |
+| System | `Agenda`, `NewAppointment`, `Messaging`, `Chatbot`, `BarChart`, `Checklist`, `Plans`, `CardField`, `MemberList`, `PermissionMatrix`, `StampCard`, `Bell`, `Queue`, `WeeklyHours` |
+| Loading | `Skeletons(kind)`, `Loading(busy, kind) { … }`: content-shaped skeletons, a fade when the data lands |
+
+Rules the kit keeps: the page owns the state and gets JSON back through actions; functions never travel as data
+(a bot's answers are `{match, text}` rules); a skeleton only shows while there is nothing to show; no native
+`<select>`, the wheels and menus instead.
+
 ## PLUG-AND-PLAY (zero class props)
 - **Btn**(variant, onClick) { slot } · **LinkBtn**(to, variant) { slot } · **Input**(value, placeholder)
 - **DataTable** @rows columns(a, b) - STYLED BY DEFAULT, no class needed.

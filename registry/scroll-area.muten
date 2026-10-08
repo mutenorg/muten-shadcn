@@ -1,4 +1,8 @@
-# Scroll Area - a scrollable region with styled scrollbars (max-height 18rem by default; eject to change).
-#   ScrollArea { … long content … }
-# shadcn-for-muten · part · no deps · styles via the semantic .scroll-area class in globals.css.
-part ScrollArea() { Stack class("scroll-area") { slot } }
+# ScrollArea - a region that scrolls inside itself with the kit's thin scrollbar, so a long list never makes the page
+# longer. Give it a height; horizontal scrolls sideways (a row of cards) and hides the bar until you scroll.
+#   ScrollArea(height: "18rem") { each tags as t { … } }
+#   ScrollArea(orientation: "horizontal") { Stack class("cx-hstack") { … } }
+# shadcn-for-muten · part · no deps · Nova (.cn-scroll-area) + kit.css (.cx-scroll-area).
+part ScrollArea(height: text = "18rem", orientation: text = "vertical", label: text = "") {
+  Stack class("cn-scroll-area cx-scroll-area cx-scroll") data(slot: "scroll-area", orientation: $orientation) style(h: "{$height}") aria(label: $label) { slot }
+}

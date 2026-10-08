@@ -1,8 +1,13 @@
-# Toggle Group - single-select toolbar. The PAGE owns a `text` state + an action that sets it:
+# ToggleGroup - toggles in a row (shadcn Nova). One choice: ToggleGroupItem with the page's text state. Several
+# choices: put Toggle parts inside, each with its own bool. spacing "0" joins them into one control; "2" separates.
 #   state { align = "left" : text }   action setAlign(v: text) mutates align { align.set(v) }
-#   ToggleGroup { ToggleGroupItem(value: "left", current: align, onSelect: setAlign) { Icon "lucide:align-left" } … }
-# shadcn-for-muten · part · no deps · styles via the semantic .toggle-group + .toggle* classes in globals.css.
-part ToggleGroup() { Stack class("toggle-group") { slot } }
-part ToggleGroupItem(value: text, current: text, onSelect: action) {
-  Button -> $onSelect($value) aria(pressed: $value == $current) class("toggle", "toggle-on" when $value == $current) { slot }
+#   ToggleGroup(label: "Alineación") { ToggleGroupItem(value: "left", current: align, onSelect: setAlign, label: "Izquierda") { Icon "lucide:align-left" } … }
+#   ToggleGroup(variant: "outline", spacing: "2") { Toggle(on: bold, onToggle: b, variant: "outline") { Icon "lucide:bold" } … }
+# variant: default | outline · size: sm | default | lg · spacing: 0 | 1 | 2 · orientation: horizontal | vertical
+# shadcn-for-muten · part · no deps · Nova (.cn-toggle-group) + kit.css (joined/vertical).
+part ToggleGroup(variant: text = "default", size: text = "default", spacing: text = "0", orientation: text = "horizontal", label: text = "") {
+  Stack class("cn-toggle-group group/toggle-group") data(slot: "toggle-group", variant: $variant, size: $size, spacing: $spacing, orientation: $orientation) aria(role: "group", label: $label) { slot }
+}
+part ToggleGroupItem(value: text, current: text, onSelect: action, variant: text = "default", size: text = "default", label: text = "") {
+  Button -> $onSelect($value) class("cn-toggle cn-toggle-variant-{$variant} cn-toggle-size-{$size} cn-toggle-group-item") data(slot: "toggle-group-item", variant: $variant, size: $size, name: $label) aria(pressed: $value == $current, label: $label) { slot }
 }

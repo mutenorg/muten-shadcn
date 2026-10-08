@@ -1,0 +1,10 @@
+# ShareButton - Storio's share sheet made generic, inside the adaptive modal (Dialog wide, Drawer on a phone). On top
+# what is shared: the link's card (initials, name, address) or the product's (image, price in the corner, name over
+# it); then the link with Copiar and a row of brand targets you can drag sideways. QR opens the code in the same
+# sheet; if the phone has its own share menu, «Compartir en otra app» appears.
+#   ShareButton(label: "Compartir mi tienda", name: "Barbería El Roble", initials: "ER", url: "storio.ink/el-roble")
+#   ShareButton(label: "Compartir un producto", variant: "outline", kind: "product", name: "Barbería El Roble", url: "storio.ink/el-roble/p/pomada-mate", productName: "Pomada mate", productMeta: "Fijación media · 100 g", productPrice: 32000, productImage: "linear-gradient(135deg,#c79a6b,#6b4a2e)")
+# shadcn-for-muten · Custom (kit/structure.js) · kit.css (.cx-sh-*).
+part ShareButton(label: text = "Compartir", variant: text = "default", kind: text = "link", name: text, initials: text = "", url: text, text: text = "", productName: text = "", productMeta: text = "", productPrice: number = 0, productImage: text = "") {
+  Custom ShareButton inputs(label: $label, variant: $variant, kind: $kind, name: $name, initials: $initials, url: $url, text: $text, productName: $productName, productMeta: $productMeta, productPrice: $productPrice, productImage: $productImage) class("cx-share-host")
+}

@@ -1,7 +1,7 @@
-# Input OTP - N single-character boxes synced to one value. The PAGE owns the value (text):
-#   state { code = "" : text }   action setCode(v: text) mutates code { code.set(v) }
-#   InputOtp(value: code, length: 6, onInput: setCode)
-# shadcn-for-muten · Custom · host JS is src/components/InputOtp.js (copied by `muten add input-otp`).
-part InputOtp(value: text, length: number, onInput: action) {
-  Custom InputOtp inputs(value: $value, length: $length) on(input: $onInput) class("otp")
+# InputOtp - the verification code: slots in two groups, a caret, «Verificando…», ok / bad, a resend countdown. The
+# PAGE checks the code: onInput gets it when complete; answer with state ("ok" | "bad") and message.
+#   InputOtp(value: code, length: 6, hint: "Te lo enviamos al +57 300 123 4567", state: otpState, message: otpMsg, onInput: check)
+# shadcn-for-muten · Custom (kit values) · host JS input-otp.js.
+part InputOtp(value: text = "", length: number = 6, hint: text = "", state: text = "", message: text = "", resendIn: number = 30, onInput: action) {
+  Custom InputOtp inputs(value: $value, length: $length, hint: $hint, state: $state, message: $message, resendIn: $resendIn) on(input: $onInput) class("cx-otp-host")
 }

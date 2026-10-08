@@ -1,0 +1,5 @@
+# Island - answers what the person just did (saving, saved, error) and never stacks: it changes shape and text in
+# the same place, at the top of the app. Change `text` (and `tone`) and it morphs; ms > 0 hides it after that time.
+#   Island(tone: saveTone, text: saveText, ms: 2200)      tone: say (spinner) | done | info | error
+# Put KitLayer once in the app shell first. shadcn-for-muten · Custom (kit core) · host JS is island.js.
+part Island(tone: text = "info", text: text, ms: number = 0) { Custom Island inputs(tone: $tone, text: $text, ms: $ms) class("cx-island-host") }

@@ -1,12 +1,16 @@
-# Attachment - a file attachment chip (icon + name + size).
-#   Attachment(name: "report.pdf", size: "2.4 MB")
-# shadcn-for-muten · part · no deps · styles via the semantic .attachment* classes in globals.css.
-part Attachment(name: text, size: text) {
-  Stack class("attachment") {
-    Icon "lucide:paperclip" class("size-4 text-muted-foreground shrink-0")
-    Stack class("flex flex-col") {
-      Span "{$name}" class("attachment-name")
-      Span "{$size}" class("attachment-size")
+# Attachment - a file in a message or a form: its kind as an icon, the name (cut with «…» when long) and the size;
+# tapping it opens the file. kind: file | pdf | image | audio | sheet.
+#   Attachment(name: "comprobante-1042.pdf", size: "182 KB", kind: "pdf", to: "/…")
+# shadcn-for-muten · part · no deps · kit.css (.cx-attach).
+part Attachment(name: text, size: text = "", kind: text = "file", to: text = "#") {
+  Link -> "{$to}" class("cx-attach") data(slot: "attachment", kind: $kind) {
+    Stack class("cx-attach-ic") {
+      when $kind == "pdf" { Icon "lucide:file-text" }
+      when $kind == "image" { Icon "lucide:image" }
+      when $kind == "audio" { Icon "lucide:file-audio" }
+      when $kind == "sheet" { Icon "lucide:file-spreadsheet" }
+      when $kind == "file" { Icon "lucide:file" }
     }
+    Stack class("cx-attach-text") { Span "{$name}" class("cx-attach-name")  Span "{$size}" class("cx-attach-size") }
   }
 }

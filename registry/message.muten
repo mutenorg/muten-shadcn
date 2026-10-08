@@ -1,11 +1,28 @@
-# Message + Bubble + Marker - chat primitives. variant: sent | received.
-# Compose: Message(variant: "received") { Avatar(name) Bubble(variant: "received") { Span "Hi!" } }
-#          Marker(label: "Today")
-# shadcn-for-muten · part · no deps · styles via the semantic .message* / .bubble / .marker classes.
-part Message(variant: text) {
-  Stack class("message", "message-sent" when $variant == "sent") { slot }
+# Message - a chat bubble, the same the kit's inbox draws: theirs on the left on the surface, yours on the right in
+# the primary colour, with the time and, on yours, whether it was sent, delivered or read. Text, a photo or an
+# Attachment go inside. Marker is the day line between messages; MessageScroller holds them and scrolls.
+#   MessageScroller(label: "Chat con Valentina") {
+#     Marker(label: "Hoy")
+#     Message(variant: "received", time: "10:02") { Span "Hola, ¿tienen cita hoy?" }
+#     Message(variant: "sent", time: "10:03", status: "read") { Span "Sí: a las 15:00 con Camila." }
+#   }
+# variant: received | sent · status (sent only): sending | sent | delivered | read · tag: a small label (Bot).
+# shadcn-for-muten · parts · no deps · kit.css (.cx-chat-*).
+part Message(variant: text = "received", time: text = "", status: text = "", tag: text = "") {
+  Stack class("cx-chat-msg") data(variant: $variant) {
+    Stack class("cx-chat-bubble cx-msg-bubble") {
+      Stack class("cx-msg-body") { slot }
+      Stack class("cx-chat-meta") {
+        Span "{$tag}" class("cx-chat-tag")
+        Span "{$time}" class("cx-text") data(variant: "caption")
+        when $status == "sending" { Icon "lucide:clock" class("cx-tick") data(status: "sending") aria(label: "Enviando") }
+        when $status == "sent" { Icon "lucide:check" class("cx-tick") data(status: "sent") aria(label: "Enviado") }
+        when $status == "delivered" { Icon "lucide:check-check" class("cx-tick") data(status: "delivered") aria(label: "Entregado") }
+        when $status == "read" { Icon "lucide:check-check" class("cx-tick") data(status: "read") aria(label: "Leído") }
+      }
+    }
+  }
 }
-part Bubble(variant: text) {
-  Stack class("bubble", "bubble-sent" when $variant == "sent", "bubble-received" when $variant == "received") { slot }
-}
-part Marker(label: text) { Span "{$label}" class("marker") }
+part Bubble(variant: text = "received") { Stack class("cx-chat-bubble cx-msg-bubble") data(variant: $variant) { slot } }
+part Marker(label: text) { Stack class("cx-chat-day") aria(role: "separator") { Span "{$label}" class("cx-text") data(variant: "caption") } }
+part MessageImage(src: text, alt: text = "Foto") { Stack class("cx-chat-img") style(bg: "{$src}") aria(role: "img", label: $alt) }

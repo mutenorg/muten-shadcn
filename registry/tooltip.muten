@@ -1,9 +1,6 @@
-# Tooltip - shows on hover (pure CSS, no state needed). The slot is the trigger.
-#   Tooltip(label: "Add to library") { Button "Hover me" class("btn btn-outline") }
-# shadcn-for-muten · part · no deps · styles via the semantic .tooltip* classes in globals.css.
-part Tooltip(label: text) {
-  Stack class("tooltip-wrap") {
-    slot
-    Span "{$label}" class("tooltip-content")
-  }
-}
+# Tooltip - a short name that shows while the pointer rests on something (or it gets the focus): what an icon-only
+# button does, the full text of a cut-off line. Only a label: never a place for something the person must read.
+# The kit's single tooltip (KitLayer) does it for anything with a name; Tooltip just gives that name.
+#   Tooltip(text: "Editar servicio") { Btn(variant: "ghost", size: "icon", onClick: edit) { Icon "lucide:pencil" } }
+# A Btn with label already has one. shadcn-for-muten · part · the kit's tooltip (.cx-tip).
+part Tooltip(text: text) { Stack class("cx-tip-wrap") data(slot: "tooltip-trigger", name: $text) { slot } }

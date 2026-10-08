@@ -1,6 +1,9 @@
-# Toggle - a two-state button. The PAGE owns the bool + the toggle action. Put an Icon or text in the slot.
-#   state { bold = false : bool }   action b mutates bold { bold.toggle() }   Toggle(on: bold, onToggle: b) { Icon "lucide:bold" }
-# shadcn-for-muten · part · no deps · styles via the semantic .toggle* classes in globals.css.
-part Toggle(on: bool, onToggle: action) {
-  Button -> $onToggle aria(pressed: $on) class("toggle", "toggle-on" when $on) { slot }
+# Toggle - a button that stays pressed (bold, favourite, «solo hoy»). The page owns the bool and the action.
+#   state { bold = false : bool }   action toggleBold() mutates bold { bold.toggle() }
+#   Toggle(on: bold, onToggle: toggleBold, label: "Negrita") { Icon "lucide:bold" }
+#   Toggle(on: today, onToggle: toggleToday, variant: "outline") { Icon "lucide:calendar"  Span "Solo hoy" }
+# variant: default | outline · size: sm | default | lg · label: the name of an icon-only toggle.
+# shadcn-for-muten · part · no deps · Nova (.cn-toggle, pressed = aria-pressed).
+part Toggle(on: bool, onToggle: action, variant: text = "default", size: text = "default", label: text = "") {
+  Button -> $onToggle class("cn-toggle cn-toggle-variant-{$variant} cn-toggle-size-{$size} cn-toggle-group-item") data(slot: "toggle", variant: $variant, size: $size, name: $label) aria(pressed: $on, label: $label) { slot }
 }

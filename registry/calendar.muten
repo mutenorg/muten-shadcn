@@ -1,9 +1,10 @@
-# Calendar - a month grid with variants. The PAGE owns the selected value (text) per mode:
-#   mode: "single" | "range" | "multiple"   months: 1 | 2   caption: "label" | "dropdown"
-#   selected encodes the value: single -> "yyyy-mm-dd"; range -> "from/to"; multiple -> "d1,d2,...".
-#   state { date = "" : text }   action pick(d: text) mutates date { date.set(d) }
-#   Calendar(selected: date, mode: "single", months: 1, caption: "label", onSelect: pick)
-# shadcn-for-muten · Custom · host JS is src/components/Calendar.js (copied by `muten add calendar`).
-part Calendar(selected: text, mode: text, months: number, caption: text, onSelect: action) {
-  Custom Calendar inputs(selected: $selected, mode: $mode, months: $months, caption: $caption) on(select: $onSelect) class("calendar")
+# Calendar - the month grid: a day or a range, one or two months. The page owns nothing until the person picks:
+# onSelect gets "yyyy-mm-dd" (single) or "from/to" (range).
+#   Calendar(selected: "today", min: "today", caption: "on", onSelect: pickDay)
+#   Calendar(selected: "-6/0", mode: "range", months: 2, presets: "reports", caption: "on", onSelect: pickRange)
+# selected/min take dates or days from today ("today", "-6/0"). presets "reports" adds Hoy · Últimos 7 días · Este
+# mes · Mes pasado beside a range; caption "on" writes what was chosen under it.
+# shadcn-for-muten · Custom (kit core) · host JS is calendar.js.
+part Calendar(selected: text = "", mode: text = "single", months: number = 1, min: text = "", presets: text = "", caption: text = "", onSelect: action) {
+  Custom Calendar inputs(selected: $selected, mode: $mode, months: $months, min: $min, presets: $presets, caption: $caption) on(select: $onSelect) class("cx-cal-host")
 }

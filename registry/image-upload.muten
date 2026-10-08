@@ -1,0 +1,8 @@
+# ImageUpload - tap, drag or paste an image: it is checked (type, size), decoded BEFORE drawing (no black squares),
+# cropped square, shrunk to WebP and uploaded with real progress to uploadUrl - or handed back as a data URL.
+# onReady gets {url | dataUrl, width, height, kb} ("" when removed).
+#   ImageUpload(title: "Sube la foto del servicio", uploadUrl: "/media", onReady: setPhoto)
+# shadcn-for-muten · Custom (kit dates) · host JS image-upload.js.
+part ImageUpload(title: text = "Sube la foto", hint: text = "", maxMb: number = 10, size: number = 1200, uploadUrl: text = "", sample: text = "", onReady: action) {
+  Custom ImageUpload inputs(title: $title, hint: $hint, maxMb: $maxMb, size: $size, uploadUrl: $uploadUrl, sample: $sample) on(ready: $onReady) class("cx-up-host")
+}

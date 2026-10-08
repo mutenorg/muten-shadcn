@@ -1,4 +1,6 @@
-# Skeleton - a loading placeholder. Add the size utilities via class (paramless part, so class() works):
-#   Skeleton class("h-4 w-32")   ·   Skeleton class("size-10 rounded-full")
-# shadcn-for-muten · part · no deps · uses .skeleton (pulse) from globals.css.
-part Skeleton() { Stack class("skeleton") { slot } }
+# Skeleton - the shape of content that has not arrived. Size it with class(); shape: "" | circle | pill.
+#   Skeleton(shape: "circle") class("size-8")    Skeleton() class("h-3 w-2/3")
+# Build a whole placeholder from the SAME parts as the content (an Item with Skeletons in place of the text), so the
+# swap changes pixels, not layout. Only while there is nothing to show: a refresh keeps the content.
+# shadcn-for-muten · part · no deps · Nova (.cn-skeleton) + kit.css (shimmer).
+part Skeleton(shape: text = "") { Stack class("cn-skeleton") data(slot: "skeleton", shape: $shape) aria(hidden: "true") }

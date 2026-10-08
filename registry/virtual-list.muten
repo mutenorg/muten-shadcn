@@ -1,0 +1,6 @@
+# VirtualList - thousands of rows, only the visible ones (+ a margin) in the DOM; arrows, Page Up/Down, Home/End.
+#   VirtualList(rows: @clients, label: "Clientes", jump: 5000)       rows: {title, subtitle, value}
+# total > rows.length repeats the rows up to it (a long demo). shadcn-for-muten · Custom (kit collections).
+part VirtualList(rows: list, total: number = 0, rowHeight: number = 52, label: text = "Lista", jump: number = 0) {
+  Custom VirtualList inputs(rows: $rows, total: $total, rowHeight: $rowHeight, label: $label, jump: $jump) class("cx-vl-host")
+}

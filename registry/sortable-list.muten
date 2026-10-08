@@ -1,7 +1,6 @@
-# Sortable List - drag rows by the grip to reorder (layers, steps). The PAGE owns a comma-joined order:
-#   state { layers = "Background,Player,UI" : text }   action reorder(v: text) mutates layers { layers.set(v) }
-#   SortableList(items: layers, onReorder: reorder)
-# shadcn-for-muten · Custom · host JS is src/components/SortableList.js (copied by `muten add sortable-list`).
-part SortableList(items: text, onReorder: action) {
-  Custom SortableList inputs(items: $items) on(reorder: $onReorder) class("sortable-list")
-}
+# SortableList - plain names you put in order (the layers of a design, the steps of a flow) from comma-joined text:
+# the same rows and feel as Sortable (the grip, the others making room, Up/Down on the focused grip).
+#   state { layers = "Fondo,Jugador,Interfaz" : text }   action reorder(v: text) mutates layers { layers.set(v) }
+#   SortableList(items: layers, label: "Capas", onReorder: reorder)
+# For rows with a price or details use Sortable with SortItem. shadcn-for-muten · Custom · sortable-list.js.
+part SortableList(items: text, label: text = "Orden", onReorder: action) { Custom SortableList inputs(items: $items, label: $label) on(reorder: $onReorder) class("cx-slist-host") }

@@ -1,0 +1,8 @@
+# PaginationNav - pages that come from the server: always 7 slots once there are more than 7 pages (nothing slides),
+# «Página n de N» on a phone, and «41–50 de 237 clientes». The page owns the page number and loads the rows; while it
+# loads, give the list class("cx-pg-list") data(loading: busy) so the old page dims in place (nothing changes size).
+#   PaginationNav(total: 237, per: 10, page: page, noun: "clientes", onPage: loadPage)
+# shadcn-for-muten · Custom (kit collections) · host JS pagination-nav.js.
+part PaginationNav(total: number, per: number = 10, page: number, noun: text = "resultados", onPage: action) {
+  Custom PaginationNav inputs(total: $total, per: $per, page: $page, noun: $noun) on(page: $onPage) class("cx-pgnav-host")
+}

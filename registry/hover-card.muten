@@ -1,9 +1,7 @@
-# Hover Card - richer content shown on hover (pure CSS, no state). label is the trigger; the slot is the card.
-#   HoverCard(label: "@muten") { Span "The AI-first frontend DSL." class("text-sm") }
-# shadcn-for-muten · part · no deps · styles via the semantic .hover-card* classes in globals.css.
-part HoverCard(label: text) {
-  Stack class("hover-card") {
-    Span "{$label}" class("hover-card-trigger")
-    Stack class("hover-card-content") { slot }
-  }
-}
+# HoverCard - a preview that shows while the pointer rests on a name or a link (or it gets the focus), and goes
+# away when it leaves. Only a preview: whatever matters must also be reachable without hovering.
+#   HoverCard { HoverCardTrigger { Link "@elroble" -> "/…" }  HoverCardContent { … } }
+# shadcn-for-muten · parts + Custom (OverlayBehavior) · Nova (.cn-hover-card-content) + kit.css.
+part HoverCard() { Stack class("cx-ov") data(slot: "hover-card") { slot  OverlayBehavior(kind: "hover") } }
+part HoverCardTrigger() { Stack class("cx-ov-trigger") data(slot: "hover-card-trigger") { slot } }
+part HoverCardContent(align: text = "center", width: text = "16rem") { Stack class("cn-hover-card-content cx-ov-content") data(slot: "hover-card-content", align: $align) style(w: "{$width}") { slot } }

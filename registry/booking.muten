@@ -1,0 +1,11 @@
+# Booking - week and hours in one piece. The dot under a day says something is left; closed days are disabled; a
+# full day shows its empty state with a jump to the next day with hours. Changing day shows a skeleton with the exact
+# shape of the hours while they load (nothing jumps in height). What is chosen goes on --selected.
+#   Booking(week: @week, taken: @taken, wait: 380, onSelect: book)
+# week {days [0..6], hours ["09:00", …]} = what the shop offers each weekday (a weekday in no row is closed);
+# taken {day (days from today or "yyyy-mm-dd"), hours} = what is booked (no hours = the whole day). onSelect gets
+# "yyyy-mm-dd HH:MM" on «Continuar».
+# shadcn-for-muten · Custom (kit/structure.js) · kit.css (.cx-book, .cx-week, .cx-hours).
+part Booking(week: list, taken: list, wait: number = 0, cta: text = "Continuar", onSelect: action) {
+  Custom Booking inputs(week: $week, taken: $taken, wait: $wait, cta: $cta) on(select: $onSelect) class("cx-book-host")
+}

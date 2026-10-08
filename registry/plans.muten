@@ -1,0 +1,4 @@
+# Plans - plan cards with a monthly/yearly switch; the current plan is marked; going up is one tap, going down asks.
+#   Plans(plans: @plans, note: "2 meses gratis")   plans: {id, name, price {month, year}, desc, features, current}
+# shadcn-for-muten · part over KitWidget (kit core).
+part Plans(plans: list, note: text = "") { Custom KitWidget inputs(name: "plans", plans: $plans, note: $note) class("cx-plans-host") }

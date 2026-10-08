@@ -1,0 +1,7 @@
+# MoneyField - a price with its currency: the symbol, separators and decimals come from the currency (Intl); the
+# currency is picked from a searchable list; under it, what is stored (minor units). onChange gets {amount, minor, currency}.
+#   MoneyField(label: "Precio del servicio", value: 25000, currency: "COP", onChange: setPrice)
+# shadcn-for-muten · Custom (kit values) · host JS money-field.js.
+part MoneyField(label: text = "Precio", value: number = 0, currency: text = "COP", onChange: action) {
+  Custom MoneyField inputs(label: $label, value: $value, currency: $currency) on(change: $onChange) class("cx-mf-host")
+}

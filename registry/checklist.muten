@@ -1,0 +1,6 @@
+# Checklist - first steps with progress: done steps checked, the next ones with their action (onAction gets its label).
+#   Checklist(title: "Tu tienda en 5 pasos", steps: @steps, onAction: act)     steps: {title, desc, done, action}
+# shadcn-for-muten · part over KitWidget (kit core).
+part Checklist(title: text, steps: list, onAction: action) {
+  Custom KitWidget inputs(name: "checklist", title: $title, steps: $steps) on(action: $onAction) class("cx-onboard")
+}

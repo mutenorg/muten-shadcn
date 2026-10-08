@@ -1,0 +1,6 @@
+# PermissionMatrix - any rows × any roles; one role can be locked (always allowed).
+#   PermissionMatrix(roles: @roleNames, rows: @permissions, locked: "Propietario", onChange: savePerms)   rows: {name, description, allow [1,0,…]}
+# shadcn-for-muten · part over KitWidget (kit core).
+part PermissionMatrix(roles: list, rows: list, locked: text = "", onChange: action) {
+  Custom KitWidget inputs(name: "permissionMatrix", roles: $roles, rows: $rows, locked: $locked) on(action: $onChange) class("cx-perms")
+}

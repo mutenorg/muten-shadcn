@@ -1,8 +1,12 @@
-# Card + its sub-components. Compose: Card { CardHeader { CardTitle(label) CardDescription(label) } CardContent { … } CardFooter { … } }
-# shadcn-for-muten · part · no deps · styles via the semantic .card* classes in globals.css.
-part Card() { Section class("card") { slot } }
-part CardHeader() { Stack class("card-header") { slot } }
-part CardTitle(label: text) { Title "{$label}" h3 class("card-title") }
-part CardDescription(label: text) { Span "{$label}" class("card-description") }
-part CardContent() { Stack class("card-content") { slot } }
-part CardFooter() { Stack class("card-footer") { slot } }
+# Card - a surface that only CONVEYS: header (title, description, an action at the corner), content, footer.
+# Decisions go in a modal, not on the card.
+#   Card(size: "sm") { CardHeader { CardTitle(label: "Hoy")  CardDescription(label: "3 citas")  CardAction { Btn(variant: "ghost", size: "icon-sm", onClick: more) { Icon "lucide:ellipsis" } } }  CardContent { … } }
+# size: default | sm (compact: items edge to edge)
+# shadcn-for-muten · part · no deps · Nova (.cn-card) + kit.css (size sm).
+part Card(size: text = "default") { Section class("cn-card group/card") data(slot: "card", size: $size) { slot } }
+part CardHeader() { Stack class("cn-card-header group/card-header") data(slot: "card-header") { slot } }
+part CardTitle(label: text) { Title "{$label}" h3 class("cn-card-title") data(slot: "card-title") }
+part CardDescription(label: text) { Text "{$label}" class("cn-card-description") data(slot: "card-description") }
+part CardAction() { Stack class("cn-card-action") data(slot: "card-action") { slot } }
+part CardContent() { Stack class("cn-card-content") data(slot: "card-content") { slot } }
+part CardFooter() { Stack class("cn-card-footer") data(slot: "card-footer") { slot } }

@@ -1,6 +1,6 @@
 {
   "name": "@muten/shadcn",
-  "version": "0.0.7",
+  "version": "0.1.0",
   "description": "shadcn-style component registry for muten - own-the-source parts you add with `muten add`.",
   "repository": {
     "type": "git",
@@ -15,6 +15,8 @@
     "registry",
     "registry.json",
     "globals.css",
+    "nova.css",
+    "kit.css",
     "motion.css",
     "themes",
     "README.md",
@@ -25,7 +27,9 @@
     "./motion.css": "./motion.css",
     "./themes/*": "./themes/*",
     "./registry.json": "./registry.json",
-    "./registry/*": "./registry/*"
+    "./registry/*": "./registry/*",
+    "./nova.css": "./nova.css",
+    "./kit.css": "./kit.css"
   },
   "keywords": [
     "muten",

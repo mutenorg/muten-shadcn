@@ -1,0 +1,9 @@
+# ScaleSlider - one or two thumbs; the value rides on each thumb and two bubbles that would touch merge into one;
+# the ends are written under it. Keys: arrows, Page Up/Down, Home/End. onChange gets "24" or "20000,80000".
+#   ScaleSlider(label: "Recordatorio antes de la cita", min: 1, max: 72, values: "24", format: "hours", onChange: setHours)
+#   ScaleSlider(label: "Precio", min: 0, max: 150000, step: 5000, values: "20000,80000", gap: 5000, format: "money", onChange: setPrice)
+# bubble: always | drag (only while moving or focused) | off · ends: on | off (the min and max written under it).
+# format: hours | money | percent | "" (+ suffix). shadcn-for-muten · Custom (kit values) · host JS scale-slider.js.
+part ScaleSlider(label: text, min: number = 0, max: number = 100, step: number = 1, values: text, gap: number = 0, format: text = "", suffix: text = "", bubble: text = "always", ends: text = "on", onChange: action) {
+  Custom ScaleSlider inputs(label: $label, min: $min, max: $max, step: $step, values: $values, gap: $gap, format: $format, suffix: $suffix, bubble: $bubble, ends: $ends) on(change: $onChange) class("cx-sl-host")
+}

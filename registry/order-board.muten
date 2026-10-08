@@ -1,0 +1,21 @@
+# OrderBoard - lanes and cards are data. Each card groups its information by what it is about and orders it by what
+# needs you first: who and how much (the contact channel they asked for on the right), what waits for your decision
+# (tonal icon Buttons with their Indicator; tapping opens it in the modal), the products, the payment (total, short
+# state, and the button that fits: «Revisar comprobante», «Ver recibo de Stripe»), the delivery (time, progress,
+# «Ver entrega»), the note, and the one next step. Tapping a button never starts a drag. Drag a card with the mouse;
+# on a phone hold it a moment. Drag the board's background (or swipe) to see the side lanes; carrying a card to the
+# edge scrolls it. Keyboard: Space lifts, arrows move, Space drops, Esc puts it back.
+#   OrderBoard(lanes: @lanes, cards: @orders, onChange: moved, onAction: act)
+#   OrderCards(cards: @orders, sizes: @sizes, onAction: act)      the same card side by side (minimum · typical · maximum)
+# lanes {id, title, next} (next = the step's label that moves a card INTO the following lane) · cards {id, lane, who,
+# sub, total, contact, status [tone, label], request {tone, icon, title, when, text, photo, actions [[id, label]]} or a
+# list of them, order {count, photos, extras}, pay {method, tone, label, detail}, delivery {mode, label, when, map
+# {address, detail, route}, track {steps, at, courier, vehicle, eta}}, note, actions [["advance", label]]}
+# · sizes {title, description, card}. Photos are CSS backgrounds (a gradient or url()).
+# shadcn-for-muten · Custom (kit/board.js) · kit.css (.cx-board, .cx-bcard, .cx-card-sizes).
+part OrderBoard(lanes: list, cards: list, onChange: action, onAction: action) {
+  Custom OrderBoard inputs(lanes: $lanes, cards: $cards) on(change: $onChange, action: $onAction) class("cx-board-host")
+}
+part OrderCards(cards: list, sizes: list, onAction: action) {
+  Custom OrderBoard inputs(cards: $cards, sizes: $sizes) on(action: $onAction) class("cx-board-host")
+}

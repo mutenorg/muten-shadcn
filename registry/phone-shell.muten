@@ -1,0 +1,9 @@
+# PhoneShell - the app's frame on a phone: a big title that shrinks into the bar as you scroll (the header never
+# jumps in height), back on the left and at most two actions, and a bottom bar of three fixed tabs (the chosen one
+# on --selected with its dot; a count never changes the width). Respects the phone's safe area.
+#   PhoneShell(tabs: @tabs, rows: @rows, onSelect: pickTab)
+# tabs {label, icon, badge} · rows {tab, section, title, subtitle, value}: each tab's screen is its rows, grouped by section.
+# shadcn-for-muten · Custom (kit/structure.js) · kit.css (.cx-phone-frame, .cx-ph-*).
+part PhoneShell(tabs: list, rows: list, onSelect: action) {
+  Custom PhoneShell inputs(tabs: $tabs, rows: $rows) on(select: $onSelect) class("cx-ph-host")
+}

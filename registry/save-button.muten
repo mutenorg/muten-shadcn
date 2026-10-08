@@ -1,0 +1,11 @@
+# SaveButton - saving takes three moments and the button keeps its width through them, so nothing jumps:
+# idle («Guardar cambios») → saving (spinner, «Guardando…») → saved (check, «Guardado», green). The page owns status.
+#   SaveButton(status: saveState, onClick: save)      status: idle | saving | saved
+# shadcn-for-muten · part · no deps · kit.css (.cx-save).
+part SaveButton(status: text, onClick: action, label: text = "Guardar cambios") {
+  Button -> $onClick class("cn-button cn-button-variant-default cn-button-size-default group/button cx-save") data(slot: "button", status: $status) {
+    when $status == "saving" { Stack class("cx-btn-label") { Icon "lucide:loader-circle" class("animate-spin")  Span "Guardando…" } }
+    when $status == "saved" { Stack class("cx-btn-label") { Icon "lucide:check"  Span "Guardado" } }
+    when $status != "saving" and $status != "saved" { Stack class("cx-btn-label") { Span "{$label}" } }
+  }
+}

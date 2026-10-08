@@ -1,14 +1,10 @@
-# Command Palette - a top-anchored modal holding a Command (search + items). The PAGE owns the open bool;
-# pair it with Hotkey to open on Cmd/Ctrl+K:
-#   state { open = false : bool }   action openP mutates open { open.set(true) }   action closeP mutates open { open.set(false) }
-#   Hotkey(keys: "k", onPress: openP)
-#   CommandPalette(open: open, onClose: closeP) {
-#     Command { SearchField bind(q) "Type a command…" class("command-input")  CommandList { CommandItem(onSelect: closeP) { … } } }
-#   }
-# shadcn-for-muten · part · no deps · reuses the .dialog* + .command* classes; backdrop click closes.
-part CommandPalette(open: bool, onClose: action) {
-  Stack class("dialog-overlay command-palette", "dialog-overlay-open" when $open) {
-    Button -> $onClose class("dialog-backdrop")
-    Stack class("command-palette-content") { slot }
+# CommandPalette - the ⌘K search: a Command inside the adaptive modal. Open it with a Hotkey and a search button; an
+# item's action does its thing and closes the palette (the page sets open back to false).
+#   Hotkey(keys: "k", onPress: openPalette)
+#   CommandPalette(open: palette, onClose: closePalette, query: q) { CommandGroup(label: "Ir a") { CommandItem(label: "Agenda", onSelect: goAgenda) { Icon "lucide:calendar" } } }
+# shadcn-for-muten · part over Modal + Command.
+part CommandPalette(open: bool, onClose: action, query: text, placeholder: text = "Busca o salta a…", title: text = "Buscar") {
+  Modal(open: $open, onClose: $onClose, title: $title, mode: "dialog") class("cx-palette") {
+    Command(query: $query, placeholder: $placeholder) { slot }
   }
 }

@@ -1,0 +1,15 @@
+# Sortable - Items you reorder: take the grip with a mouse or a finger, or focus it and use the arrows. The others
+# make room as you drag; a screen reader hears the new position. onReorder gets the keys in their new order
+# ("cut,beard,trim") so the page can save it.
+#   Sortable(label: "Orden de los servicios en tu tienda", onReorder: saveOrder) {
+#     SortItem(key: "cut", title: "Corte clásico", price: "$25.000")
+#   }
+# shadcn-for-muten · part + Custom (SortableBehavior) · kit.css (.cx-sortable).
+part Sortable(label: text, onReorder: action) { Stack class("cx-sortable") aria(label: $label) { slot  SortableBehavior(onReorder: $onReorder) } }
+part SortItem(key: text, title: text, price: text = "") {
+  Stack class("cn-item cn-item-variant-outline cn-item-size-sm group/item cx-item") data(slot: "item", key: $key) {
+    Stack class("cn-button cn-button-variant-ghost cn-button-size-icon-xs cx-grip") aria(role: "button", label: "Mover {$title}") data(grip: "true") { Icon "lucide:grip-vertical" }
+    Stack class("cn-item-content") data(slot: "item-content") { Span "{$title}" class("cn-item-title") data(slot: "item-title") }
+    Span "{$price}" class("cx-price")
+  }
+}

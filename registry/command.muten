@@ -1,16 +1,37 @@
-# Command - a command palette (search + grouped item list). The PAGE provides the search input + the items:
-#   Command {
-#     SearchField bind(q) "Type a command…" class("command-input")
-#     CommandList { CommandGroup(label: "Suggestions") { CommandItem(onSelect: run) { Icon … Span "Calendar" } … } }
+# Command - a list you search and pick from with the keyboard (shadcn's cmdk). Typing keeps what matches, accent-
+# insensitive; arrows move, Enter picks; groups with nothing left hide; «empty» says when nothing matches. The page
+# owns the query text (read it to search the server too); each item runs its own action.
+#   Command(query: q, placeholder: "Cliente, pedido o acción…") {
+#     CommandGroup(label: "Acciones") { CommandItem(label: "Nueva cita", shortcut: "N", onSelect: create) { Icon "lucide:plus" } }
+#     CommandSeparator()
+#     CommandGroup(label: "Clientes") { CommandItem(label: "Laura Méndez", keywords: "300 112 4410", onSelect: openLaura) { Icon "lucide:user" } }
 #   }
-# Put inside a Dialog for the modal palette. shadcn-for-muten · part · no deps · styles via the .command* classes.
-part Command() { Stack class("command") { slot } }
-part CommandList() { Stack class("command-list") { slot } }
+# Inside a Modal it is the ⌘K palette: CommandPalette. shadcn-for-muten · parts + Custom (CommandBehavior) · Nova (.cn-command*).
+part Command(query: text, placeholder: text = "Busca…", empty: text = "Nada coincide.") {
+  Stack class("cn-command cx-command") data(slot: "command") {
+    Stack class("cn-command-input-wrapper cx-command-input") data(slot: "command-input-wrapper") {
+      Icon "lucide:search" class("cn-command-input-icon")
+      SearchField bind($query) "{$placeholder}" class("cn-command-input") data(slot: "command-input")
+    }
+    Stack class("cn-command-list cx-command-list") data(slot: "command-list") aria(role: "listbox") {
+      slot
+      Span "{$empty}" class("cn-command-empty cx-command-empty") data(slot: "command-empty")
+    }
+    CommandBehavior()
+  }
+}
 part CommandGroup(label: text) {
-  Stack class("flex flex-col") {
-    Span "{$label}" class("command-group-label")
+  Stack class("cn-command-group cx-cmd-group") data(slot: "command-group") aria(role: "group", label: $label) {
+    Span "{$label}" class("cx-cmd-label")
     slot
   }
 }
-part CommandItem(onSelect: action) { Button -> $onSelect class("command-item") { slot } }
-part CommandShortcut(keys: text) { Span "{$keys}" class("command-shortcut") }
+part CommandItem(label: text, onSelect: action, shortcut: text = "", keywords: text = "") {
+  Button -> $onSelect class("cn-command-item cx-cmd-item") data(slot: "command-item", keywords: $keywords) aria(role: "option") {
+    slot
+    Span "{$label}" class("cx-cmd-text")
+    Span "{$shortcut}" class("cn-command-shortcut") data(slot: "command-shortcut")
+  }
+}
+part CommandSeparator() { Stack class("cn-command-separator cx-cmd-sep") data(slot: "command-separator") aria(role: "separator") }
+part CommandBehavior() { Custom CommandBehavior class("cx-cmd-behavior") }

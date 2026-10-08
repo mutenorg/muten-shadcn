@@ -1,11 +1,11 @@
-# Zoom Control - a  -  100%  +  widget. The PAGE owns the zoom number + the -/+ actions:
-#   state { zoom = 100 : number }   action zOut mutates zoom { zoom.set(zoom - 10) }   action zIn mutates zoom { zoom.set(zoom + 10) }
-#   ZoomControl(value: zoom, onOut: zOut, onIn: zIn)
-# shadcn-for-muten · part · no deps · styles via the semantic .zoom-* classes in globals.css.
-part ZoomControl(value: number, onOut: action, onIn: action) {
-  Stack class("zoom-control") {
-    Button -> $onOut class("zoom-btn") { Icon "lucide:minus" class("size-4") }
-    Span "{$value}%" class("zoom-value")
-    Button -> $onIn class("zoom-btn") { Icon "lucide:plus" class("size-4") }
+# ZoomControl - minus, the zoom in percent, plus. Tapping the number puts it back to 100 %. The page owns the number
+# and the three actions (and the limits: switch a side off at its end with Btn's own rules).
+#   ZoomControl(value: zoom, onOut: zoomOut, onIn: zoomIn, onReset: zoomReset)
+# shadcn-for-muten · part · no deps · kit.css (.cx-zoom).
+part ZoomControl(value: number, onOut: action, onIn: action, onReset: action) {
+  Stack class("cx-zoom") data(slot: "zoom-control") aria(role: "group", label: "Zoom") {
+    Button -> $onOut class("cn-button cn-button-variant-ghost cn-button-size-icon-sm group/button") data(name: "Alejar") aria(label: "Alejar") { Icon "lucide:minus" }
+    Button "{$value} %" -> $onReset class("cn-button cn-button-variant-ghost cn-button-size-sm group/button cx-zoom-value") data(name: "Volver a 100 %") aria(label: "Zoom {$value} %, volver a 100")
+    Button -> $onIn class("cn-button cn-button-variant-ghost cn-button-size-icon-sm group/button") data(name: "Acercar") aria(label: "Acercar") { Icon "lucide:plus" }
   }
 }

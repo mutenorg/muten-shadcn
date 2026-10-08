@@ -1,3 +1,4 @@
-# Spinner - a loading indicator (shadcn uses the lucide loader, spun with animate-spin).
-# shadcn-for-muten · part · no deps · styles via the semantic .spinner class in globals.css.
-part Spinner() { Icon "lucide:loader-circle" class("spinner") }
+# Spinner - a loading mark for a button or a line, never for a whole screen (that is a Skeleton).
+#   Btn(onClick: save) disabled… { Spinner()  Span "Guardando…" }
+# shadcn-for-muten · part · no deps · Nova (.cn-spinner).
+part Spinner() { Icon "lucide:loader-circle" class("cn-spinner animate-spin") aria(label: "Cargando", role: "status") }

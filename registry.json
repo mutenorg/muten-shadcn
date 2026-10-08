@@ -4,602 +4,1046 @@
   "style": "shadcn zinc dark (tokens shipped by globals.css: bg-card / bg-primary / text-muted-foreground / border-border / …)",
   "components": [
     {
-      "name": "card",
-      "part": "Card",
-      "file": "registry/card.muten",
-      "description": "A surface with CardHeader / CardTitle / CardDescription / CardContent / CardFooter sub-components.",
-      "deps": []
-    },
-    {
-      "name": "badge",
-      "part": "Badge",
-      "file": "registry/badge.muten",
-      "description": "A small status descriptor. variant: default | secondary | destructive | outline.",
-      "deps": []
-    },
-    {
-      "name": "alert",
-      "part": "Alert",
-      "file": "registry/alert.muten",
-      "description": "A callout with AlertTitle / AlertDescription. variant: default | destructive.",
-      "deps": []
-    },
-    {
-      "name": "avatar",
-      "part": "Avatar",
-      "file": "registry/avatar.muten",
-      "description": "A user's initials in a circle (AvatarFallback).",
-      "deps": []
-    },
-    {
-      "name": "switch",
-      "part": "Switch",
-      "file": "registry/switch.muten",
-      "description": "A toggle; the page owns the bool + the action.",
-      "deps": []
-    },
-    {
-      "name": "spinner",
-      "part": "Spinner",
-      "file": "registry/spinner.muten",
-      "description": "A loading indicator (animate-spin loader).",
-      "deps": []
-    },
-    {
-      "name": "progress",
-      "part": "Progress",
-      "file": "registry/progress.muten",
-      "description": "A determinate progress bar; value is 0-100.",
-      "deps": []
-    },
-    {
-      "name": "separator",
-      "part": "Separator",
-      "file": "registry/separator.muten",
-      "description": "A thin divider line.",
-      "deps": []
-    },
-    {
-      "name": "empty",
-      "part": "Empty",
-      "file": "registry/empty.muten",
-      "description": "An empty-state placeholder (title + description in a dashed border).",
-      "deps": []
-    },
-    {
-      "name": "breadcrumb",
-      "part": "Breadcrumb",
-      "file": "registry/breadcrumb.muten",
-      "description": "A breadcrumb trail with BreadcrumbLink / BreadcrumbSeparator / BreadcrumbPage.",
-      "deps": []
-    },
-    {
-      "name": "pagination",
-      "part": "Pagination",
-      "file": "registry/pagination.muten",
-      "description": "Page navigation with PaginationLink / Previous / Next / Ellipsis.",
-      "deps": []
-    },
-    {
-      "name": "field",
-      "part": "Field",
-      "file": "registry/field.muten",
-      "description": "A labelled form control: FieldLabel / FieldDescription / FieldError.",
-      "deps": []
-    },
-    {
-      "name": "item",
-      "part": "Item",
-      "file": "registry/item.muten",
-      "description": "A bordered row: ItemContent / ItemTitle / ItemDescription.",
-      "deps": []
-    },
-    {
-      "name": "toggle",
-      "part": "Toggle",
-      "file": "registry/toggle.muten",
-      "description": "A two-state button; the page owns the bool + the toggle action.",
-      "deps": []
-    },
-    {
-      "name": "toggle-group",
-      "part": "ToggleGroup",
-      "file": "registry/toggle-group.muten",
-      "description": "Single-select toolbar with ToggleGroupItem; page owns a text state.",
-      "deps": []
-    },
-    {
-      "name": "radio-group",
-      "part": "RadioGroup",
-      "file": "registry/radio-group.muten",
-      "description": "Single choice with RadioGroupItem; page owns a text state.",
-      "deps": []
-    },
-    {
-      "name": "collapsible",
-      "part": "Collapsible",
-      "file": "registry/collapsible.muten",
-      "description": "A trigger + content shown when open; page owns the bool.",
-      "deps": []
-    },
-    {
       "name": "accordion",
+      "deps": [],
       "part": "Accordion",
       "file": "registry/accordion.muten",
-      "description": "Stacked expandable sections with AccordionItem; page owns a bool per item.",
-      "deps": []
+      "description": "Stacked expandable sections with AccordionItem; page owns a bool per item."
     },
     {
-      "name": "tabs",
-      "part": "TabsList",
-      "file": "registry/tabs.muten",
-      "description": "Tab bar (TabsList/TabsTrigger) + TabsContent panels; page owns the active-tab text.",
-      "deps": []
-    },
-    {
-      "name": "dialog",
-      "part": "Dialog",
-      "file": "registry/dialog.muten",
-      "description": "A modal with DialogTitle/Description/Footer; page owns the open bool. Backdrop click closes.",
-      "deps": []
-    },
-    {
-      "name": "tooltip",
-      "part": "Tooltip",
-      "file": "registry/tooltip.muten",
-      "description": "A hover tooltip (pure CSS, no state). The slot is the trigger.",
-      "deps": []
-    },
-    {
-      "name": "dropdown-menu",
-      "part": "DropdownMenu",
-      "file": "registry/dropdown-menu.muten",
-      "description": "A menu below a trigger with DropdownItem/Label/Separator; page owns the open bool.",
-      "deps": []
-    },
-    {
-      "name": "popover",
-      "part": "Popover",
-      "file": "registry/popover.muten",
-      "description": "A floating panel below a trigger; page owns the open bool.",
-      "deps": []
+      "name": "agenda",
+      "deps": [],
+      "part": "Agenda",
+      "file": "registry/agenda.muten",
+      "component": "Agenda",
+      "description": "Agenda(resources, hours, events, blocks, from, to, slot, onCreate, onChange): day/week/list, drag, resize, appointment sheet (Custom, kit core)."
     },
     {
       "name": "alert-dialog",
+      "deps": [],
       "part": "AlertDialog",
       "file": "registry/alert-dialog.muten",
-      "description": "A modal requiring an explicit choice (no backdrop dismiss); page owns the open bool.",
-      "deps": []
+      "description": "A modal requiring an explicit choice (no backdrop dismiss); page owns the open bool."
     },
     {
-      "name": "sheet",
-      "part": "Sheet",
-      "file": "registry/sheet.muten",
-      "description": "A panel that slides in from the right; page owns the open bool.",
-      "deps": []
+      "name": "alert",
+      "deps": [],
+      "part": "Alert",
+      "file": "registry/alert.muten",
+      "description": "Alert(variant, tone) callout: an Icon, AlertTitle, AlertDescription, AlertAction at the corner. tone: info | ok | wait."
     },
     {
-      "name": "drawer",
-      "part": "Drawer",
-      "file": "registry/drawer.muten",
-      "description": "A panel that slides up from the bottom; page owns the open bool.",
-      "deps": []
-    },
-    {
-      "name": "hover-card",
-      "part": "HoverCard",
-      "file": "registry/hover-card.muten",
-      "description": "Richer content shown on hover (pure CSS, no state).",
-      "deps": []
-    },
-    {
-      "name": "scroll-area",
-      "part": "ScrollArea",
-      "file": "registry/scroll-area.muten",
-      "description": "A scrollable region with styled scrollbars.",
-      "deps": []
-    },
-    {
-      "name": "message",
-      "part": "Message",
-      "file": "registry/message.muten",
-      "description": "Chat Message + Bubble + Marker (variant: sent | received).",
-      "deps": []
-    },
-    {
-      "name": "message-scroller",
-      "part": "MessageScroller",
-      "file": "registry/message-scroller.muten",
-      "description": "A scrollable column of chat messages.",
-      "deps": []
+      "name": "app-shell",
+      "deps": [],
+      "part": "AppShell",
+      "file": "registry/app-shell.muten",
+      "component": "AppShell",
+      "description": "AppShell(brand, user, nav, pages, rows, commands, narrow, onNavigate, onOpen, onAction): Sidebar, page header, detail Sheet, ⌘K Command."
     },
     {
       "name": "attachment",
+      "deps": [],
       "part": "Attachment",
       "file": "registry/attachment.muten",
-      "description": "A file attachment chip (icon + name + size).",
-      "deps": []
+      "description": "A file attachment chip (icon + name + size)."
     },
     {
-      "name": "menubar",
-      "part": "Menubar",
-      "file": "registry/menubar.muten",
-      "description": "A bar of menus (File/Edit/View); page owns which is open via a text state.",
-      "deps": []
+      "name": "avatar",
+      "deps": [],
+      "part": "Avatar",
+      "file": "registry/avatar.muten",
+      "description": "Avatar(name, size, shape, status): initials with a stable tone from the name, name on hover, online dot · AvatarImage · AvatarGroup + AvatarMore · Who."
     },
     {
-      "name": "navigation-menu",
-      "part": "NavigationMenu",
-      "file": "registry/navigation-menu.muten",
-      "description": "A nav bar with hover-revealed panels (pure CSS, no state).",
-      "deps": []
+      "name": "badge",
+      "deps": [],
+      "part": "Badge",
+      "file": "registry/badge.muten",
+      "description": "Badge(label, variant) · StatusBadge(label, tone) dot+word · ToneBadge(label, tone, dot) tinted · Chip(label, onRemove) removable."
     },
     {
-      "name": "combobox",
-      "part": "Combobox",
-      "file": "registry/combobox.muten",
-      "description": "A Select with a search box; page filters items with `each … where`.",
-      "deps": []
+      "name": "band",
+      "deps": [],
+      "part": "Band",
+      "file": "registry/band.muten",
+      "description": "Band(open, tone, text, action, onAction) { Icon }: the top strip for a lasting state; folds, never clips."
     },
     {
-      "name": "command",
-      "part": "Command",
-      "file": "registry/command.muten",
-      "description": "A command palette (search + grouped CommandItem list).",
-      "deps": []
-    },
-    {
-      "name": "slider",
-      "part": "Slider",
-      "file": "registry/slider.muten",
-      "component": "Slider",
-      "description": "A draggable range slider (Custom). Page owns the value number.",
-      "deps": []
-    },
-    {
-      "name": "input-otp",
-      "part": "InputOtp",
-      "file": "registry/input-otp.muten",
-      "component": "InputOtp",
-      "description": "N single-character boxes synced to one value (Custom). Page owns the value text.",
-      "deps": []
-    },
-    {
-      "name": "calendar",
-      "part": "Calendar",
-      "file": "registry/calendar.muten",
-      "component": "Calendar",
-      "description": "A month-grid date picker (Custom). Page owns the selected ISO date text.",
-      "deps": []
-    },
-    {
-      "name": "toaster",
-      "part": "Toaster",
-      "file": "registry/toaster.muten",
-      "component": "Toaster",
-      "description": "Fixed toast notifications (Custom). Page bumps a trigger counter to fire one.",
-      "deps": []
-    },
-    {
-      "name": "carousel",
-      "part": "Carousel",
-      "file": "registry/carousel.muten",
-      "component": "Carousel",
-      "description": "A slide carousel over a list (Custom). Page owns the slides list.",
-      "deps": []
-    },
-    {
-      "name": "gradient-blinds",
-      "part": "GradientBlinds",
-      "file": "registry/gradient-blinds.muten",
-      "component": "GradientBlinds",
-      "description": "Animated WebGL gradient + diagonal-blinds hero background that follows the cursor and fades into the page (needs ogl).",
+      "name": "bar-chart",
       "deps": [
-        "ogl"
-      ]
+        "kit-widget"
+      ],
+      "part": "BarChart",
+      "file": "registry/bar-chart.muten",
+      "description": "BarChart - bars that always fill their height, a period switch (14 días / 30 días). periods: {label, values} - the"
     },
     {
-      "name": "resizable",
-      "part": "Resizable",
-      "file": "registry/resizable.muten",
-      "component": "Resizable",
-      "description": "Two panels with a draggable splitter (Custom).",
-      "deps": []
-    },
-    {
-      "name": "context-menu",
-      "part": "ContextMenu",
-      "file": "registry/context-menu.muten",
-      "component": "ContextMenu",
-      "description": "Right-click an area to open a menu of items (Custom).",
-      "deps": []
-    },
-    {
-      "name": "number-field",
-      "part": "NumberField",
-      "file": "registry/number-field.muten",
-      "component": "NumberField",
-      "description": "A numeric input with -/+ steppers, min/max/step (Custom).",
-      "deps": []
-    },
-    {
-      "name": "segmented-control",
-      "part": "SegmentedControl",
-      "file": "registry/segmented-control.muten",
-      "description": "A single-select toolbar (SegmentedItem); page owns a text state.",
-      "deps": []
-    },
-    {
-      "name": "file-input",
-      "part": "FileInput",
-      "file": "registry/file-input.muten",
-      "component": "FileInput",
-      "description": "A click/drag-drop file dropzone (Custom); emits file names.",
-      "deps": []
-    },
-    {
-      "name": "color-picker",
-      "part": "ColorPicker",
-      "file": "registry/color-picker.muten",
-      "component": "ColorPicker",
-      "description": "A swatch + saturation/value + hue popover (Custom); page owns the hex.",
-      "deps": []
-    },
-    {
-      "name": "vector-field",
-      "part": "VectorField",
-      "file": "registry/vector-field.muten",
-      "description": "Paired NumberFields (X/Y) for position or size.",
+      "name": "bell",
       "deps": [
-        "number-field"
-      ]
-    },
-    {
-      "name": "tree-view",
-      "part": "TreeView",
-      "file": "registry/tree-view.muten",
-      "component": "TreeView",
-      "description": "A nested folder/file tree (Custom): expandable, selectable, icons + indent.",
-      "deps": []
-    },
-    {
-      "name": "toolbar",
-      "part": "Toolbar",
-      "file": "registry/toolbar.muten",
-      "description": "A grouped button bar with ToolbarGroup / ToolbarSeparator.",
-      "deps": []
-    },
-    {
-      "name": "canvas-viewport",
-      "part": "CanvasViewport",
-      "file": "registry/canvas-viewport.muten",
-      "component": "CanvasHost",
-      "description": "A <canvas> with pan/zoom (Custom) + a muten toolbar slot floating on top.",
-      "deps": []
-    },
-    {
-      "name": "status-bar",
-      "part": "StatusBar",
-      "file": "registry/status-bar.muten",
-      "description": "A thin bottom bar with StatusItem / StatusSpacer.",
-      "deps": []
-    },
-    {
-      "name": "zoom-control",
-      "part": "ZoomControl",
-      "file": "registry/zoom-control.muten",
-      "description": "A - 100% + zoom widget; page owns the zoom number.",
-      "deps": []
-    },
-    {
-      "name": "split-button",
-      "part": "SplitButton",
-      "file": "registry/split-button.muten",
-      "description": "A main action + a caret dropdown; page owns the open bool.",
-      "deps": []
-    },
-    {
-      "name": "tag-input",
-      "part": "TagInput",
-      "file": "registry/tag-input.muten",
-      "component": "TagInput",
-      "description": "Chips you add by typing + Enter (Custom); page owns a comma-joined text.",
-      "deps": []
-    },
-    {
-      "name": "swatch",
-      "part": "SwatchPalette",
-      "file": "registry/swatch.muten",
-      "description": "A grid of selectable color swatches (Swatch); page owns the selected hex + colors.",
-      "deps": []
-    },
-    {
-      "name": "range-slider",
-      "part": "RangeSlider",
-      "file": "registry/range-slider.muten",
-      "component": "RangeSlider",
-      "description": "A two-thumb range slider (Custom); page owns the low + high numbers.",
-      "deps": []
-    },
-    {
-      "name": "sidebar",
-      "part": "AppSidebar",
-      "file": "registry/sidebar.muten",
-      "description": "AppSidebar - a collapsible nav panel (SidebarHeader / SidebarGroup / SidebarItem). Named AppSidebar so it never shadows muten's core Sidebar <aside> primitive.",
-      "deps": []
-    },
-    {
-      "name": "sortable-list",
-      "part": "SortableList",
-      "file": "registry/sortable-list.muten",
-      "component": "SortableList",
-      "description": "Drag rows to reorder (Custom); page owns a comma-joined order.",
-      "deps": []
-    },
-    {
-      "name": "inspector",
-      "part": "Inspector",
-      "file": "registry/inspector.muten",
-      "description": "Property grid: InspectorSection (collapsible) / InspectorRow (label : value slot).",
-      "deps": []
-    },
-    {
-      "name": "folder-picker",
-      "part": "FolderPicker",
-      "file": "registry/folder-picker.muten",
-      "component": "FolderPicker",
-      "description": "Connect a local folder via showDirectoryPicker (Custom); emits the name.",
-      "deps": []
-    },
-    {
-      "name": "command-palette",
-      "part": "CommandPalette",
-      "file": "registry/command-palette.muten",
-      "description": "A top-anchored modal holding a Command; page owns the open bool.",
-      "deps": []
-    },
-    {
-      "name": "hotkey",
-      "part": "Hotkey",
-      "file": "registry/hotkey.muten",
-      "component": "Hotkey",
-      "description": "A global keyboard shortcut (Cmd/Ctrl+key), invisible (Custom).",
-      "deps": []
-    },
-    {
-      "name": "code",
-      "part": "Code",
-      "file": "registry/code.muten",
-      "component": "Code",
-      "description": "Syntax-highlighted code block that understands muten (shared highlight.js, same grammar as the VS Code extension).",
-      "deps": []
-    },
-    {
-      "name": "stepper",
-      "part": "Stepper",
-      "file": "registry/stepper.muten",
-      "description": "Horizontal or vertical step progress indicator; done steps show a check, the current step is ringed (parts: Stepper, StepperVertical, Step).",
-      "deps": []
-    },
-    {
-      "name": "timeline",
-      "part": "Timeline",
-      "file": "registry/timeline.muten",
-      "description": "Vertical event timeline: a dot on a connector line + title/time/description per item (parts: Timeline, TimelineItem).",
-      "deps": []
-    },
-    {
-      "name": "pill",
-      "part": "Pill",
-      "file": "registry/pill.muten",
-      "description": "A hero eyebrow chip (rounded-full, bigger than Badge); slot-based for an icon + text.",
-      "deps": []
-    },
-    {
-      "name": "feature-grid",
-      "part": "FeatureGrid",
-      "file": "registry/feature-grid.muten",
-      "description": "BLOCK: responsive grid of feature cards (icon + title + copy). Parts: FeatureGrid, FeatureCard.",
-      "deps": []
-    },
-    {
-      "name": "pricing",
-      "part": "Pricing",
-      "file": "registry/pricing.muten",
-      "description": "BLOCK: a row of pricing tiers (name/price/features/CTA), featured highlight. Parts: Pricing, PricingTier, PricingFeature.",
-      "deps": []
-    },
-    {
-      "name": "logo-cloud",
-      "part": "LogoCloud",
-      "file": "registry/logo-cloud.muten",
-      "description": "BLOCK: a 'trusted by' strip of logos, muted + grayscale until hover. Parts: LogoCloud, LogoCloudItem.",
-      "deps": []
-    },
-    {
-      "name": "count-up",
-      "part": "CountUp",
-      "file": "registry/count-up.muten",
-      "component": "CountUp",
-      "description": "Animate a formatted number (2.4M / 94% / 40ms / 99.99%) from 0 when it scrolls into view; lands on the exact target. Custom. Styled form (takes the class): `Custom CountUp inputs(to: \"2.4M\") class(\"text-4xl font-bold\")`. For stat bands + hero metrics.",
-      "deps": []
-    },
-    {
-      "name": "navpill",
-      "part": "NavPill",
-      "file": "registry/navpill.muten",
-      "description": "BLOCK: the floating glass navbar (sticky wrapper + glass pill + scroll animation baked in). Drop logo/links/CTA inside.",
-      "deps": []
-    },
-    {
-      "name": "stat-band",
-      "part": "StatBand",
-      "file": "registry/stat-band.muten",
-      "description": "BLOCK: a divided row of KPI stats. Parts: StatBand, Stat(label) - value goes in the slot (Span or Custom CountUp).",
-      "deps": []
-    },
-    {
-      "name": "feature-rows",
-      "part": "FeatureRows",
-      "file": "registry/feature-rows.muten",
-      "description": "BLOCK: numbered feature/schedule rows with side gutters (12-col grid inside). Parts: FeatureRows, FeatureRow.",
-      "deps": []
+        "kit-widget"
+      ],
+      "part": "Bell",
+      "file": "registry/bell.muten",
+      "description": "Bell - the system's notifications: tap to see them, mark all read.   Bell(items: @notices)   items: {icon, tone, title, desc, time, unread}"
     },
     {
       "name": "bento",
+      "deps": [],
       "part": "BentoGallery",
       "file": "registry/bento.muten",
-      "description": "BLOCK: fixed-row-height tiling gallery; cells pick their col-span. Parts: BentoGallery, BentoCell.",
-      "deps": []
+      "description": "BLOCK: fixed-row-height tiling gallery; cells pick their col-span. Parts: BentoGallery, BentoCell."
+    },
+    {
+      "name": "booking",
+      "deps": [],
+      "part": "Booking",
+      "file": "registry/booking.muten",
+      "component": "Booking",
+      "description": "Booking(week, taken, wait, onSelect): week strip and hours, closed and full days, skeleton while loading."
+    },
+    {
+      "name": "breadcrumb",
+      "deps": [],
+      "part": "Breadcrumb",
+      "file": "registry/breadcrumb.muten",
+      "description": "A breadcrumb trail with BreadcrumbLink / BreadcrumbSeparator / BreadcrumbPage."
     },
     {
       "name": "button-group",
+      "deps": [],
       "part": "ButtonGroup",
       "file": "registry/button-group.muten",
-      "description": "A segmented row of buttons that share borders. Put btn-outline buttons inside.",
-      "deps": []
-    },
-    {
-      "name": "input-group",
-      "part": "InputGroup",
-      "file": "registry/input-group.muten",
-      "description": "An input with a leading icon/addon in one bordered field.",
-      "deps": []
-    },
-    {
-      "name": "skeleton",
-      "part": "Skeleton",
-      "file": "registry/skeleton.muten",
-      "description": "A loading placeholder (pulse). Add size via class: Skeleton class(\"h-4 w-32\").",
-      "deps": []
-    },
-    {
-      "name": "kbd",
-      "part": "Kbd",
-      "file": "registry/kbd.muten",
-      "description": "A keyboard key hint. Kbd { Span \"Ctrl\" }.",
-      "deps": []
+      "description": "A segmented row of buttons that share borders. Put btn-outline buttons inside."
     },
     {
       "name": "button",
+      "deps": [],
       "part": "Btn",
       "file": "registry/button.muten",
-      "description": "Plug-and-play button (part Btn - Button is a primitive). `Btn(variant: \"default\", onClick: save) { Span \"Save\" }`. variant: default|secondary|outline|ghost|destructive|link.",
-      "deps": []
+      "description": "Btn(variant, size, onClick) { slot }: Nova button with fixed heights; icons move on hover. variant: default | outline | secondary | ghost | destructive | link. size: xs | sm | default | lg | icon | icon-xs | icon-sm | icon-lg."
+    },
+    {
+      "name": "calendar",
+      "deps": [],
+      "part": "Calendar",
+      "file": "registry/calendar.muten",
+      "component": "Calendar",
+      "description": "Calendar(selected, mode, months, min, onSelect): the kit month grid, single day or range, 1 or 2 months (Custom, kit core)."
+    },
+    {
+      "name": "canvas-viewport",
+      "deps": [],
+      "part": "CanvasViewport",
+      "file": "registry/canvas-viewport.muten",
+      "component": "CanvasHost",
+      "description": "A <canvas> with pan/zoom (Custom) + a muten toolbar slot floating on top."
+    },
+    {
+      "name": "card-field",
+      "deps": [
+        "kit-widget"
+      ],
+      "part": "CardField",
+      "file": "registry/card-field.muten",
+      "description": "CardField - card number with its brand, expiry, code; validates (Luhn) and says what was saved."
+    },
+    {
+      "name": "card",
+      "deps": [],
+      "part": "Card",
+      "file": "registry/card.muten",
+      "description": "Card(size) surface that only conveys: CardHeader (CardTitle, CardDescription, CardAction) / CardContent / CardFooter. size: default | sm."
+    },
+    {
+      "name": "carousel",
+      "deps": [],
+      "part": "Carousel",
+      "file": "registry/carousel.muten",
+      "component": "Carousel",
+      "description": "Carousel(label, perView, center, loop, autoplay, indicator, arrows) { CarouselSlide }: one component, options instead of copies."
+    },
+    {
+      "name": "chatbot",
+      "deps": [
+        "kit-widget"
+      ],
+      "part": "Chatbot",
+      "file": "registry/chatbot.muten",
+      "description": "Chatbot - the assistant: greets, offers suggestions, «thinks», writes the answer live (with Stop), can carry an"
+    },
+    {
+      "name": "checklist",
+      "deps": [
+        "kit-widget"
+      ],
+      "part": "Checklist",
+      "file": "registry/checklist.muten",
+      "description": "Checklist - first steps with progress: done steps checked, the next ones with their action (onAction gets its label)."
+    },
+    {
+      "name": "choice-list",
+      "deps": [
+        "roving-behavior"
+      ],
+      "part": "ChoiceList",
+      "file": "registry/choice-list.muten",
+      "description": "ChoiceList(label) + ChoiceItem(value, current, onPick, title, description, price): Items as a radio group (arrows pick)."
+    },
+    {
+      "name": "code",
+      "deps": [],
+      "part": "Code",
+      "file": "registry/code.muten",
+      "component": "Code",
+      "description": "Syntax-highlighted code block that understands muten (shared highlight.js, same grammar as the VS Code extension)."
+    },
+    {
+      "name": "collapsible",
+      "deps": [],
+      "part": "Collapsible",
+      "file": "registry/collapsible.muten",
+      "description": "A trigger + content shown when open; page owns the bool."
+    },
+    {
+      "name": "color-picker",
+      "deps": [],
+      "part": "ColorPicker",
+      "file": "registry/color-picker.muten",
+      "component": "ColorPicker",
+      "description": "ColorPicker(value, modes, anims, label, onInput): Storio's colour picker (solid, gradient, animations)."
+    },
+    {
+      "name": "combobox",
+      "deps": [],
+      "part": "Combobox",
+      "file": "registry/combobox.muten",
+      "component": "Combobox",
+      "description": "Combobox(label, options, value, placeholder, allowNew, onChange): filters and marks the match, «Usar …» for a new value."
+    },
+    {
+      "name": "command-palette",
+      "deps": [],
+      "part": "CommandPalette",
+      "file": "registry/command-palette.muten",
+      "description": "A top-anchored modal holding a Command; page owns the open bool."
+    },
+    {
+      "name": "command",
+      "deps": [],
+      "part": "Command",
+      "file": "registry/command.muten",
+      "component": "CommandBehavior",
+      "description": "A command palette (search + grouped CommandItem list)."
+    },
+    {
+      "name": "context-menu",
+      "deps": [],
+      "part": "ContextMenu",
+      "file": "registry/context-menu.muten",
+      "description": "Right-click an area to open a menu of items (Custom)."
+    },
+    {
+      "name": "count-up",
+      "deps": [],
+      "part": "CountUp",
+      "file": "registry/count-up.muten",
+      "component": "CountUp",
+      "description": "Animate a formatted number (2.4M / 94% / 40ms / 99.99%) from 0 when it scrolls into view; lands on the exact target. Custom. Styled form (takes the class): `Custom CountUp inputs(to: \"2.4M\") class(\"text-4xl font-bold\")`. For stat bands + hero metrics."
+    },
+    {
+      "name": "date-field",
+      "deps": [],
+      "part": "DateField",
+      "file": "registry/date-field.muten",
+      "component": "DateField",
+      "description": "DateField(label, value, min, years, onChange): the long date; opens the date wheels."
+    },
+    {
+      "name": "dialog",
+      "deps": [],
+      "part": "Dialog",
+      "file": "registry/dialog.muten",
+      "description": "A modal with DialogTitle/Description/Footer; page owns the open bool. Backdrop click closes."
+    },
+    {
+      "name": "dirty-bar",
+      "deps": [],
+      "part": "SettingsForm",
+      "file": "registry/dirty-bar.muten",
+      "component": "DirtyBar",
+      "description": "DirtyBar - «Tienes cambios sin guardar»: a floating footer of the form it sits in. It appears when any field,"
+    },
+    {
+      "name": "drawer",
+      "deps": [],
+      "part": "Drawer",
+      "file": "registry/drawer.muten",
+      "description": "A panel that slides up from the bottom; page owns the open bool."
+    },
+    {
+      "name": "dropdown-menu",
+      "deps": [],
+      "part": "DropdownMenu",
+      "file": "registry/dropdown-menu.muten",
+      "description": "A menu below a trigger with DropdownItem/Label/Separator; page owns the open bool."
+    },
+    {
+      "name": "empty",
+      "deps": [],
+      "part": "Empty",
+      "file": "registry/empty.muten",
+      "description": "Empty(title, description) { Icon } — what a list says when it has nothing yet."
+    },
+    {
+      "name": "feature-grid",
+      "deps": [],
+      "part": "FeatureGrid",
+      "file": "registry/feature-grid.muten",
+      "description": "BLOCK: responsive grid of feature cards (icon + title + copy). Parts: FeatureGrid, FeatureCard."
+    },
+    {
+      "name": "feature-rows",
+      "deps": [],
+      "part": "FeatureRows",
+      "file": "registry/feature-rows.muten",
+      "description": "BLOCK: numbered feature/schedule rows with side gutters (12-col grid inside). Parts: FeatureRows, FeatureRow."
+    },
+    {
+      "name": "field-behavior",
+      "deps": [],
+      "part": "FieldBehavior",
+      "file": "registry/field-behavior.muten",
+      "component": "FieldBehavior",
+      "description": "FieldBehavior(kind, message, max): money thousands on blur · email checked on blur · Esc clears search · character count."
+    },
+    {
+      "name": "field",
+      "deps": [],
+      "part": "Field",
+      "file": "registry/field.muten",
+      "description": "Field(label, description, orientation) { control } + FieldRow (two columns) + FieldLabel / FieldDescription / FieldError."
+    },
+    {
+      "name": "file-input",
+      "deps": [],
+      "part": "FileInput",
+      "file": "registry/file-input.muten",
+      "component": "FileInput",
+      "description": "A click/drag-drop file dropzone (Custom); emits file names."
+    },
+    {
+      "name": "fixed-card",
+      "deps": [],
+      "part": "FixedCard",
+      "file": "registry/fixed-card.muten",
+      "description": "FixedCard(title, description) + Row3(time, title, subtitle) + EmptyMini(text): a card that never grows (3 rows + «Ver todas»)."
+    },
+    {
+      "name": "folder-picker",
+      "deps": [],
+      "part": "FolderPicker",
+      "file": "registry/folder-picker.muten",
+      "component": "FolderPicker",
+      "description": "Connect a local folder via showDirectoryPicker (Custom); emits the name."
+    },
+    {
+      "name": "gradient-blinds",
+      "deps": [
+        "ogl"
+      ],
+      "part": "GradientBlinds",
+      "file": "registry/gradient-blinds.muten",
+      "component": "GradientBlinds",
+      "description": "Animated WebGL gradient + diagonal-blinds hero background that follows the cursor and fades into the page (needs ogl)."
+    },
+    {
+      "name": "hotkey",
+      "deps": [],
+      "part": "Hotkey",
+      "file": "registry/hotkey.muten",
+      "component": "Hotkey",
+      "description": "A global keyboard shortcut (Cmd/Ctrl+key), invisible (Custom)."
+    },
+    {
+      "name": "hover-card",
+      "deps": [],
+      "part": "HoverCard",
+      "file": "registry/hover-card.muten",
+      "description": "Richer content shown on hover (pure CSS, no state)."
+    },
+    {
+      "name": "image-upload",
+      "deps": [],
+      "part": "ImageUpload",
+      "file": "registry/image-upload.muten",
+      "component": "ImageUpload",
+      "description": "ImageUpload(title, hint, maxMb, size, uploadUrl, sample, onReady): validate, decode, crop, shrink, upload with progress."
+    },
+    {
+      "name": "indicator",
+      "deps": [],
+      "part": "Indicator",
+      "file": "registry/indicator.muten",
+      "description": "Indicator(tone): the corner dot that says something needs you."
+    },
+    {
+      "name": "input-group",
+      "deps": [
+        "field-behavior"
+      ],
+      "part": "InputGroup",
+      "file": "registry/input-group.muten",
+      "description": "InputGroup + InputAddon(align) + GroupInput(value) · SearchInput(value, placeholder, onClear) with × only when there is text."
+    },
+    {
+      "name": "input-otp",
+      "deps": [],
+      "part": "InputOtp",
+      "file": "registry/input-otp.muten",
+      "component": "InputOtp",
+      "description": "InputOtp(value, length, hint, state, message, resendIn, onInput): slots, caret, ok/bad, resend countdown."
     },
     {
       "name": "input",
+      "deps": [],
       "part": "Input",
       "file": "registry/input.muten",
-      "description": "Plug-and-play text input (part Input wraps SearchField). `Input(value: q, placeholder: \"...\")` - value is two-way bound. For typed/validated fields use a Form.",
-      "deps": []
+      "description": "Input(value, placeholder) and TextArea(value, placeholder): Nova fields bound to a page text state."
+    },
+    {
+      "name": "inspector",
+      "deps": [],
+      "part": "Inspector",
+      "file": "registry/inspector.muten",
+      "description": "Property grid: InspectorSection (collapsible) / InspectorRow (label : value slot)."
+    },
+    {
+      "name": "island",
+      "deps": [],
+      "part": "Island",
+      "file": "registry/island.muten",
+      "component": "Island",
+      "description": "Island(tone, text, ms): the one floating notice that morphs (kit core)."
+    },
+    {
+      "name": "item",
+      "deps": [],
+      "part": "Item",
+      "file": "registry/item.muten",
+      "description": "Item(variant, size) row with ItemMedia / ItemContent / ItemTitle / ItemDescription / ItemActions / ItemFooter; lists = ItemGroup + ItemSeparator."
+    },
+    {
+      "name": "kbd",
+      "deps": [],
+      "part": "Kbd",
+      "file": "registry/kbd.muten",
+      "description": "A keyboard key hint. Kbd { Span \"Ctrl\" }."
+    },
+    {
+      "name": "kit-layer",
+      "deps": [],
+      "part": "KitLayer",
+      "file": "registry/kit-layer.muten",
+      "component": "KitLayer",
+      "description": "KitLayer(): once in the shell; loads the kit core (tooltip, island, sprite)."
+    },
+    {
+      "name": "kit-skeleton",
+      "deps": [],
+      "part": "Skeletons",
+      "file": "registry/kit-skeleton.muten",
+      "component": "KitSkeleton",
+      "description": "Skeletons(kind, count) / Loading(busy, kind) { … }: content-shaped skeletons, fade on arrival."
+    },
+    {
+      "name": "kit-widget",
+      "deps": [],
+      "part": "KitWidget",
+      "file": "registry/kit-widget.muten",
+      "component": "KitWidget",
+      "description": "Host of the system kit widgets (Custom, kit core). Use the named parts."
     },
     {
       "name": "link-btn",
+      "deps": [],
       "part": "LinkBtn",
       "file": "registry/link-btn.muten",
-      "description": "A navigation link styled as a button. `LinkBtn(to: \"/signup\", variant: \"default\") { Span \"Get started\" }`.",
-      "deps": []
+      "description": "A navigation link styled as a button. `LinkBtn(to: \"/signup\", variant: \"default\") { Span \"Get started\" }`."
+    },
+    {
+      "name": "logo-cloud",
+      "deps": [],
+      "part": "LogoCloud",
+      "file": "registry/logo-cloud.muten",
+      "description": "BLOCK: a 'trusted by' strip of logos, muted + grayscale until hover. Parts: LogoCloud, LogoCloudItem."
+    },
+    {
+      "name": "member-list",
+      "deps": [
+        "kit-widget"
+      ],
+      "part": "MemberList",
+      "file": "registry/member-list.muten",
+      "description": "MemberList - any group (team, workspace, family plan): who is in, their role in the library's menu, invite."
+    },
+    {
+      "name": "menubar",
+      "deps": [],
+      "part": "Menubar",
+      "file": "registry/menubar.muten",
+      "description": "A bar of menus (File/Edit/View); page owns which is open via a text state."
+    },
+    {
+      "name": "message-scroller",
+      "deps": [],
+      "part": "MessageScroller",
+      "file": "registry/message-scroller.muten",
+      "component": "MessageScrollerBehavior",
+      "description": "A scrollable column of chat messages."
+    },
+    {
+      "name": "message",
+      "deps": [],
+      "part": "Message",
+      "file": "registry/message.muten",
+      "description": "Chat Message + Bubble + Marker (variant: sent | received)."
+    },
+    {
+      "name": "messaging",
+      "deps": [
+        "kit-widget"
+      ],
+      "part": "Messaging",
+      "file": "registry/messaging.muten",
+      "description": "Messaging - one inbox for every channel: list (search, filters with counts, channel, state, unread), the chat (the"
+    },
+    {
+      "name": "modal-behavior",
+      "deps": [],
+      "part": "ModalBehavior",
+      "file": "registry/modal-behavior.muten",
+      "component": "ModalBehavior",
+      "description": "The adaptive modal's behaviour (history, Esc, focus trap, drawer drag). Used by Modal."
+    },
+    {
+      "name": "modal",
+      "deps": [
+        "modal-behavior"
+      ],
+      "part": "Modal",
+      "file": "registry/modal.muten",
+      "description": "Modal(open, onClose, title, description, mode, size) + ModalFooter: THE adaptive modal (Dialog on desktop, Drawer on phone). Back/Esc/overlay/✕/drag close it."
+    },
+    {
+      "name": "money-field",
+      "deps": [],
+      "part": "MoneyField",
+      "file": "registry/money-field.muten",
+      "component": "MoneyField",
+      "description": "MoneyField(label, value, currency, onChange): Intl currency, searchable currency list, minor units."
+    },
+    {
+      "name": "nav-button",
+      "deps": [],
+      "part": "NavButton",
+      "file": "registry/nav-button.muten",
+      "description": "NavButton(label, current, onClick) + NavBar: chosen is a state (--selected + dot), not a variant."
+    },
+    {
+      "name": "navigation-menu",
+      "deps": [],
+      "part": "NavigationMenu",
+      "file": "registry/navigation-menu.muten",
+      "description": "A nav bar with hover-revealed panels (pure CSS, no state)."
+    },
+    {
+      "name": "navpill",
+      "deps": [],
+      "part": "NavPill",
+      "file": "registry/navpill.muten",
+      "description": "BLOCK: the floating glass navbar (sticky wrapper + glass pill + scroll animation baked in). Drop logo/links/CTA inside."
+    },
+    {
+      "name": "new-appointment",
+      "deps": [],
+      "part": "NewAppointment",
+      "file": "registry/new-appointment.muten",
+      "component": "NewAppointment",
+      "description": "NewAppointment(open, clients, services, hours, closed, onCreate, onClose): «Nueva cita» in 4 steps."
+    },
+    {
+      "name": "number-field",
+      "deps": [],
+      "part": "NumberField",
+      "file": "registry/number-field.muten",
+      "component": "NumberField",
+      "description": "A numeric input with -/+ steppers, min/max/step (Custom)."
+    },
+    {
+      "name": "order-board",
+      "deps": [],
+      "part": "OrderBoard",
+      "file": "registry/order-board.muten",
+      "component": "OrderBoard",
+      "description": "OrderBoard(lanes, cards, onChange, onAction) / OrderCards(cards, sizes): order board and card with its modals."
+    },
+    {
+      "name": "overlay-behavior",
+      "deps": [],
+      "part": "OverlayBehavior",
+      "file": "registry/overlay-behavior.muten",
+      "component": "OverlayBehavior",
+      "description": "OverlayBehavior - the opening, placing and closing of a floating panel; the floating parts (Popover, HoverCard,"
+    },
+    {
+      "name": "pagination-nav",
+      "deps": [],
+      "part": "PaginationNav",
+      "file": "registry/pagination-nav.muten",
+      "component": "PaginationNav",
+      "description": "PaginationNav(total, per, page, noun, onPage): server pages, 7 fixed slots, range line."
+    },
+    {
+      "name": "pagination",
+      "deps": [],
+      "part": "Pagination",
+      "file": "registry/pagination.muten",
+      "description": "Page navigation with PaginationLink / Previous / Next / Ellipsis."
+    },
+    {
+      "name": "password-field",
+      "deps": [
+        "kit-widget"
+      ],
+      "part": "PasswordField",
+      "file": "registry/password-field.muten",
+      "description": "PasswordField - a password with show/hide and its strength.   PasswordField(label: \"Contraseña nueva\")"
+    },
+    {
+      "name": "permission-matrix",
+      "deps": [
+        "kit-widget"
+      ],
+      "part": "PermissionMatrix",
+      "file": "registry/permission-matrix.muten",
+      "description": "PermissionMatrix - any rows × any roles; one role can be locked (always allowed)."
+    },
+    {
+      "name": "phone-field",
+      "deps": [],
+      "part": "PhoneField",
+      "file": "registry/phone-field.muten",
+      "component": "PhoneField",
+      "description": "PhoneField(label, value, country, onChange): dial code list, mask, E.164."
+    },
+    {
+      "name": "phone-shell",
+      "deps": [],
+      "part": "PhoneShell",
+      "file": "registry/phone-shell.muten",
+      "component": "PhoneShell",
+      "description": "PhoneShell(tabs, rows, onSelect): phone frame, big title that shrinks on scroll, three fixed bottom tabs."
+    },
+    {
+      "name": "pill",
+      "deps": [],
+      "part": "Pill",
+      "file": "registry/pill.muten",
+      "description": "A hero eyebrow chip (rounded-full, bigger than Badge); slot-based for an icon + text."
+    },
+    {
+      "name": "plans",
+      "deps": [
+        "kit-widget"
+      ],
+      "part": "Plans",
+      "file": "registry/plans.muten",
+      "description": "Plans - plan cards with a monthly/yearly switch; the current plan is marked; going up is one tap, going down asks."
+    },
+    {
+      "name": "popover",
+      "deps": [],
+      "part": "Popover",
+      "file": "registry/popover.muten",
+      "description": "A floating panel below a trigger; page owns the open bool."
+    },
+    {
+      "name": "pricing",
+      "deps": [],
+      "part": "Pricing",
+      "file": "registry/pricing.muten",
+      "description": "BLOCK: a row of pricing tiers (name/price/features/CTA), featured highlight. Parts: Pricing, PricingTier, PricingFeature."
+    },
+    {
+      "name": "progress",
+      "deps": [],
+      "part": "Progress",
+      "file": "registry/progress.muten",
+      "description": "Progress(value, label): determinate bar 0-100 that eases between values."
+    },
+    {
+      "name": "queue",
+      "deps": [
+        "kit-widget"
+      ],
+      "part": "Queue",
+      "file": "registry/queue.muten",
+      "description": "Queue - a waitlist: offer a freed slot to the first in line, with a countdown.   Queue(title: \"Lista de espera · sábado\", people: @waiting)"
+    },
+    {
+      "name": "radio-group",
+      "deps": [],
+      "part": "RadioGroup",
+      "file": "registry/radio-group.muten",
+      "description": "Single choice with RadioGroupItem; page owns a text state."
+    },
+    {
+      "name": "range-slider",
+      "deps": [],
+      "part": "RangeSlider",
+      "file": "registry/range-slider.muten",
+      "component": "RangeSlider",
+      "description": "RangeSlider(lo, hi, min, max, step, onLo, onHi): two thumbs on the kit ScaleSlider."
+    },
+    {
+      "name": "resizable",
+      "deps": [],
+      "part": "ResizablePanelGroup",
+      "file": "registry/resizable.muten",
+      "component": "ResizableBehavior",
+      "description": "Resizable - panels you size by dragging the line between them (shadcn Nova). Each panel starts at its size (a"
+    },
+    {
+      "name": "roving-behavior",
+      "deps": [],
+      "part": "RovingBehavior",
+      "file": "registry/roving-behavior.muten",
+      "component": "RovingBehavior",
+      "description": "Arrow keys for a radio group (Custom)."
+    },
+    {
+      "name": "row-menu",
+      "deps": [],
+      "part": "RowMenu",
+      "file": "registry/row-menu.muten",
+      "component": "RowMenu",
+      "description": "RowMenu(label, items, onPick): the ⋯ menu of a row (arrows, type-ahead, Esc)."
+    },
+    {
+      "name": "save-button",
+      "deps": [],
+      "part": "SaveButton",
+      "file": "registry/save-button.muten",
+      "description": "SaveButton(status, onClick, label): idle → saving → saved, fixed width."
+    },
+    {
+      "name": "scale-slider",
+      "deps": [],
+      "part": "ScaleSlider",
+      "file": "registry/scale-slider.muten",
+      "component": "ScaleSlider",
+      "description": "ScaleSlider(label, min, max, step, values, gap, format, onChange): value rides on the thumb; two bubbles merge."
+    },
+    {
+      "name": "scroll-area",
+      "deps": [],
+      "part": "ScrollArea",
+      "file": "registry/scroll-area.muten",
+      "description": "A scrollable region with styled scrollbars."
+    },
+    {
+      "name": "segmented-control",
+      "deps": [
+        "tabs-behavior"
+      ],
+      "part": "SegmentedControl",
+      "file": "registry/segmented-control.muten",
+      "description": "A single-select toolbar (SegmentedItem); page owns a text state."
+    },
+    {
+      "name": "separator",
+      "deps": [],
+      "part": "Separator",
+      "file": "registry/separator.muten",
+      "description": "Separator(orientation): a hairline. horizontal | vertical."
+    },
+    {
+      "name": "share-button",
+      "deps": [],
+      "part": "ShareButton",
+      "file": "registry/share-button.muten",
+      "component": "ShareButton",
+      "description": "ShareButton(label, kind, name, initials, url, product…): share sheet in the adaptive modal, brand targets, QR."
+    },
+    {
+      "name": "sheet",
+      "deps": [],
+      "part": "Sheet",
+      "file": "registry/sheet.muten",
+      "description": "A panel that slides in from the right; page owns the open bool."
+    },
+    {
+      "name": "sidebar",
+      "deps": [],
+      "part": "AppSidebar",
+      "file": "registry/sidebar.muten",
+      "description": "AppSidebar - a collapsible nav panel (SidebarHeader / SidebarGroup / SidebarItem). Named AppSidebar so it never shadows muten's core Sidebar <aside> primitive."
+    },
+    {
+      "name": "skeleton",
+      "deps": [],
+      "part": "Skeleton",
+      "file": "registry/skeleton.muten",
+      "description": "Skeleton(shape) sized with class(): the shape of content not yet loaded, with a shimmer. shape: \"\" | circle | pill."
+    },
+    {
+      "name": "slider",
+      "deps": [],
+      "part": "Slider",
+      "file": "registry/slider.muten",
+      "component": "Slider",
+      "description": "Slider(value, min, max, step, suffix, onInput): Storio's slider with the value bubble."
+    },
+    {
+      "name": "sortable-behavior",
+      "deps": [],
+      "part": "SortableBehavior",
+      "file": "registry/sortable-behavior.muten",
+      "component": "SortableBehavior",
+      "description": "The drag of a Sortable (Custom)."
+    },
+    {
+      "name": "sortable-list",
+      "deps": [],
+      "part": "SortableList",
+      "file": "registry/sortable-list.muten",
+      "component": "SortableList",
+      "description": "Drag rows to reorder (Custom); page owns a comma-joined order."
+    },
+    {
+      "name": "sortable",
+      "deps": [
+        "sortable-behavior"
+      ],
+      "part": "Sortable",
+      "file": "registry/sortable.muten",
+      "description": "Sortable(label, onReorder) + SortItem(key, title, price): drag the grip (pointer or arrows); emits the new key order."
+    },
+    {
+      "name": "spark",
+      "deps": [],
+      "part": "Spark",
+      "file": "registry/spark.muten",
+      "component": "Spark",
+      "description": "Spark(series, tone): a tiny line for a series (Custom)."
+    },
+    {
+      "name": "spinner",
+      "deps": [],
+      "part": "Spinner",
+      "file": "registry/spinner.muten",
+      "description": "A loading indicator (animate-spin loader)."
+    },
+    {
+      "name": "split-button",
+      "deps": [],
+      "part": "SplitButton",
+      "file": "registry/split-button.muten",
+      "description": "A main action + a caret dropdown; page owns the open bool."
+    },
+    {
+      "name": "stamp-card",
+      "deps": [
+        "kit-widget"
+      ],
+      "part": "StampCard",
+      "file": "registry/stamp-card.muten",
+      "description": "StampCard - a loyalty card: stamps toward a reward (good for any shop)."
+    },
+    {
+      "name": "stat-band",
+      "deps": [],
+      "part": "StatBand",
+      "file": "registry/stat-band.muten",
+      "description": "BLOCK: a divided row of KPI stats. Parts: StatBand, Stat(label) - value goes in the slot (Span or Custom CountUp)."
+    },
+    {
+      "name": "stat",
+      "deps": [
+        "spark"
+      ],
+      "part": "StatCard",
+      "file": "registry/stat.muten",
+      "description": "StatCard(label, value, delta, tone, compare, series) { Icon } + StatGrid + Spark: a number for any use."
+    },
+    {
+      "name": "status-bar",
+      "deps": [],
+      "part": "StatusBar",
+      "file": "registry/status-bar.muten",
+      "description": "A thin bottom bar with StatusItem / StatusSpacer."
+    },
+    {
+      "name": "stepper",
+      "deps": [],
+      "part": "Stepper",
+      "file": "registry/stepper.muten",
+      "description": "Horizontal or vertical step progress indicator; done steps show a check, the current step is ringed (parts: Stepper, StepperVertical, Step)."
+    },
+    {
+      "name": "store-qr",
+      "deps": [],
+      "part": "StoreQr",
+      "file": "registry/store-qr.muten",
+      "component": "StoreQr",
+      "description": "StoreQr(url, name, mark): the shop QR with its mark and «Copiar enlace»."
+    },
+    {
+      "name": "swatch",
+      "deps": [],
+      "part": "SwatchPalette",
+      "file": "registry/swatch.muten",
+      "description": "A grid of selectable color swatches (Swatch); page owns the selected hex + colors."
+    },
+    {
+      "name": "switch",
+      "deps": [],
+      "part": "Switch",
+      "file": "registry/switch.muten",
+      "description": "Switch(on, onToggle, label, size) + SwitchRow(on, onToggle, label, description): Nova switch, the page owns the bool."
+    },
+    {
+      "name": "table-view",
+      "deps": [
+        "kit-widget"
+      ],
+      "part": "TableView",
+      "file": "registry/table-view.muten",
+      "description": "TableView(columns, rows, filters, statuses, bulk, one, many, onAction): the DataTable with filters as data, animated rows, selection, phone sheet, narrow → Items (kit core)."
+    },
+    {
+      "name": "tabs-behavior",
+      "deps": [],
+      "part": "TabsBehavior",
+      "file": "registry/tabs-behavior.muten",
+      "component": "TabsBehavior",
+      "description": "The sliding indicator + keys of Tabs/SegmentedControl (Custom)."
+    },
+    {
+      "name": "tabs",
+      "deps": [
+        "tabs-behavior"
+      ],
+      "part": "Tabs",
+      "file": "registry/tabs.muten",
+      "description": "Tabs(label, variant) + TabsTrigger(value, current, label, onSelect, count) + TabsContent: sliding indicator, arrow keys; variant \"\" (segmented) | line."
+    },
+    {
+      "name": "tag-input",
+      "deps": [],
+      "part": "TagInput",
+      "file": "registry/tag-input.muten",
+      "component": "TagInput",
+      "description": "TagInput(value, label, suggestions, max, hint, onChange): chips in/out, height eases, cap with count."
+    },
+    {
+      "name": "text",
+      "deps": [],
+      "part": "Txt",
+      "file": "registry/text.muten",
+      "description": "Txt(value, variant): the one text atom. variant: body | title | heading | strong | label | muted | caption."
+    },
+    {
+      "name": "time-field",
+      "deps": [],
+      "part": "TimeField",
+      "file": "registry/time-field.muten",
+      "component": "TimeField",
+      "description": "TimeField(label, value, from, to, step, onChange): opens the time wheels."
+    },
+    {
+      "name": "timeline",
+      "deps": [],
+      "part": "Timeline",
+      "file": "registry/timeline.muten",
+      "description": "Vertical event timeline: a dot on a connector line + title/time/description per item (parts: Timeline, TimelineItem)."
+    },
+    {
+      "name": "toaster",
+      "deps": [],
+      "part": "Toaster",
+      "file": "registry/toaster.muten",
+      "component": "Toaster",
+      "description": "Fixed toast notifications (Custom). Page bumps a trigger counter to fire one."
+    },
+    {
+      "name": "toggle-group",
+      "deps": [],
+      "part": "ToggleGroup",
+      "file": "registry/toggle-group.muten",
+      "description": "Single-select toolbar with ToggleGroupItem; page owns a text state."
+    },
+    {
+      "name": "toggle",
+      "deps": [],
+      "part": "Toggle",
+      "file": "registry/toggle.muten",
+      "description": "A two-state button; the page owns the bool + the toggle action."
+    },
+    {
+      "name": "toolbar",
+      "deps": [],
+      "part": "Toolbar",
+      "file": "registry/toolbar.muten",
+      "description": "A grouped button bar with ToolbarGroup / ToolbarSeparator."
+    },
+    {
+      "name": "tooltip",
+      "deps": [],
+      "part": "Tooltip",
+      "file": "registry/tooltip.muten",
+      "description": "A hover tooltip (pure CSS, no state). The slot is the trigger."
+    },
+    {
+      "name": "tree-view",
+      "deps": [],
+      "part": "TreeView",
+      "file": "registry/tree-view.muten",
+      "component": "TreeView",
+      "description": "A nested folder/file tree (Custom): expandable, selectable, icons + indent."
+    },
+    {
+      "name": "vector-field",
+      "deps": [
+        "number-field"
+      ],
+      "part": "VectorField",
+      "file": "registry/vector-field.muten",
+      "description": "Paired NumberFields (X/Y) for position or size."
+    },
+    {
+      "name": "virtual-list",
+      "deps": [],
+      "part": "VirtualList",
+      "file": "registry/virtual-list.muten",
+      "component": "VirtualList",
+      "description": "VirtualList(rows, total, rowHeight, label, jump): only visible rows in the DOM."
+    },
+    {
+      "name": "weekly-hours",
+      "deps": [
+        "kit-widget"
+      ],
+      "part": "WeeklyHours",
+      "file": "registry/weekly-hours.muten",
+      "description": "WeeklyHours(days, onChange): a switch per day, ranges with the wheel time picker (kit core)."
+    },
+    {
+      "name": "zoom-control",
+      "deps": [],
+      "part": "ZoomControl",
+      "file": "registry/zoom-control.muten",
+      "description": "A - 100% + zoom widget; page owns the zoom number."
     }
   ],
   "classComponents": {

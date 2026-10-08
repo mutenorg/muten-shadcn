@@ -1,6 +1,7 @@
-# Status Bar - a thin bottom bar of status items (zoom %, coords, dimensions). Use StatusSpacer to push items apart.
-#   StatusBar { StatusItem(label: "Ready") StatusSpacer StatusItem(label: "32 x 32") StatusItem(label: "100%") }
-# shadcn-for-muten · part · no deps · styles via the semantic .status-* classes in globals.css.
-part StatusBar() { Stack class("status-bar") { slot } }
-part StatusItem(label: text) { Span "{$label}" class("status-item") }
-part StatusSpacer() { Stack class("status-spacer") }
+# StatusBar - the thin line under an editor that says how things stand: the tool, the position, the size, the zoom,
+# whether it is saved. StatusSpacer pushes what follows to the right; an item can carry an icon.
+#   StatusBar { StatusItem(label: "Listo") { Icon "lucide:circle-check" }  StatusSpacer()  StatusItem(label: "1080 × 1350")  StatusItem(label: "100 %") }
+# shadcn-for-muten · parts · no deps · kit.css (.cx-status).
+part StatusBar(label: text = "Estado") { Stack class("cx-status") data(slot: "status-bar") aria(role: "status", label: $label) { slot } }
+part StatusItem(label: text) { Stack class("cx-status-item") { slot  Span "{$label}" class("cx-status-text") } }
+part StatusSpacer() { Stack class("cx-status-spacer") }

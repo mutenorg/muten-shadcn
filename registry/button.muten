@@ -1,8 +1,20 @@
-# Button (part name Btn - `Button` is a muten primitive, so a part can't reuse that name) - a plug-and-play
-# button. No class props: pass a `variant` + your action, put the label/icon in the slot.
-#   Btn(variant: "default", onClick: save) { Span "Save" }
-#   Btn(variant: "outline", onClick: cancel) { Icon "lucide:x" class("size-4")  Span "Cancel" }
-# variant: default | secondary | outline | ghost | destructive | link. For a link that looks like a button use
-# `Link "..." -> "/path" class("btn btn-default")`; for sizes add btn-sm|btn-lg on the primitive.
-# shadcn-for-muten · part · no deps · wraps the Button primitive + the .btn recipe.
-part Btn(variant: text, onClick: action) { Button -> $onClick class("btn btn-{$variant}") { slot } }
+# Button (part name Btn - `Button` is a muten primitive, so a part can't reuse that name) - shadcn's Nova button.
+# Put the label (and an icon) in the slot; an Icon nudges on hover (trailing moves on, leading lifts, lone grows).
+#   Btn(onClick: save) { Span "Guardar" }
+#   Btn(variant: "outline", size: "sm", onClick: cancel) { Icon "lucide:x"  Span "Cancelar" }
+#   Btn(size: "icon-sm", variant: "ghost", tone: "wait", onClick: due) { Icon "lucide:clock"  Indicator(tone: "wait") }
+#   Btn(onClick: go) class("cx-fill") { Span "Marcar llegada"  Icon "lucide:chevron-right" }   - full width (a card's primary)
+# variant: default | outline | secondary | ghost | destructive | link   (default: default)
+# size: xs (24) | sm (28) | default (32) | lg (36) | icon | icon-xs | icon-sm | icon-lg   (default: default)
+# tone: "" | info | ok | wait | bad | note - a tinted icon button (a pending thing on a card)
+# label: the name of an icon-only button (aria-label, and the kit's tooltip on hover). Leave it empty when there is text.
+# shadcn-for-muten · part · no deps · Nova classes (nova.css) + kit.css.
+part Btn(variant: text = "default", size: text = "default", tone: text = "", label: text = "", onClick: action) {
+  Button -> $onClick class("cn-button cn-button-variant-{$variant} cn-button-size-{$size} group/button", "cx-tonal cx-has-indicator" when $tone != "") data(slot: "button", tone: $tone, name: $label) aria(label: $label) { slot }
+}
+# TriggerBtn - a Btn that only opens what sits next to it (a Popover, a DropdownMenu, a SplitButton's menu): it has no
+# action of its own, so opening never runs something else. Same variants and sizes as Btn.
+#   DropdownMenu { DropdownTrigger { TriggerBtn { Span "Opciones"  Icon "lucide:chevron-down" } }  DropdownContent { … } }
+part TriggerBtn(variant: text = "outline", size: text = "default", label: text = "") {
+  Button class("cn-button cn-button-variant-{$variant} cn-button-size-{$size} group/button") data(slot: "button", name: $label) aria(label: $label) { slot }
+}

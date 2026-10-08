@@ -1,0 +1,4 @@
+# CardField - card number with its brand, expiry, code; validates (Luhn) and says what was saved.
+#   CardField(onSave: saved)
+# shadcn-for-muten · part over KitWidget (kit core).
+part CardField(onSave: action) { Custom KitWidget inputs(name: "cardField") on(action: $onSave) class("cx-cardform") }

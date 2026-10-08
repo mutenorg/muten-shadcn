@@ -1,11 +1,6 @@
-# LogoCloud - the "trusted by" strip: a wrapping row of logos, muted + grayscale until hover. GENERIC - a
-# LogoCloudItem holds ANY logo type: an Image, an Icon, or a plain text wordmark (Span). All normalize to one
-# height. Give it a heading above via a plain Text.
-#   LogoCloud {
-#     LogoCloudItem { Image "~/logos/acme.svg" alt("Acme") }   # image logo
-#     LogoCloudItem { Icon "simple-icons:vercel" }             # icon logo
-#     LogoCloudItem { Span "Globex" class("text-lg font-bold tracking-tight") }   # text wordmark
-#   }
-# shadcn-for-muten · block · no deps · styles via .logo-cloud / .logo-cloud-item in globals.css.
-part LogoCloud() { Stack class("logo-cloud") { slot } }
-part LogoCloudItem() { Stack class("logo-cloud-item") { slot } }
+# LogoCloud - the «they use it» strip: a wrapping row of logos, muted until the pointer rests on one. A
+# LogoCloudItem holds any logo: an Image, an Icon or a word in a Span; all take the same height.
+#   LogoCloud(label: "Lo usan") { LogoCloudItem { Image "~/logos/roble.svg" alt("El Roble") }  LogoCloudItem { Span "Pelos & Co" } }
+# shadcn-for-muten · parts · no deps · kit.css (.cx-logos).
+part LogoCloud(label: text = "") { Stack class("cx-logos") aria(label: $label) { slot } }
+part LogoCloudItem() { Stack class("cx-logo") { slot } }

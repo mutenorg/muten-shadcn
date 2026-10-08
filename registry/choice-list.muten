@@ -1,0 +1,16 @@
+# ChoiceList - Items you choose one of: a real radio group (arrows move and pick). The page owns the current value.
+#   ChoiceList(label: "Servicio") {
+#     ChoiceItem(value: "cut", current: service, onPick: pick, title: "Corte clásico", description: "30 min", price: "$25.000")
+#   }
+# shadcn-for-muten · part + Custom (RovingBehavior) · kit.css (.cx-radiogroup, .cx-radio).
+part ChoiceList(label: text) { Stack class("cx-radiogroup") aria(role: "radiogroup", label: $label) { slot  RovingBehavior() } }
+part ChoiceItem(value: text, current: text, onPick: action, title: text, description: text = "", price: text = "") {
+  Button -> $onPick($value) class("cn-item cn-item-variant-outline cn-item-size-sm group/item cx-item cx-choice") data(slot: "item") aria(role: "radio", checked: $value == $current) {
+    Span "" class("cx-radio")
+    Stack class("cn-item-content") data(slot: "item-content") {
+      Span "{$title}" class("cn-item-title") data(slot: "item-title")
+      Text "{$description}" class("cn-item-description") data(slot: "item-description")
+    }
+    Span "{$price}" class("cx-price")
+  }
+}

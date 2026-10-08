@@ -1,13 +1,10 @@
-# Alert Dialog - a modal that REQUIRES an explicit choice (no backdrop dismiss). The PAGE owns the bool:
-#   state { open = false : bool }   action confirm mutates open { open.set(false) … }   action cancel mutates open { open.set(false) }
-#   AlertDialog(open: open) { AlertDialogTitle(label) AlertDialogDescription(label) AlertDialogFooter { Button "Cancel" -> cancel … } }
-# shadcn-for-muten · part · no deps · reuses the .dialog* classes; the backdrop is a plain Stack (not clickable).
-part AlertDialog(open: bool) {
-  Stack class("dialog-overlay", "dialog-overlay-open" when $open) {
-    Stack class("dialog-backdrop")
-    Stack class("dialog-content") { slot }
-  }
+# AlertDialog - asks before something that cannot be undone (delete, cancel and refund). It cannot be dismissed by
+# tapping outside: the person answers with one of its two buttons (Esc counts as the safe one). Put them in a
+# ModalFooter: the safe way out (cx-exit) and the action (cx-go, destructive when it destroys).
+#   AlertDialog(open: asking, onClose: keep, title: "¿Eliminar el servicio?", description: "Desaparece de tu tienda…") {
+#     ModalFooter { Btn(variant: "outline", onClick: keep) class("cx-exit") { Span "Cancelar" }  Btn(variant: "destructive", onClick: remove) class("cx-go") { Span "Eliminar" } }
+#   }
+# shadcn-for-muten · part over Modal (role alertdialog, dismiss off).
+part AlertDialog(open: bool, onClose: action, title: text, description: text = "") {
+  Modal(open: $open, onClose: $onClose, title: $title, description: $description, mode: "dialog", role: "alertdialog", dismiss: "off") { slot }
 }
-part AlertDialogTitle(label: text) { Title "{$label}" h2 class("dialog-title") }
-part AlertDialogDescription(label: text) { Span "{$label}" class("dialog-description") }
-part AlertDialogFooter() { Stack class("dialog-footer") { slot } }

@@ -1,0 +1,11 @@
+# Messaging - one inbox for every channel: list (search, filters with counts, channel, state, unread), the chat (the
+# bot's control, booking/order cards, system lines, quick actions that ask first, the InputGroup composer) and the
+# person (numbers, what they have now, archive/delete). 3 panes wide, the person in a sheet medium, one pane narrow.
+# All data (shapes in kit-widget.js / the bench page): channels, conversations (with messages + client), filters
+# {id,label,state}, states {id,label,tone}, controls {id,icon,tone,title,description,action,next}, quick
+# {id,icon,label,noun,title,subtitle}, templates {title,body}, replies {match (regex), text}.
+#   Messaging(channels: @channels, conversations: @inbox, filters: @filters, states: @states, controls: @controls, quick: @quick, templates: @templates, replies: @replies, onAction: act)
+# shadcn-for-muten · part over KitWidget (kit core).
+part Messaging(title: text = "Mensajes", channels: list, conversations: list, filters: list, states: list, controls: list, quick: list, templates: list, replies: list, onAction: action) {
+  Custom KitWidget inputs(name: "messaging", title: $title, channels: $channels, conversations: $conversations, filters: $filters, states: $states, controls: $controls, quick: $quick, templates: $templates, replies: $replies) on(action: $onAction) class("cx-mx-host")
+}

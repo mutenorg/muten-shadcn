@@ -1,0 +1,5 @@
+# StoreQr - the shop's QR with its mark in the middle, the name, the link and «Copiar enlace» (falls back to
+# selecting the link when the clipboard says no).
+#   StoreQr(url: "https://storio.ink/el-roble", name: "Barbería El Roble", mark: "ER")
+# shadcn-for-muten · Custom (kit menus + vendored qrcode-generator, MIT) · host JS store-qr.js.
+part StoreQr(url: text, name: text = "", mark: text = "") { Custom StoreQr inputs(url: $url, name: $name, mark: $mark) class("cx-qr-host") }

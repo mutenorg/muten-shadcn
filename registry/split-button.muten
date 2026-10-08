@@ -1,12 +1,14 @@
-# Split Button - a main action + a caret that opens a dropdown. The PAGE owns the main action + the open bool:
-#   state { open = false : bool }   action t mutates open { open.toggle() }
-#   SplitButton(label: "Export", open: open, onMain: doExport, onToggle: t) { DropdownItem(label: "Export as PNG", onSelect: …) … }
-# shadcn-for-muten · part · no deps · reuses the .btn + .dropdown* classes.
-part SplitButton(label: text, open: bool, onMain: action, onToggle: action) {
-  Stack class("split-button") {
-    Button "{$label}" -> $onMain class("btn btn-default split-button-main")
-    Button -> $onToggle aria(expanded: $open) class("btn btn-default split-button-caret") { Icon "lucide:chevron-down" class("size-4") }
-    when $open { Button -> $onToggle class("dropdown-backdrop") }
-    Stack class("dropdown-content", "dropdown-content-open" when $open) { slot }
+# SplitButton - one main action and, joined to it, a chevron with the other ways to do it (save / save as draft).
+# The main action runs on its own; the menu takes DropdownItem parts.
+#   SplitButton(label: "Publicar", onClick: publish) { DropdownItem(label: "Guardar como borrador", onSelect: draft)  DropdownItem(label: "Programar…", onSelect: schedule) }
+# variant: as Btn. shadcn-for-muten · part over ButtonGroup + DropdownMenu.
+part SplitButton(label: text, onClick: action, variant: text = "default", size: text = "default", menu: text = "Más opciones") {
+  ButtonGroup(label: $label) {
+    Btn(variant: $variant, size: $size, onClick: $onClick) { Span "{$label}" }
+    ButtonGroupSeparator()
+    DropdownMenu {
+      DropdownTrigger { TriggerBtn(variant: $variant, size: "icon", label: $menu) class("cx-split-caret") { Icon "lucide:chevron-down" } }
+      DropdownContent(align: "end", width: "14rem") { slot }
+    }
   }
 }

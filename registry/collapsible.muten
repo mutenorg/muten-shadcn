@@ -1,14 +1,18 @@
-# Collapsible - a trigger + content that animates open. The PAGE owns the bool + the toggle action.
-#   state { open = false : bool }   action t mutates open { open.toggle() }   Collapsible(label: "…", open: open, onToggle: t) { … }
-# shadcn-for-muten · part · no deps · the content always renders and animates open via the .collapsible-panel grid trick.
-part Collapsible(label: text, open: bool, onToggle: action) {
-  Stack class("collapsible") {
-    Button -> $onToggle aria(expanded: $open) class("collapsible-trigger") {
-      Span "{$label}"
-      Icon "lucide:chevrons-up-down" class("size-4 text-muted-foreground")
+# Collapsible - one block that opens and closes: a trigger line and the content under it, folding to its exact
+# height (200 ms) while the chevron turns. The page owns the bool. For several stacked questions use Accordion.
+#   state { more = false : bool }   action toggleMore() mutates more { more.toggle() }
+#   Collapsible(label: "Más opciones", open: more, onToggle: toggleMore) { … }
+#   Collapsible(label: "3 pedidos entregados", hint: "Ver", open: done, onToggle: toggleDone) { … }
+# shadcn-for-muten · part · no deps · kit.css (.cx-coll, the same fold as Accordion).
+part Collapsible(label: text, open: bool, onToggle: action, hint: text = "") {
+  Stack class("cx-coll") data(slot: "collapsible", open: $open) {
+    Button -> $onToggle class("cx-coll-trigger") data(slot: "collapsible-trigger") aria(expanded: $open) {
+      Span "{$label}" class("cx-coll-label")
+      Span "{$hint}" class("cx-coll-hint")
+      Icon "lucide:chevron-down" class("cx-acc-chev")
     }
-    Stack class("collapsible-panel", "collapsible-panel-open" when $open) {
-      Stack class("collapsible-content") { slot }
+    Stack class("cn-accordion-content cx-acc-fold") data(slot: "collapsible-content", open: $open) aria(role: "region") {
+      Stack class("cn-accordion-content-inner cx-coll-inner") { slot }
     }
   }
 }

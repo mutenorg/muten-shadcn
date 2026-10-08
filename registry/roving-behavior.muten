@@ -1,0 +1,3 @@
+# RovingBehavior - arrow keys walk a group of radios (or options) and pick as they go; only the chosen one is in the
+# Tab order. Used by ChoiceList. shadcn-for-muten · Custom · host JS is roving-behavior.js.
+part RovingBehavior() { Custom RovingBehavior class("cx-roving-behavior") }

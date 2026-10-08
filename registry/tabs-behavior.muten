@@ -1,0 +1,3 @@
+# TabsBehavior - the sliding indicator and the arrow keys of a Tabs / SegmentedControl. Used by them; never by hand.
+# shadcn-for-muten · Custom · host JS is tabs-behavior.js.
+part TabsBehavior() { Custom TabsBehavior class("cx-tabs-behavior") }

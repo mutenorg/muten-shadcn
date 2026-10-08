@@ -1,16 +1,16 @@
-# Accordion - stacked expandable sections. The PAGE owns a bool per item + a toggle action per item:
-#   state { a1 = true : bool  a2 = false : bool }   action t1 mutates a1 { a1.toggle() }
-#   Accordion { AccordionItem(title: "…", open: a1, onToggle: t1) { … } AccordionItem(title: "…", open: a2, onToggle: t2) { … } }
-# shadcn-for-muten · part · no deps · the content always renders and animates open via the .accordion-panel grid trick.
-part Accordion() { Stack class("accordion") { slot } }
+# Accordion - stacked questions; each opens to its content's exact height (200 ms) and the arrow turns instead of
+# swapping icons. The page owns a bool per item and the toggle.
+#   Accordion { AccordionItem(title: "¿Puedo cancelar mi cita?", open: a1, onToggle: t1) { Text "Sí, hasta 3 horas antes…" } }
+# shadcn-for-muten · part · no deps · Nova (.cn-accordion) + kit.css.
+part Accordion() { Stack class("cn-accordion") data(slot: "accordion") { slot } }
 part AccordionItem(title: text, open: bool, onToggle: action) {
-  Stack class("accordion-item") {
-    Button -> $onToggle aria(expanded: $open) class("accordion-trigger") {
+  Stack class("cn-accordion-item") data(slot: "accordion-item") {
+    Button -> $onToggle class("cn-accordion-trigger group/accordion-trigger") data(slot: "accordion-trigger") aria(expanded: $open) {
       Span "{$title}"
-      Icon "lucide:chevron-down" class("accordion-chevron", "accordion-chevron-open" when $open)
+      Icon "lucide:chevron-down" class("cx-acc-chev")
     }
-    Stack class("accordion-panel", "accordion-panel-open" when $open) {
-      Stack class("accordion-content") { slot }
+    Stack class("cn-accordion-content cx-acc-fold") data(slot: "accordion-content", open: $open) aria(role: "region") {
+      Stack class("cn-accordion-content-inner") { slot }
     }
   }
 }

@@ -1,0 +1,10 @@
+# TableView - the DataTable: filters as data (search · facet · date · range) with counts and chips, rows that fade /
+# slide / enter, the height easing, sort by header, selection with a bulk bar in its own space, the phone's
+# «buscar + Filtros» sheet, and Items when its box is narrow. (`DataTable` is muten's raw table primitive.)
+#   TableView(columns: @cols, rows: @appointments, filters: @filters, statuses: @statuses, bulk: @bulk, one: "cita", many: "citas", onAction: act)
+# columns {key, label, type: person|text|date|status|money, sub} · filters {id, type, label, key | keys} ·
+# statuses {id, label, tone} · bulk {id, label, variant, set {…}} → onAction gets {"action", "ids"}.
+# shadcn-for-muten · part over KitWidget (kit core + kit/table.js).
+part TableView(columns: list, rows: list, filters: list, statuses: list, bulk: list, one: text = "fila", many: text = "filas", onAction: action) {
+  Custom KitWidget inputs(name: "table", columns: $columns, rows: $rows, filters: $filters, statuses: $statuses, bulk: $bulk, one: $one, many: $many) on(action: $onAction) class("cx-table-host")
+}

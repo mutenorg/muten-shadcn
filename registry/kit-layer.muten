@@ -1,0 +1,5 @@
+# KitLayer - put it ONCE in the app shell: it loads the kit core so the library's shared pieces work everywhere
+# (the tooltip on anything with a name, the Island, the icon sprite, the floating layer that follows the skin).
+#   shell { Stack { Custom KitLayer class("cx-kit-host")  … slot … } }   (a shell cannot call plugin parts: use the Custom directly)
+# shadcn-for-muten · Custom (kit core) · host JS is kit-layer.js.
+part KitLayer() { Custom KitLayer class("cx-kit-host") }

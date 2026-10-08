@@ -1,14 +1,14 @@
-# Segmented Control - a single-select toolbar (tool picker, view switch). The PAGE owns a text state:
+# Segmented Control - a single-select toolbar (tool picker, view switch) on the kit's tabs track: the chosen one
+# sits on a sliding pill (TabsBehavior), arrows move between items. The PAGE owns a text state:
 #   state { tool = "select" : text }   action setTool(v: text) mutates tool { tool.set(v) }
 #   SegmentedControl { SegmentedItem(value: "select", current: tool, label: "Select", onSelect: setTool) … }
-# shadcn-for-muten · part · no deps · styles via the semantic .segmented* classes in globals.css.
-part SegmentedControl() { Stack class("segmented") { slot } }
+# SegmentedTabs fills its width; IconTab holds an Icon instead of a label.
+# shadcn-for-muten · part + Custom (TabsBehavior) · kit.css (.cx-tabs).
+part SegmentedControl() { Stack class("cx-tabs") data(slot: "segmented") aria(role: "group") { slot  TabsBehavior() } }
 part SegmentedItem(value: text, current: text, label: text, onSelect: action) {
-  Button "{$label}" -> $onSelect($value) aria(pressed: $value == $current) class("segmented-item", "segmented-item-active" when $value == $current)
+  Button "{$label}" -> $onSelect($value) class("cn-button cn-button-variant-ghost cn-button-size-sm cx-tab") aria(pressed: $value == $current)
 }
-# Full-width tab bar with icon + label (Forms · Scheduling · PDF …). IconTab is slot-based so you drop an
-# Icon + Span inside:  SegmentedTabs { IconTab(value: "forms", current: tab, onSelect: setTab) { Icon "lucide:file-text"  Span "Forms" } … }
-part SegmentedTabs() { Stack class("segmented segmented-fill") { slot } }
+part SegmentedTabs() { Stack class("cx-tabs cx-tabs-fill") data(slot: "segmented") { slot  TabsBehavior() } }
 part IconTab(value: text, current: text, onSelect: action) {
-  Button -> $onSelect($value) aria(pressed: $value == $current) class("segmented-item", "segmented-item-active" when $value == $current) { slot }
+  Button -> $onSelect($value) class("cn-button cn-button-variant-ghost cn-button-size-icon-sm cx-tab") aria(pressed: $value == $current) { slot }
 }

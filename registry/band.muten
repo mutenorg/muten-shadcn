@@ -1,0 +1,16 @@
+# Band - the strip at the top for a state that lasts (no connection, the plan is about to end). One at a time: a new
+# one replaces the old. It folds open and closed; the text fades first so nothing is clipped. The page owns open.
+#   Band(open: offline, tone: "muted", text: "Sin conexión. Guardamos tus cambios al volver.") { Icon "lucide:info" }
+#   Band(open: planEnding, tone: "warn", text: "Tu plan Pro vence en 3 días.", action: "Renovar", onAction: renew) { Icon "lucide:clock" }
+# tone: muted | warn. shadcn-for-muten · part · no deps · kit.css (.cx-band).
+part Band(open: bool, tone: text = "muted", text: text, action: text = "", onAction: action) {
+  Stack class("cx-band-slot") data(open: $open) {
+    Stack class("cx-band-fold") {
+      Stack class("cx-band") data(tone: $tone) aria(role: "status") {
+        slot
+        Span "{$text}" class("cx-band-text")
+        when $action != "" { Button "{$action}" -> $onAction class("cn-button cn-button-variant-outline cn-button-size-xs group/button") }
+      }
+    }
+  }
+}

@@ -1,0 +1,7 @@
+# PhoneField - a phone with its country: dial code from a searchable list, the country's mask while typing, checked on
+# leaving the field, and what is stored (E.164). onChange gets {e164, valid, country}.
+#   PhoneField(label: "WhatsApp", value: "3001234567", country: "CO", onChange: setPhone)
+# shadcn-for-muten · Custom (kit values) · host JS phone-field.js.
+part PhoneField(label: text = "Teléfono", value: text = "", country: text = "CO", onChange: action) {
+  Custom PhoneField inputs(label: $label, value: $value, country: $country) on(change: $onChange) class("cx-ph-host")
+}

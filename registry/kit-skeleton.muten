@@ -1,0 +1,16 @@
+# Skeletons / Loading - while there is NOTHING to show, the shape of the content: built from the same atoms (Item,
+# Card, Stat, bubbles) with Skeleton in place of the text, so when the data lands only the pixels change, with a fade
+# and no jump in height. A refresh keeps the content: gate on «nothing yet», never on «fetching again».
+#   Loading(busy: orders.loading, kind: "list", count: 4) { each orders as o { … } }
+#   Skeletons(kind: "messaging")
+# kind: list · item · stat · stats · card · products · bubbles · table · messaging · agenda. media: avatar · icon · none.
+# shadcn-for-muten · Custom (kit.sk) · kit.css (.cx-sk*, .cx-loaded fade).
+part Skeletons(kind: text = "list", count: number = 4, media: text = "avatar") {
+  Custom KitSkeleton inputs(kind: $kind, count: $count, media: $media) class("cx-sk-host") aria(busy: "true")
+}
+part Loading(busy: bool, kind: text = "list", count: number = 4, media: text = "avatar") {
+  Stack class("cx-loading") {
+    when $busy { Custom KitSkeleton inputs(kind: $kind, count: $count, media: $media) class("cx-sk-host") aria(busy: "true") }
+    when not $busy { Stack class("cx-loaded") { slot } }
+  }
+}

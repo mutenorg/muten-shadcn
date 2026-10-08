@@ -1,7 +1,9 @@
-# NumberField - a numeric input with -/+ steppers. The PAGE owns the value (number) + the action:
-#   state { size = 16 : number }   action setSize(v: number) mutates size { size.set(v) }
-#   NumberField(value: size, min: 1, max: 512, step: 1, onInput: setSize)
-# shadcn-for-muten · Custom · host JS is src/components/NumberField.js (copied by `muten add number-field`).
-part NumberField(value: number, min: number, max: number, step: number, onInput: action) {
-  Custom NumberField inputs(value: $value, min: $min, max: $max, step: $step) on(input: $onInput) class("number-field")
+# NumberField - a number you nudge: − and + inside one field, arrows (Shift = ×10), the wheel while focused, and a
+# held button that repeats. Clamped to [min, max]; the button at an end switches off. The page owns the value.
+#   state { minutes = 30 : number }   action setMinutes(v: number) mutates minutes { minutes.set(v) }
+#   NumberField(value: minutes, min: 5, max: 240, step: 5, unit: "min", label: "Duración", onInput: setMinutes)
+#   NumberField(value: x, min: 0, max: 1920, prefix: "X", onInput: setX)
+# shadcn-for-muten · Custom · Nova (.cn-input-group) + kit.css (.cx-nf) · host JS number-field.js.
+part NumberField(value: number, min: number, max: number, step: number = 1, prefix: text = "", unit: text = "", label: text = "", onInput: action) {
+  Custom NumberField inputs(value: $value, min: $min, max: $max, step: $step, prefix: $prefix, unit: $unit, label: $label) on(input: $onInput) class("cx-nf-host")
 }

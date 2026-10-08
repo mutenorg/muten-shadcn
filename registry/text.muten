@@ -1,0 +1,7 @@
+# Text (part name Txt - `Text` is a muten primitive) - the one text atom, in a few roles. Everything that shows words
+# in the kit is built from it, so a role changes in one place.
+#   Txt(value: "Corte clásico", variant: "heading")
+#   Txt(value: "{count} citas", variant: "muted")
+# variant: body | title | heading | strong | label | muted | caption   (default: body)
+# shadcn-for-muten · part · no deps · styled by kit.css (.cx-text).
+part Txt(value: text, variant: text = "body") { Span "{$value}" class("cx-text") data(slot: "text", variant: $variant) }

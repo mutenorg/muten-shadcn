@@ -1,0 +1,7 @@
+# BarChart - bars that always fill their height, a period switch (14 días / 30 días). periods: {label, values} - the
+# labels are the last N days up to today. money "on" formats as money.
+#   BarChart(title: "Ventas", periods: @sales, money: "on")
+# shadcn-for-muten · part over KitWidget (kit core).
+part BarChart(title: text, periods: list, money: text = "") {
+  Custom KitWidget inputs(name: "barChart", title: $title, periods: $periods, money: $money) class("cx-chart-card")
+}

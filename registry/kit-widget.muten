@@ -1,0 +1,4 @@
+# KitWidget - the host the system kit's parts (Messaging, Chatbot, BarChart, Checklist, Plans, CardField, MemberList,
+# PermissionMatrix, StampCard, Bell, Queue, PasswordField) render through. Call those parts, not this.
+# shadcn-for-muten · Custom (kit core) · host JS is kit-widget.js.
+part KitWidget(name: text) { Custom KitWidget inputs(name: $name) class("cx-kit-widget") }

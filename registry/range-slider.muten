@@ -1,7 +1,6 @@
-# Range Slider - two thumbs (a low + high bound). The PAGE owns two numbers + two actions:
-#   state { lo = 20 : number  hi = 80 : number }   action setLo(v: number) mutates lo { lo.set(v) }   action setHi(v: number) mutates hi { hi.set(v) }
+# RangeSlider - two thumbs (a range) on the kit's ScaleSlider. The page owns lo and hi.
 #   RangeSlider(lo: lo, hi: hi, min: 0, max: 100, step: 1, onLo: setLo, onHi: setHi)
-# shadcn-for-muten · Custom · host JS is src/components/RangeSlider.js (copied by `muten add range-slider`).
-part RangeSlider(lo: number, hi: number, min: number, max: number, step: number, onLo: action, onHi: action) {
-  Custom RangeSlider inputs(lo: $lo, hi: $hi, min: $min, max: $max, step: $step) on(lo: $onLo, hi: $onHi) class("range-slider")
+# shadcn-for-muten · Custom (kit values) · host JS range-slider.js.
+part RangeSlider(lo: number, hi: number, min: number, max: number, step: number = 1, gap: number = 0, label: text = "", format: text = "", bubble: text = "always", ends: text = "on", onLo: action, onHi: action) {
+  Custom RangeSlider inputs(lo: $lo, hi: $hi, min: $min, max: $max, step: $step, gap: $gap, label: $label, format: $format, bubble: $bubble, ends: $ends) on(lo: $onLo, hi: $onHi) class("cx-sl-host")
 }

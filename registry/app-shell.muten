@@ -1,0 +1,12 @@
+# AppShell - the system's structure on shadcn's Sidebar: store switcher on top, groups with their label and counts,
+# the person at the bottom. It folds to icons (the name shows on hover) and, in a narrow box, becomes a menu that
+# slides from the left. The page header has breadcrumbs, title, description and actions. Tapping a row opens the
+# detail Sheet on the right without leaving the list. Ctrl/⌘ K (or the search button) opens the Command.
+#   AppShell(brand: "Barbería El Roble", short: "El Roble", plan: "Plan Pro", user: "Julián Restrepo", email: "julian@elroble.co", page: "Pedidos", nav: @nav, pages: @pages, rows: @rows, commands: @commands, width: width, onNavigate: go, onOpen: openRow, onAction: act)
+# nav {group, icon, label, count} · pages {name, title, description, actions [{label, variant, icon}]} · rows {page, id,
+# title, description, badge, tone, amount, command, sheetTitle, sheetDescription, sheet [{icon, title, description,
+# badge, tone, amount}], timeline [{label, when}], primary, secondary} · commands {icon, label, page}.
+# width "narrow" lays it out as in a narrow box. shadcn-for-muten · Custom (kit/structure.js) · Nova sidebar/sheet/command + kit.css (.cx-app-*).
+part AppShell(brand: text, short: text = "", plan: text = "", user: text, email: text = "", page: text = "", nav: list, pages: list, rows: list, commands: list, empty: text = "", width: text = "wide", onNavigate: action, onOpen: action, onAction: action) {
+  Custom AppShell inputs(brand: $brand, short: $short, plan: $plan, user: $user, email: $email, page: $page, nav: $nav, pages: $pages, rows: $rows, commands: $commands, empty: $empty, width: $width) on(navigate: $onNavigate, open: $onOpen, action: $onAction) class("cx-app-host")
+}

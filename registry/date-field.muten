@@ -1,0 +1,7 @@
+# DateField - a field-like button with the long date; it opens the day / month / year wheels in the adaptive modal.
+# min "today" turns the past off (the wheel greys those days and «Listo» waits).
+#   DateField(label: "Fecha", value: "today", min: "today", onChange: setDay)      → "yyyy-mm-dd"
+# shadcn-for-muten · Custom (kit dates) · host JS date-field.js.
+part DateField(label: text = "Fecha", value: text = "today", min: text = "", years: number = 2, onChange: action) {
+  Custom DateField inputs(label: $label, value: $value, min: $min, years: $years) on(change: $onChange) class("cx-df-host")
+}

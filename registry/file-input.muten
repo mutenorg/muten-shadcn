@@ -1,8 +1,9 @@
-# File Input / Dropzone - click or drag-drop files. The PAGE gets the file names (text):
-#   state { picked = "" : text }   action onFiles(v: text) mutates picked { picked.set(v) }
-#   FileInput(label: "Drop a sprite sheet here", accept: "image/*", onFiles: onFiles)
-# Emits the file NAMES; to read bytes, edit src/components/FileInput.js (FileReader -> emit a data URL).
-# shadcn-for-muten · Custom · host JS is src/components/FileInput.js (copied by `muten add file-input`).
-part FileInput(label: text, accept: text, onFiles: action) {
-  Custom FileInput inputs(label: $label, accept: $accept) on(files: $onFiles) class("dropzone")
+# FileInput - a drop zone for any file: tap to pick, drag and drop, or paste. Under it, the picked files with their
+# size and a × each; a file of the wrong type or too heavy is refused in the same place, with the reason. For a
+# photo that has to be cropped and shrunk before uploading, use ImageUpload.
+#   FileInput(label: "Sube el comprobante", hint: "PDF o imagen · hasta 5 MB", accept: "image/*,.pdf", maxMb: 5, onFiles: setFiles)
+#   FileInput(label: "Documentos", multiple: "on", onFiles: setFiles)
+# onFiles gets the names, joined by ", ". shadcn-for-muten · Custom · kit.css (.cx-drop) · host JS file-input.js.
+part FileInput(label: text = "Sube un archivo", hint: text = "Toca, arrastra o pega aquí", accept: text = "", multiple: text = "", maxMb: number = 10, onFiles: action) {
+  Custom FileInput inputs(label: $label, hint: $hint, accept: $accept, multiple: $multiple, maxMb: $maxMb) on(files: $onFiles) class("cx-file-host")
 }

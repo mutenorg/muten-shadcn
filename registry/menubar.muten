@@ -1,14 +1,10 @@
-# Menubar - a bar of menus (File / Edit / View). The PAGE owns which is open via a text state:
-#   state { bar = "" : text }   action open(v: text) mutates bar { if bar == v { bar.set("") } else { bar.set(v) } }
-#   action close mutates bar { bar.set("") }
-#   Menubar { MenubarMenu(label: "File", name: "file", current: bar, onOpen: open) { MenubarItem(label: "New", onSelect: close) … } }
-# shadcn-for-muten · part · no deps · styles via the semantic .menubar* classes (items reuse .dropdown-item).
-part Menubar() { Stack class("menubar") { slot } }
-part MenubarMenu(label: text, name: text, current: text, onOpen: action) {
-  Stack class("menubar-item") {
-    Button "{$label}" -> $onOpen($name) aria(expanded: $name == $current) class("menubar-trigger", "menubar-trigger-active" when $name == $current)
-    Stack class("menubar-content", "menubar-content-open" when $name == $current) { slot }
-  }
-}
-part MenubarItem(label: text, onSelect: action) { Button "{$label}" -> $onSelect class("dropdown-item") }
-part MenubarSeparator() { Stack class("dropdown-separator") }
+# Menubar - a desktop app's menu bar: each word opens its menu; once one is open, moving the pointer to the next word
+# opens that one, and the left and right arrows walk the bar. Each menu holds DropdownContent and its items.
+#   Menubar(label: "Editor") {
+#     MenubarMenu { MenubarTrigger(label: "Archivo")  DropdownContent { DropdownItem(label: "Nuevo", shortcut: "⌘N", onSelect: create) … } }
+#     MenubarMenu { MenubarTrigger(label: "Editar")  DropdownContent { … } }
+#   }
+# shadcn-for-muten · parts + Custom (OverlayBehavior) · Nova (.cn-menubar*) + kit.css.
+part Menubar(label: text = "Menú") { Stack class("cn-menubar cx-menubar") data(slot: "menubar") aria(role: "menubar", label: $label) { slot } }
+part MenubarMenu() { Stack class("cx-ov") data(slot: "menubar-menu") { slot  OverlayBehavior(kind: "menubar") } }
+part MenubarTrigger(label: text) { Stack class("cx-ov-trigger") { Button "{$label}" class("cn-menubar-trigger") data(slot: "menubar-trigger") aria(role: "menuitem") } }

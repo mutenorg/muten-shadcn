@@ -1,7 +1,7 @@
-# Progress - a determinate progress bar. value is 0-100; the fill width is the one runtime value, set via style().
-# shadcn-for-muten · part · no deps · styles via the semantic .progress* classes in globals.css.
-part Progress(value: number) {
-  Stack class("progress") {
-    Stack class("progress-indicator") style(w: "{$value}%")
+# Progress - a determinate bar, value 0-100; it eases between values.  Progress(value: done, label: "Pasos hechos")
+# shadcn-for-muten · part · no deps · Nova (.cn-progress) + kit.css (the value rides --w).
+part Progress(value: number, label: text = "Progreso") {
+  Stack class("cn-progress") data(slot: "progress") aria(role: "progressbar", label: $label, valuemin: 0, valuemax: 100, valuenow: $value) {
+    Stack class("cn-progress-indicator") data(slot: "progress-indicator") style(w: "{$value}%")
   }
 }

@@ -1,19 +1,17 @@
-# Inspector / Property Grid - label:value rows in collapsible sections (the right panel of an editor). The PAGE
-# owns a bool per section + the value states; the row's slot is the value control (a NumberField, Switch, …):
-#   InspectorSection(label: "Transform", open: t, onToggle: tt) {
-#     InspectorRow(label: "X") { NumberField(value: x, …) }   InspectorRow(label: "Y") { NumberField(value: y, …) }
+# Inspector - the right panel of an editor: sections that fold (Transform, Apariencia), each a list of rows with the
+# property's name on the left and its control on the right (a NumberField, a Switch, a ColorPicker…). The page owns
+# whether each section is open.
+#   Inspector {
+#     InspectorSection(label: "Transform", open: tOpen, onToggle: toggleT) {
+#       InspectorRow(label: "Posición") { VectorField(…) }  InspectorRow(label: "Rotación") { NumberField(…) }
+#     }
 #   }
-# shadcn-for-muten · part · no deps · styles via the semantic .inspector* classes in globals.css.
-part Inspector() { Stack class("inspector") { slot } }
+# shadcn-for-muten · parts · no deps · kit.css (.cx-insp, the Accordion's fold).
+part Inspector(label: text = "Propiedades") { Stack class("cx-insp") data(slot: "inspector") aria(label: $label) { slot } }
 part InspectorSection(label: text, open: bool, onToggle: action) {
-  Stack class("inspector-section") {
-    Button -> $onToggle aria(expanded: $open) class("inspector-section-header") {
-      Span "{$label}"
-      Icon "lucide:chevron-down" class("inspector-chevron", "inspector-chevron-open" when $open)
-    }
-    when $open { Stack class("inspector-body") { slot } }
+  Stack class("cx-insp-sec") data(open: $open) {
+    Button -> $onToggle class("cx-insp-head") aria(expanded: $open) { Span "{$label}"  Icon "lucide:chevron-down" class("cx-acc-chev") }
+    Stack class("cn-accordion-content cx-acc-fold") data(open: $open) aria(role: "region", label: $label) { Stack class("cn-accordion-content-inner cx-insp-body") { slot } }
   }
 }
-part InspectorRow(label: text) {
-  Stack class("inspector-row") { Span "{$label}" class("inspector-row-label")  slot }
-}
+part InspectorRow(label: text) { Stack class("cx-insp-row") { Span "{$label}" class("cx-insp-label")  Stack class("cx-insp-ctl") { slot } } }

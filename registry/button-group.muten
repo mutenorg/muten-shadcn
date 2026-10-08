@@ -1,4 +1,13 @@
-# ButtonGroup - segmented row of buttons that share borders. Put `btn btn-outline` buttons inside:
-#   ButtonGroup { Button "Bold" -> b class("btn btn-outline")  Button "Italic" -> i class("btn btn-outline") }
-# shadcn-for-muten · part · no deps · uses .btn-group from globals.css.
-part ButtonGroup() { Stack class("btn-group") { slot } }
+# ButtonGroup - buttons that belong together, sharing their borders (shadcn Nova). Buttons, an Input or a
+# ButtonGroupText go inside; ButtonGroupSeparator splits two filled buttons. Groups can nest (they keep a gap).
+#   ButtonGroup { Btn(variant: "outline", onClick: prev) { Icon "lucide:chevron-left" }  Btn(variant: "outline", onClick: next) { Icon "lucide:chevron-right" } }
+#   ButtonGroup(orientation: "vertical") { … }
+#   ButtonGroup { ButtonGroupText(label: "https://")  Input(value: site) }
+# orientation: horizontal | vertical. shadcn-for-muten · part · no deps · Nova (.cn-button-group).
+part ButtonGroup(orientation: text = "horizontal", label: text = "") {
+  Stack class("cn-button-group cn-button-group-orientation-{$orientation}") data(slot: "button-group", orientation: $orientation) aria(role: "group", label: $label) { slot }
+}
+part ButtonGroupText(label: text) { Span "{$label}" class("cn-button-group-text") data(slot: "button-group-text") }
+part ButtonGroupSeparator(orientation: text = "vertical") {
+  Stack class("cn-separator cn-separator-{$orientation} cn-button-group-separator") data(slot: "button-group-separator", orientation: $orientation) aria(role: "separator")
+}

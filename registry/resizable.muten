@@ -1,6 +1,17 @@
-# Resizable - two panels with a draggable splitter. Pass the panel labels; drag the handle to resize.
-#   Resizable(left: "Sidebar", right: "Content")
-# shadcn-for-muten · Custom · host JS is src/components/Resizable.js (edit it to render real content per panel).
-part Resizable(left: text, right: text) {
-  Custom Resizable inputs(left: $left, right: $right) class("resizable")
+# Resizable - panels you size by dragging the line between them (shadcn Nova). Each panel starts at its size (a
+# percentage) and never goes under min; the handle also moves with the arrow keys (Home/End to the ends).
+#   ResizablePanelGroup(orientation: "horizontal") {
+#     ResizablePanel(size: 30) { … }  ResizableHandle(grip: "on")  ResizablePanel(size: 70) { … }
+#   }
+# orientation: horizontal (side by side) | vertical (one above the other).
+# shadcn-for-muten · parts + Custom (ResizableBehavior) · Nova (.cn-resizable-*) + kit.css.
+part ResizablePanelGroup(orientation: text = "horizontal", label: text = "") {
+  Stack class("cn-resizable-panel-group cx-rz") data(slot: "resizable-panel-group", orientation: $orientation) aria(label: $label) { slot  ResizableBehavior() }
 }
+part ResizablePanel(size: number = 50, min: number = 15) { Stack class("cx-rz-panel") data(slot: "resizable-panel", size: $size, min: $min) { slot } }
+part ResizableHandle(grip: text = "") {
+  Stack class("cn-resizable-handle cx-rz-handle") data(slot: "resizable-handle", grip: $grip) aria(role: "separator", label: "Cambiar el tamaño") {
+    when $grip != "" { Span "" class("cn-resizable-handle-icon") }
+  }
+}
+part ResizableBehavior() { Custom ResizableBehavior class("cx-rz-behavior") }

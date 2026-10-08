@@ -1,7 +1,9 @@
-# Breadcrumb + sub-components.
-# Compose: Breadcrumb { BreadcrumbLink(label,href) BreadcrumbSeparator BreadcrumbLink(...) BreadcrumbSeparator BreadcrumbPage(label) }
-# shadcn-for-muten · part · no deps · styles via the semantic .breadcrumb* classes in globals.css.
-part Breadcrumb() { Nav class("breadcrumb") aria(label: "breadcrumb") { slot } }
-part BreadcrumbLink(label: text, href: text) { Link "{$label}" -> "{$href}" class("breadcrumb-link") }
-part BreadcrumbPage(label: text) { Span "{$label}" class("breadcrumb-page") }
-part BreadcrumbSeparator() { Icon "lucide:chevron-right" class("breadcrumb-separator") }
+# Breadcrumb - where this page sits: the trail of pages above it, the current one last (not a link). A long trail
+# folds its middle into «…» (BreadcrumbEllipsis).
+#   Breadcrumb { BreadcrumbLink(label: "El Roble", to: "/")  BreadcrumbSeparator()  BreadcrumbLink(label: "Pedidos", to: "/orders")  BreadcrumbSeparator()  BreadcrumbPage(label: "#1042") }
+# shadcn-for-muten · parts · no deps · Nova (.cn-breadcrumb-*).
+part Breadcrumb(label: text = "Migas") { Nav class("cx-breadcrumb") data(slot: "breadcrumb") aria(label: $label) { Stack class("cn-breadcrumb-list cx-bc-list") data(slot: "breadcrumb-list") aria(role: "list") { slot } } }
+part BreadcrumbLink(label: text, to: text) { Link "{$label}" -> "{$to}" class("cn-breadcrumb-link cx-bc-item") data(slot: "breadcrumb-link") }
+part BreadcrumbPage(label: text) { Span "{$label}" class("cn-breadcrumb-page cx-bc-item") data(slot: "breadcrumb-page") aria(current: "page") }
+part BreadcrumbSeparator() { Stack class("cn-breadcrumb-separator cx-bc-sep") data(slot: "breadcrumb-separator") aria(hidden: "true") { Icon "lucide:chevron-right" } }
+part BreadcrumbEllipsis(label: text = "Más páginas") { Stack class("cn-breadcrumb-ellipsis cx-bc-more") data(slot: "breadcrumb-ellipsis", name: $label) aria(label: $label) { Icon "lucide:ellipsis" } }

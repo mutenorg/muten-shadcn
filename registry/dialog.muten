@@ -1,13 +1,7 @@
-# Dialog - a modal. The PAGE owns the bool + open/close actions:
-#   state { open = false : bool }   action close mutates open { open.set(false) }   action show mutates open { open.set(true) }
-#   Button "Open" -> show ...   Dialog(open: open, onClose: close) { DialogTitle(label) DialogDescription(label) … DialogFooter { … } }
-# shadcn-for-muten · part · no deps · the backdrop click closes; styles via the semantic .dialog* classes.
-part Dialog(open: bool, onClose: action) {
-  Stack class("dialog-overlay", "dialog-overlay-open" when $open) {
-    Button -> $onClose class("dialog-backdrop")
-    Stack class("dialog-content") { slot }
-  }
+# Dialog - a window in the middle of the screen for one task (edit, confirm a detail), on every width. It is the
+# adaptive Modal forced to dialog; on a phone prefer Modal (it becomes a Drawer). The page owns open.
+#   Dialog(open: editing, onClose: done, title: "Editar servicio", description: "…") { … ModalFooter { … } }
+# shadcn-for-muten · part over Modal.
+part Dialog(open: bool, onClose: action, title: text, description: text = "", size: text = "") {
+  Modal(open: $open, onClose: $onClose, title: $title, description: $description, mode: "dialog", size: $size) { slot }
 }
-part DialogTitle(label: text) { Title "{$label}" h2 class("dialog-title") }
-part DialogDescription(label: text) { Span "{$label}" class("dialog-description") }
-part DialogFooter() { Stack class("dialog-footer") { slot } }

@@ -1,7 +1,8 @@
-# Color Picker - a swatch that opens a saturation/value + hue picker. The PAGE owns the hex value (text):
-#   state { color = "#3b82f6" : text }   action setColor(v: text) mutates color { color.set(v) }
-#   ColorPicker(value: color, onInput: setColor)
-# shadcn-for-muten · Custom · host JS is src/components/ColorPicker.js (copied by `muten add color-picker`).
-part ColorPicker(value: text, onInput: action) {
-  Custom ColorPicker inputs(value: $value) on(input: $onInput) class("color-picker")
+# ColorPicker - Storio's one colour picker. Closed: a swatch with the real colour (or gradient). Open: a popover (a
+# sheet on a phone) to pick. modes "solid" (default) or "solid gradient"; anims lists the allowed animations.
+#   ColorPicker(value: brand, onInput: setBrand)
+#   ColorPicker(value: wall, modes: "solid gradient", anims: "flow breathe spin hue", label: "Fondo de la tienda", onInput: setWall)
+# The value is paint text (a hex, or "linear 150 | #1a0f0a 0 | #c2410c 100 ~flow 14"). shadcn-for-muten · Custom.
+part ColorPicker(value: text, modes: text = "solid", anims: text = "", label: text = "Color", onInput: action) {
+  Custom ColorPicker inputs(value: $value, modes: $modes, anims: $anims, label: $label, lang: "es") on(input: $onInput, pick: $onInput) class("cx-cp-host")
 }

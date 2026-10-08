@@ -1,9 +1,12 @@
-# Pagination + sub-components (links reuse the .btn classes).
-# Compose: Pagination { PaginationPrevious(href) PaginationLink(label,href,page,current) PaginationEllipsis PaginationNext(href) }
-# shadcn-for-muten · part · no deps · styles via the semantic .pagination* + .btn classes in globals.css.
-part Pagination() { Nav class("pagination") aria(label: "pagination") { slot } }
-# `page` is this link's number, `current` the active-page state - the part highlights itself when they match.
-part PaginationLink(label: text, href: text, page: number, current: number) { Link "{$label}" -> "{$href}" class("btn btn-icon", "btn-outline" when $page == $current, "btn-ghost" when $page != $current) }
-part PaginationPrevious(href: text) { Link "Previous" -> "{$href}" class("btn btn-ghost btn-sm gap-1") }
-part PaginationNext(href: text) { Link "Next" -> "{$href}" class("btn btn-ghost btn-sm gap-1") }
-part PaginationEllipsis() { Span "…" class("pagination-ellipsis") }
+# Pagination (links) - pages that are routes of their own (a blog, a catalog that can be shared by URL): previous,
+# the numbers with the current one outlined, «…», next. For pages loaded from the server inside one screen use
+# PaginationNav.
+#   Pagination { PaginationPrevious(to: "/blog/1")  PaginationLink(label: "1", to: "/blog/1", page: 1, current: 2)  PaginationLink(label: "2", to: "/blog/2", page: 2, current: 2)  PaginationEllipsis()  PaginationNext(to: "/blog/3") }
+# shadcn-for-muten · parts · no deps · Nova (.cn-pagination-*).
+part Pagination(label: text = "Páginas") { Nav class("cn-pagination cx-pagination-links") data(slot: "pagination") aria(label: $label) { Stack class("cn-pagination-content cx-pl-row") data(slot: "pagination-content") { slot } } }
+part PaginationLink(label: text, to: text, page: number, current: number) {
+  Link "{$label}" -> "{$to}" class("cn-button cn-button-size-icon group/button cx-pl-num", "cn-button-variant-outline" when $page == $current, "cn-button-variant-ghost" when $page != $current) data(slot: "pagination-link") aria(current: $page == $current)
+}
+part PaginationPrevious(to: text, label: text = "Anterior") { Link -> "{$to}" class("cn-button cn-button-variant-ghost cn-button-size-default group/button cn-pagination-previous") data(slot: "pagination-previous") { Icon "lucide:chevron-left"  Span "{$label}" class("cn-pagination-previous-text") } }
+part PaginationNext(to: text, label: text = "Siguiente") { Link -> "{$to}" class("cn-button cn-button-variant-ghost cn-button-size-default group/button cn-pagination-next") data(slot: "pagination-next") { Span "{$label}" class("cn-pagination-next-text")  Icon "lucide:chevron-right" } }
+part PaginationEllipsis() { Stack class("cn-pagination-ellipsis cx-pl-more") data(slot: "pagination-ellipsis") aria(hidden: "true") { Icon "lucide:ellipsis" } }

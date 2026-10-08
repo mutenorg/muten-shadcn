@@ -1,16 +1,18 @@
-# Navigation Menu - a nav bar whose items reveal a panel on hover (pure CSS, no state).
-#   NavigationMenu { NavigationMenuItem(label: "Getting started") { NavigationMenuLink(title: "Intro", desc: "…", href: "/intro") … } }
-# shadcn-for-muten · part · no deps · styles via the semantic .nav-menu* classes in globals.css.
-part NavigationMenu() { Stack class("nav-menu") { slot } }
-part NavigationMenuItem(label: text) {
-  Stack class("nav-menu-item") {
-    Span "{$label}" class("nav-menu-trigger")
-    Stack class("nav-menu-content") { slot }
+# NavigationMenu - a site's top navigation: words that open a panel of links on hover (or tap, or focus) and plain
+# links. Once a panel is open, resting on the next word switches to its panel.
+#   NavigationMenu(label: "Principal") {
+#     NavMenuItem { NavMenuTrigger(label: "Producto")  NavMenuContent { NavMenuLink(title: "Agenda", description: "…", to: "/agenda") … } }
+#     NavMenuItemLink(label: "Precios", to: "/precios")
+#   }
+# shadcn-for-muten · parts + Custom (OverlayBehavior) · Nova (.cn-navigation-menu-*) + kit.css.
+part NavigationMenu(label: text = "Principal") { Nav class("cn-navigation-menu cx-navmenu") data(slot: "navigation-menu") aria(label: $label) { slot } }
+part NavMenuItem() { Stack class("cx-ov") data(slot: "navigation-menu-item") { slot  OverlayBehavior(kind: "navmenu") } }
+part NavMenuTrigger(label: text) { Stack class("cx-ov-trigger") { Button class("cn-navigation-menu-trigger cx-navmenu-trigger") data(slot: "navigation-menu-trigger") { Span "{$label}"  Icon "lucide:chevron-down" class("cn-navigation-menu-trigger-icon") } } }
+part NavMenuContent(width: text = "26rem", columns: number = 2) { Stack class("cn-navigation-menu-content cx-ov-content cx-navmenu-panel") data(slot: "navigation-menu-content", align: "start") style(w: "{$width}", cols: "{$columns}") { slot } }
+part NavMenuLink(title: text, to: text, description: text = "") {
+  Link -> "{$to}" class("cn-navigation-menu-link cx-navmenu-link") data(slot: "navigation-menu-link") {
+    Span "{$title}" class("cx-navmenu-title")
+    Span "{$description}" class("cx-navmenu-desc")
   }
 }
-part NavigationMenuLink(title: text, desc: text, href: text) {
-  Link "" -> "{$href}" class("nav-menu-link") {
-    Span "{$title}" class("nav-menu-link-title")
-    Span "{$desc}" class("nav-menu-link-text")
-  }
-}
+part NavMenuItemLink(label: text, to: text) { Link "{$label}" -> "{$to}" class("cn-navigation-menu-trigger cx-navmenu-trigger") data(slot: "navigation-menu-link") }

@@ -1,11 +1,7 @@
-# Sheet - a panel that slides in from the right edge. The PAGE owns the bool + open/close actions:
-#   state { open = false : bool }   action close mutates open { open.set(false) }   Sheet(open: open, onClose: close) { … }
-# shadcn-for-muten · part · no deps · backdrop click closes; styles via the semantic .sheet* classes.
-part Sheet(open: bool, onClose: action) {
-  Stack class("sheet-overlay", "sheet-overlay-open" when $open) {
-    Button -> $onClose class("sheet-backdrop")
-    Stack class("sheet-content") { slot }
-  }
+# Sheet - a panel that slides from a side and keeps the page behind it in view: a detail, filters, a cart. Full
+# height from the right (default) or left, full width from the top or bottom. The page owns open.
+#   Sheet(open: showing, onClose: done, title: "Pedido #1042", side: "right") { … ModalFooter { … } }
+# shadcn-for-muten · part over Modal (mode sheet).
+part Sheet(open: bool, onClose: action, title: text, description: text = "", side: text = "right") {
+  Modal(open: $open, onClose: $onClose, title: $title, description: $description, mode: "sheet", side: $side) { slot }
 }
-part SheetTitle(label: text) { Title "{$label}" h2 class("sheet-title") }
-part SheetDescription(label: text) { Span "{$label}" class("sheet-description") }

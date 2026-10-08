@@ -1,0 +1,6 @@
+# StampCard - a loyalty card: stamps toward a reward (good for any shop).
+#   StampCard(store: "Barbería El Roble", owner: "Laura", total: 10, stamps: 7, reward: "un corte gratis")
+# shadcn-for-muten · part over KitWidget (kit core).
+part StampCard(store: text, owner: text, total: number = 10, stamps: number, reward: text) {
+  Custom KitWidget inputs(name: "stampCard", store: $store, owner: $owner, total: $total, stamps: $stamps, reward: $reward) class("cx-stamp-host")
+}

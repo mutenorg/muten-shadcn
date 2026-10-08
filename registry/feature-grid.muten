@@ -1,14 +1,12 @@
-# FeatureGrid - a responsive grid of feature cards. FeatureCard takes title + desc and a slot for the icon:
-#   FeatureGrid {
-#     FeatureCard(title: "Locatable", desc: "Every screen has a name and a place.") { Icon "lucide:scan-text" class("size-5") }
-#     …
-#   }
-# shadcn-for-muten · block · no deps · styles via the semantic .feature-* classes in globals.css.
-part FeatureGrid() { Stack class("feature-grid") { slot } }
-part FeatureCard(title: text, desc: text) {
-  Stack class("feature-card") {
-    Stack class("feature-card-icon") { slot }
-    Title "{$title}" h3 class("feature-card-title")
-    Text "{$desc}" class("feature-card-desc")
+# FeatureGrid - what a product does, as cards in a grid that wraps (three, two or one per row by the width). Each
+# FeatureCard has its icon in the slot, a title and a line.
+#   FeatureGrid { FeatureCard(title: "Agenda", description: "Citas por persona y recordatorios.") { Icon "lucide:calendar" } … }
+# shadcn-for-muten · parts · no deps · kit.css (.cx-features).
+part FeatureGrid(columns: number = 3) { Stack class("cx-features") style(cols: "{$columns}") { slot } }
+part FeatureCard(title: text, description: text) {
+  Stack class("cx-feature") {
+    Stack class("cx-feature-ic") { slot }
+    Title "{$title}" h3 class("cx-feature-t")
+    Text "{$description}" class("cx-feature-d")
   }
 }

@@ -1,0 +1,4 @@
+# ModalBehavior - what a modal needs that is not markup: the phone's Back closes it, Esc closes it, focus stays
+# inside, the page behind does not scroll, and on a phone the drawer drags down to close. Used by Modal; you never
+# call it yourself. shadcn-for-muten · Custom · host JS is modal-behavior.js.
+part ModalBehavior(open: bool, onClose: action) { Custom ModalBehavior inputs(open: $open) on(close: $onClose) class("cx-modal-behavior") }

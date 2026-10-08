@@ -1,10 +1,10 @@
-# Swatch / Swatch Palette - a grid of selectable color swatches (recent colors, a pixel palette). The PAGE owns
-# the selected hex + the list of colors:
-#   state { colors = ["#ef4444", "#3b82f6", "#22c55e"] : list<text>  active = "#3b82f6" : text }
+# Swatch / SwatchPalette - colours to pick from at a glance: the last ones used, the brand's, a fixed palette. The
+# chosen one carries a ring in the skin's --selected colour and reads as pressed. The page owns the list and the pick.
+#   state { colors = ["#6B46F2", "#0EA5E9", "#22C55E"] : list<text>  active = "#6B46F2" : text }
 #   action pick(c: text) mutates active { active.set(c) }
-#   SwatchPalette { each colors as c { Swatch(color: c, current: active, onSelect: pick) } }
-# shadcn-for-muten · part · no deps · the swatch background is set via style(bg).
-part SwatchPalette() { Stack class("swatch-palette") { slot } }
-part Swatch(color: text, current: text, onSelect: action) {
-  Button -> $onSelect($color) aria(pressed: $color == $current) class("swatch", "swatch-active" when $color == $current) style(bg: "{$color}")
+#   SwatchPalette(label: "Colores recientes") { each colors as c { Swatch(color: c, current: active, onSelect: pick) } }
+# size: sm | default | lg. shadcn-for-muten · part · no deps · kit.css (.cx-swatch).
+part SwatchPalette(label: text = "Colores") { Stack class("cx-swatches-row") aria(role: "group", label: $label) { slot } }
+part Swatch(color: text, current: text, onSelect: action, size: text = "default") {
+  Button -> $onSelect($color) class("cx-swatch") data(size: $size, name: $color) aria(pressed: $color == $current, label: $color) style(bg: "{$color}")
 }

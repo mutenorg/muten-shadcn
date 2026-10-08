@@ -1,9 +1,11 @@
-# Toaster - fixed toast notifications (bottom-right). The PAGE bumps a `trigger` counter to fire one:
-#   state { toastN = 0 : number }   action notify mutates toastN { toastN.set(toastN + 1) }
-#   Button "Notify" -> notify
-#   Toaster(trigger: toastN, title: "Saved", description: "Your changes are saved.", variant: "default")
-# Auto-dismisses; click a toast to close it early. Use state title/description and change them before bumping for dynamic messages.
-# shadcn-for-muten · Custom · host JS is src/components/Toaster.js (copied by `muten add toaster`).
-part Toaster(trigger: number, title: text, description: text, variant: text) {
-  Custom Toaster inputs(trigger: $trigger, title: $title, description: $description, variant: $variant) class("toaster")
+# Toaster - shadcn's Sonner: toasts that pile at the bottom right, the newest in front and three peeking behind;
+# hovering the pile fans them out and pauses them; each one leaves on its own (duration) or with its ×, and can carry
+# one action (Deshacer). The page bumps a counter to show one, with the title it has at that moment:
+#   state { toasts = 0 : number  toastTitle = "" : text }
+#   action saved() mutates toasts, toastTitle { toastTitle.set("Cita creada")  toasts.set(toasts + 1) }
+#   Toaster(trigger: toasts, title: toastTitle, description: "Jueves 9 a las 10:30", action: "Deshacer", onAction: undo)
+# For what the person just did on this screen (saving, saved) the Island is lighter; a toast is for news that can wait.
+# shadcn-for-muten · Custom · kit.css (.pg-toasts, .pg-toast) · host JS toaster.js.
+part Toaster(trigger: number, title: text, description: text = "", action: text = "", duration: number = 5000, onAction: action) {
+  Custom Toaster inputs(trigger: $trigger, title: $title, description: $description, action: $action, duration: $duration) on(action: $onAction) class("cx-toaster-host")
 }

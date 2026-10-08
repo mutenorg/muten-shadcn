@@ -1,7 +1,6 @@
-# Code - a syntax-highlighted code block. `lang` defaults to "muten" (the muten grammar, matching the VS Code
-# extension); pass another lang to render plain. NOTE: muten strings can't hold `{` or `"`, so feed muten source
-# from a .md file (a Markdown component) or a .js snippet, not an inline muten string.
-# shadcn-for-muten · Custom · host JS is src/components/Code.js (copied by `muten add code`); shares highlight.js.
-part Code(code: text, lang: text) {
-  Custom Code inputs(code: $code, lang: $lang) class("code-block")
-}
+# Code - a code block with a bar (the language or a title) and Copiar; muten code comes highlighted with the same
+# grammar as the editor. muten strings cannot hold quotes or braces, so pass the code from a state (or a store),
+# not inline. For other languages pass lang: it shows plain.
+#   state { snippet = "…" : text }   Code(code: snippet, title: "src/app.muten")
+# shadcn-for-muten · Custom · kit.css (.cx-code) · host JS code.js (shares highlight.js).
+part Code(code: text, lang: text = "muten", title: text = "") { Custom Code inputs(code: $code, lang: $lang, title: $title) class("cx-code") }

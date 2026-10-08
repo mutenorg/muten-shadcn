@@ -1,13 +1,6 @@
-# GradientBlinds - an animated WebGL gradient with diagonal blinds and a spotlight that follows the cursor
-# (ported from React Bits). Use it as a hero background: make it the first child of a
-# `relative overflow-hidden` box and it fills the box, then fades out at the bottom to blend into the page.
-#   Stack class("relative overflow-hidden") {
-#     GradientBlinds(colors: "#FF9FFC,#5227FF")
-#     Section class("relative z-10 ...") { ...hero content... }
-#   }
-# `colors` = a comma-separated list of hex stops. Angle, blind count, spotlight and grain are tuned defaults in
-# the ejected host JS - edit src/components/GradientBlinds.js to change them.
-# shadcn-for-muten · Custom · needs `ogl` (npm i ogl). Host JS: src/components/GradientBlinds.js.
-part GradientBlinds(colors: text) {
-  Custom GradientBlinds inputs(colors: $colors) class("absolute inset-0 z-0 pointer-events-none opacity-75")
-}
+# GradientBlinds - an animated gradient behind a hero: diagonal blinds and a light that follows the pointer, drawn on
+# the GPU (WebGL, through `ogl`: npm i ogl). Make it the first child of the hero and it fills the hero, fading out
+# at the bottom into the page; the content goes on top. colors: hex stops separated by commas.
+#   Stack class("cx-hero-blinds") { GradientBlinds(colors: "#9B80FF,#6B46F2")  Stack class("…") { … } }
+# shadcn-for-muten · Custom · needs ogl · host JS gradient-blinds.js.
+part GradientBlinds(colors: text = "#9B80FF,#6B46F2") { Custom GradientBlinds inputs(colors: $colors) class("cx-blinds") }

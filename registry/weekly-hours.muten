@@ -1,0 +1,4 @@
+# WeeklyHours - when the business opens: a switch per day, ranges with the wheel time picker, add a range, copy to all.
+#   WeeklyHours(days: @week, onChange: saveHours)    days: {name, open, ranges [["09:00", "13:00"], ["14:00", "19:00"]]}
+# shadcn-for-muten · part over KitWidget (kit core).
+part WeeklyHours(days: list, onChange: action) { Custom KitWidget inputs(name: "weeklyHours", days: $days) on(action: $onChange) class("cx-wh-host") }

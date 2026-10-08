@@ -1,7 +1,20 @@
-# Item + sub-components: a bordered row of media + content + actions.
-# Compose: Item { <Icon/Avatar> ItemContent { ItemTitle(label) ItemDescription(label) } <Button/Switch> }
-# shadcn-for-muten · part · no deps · styles via the semantic .item* classes in globals.css.
-part Item() { Stack class("item") { slot } }
-part ItemContent() { Stack class("item-content") { slot } }
-part ItemTitle(label: text) { Span "{$label}" class("item-title") }
-part ItemDescription(label: text) { Span "{$label}" class("item-description") }
+# Item - a row: media, content (title + description), actions, an optional footer. Lists are Items in an ItemGroup
+# with ItemSeparator between them.
+#   ItemGroup {
+#     Item { ItemMedia { Avatar(name: "Ana") }  ItemContent { ItemTitle(label: "Ana")  ItemDescription(label: "Corte · 9:00") }  ItemActions { Txt(value: "$25.000", variant: "strong") } }
+#     ItemSeparator()
+#   }
+# Item variant: default | outline | muted · size: default | sm | xs   ·   ItemMedia variant: default | icon | image
+# shadcn-for-muten · part · no deps · Nova (.cn-item).
+part Item(variant: text = "default", size: text = "default") { Stack class("cn-item cn-item-variant-{$variant} cn-item-size-{$size} group/item") data(slot: "item", size: $size) { slot } }
+part ItemGroup() { Stack class("cn-item-group group/item-group") data(slot: "item-group") aria(role: "list") { slot } }
+part ItemSeparator() { Stack class("cn-separator cn-separator-horizontal cn-item-separator") data(slot: "item-separator", orientation: "horizontal") aria(role: "separator") }
+part ItemMedia(variant: text = "default") { Stack class("cn-item-media cn-item-media-variant-{$variant}") data(slot: "item-media", variant: $variant) { slot } }
+part ItemContent() { Stack class("cn-item-content") data(slot: "item-content") { slot } }
+part ItemTitle(label: text) { Span "{$label}" class("cn-item-title") data(slot: "item-title") }
+part ItemDescription(label: text) { Text "{$label}" class("cn-item-description") data(slot: "item-description") }
+part ItemActions() { Stack class("cn-item-actions") data(slot: "item-actions") { slot } }
+part ItemFooter() { Stack class("cn-item-footer") data(slot: "item-footer") { slot } }
+# ItemImage - a photo as an Item's media (40×40, rounded). Price - an amount with tabular digits, pushed to the end.
+part ItemImage(src: text, alt: text = "") { Image "{$src}" alt("{$alt}") class("cx-media-img") }
+part Price(value: text) { Span "{$value}" class("cx-price") }

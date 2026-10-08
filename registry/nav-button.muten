@@ -1,0 +1,14 @@
+# NavButton - a place in the app (a tab bar, a sidebar, a segmented header). Where you are is a STATE, not a
+# variant: it rides aria-pressed and is marked by `marker`; everything else is a Btn (variant, size, any content in
+# the slot: an icon, a count). Lay them in a NavBar, across or down.
+#   NavBar(label: "Secciones") { NavButton(label: "Mi tienda", current: atShop, onClick: goShop) … }
+#   NavBar(label: "Menú", orientation: "vertical") { NavButton(label: "Agenda", current: atAgenda, onClick: goAgenda, marker: "fill") { Icon "lucide:calendar" } }
+# marker: dot (soft fill + a dot, the default) | fill (soft fill) | line (an underline) | none (only the text firms up)
+# variant / size: as Btn. shadcn-for-muten · part · no deps · kit.css (.cx-nav, .cx-navbar).
+part NavButton(label: text = "", current: bool, onClick: action, variant: text = "ghost", size: text = "default", marker: text = "dot") {
+  Button -> $onClick class("cn-button cn-button-variant-{$variant} cn-button-size-{$size} group/button cx-nav") data(slot: "button", marker: $marker) aria(pressed: $current) {
+    slot
+    Span "{$label}" class("cx-nav-label")
+  }
+}
+part NavBar(label: text = "Secciones", orientation: text = "horizontal") { Nav class("cx-navbar") data(orientation: $orientation) aria(label: $label) { slot } }

@@ -1,7 +1,7 @@
-# Tag Input - chips you add by typing + Enter, remove with x / Backspace. The PAGE owns a comma-joined text:
-#   state { tags = "sprite,enemy" : text }   action setTags(v: text) mutates tags { tags.set(v) }
-#   TagInput(value: tags, placeholder: "Add tag…", onChange: setTags)
-# shadcn-for-muten · Custom · host JS is src/components/TagInput.js (copied by `muten add tag-input`).
-part TagInput(value: text, placeholder: text, onChange: action) {
-  Custom TagInput inputs(value: $value, placeholder: $placeholder) on(change: $onChange) class("tag-input")
+# TagInput - tags as chips: Enter or a comma adds, Backspace marks then removes the last, a repeated tag flashes the
+# one already there, suggestions to tap, a cap with its count. The value is comma-joined text.
+#   TagInput(value: tags, label: "Etiquetas del servicio", suggestions: "Fade,Navaja,Niños", max: 8, hint: "Ayudan a que te encuentren.", onChange: setTags)
+# shadcn-for-muten · Custom (kit collections) · host JS tag-input.js.
+part TagInput(value: text, placeholder: text = "", label: text = "Etiquetas", suggestions: text = "", max: number = 8, hint: text = "", onChange: action) {
+  Custom TagInput inputs(value: $value, placeholder: $placeholder, label: $label, suggestions: $suggestions, max: $max, hint: $hint) on(change: $onChange) class("cx-tags-host")
 }

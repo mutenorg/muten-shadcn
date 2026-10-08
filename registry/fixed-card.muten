@@ -1,0 +1,25 @@
+# FixedCard - a card that never grows with the data: at most three rows and a «Ver todas» that opens the full list
+# (in the adaptive Modal). Empty, it keeps the same shape. Rows are Row3 (time · who and what · its state).
+#   FixedCard(title: "Citas de hoy", description: "Jueves · 14 en total") {
+#     Row3(time: "09:00", title: "Andrés Rojas", subtitle: "Corte clásico") { ToneBadge(label: "Confirmada", tone: "ok") }
+#   }
+#   …then its CardFooter { Btn(variant: "outline", size: "sm", onClick: openAll) class("cx-fill") { Span "Ver todas (14)" } }
+# EmptyMini - the empty line inside it: EmptyMini(text: "Entregaste todo.") { Icon "lucide:circle-check" }
+# shadcn-for-muten · part · no deps · kit.css (.cx-fixed-card, .cx-row3, .cx-empty-mini).
+part FixedCard(title: text, description: text = "") {
+  Section class("cn-card group/card cx-fixed-card") data(slot: "card") {
+    Stack class("cn-card-header group/card-header") data(slot: "card-header") {
+      Span "{$title}" class("cn-card-title") data(slot: "card-title")
+      Text "{$description}" class("cn-card-description") data(slot: "card-description")
+    }
+    slot
+  }
+}
+part Row3(time: text, title: text, subtitle: text = "") {
+  Stack class("cx-row3") {
+    Span "{$time}" class("cx-time")
+    Stack class("cx-row3-who") { Span "{$title}" class("cx-row3-t")  Span "{$subtitle}" class("cx-row3-s") }
+    slot
+  }
+}
+part EmptyMini(text: text) { Stack class("cx-empty-mini") { slot  Span "{$text}" } }

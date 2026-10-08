@@ -1,7 +1,6 @@
-# Input (part name Input - muten's text-input primitive is `SearchField`, so this wraps it) - a plug-and-play
-# text input. No class props: pass a state to `value` (two-way bound) + a placeholder.
-#   state { email = "" : text }
-#   Input(value: email, placeholder: "you@example.com")
-# For typed fields (email/number/password/date) or validation, use a `Form` over an entity instead.
-# shadcn-for-muten · part · no deps · wraps SearchField + the .input recipe.
-part Input(value: text, placeholder: text) { SearchField bind($value) "{$placeholder}" class("input") }
+# Input - a text field bound to a page text state. TextArea - the same for several lines (`Textarea` is muten's
+# primitive, so the part is TextArea).
+#   Input(value: name, placeholder: "Nombre o teléfono")      TextArea(value: notes, placeholder: "Notas para el equipo")
+# shadcn-for-muten · part · no deps · Nova (.cn-input, .cn-textarea).
+part Input(value: text, placeholder: text = "") { SearchField bind($value) "{$placeholder}" class("cn-input") data(slot: "input") }
+part TextArea(value: text, placeholder: text = "") { Textarea bind($value) "{$placeholder}" class("cn-textarea") data(slot: "textarea") }

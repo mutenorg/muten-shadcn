@@ -1,4 +1,26 @@
-# InputGroup - an input with a leading icon / addon in one bordered field:
-#   InputGroup { Icon "lucide:search"  SearchField bind(q) "Search..." class("input-group-control") }
-# shadcn-for-muten · part · no deps · uses .input-group from globals.css.
-part InputGroup() { Stack class("input-group") { slot } }
+# InputGroup - a field with things inside its border: a prefix ($, an icon), a suffix (COP), a clear button.
+#   InputGroup { InputAddon { Span "$" }  GroupInput(value: price)  InputAddon(align: "inline-end") { Span "COP" } }
+# SearchInput - the search with a magnifier and a × that shows only with text (Esc also clears).
+#   SearchInput(value: q, placeholder: "Nombre o teléfono", onClear: clearQ)
+# Anything goes in an addon: an Icon, InputGroupText («https://», «COP», «@»), an InputGroupButton, a Kbd, a Spinner.
+# align: inline-start | inline-end (beside the text) | block-start | block-end (a row above / below, for a GroupTextArea).
+#   InputGroup { GroupTextArea(value: msg, placeholder: "Escribe…")  InputAddon(align: "block-end") { InputGroupText(label: "0/160")  InputGroupButton(label: "Enviar", onClick: send) { Icon "lucide:send" } } }
+# shadcn-for-muten · part · no deps · Nova (.cn-input-group).
+part InputGroup() { Stack class("cn-input-group group/input-group") data(slot: "input-group") aria(role: "group") { slot } }
+part InputAddon(align: text = "inline-start") { Stack class("cn-input-group-addon cn-input-group-addon-align-{$align}") data(slot: "input-group-addon", align: $align) { slot } }
+part GroupInput(value: text, placeholder: text = "") { SearchField bind($value) "{$placeholder}" class("cn-input cn-input-group-input cx-num") data(slot: "input-group-control") }
+part SearchInput(value: text, placeholder: text = "Buscar", onClear: action) {
+  Stack class("cn-input-group group/input-group") data(slot: "input-group") aria(role: "group") {
+    Stack class("cn-input-group-addon cn-input-group-addon-align-inline-start") data(slot: "input-group-addon", align: "inline-start") { Icon "lucide:search" }
+    SearchField bind($value) "{$placeholder}" class("cn-input cn-input-group-input") data(slot: "input-group-control")
+    Stack class("cn-input-group-addon cn-input-group-addon-align-inline-end") data(slot: "input-group-addon", align: "inline-end") {
+      when $value != "" { Button -> $onClear class("cn-button cn-button-variant-ghost cn-button-size-icon-xs group/button cx-clear") aria(label: "Limpiar búsqueda") { Icon "lucide:x" } }
+    }
+    FieldBehavior(kind: "search", message: "")
+  }
+}
+part InputGroupText(label: text) { Span "{$label}" class("cn-input-group-text") data(slot: "input-group-text") }
+part InputGroupButton(onClick: action, variant: text = "ghost", size: text = "xs", label: text = "") {
+  Button -> $onClick class("cn-button cn-button-variant-{$variant} cn-input-group-button cn-input-group-button-size-{$size} group/button") data(slot: "button", size: $size, name: $label) aria(label: $label) { slot }
+}
+part GroupTextArea(value: text, placeholder: text = "") { Textarea bind($value) "{$placeholder}" class("cn-textarea cn-input-group-textarea") data(slot: "input-group-control") }

@@ -1,8 +1,8 @@
-# Alert + sub-components. variant: default | destructive.
-# Compose: Alert(variant) { Icon … ; Stack { AlertTitle(label) AlertDescription(label) } }
-# shadcn-for-muten · part · no deps · styles via the semantic .alert* classes in globals.css.
-part Alert(variant: text) {
-  Section class("alert", "alert-default" when $variant == "default", "alert-destructive" when $variant == "destructive") { slot }
-}
-part AlertTitle(label: text) { Span "{$label}" class("alert-title") }
-part AlertDescription(label: text) { Span "{$label}" class("alert-description") }
+# Alert - a callout: an icon, a title, a description, an optional action at the corner. The icon carries the tone.
+#   Alert(tone: "wait") { Icon "lucide:clock"  AlertTitle(label: "Tu plan vence en 3 días")  AlertDescription(label: "…")  AlertAction { Btn(size: "xs", variant: "outline", onClick: renew) { Span "Renovar" } } }
+# variant: default | destructive · tone: "" | info | ok | wait
+# shadcn-for-muten · part · no deps · Nova (.cn-alert) + kit.css (tone).
+part Alert(variant: text = "default", tone: text = "") { Section class("cn-alert cn-alert-variant-{$variant} group/alert") data(slot: "alert", tone: $tone) aria(role: "status") { slot } }
+part AlertTitle(label: text) { Span "{$label}" class("cn-alert-title") data(slot: "alert-title") }
+part AlertDescription(label: text) { Text "{$label}" class("cn-alert-description") data(slot: "alert-description") }
+part AlertAction() { Stack class("cn-alert-action") data(slot: "alert-action") { slot } }

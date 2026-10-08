@@ -1,11 +1,18 @@
-# Popover - a button that opens a floating panel below it. The PAGE owns the bool + the toggle action:
-#   state { open = false : bool }   action t mutates open { open.toggle() }
-#   Popover(label: "Open", open: open, onToggle: t) { … any content … }
-# shadcn-for-muten · part · no deps · the backdrop catches outside clicks; styles via the semantic .popover* classes.
-part Popover(label: text, open: bool, onToggle: action) {
-  Stack class("popover") {
-    Button "{$label}" -> $onToggle aria(expanded: $open) class("btn btn-outline")
-    when $open { Button -> $onToggle class("popover-backdrop") }
-    Stack class("popover-content", "popover-content-open" when $open) { slot }
+# Popover - a panel that opens next to what you tapped and stays until you tap outside, press Esc or close it. Its
+# content is anything: a small form, a filter, a detail. Trigger and content go inside, as in shadcn:
+#   Popover {
+#     PopoverTrigger { TriggerBtn { Span "Filtrar" } }
+#     PopoverContent(align: "start") { PopoverHeader(title: "Filtrar", description: "Lo que ves en la lista.")  … }
+#   }
+# PopoverClose is a button inside the content that closes it. align: start | center | end.
+# shadcn-for-muten · parts + Custom (OverlayBehavior) · Nova (.cn-popover-*) + kit.css (.cx-ov).
+part Popover() { Stack class("cx-ov") data(slot: "popover") { slot  OverlayBehavior(kind: "popover") } }
+part PopoverTrigger() { Stack class("cx-ov-trigger") data(slot: "popover-trigger") { slot } }
+part PopoverContent(align: text = "center", width: text = "18rem") { Stack class("cn-popover-content cx-ov-content") data(slot: "popover-content", align: $align) style(w: "{$width}") { slot } }
+part PopoverHeader(title: text, description: text = "") {
+  Stack class("cn-popover-header") data(slot: "popover-header") {
+    Span "{$title}" class("cn-popover-title") data(slot: "popover-title")
+    Text "{$description}" class("cn-popover-description") data(slot: "popover-description")
   }
 }
+part PopoverClose(label: text = "Listo", variant: text = "default") { Button "{$label}" class("cn-button cn-button-variant-{$variant} cn-button-size-sm group/button") data(ovclose: "true") }

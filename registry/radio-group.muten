@@ -1,11 +1,19 @@
-# Radio Group - single choice from a list. The PAGE owns a `text` state + an action that sets it:
+# RadioGroup - one choice from a short list (shadcn Nova): a circle and its label, and a description when the
+# choice needs one. A real radio group: arrows move and pick, only the chosen one is in the Tab order. The page
+# owns the value:
 #   state { plan = "pro" : text }   action setPlan(v: text) mutates plan { plan.set(v) }
-#   RadioGroup { RadioGroupItem(value: "pro", current: plan, label: "Pro", onSelect: setPlan) … }
-# shadcn-for-muten · part · no deps · the dot always renders and scales in via .radio-dot-on.
-part RadioGroup() { Stack class("radio-group") { slot } }
-part RadioGroupItem(value: text, current: text, label: text, onSelect: action) {
-  Button -> $onSelect($value) aria(checked: $value == $current) class("radio-row") {
-    Stack class("radio") { Stack class("radio-dot", "radio-dot-on" when $value == $current) }
-    Span "{$label}" class("radio-label")
+#   RadioGroup(label: "Plan") { RadioGroupItem(value: "free", current: plan, label: "Gratis", onSelect: setPlan)  … }
+# For choices that carry more (a price, a duration) use ChoiceList. orientation: vertical | horizontal.
+# shadcn-for-muten · part + Custom (RovingBehavior) · Nova (.cn-radio-group) + kit.css (checked state).
+part RadioGroup(label: text = "", orientation: text = "vertical") {
+  Stack class("cn-radio-group cx-rg") data(slot: "radio-group", orientation: $orientation) aria(role: "radiogroup", label: $label) { slot  RovingBehavior() }
+}
+part RadioGroupItem(value: text, current: text, label: text, onSelect: action, description: text = "") {
+  Button -> $onSelect($value) class("cx-rg-row") aria(role: "radio", checked: $value == $current) {
+    Span "" class("cn-radio-group-item cx-rg-dot") data(slot: "radio-group-item", state: $value == $current)
+    Stack class("cx-rg-text") {
+      Span "{$label}" class("cn-label") data(slot: "label")
+      Text "{$description}" class("cn-field-description") data(slot: "field-description")
+    }
   }
 }

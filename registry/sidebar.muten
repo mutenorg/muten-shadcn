@@ -1,19 +1,27 @@
-# AppSidebar - a collapsible nav panel (named AppSidebar, NOT Sidebar, so it never shadows muten's core `Sidebar`
-# <aside> primitive). The PAGE owns a collapsed bool + the active item:
-#   state { collapsed = false : bool  nav = "sprites" : text }   action setNav(v: text) mutates nav { nav.set(v) }
-#   AppSidebar(collapsed: collapsed) {
-#     SidebarHeader { Span "Studio" }
-#     SidebarGroup { SidebarGroupLabel(label: "Assets")
-#       SidebarItem(label: "Sprites", value: "sprites", current: nav, onSelect: setNav) { Icon "lucide:image" class("size-4 shrink-0") } … }
+# AppSidebar - a side menu of muten parts (shadcn Nova's Sidebar): a header, groups with their label, items with an
+# icon and a count, a footer. It folds to icons only (the names show on hover). The page owns where you are and
+# whether it is folded. (AppShell is the whole frame - sidebar, header, sheet, ⌘K - built from data.)
+#   AppSidebar(collapsed: folded) {
+#     SidebarHeader { … }
+#     SidebarGroup(label: "Principal") { SidebarItem(label: "Agenda", value: "agenda", current: place, count: "14", onSelect: go) { Icon "lucide:calendar" } }
+#     SidebarFooter { … }
 #   }
-# shadcn-for-muten · part · no deps · styles via the semantic .sidebar* classes in globals.css.
-part AppSidebar(collapsed: bool) { Stack class("sidebar", "sidebar-collapsed" when $collapsed) { slot } }
-part SidebarHeader() { Stack class("sidebar-header") { slot } }
-part SidebarGroup() { Stack class("sidebar-group") { slot } }
-part SidebarGroupLabel(label: text) { Span "{$label}" class("sidebar-group-label") }
-part SidebarItem(label: text, value: text, current: text, onSelect: action) {
-  Button -> $onSelect($value) aria(pressed: $value == $current) class("sidebar-item", "sidebar-item-active" when $value == $current) {
+# The name AppSidebar avoids muten's own Sidebar primitive. shadcn-for-muten · parts · no deps · Nova (.cn-sidebar-*) + kit.css.
+part AppSidebar(collapsed: bool, label: text = "Menú") {
+  Nav class("cx-sidebar") data(slot: "sidebar", collapsed: $collapsed) aria(label: $label) { Stack class("cn-sidebar-inner cx-sb-inner") data(slot: "sidebar-inner") { slot } }
+}
+part SidebarHeader() { Stack class("cn-sidebar-header cx-sb-head") data(slot: "sidebar-header") { slot } }
+part SidebarFooter() { Stack class("cn-sidebar-footer cx-sb-foot") data(slot: "sidebar-footer") { slot } }
+part SidebarGroup(label: text = "") {
+  Stack class("cn-sidebar-group cx-sb-group") data(slot: "sidebar-group") aria(role: "group", label: $label) {
+    Span "{$label}" class("cn-sidebar-group-label cx-sb-glabel") data(slot: "sidebar-group-label")
+    Stack class("cn-sidebar-menu cx-sb-menu") data(slot: "sidebar-menu") { slot }
+  }
+}
+part SidebarItem(label: text, value: text, current: text, onSelect: action, count: text = "") {
+  Button -> $onSelect($value) class("cn-sidebar-menu-button cn-sidebar-menu-button-variant-default cn-sidebar-menu-button-size-default cx-sb-item") data(slot: "sidebar-menu-button", active: $value == $current, name: $label) aria(current: $value == $current) {
     slot
-    Span "{$label}" class("sidebar-item-label truncate")
+    Span "{$label}" class("cx-sb-label")
+    Span "{$count}" class("cn-sidebar-menu-badge cx-sb-count") data(slot: "sidebar-menu-badge")
   }
 }

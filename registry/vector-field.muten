@@ -1,10 +1,11 @@
-# Vector Field - paired NumberFields (X / Y) for position or size. The PAGE owns two number states + two actions:
-#   state { px = 0 : number  py = 0 : number }   action setX(v: number) mutates px { px.set(v) }   action setY(v: number) mutates py { py.set(v) }
-#   VectorField(x: px, y: py, min: -9999, max: 9999, step: 1, onX: setX, onY: setY)
-# shadcn-for-muten · part · depends on number-field · styles via the semantic .vector* classes.
-part VectorField(x: number, y: number, min: number, max: number, step: number, onX: action, onY: action) {
-  Stack class("vector-field") {
-    Stack class("vector-axis") { Span "X" class("vector-axis-label")  NumberField(value: $x, min: $min, max: $max, step: $step, onInput: $onX) }
-    Stack class("vector-axis") { Span "Y" class("vector-axis-label")  NumberField(value: $y, min: $min, max: $max, step: $step, onInput: $onY) }
+# VectorField - two numbers that go together: a position (X, Y) or a size (W, H), each a NumberField with its axis
+# inside. The page owns both values and both actions.
+#   VectorField(x: px, y: py, min: 0, max: 1920, onX: setX, onY: setY)
+#   VectorField(x: w, y: h, min: 1, max: 4096, xLabel: "W", yLabel: "H", unit: "px", onX: setW, onY: setH)
+# shadcn-for-muten · part over NumberField · kit.css (.cx-vector).
+part VectorField(x: number, y: number, min: number, max: number, step: number = 1, xLabel: text = "X", yLabel: text = "Y", unit: text = "", onX: action, onY: action) {
+  Stack class("cx-vector") {
+    NumberField(value: $x, min: $min, max: $max, step: $step, prefix: $xLabel, unit: $unit, onInput: $onX)
+    NumberField(value: $y, min: $min, max: $max, step: $step, prefix: $yLabel, unit: $unit, onInput: $onY)
   }
 }

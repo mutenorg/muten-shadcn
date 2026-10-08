@@ -1,0 +1,13 @@
+# DirtyBar - «Tienes cambios sin guardar»: a floating footer of the form it sits in. It appears when any field,
+# switch or time differs from the last save, «Descartar» puts everything back, «Guardar» saves in three moments.
+# Put it as the LAST child of a SettingsForm.
+#   SettingsForm { SettingsSection(title: "Tu negocio", description: "…") { Field(…) { Input(…) } }  DirtyBar(onSave: save) }
+# shadcn-for-muten · part + Custom (DirtyBar, kit core) · kit.css (.cx-dirty, .cx-set-form).
+part SettingsForm() { Stack class("cx-set-form") { slot } }
+part SettingsSection(title: text, description: text = "") {
+  Section class("cx-set-sec") {
+    Stack class("cx-vstack cx-gap-2") { Span "{$title}" class("cx-text") data(variant: "heading")  Text "{$description}" class("cx-text") data(variant: "muted") }
+    Stack class("cx-vstack cx-gap-14") { slot }
+  }
+}
+part DirtyBar(onSave: action) { Custom DirtyBar on(save: $onSave) class("cx-dirty-host") }

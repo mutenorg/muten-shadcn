@@ -1,0 +1,3 @@
+# Queue - a waitlist: offer a freed slot to the first in line, with a countdown.   Queue(title: "Lista de espera · sábado", people: @waiting)
+# shadcn-for-muten · part over KitWidget (kit core).
+part Queue(title: text, people: list, minutes: number = 10) { Custom KitWidget inputs(name: "queue", title: $title, people: $people, minutes: $minutes) class("cx-queue-host") }

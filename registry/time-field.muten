@@ -1,0 +1,6 @@
+# TimeField - a field-like button with the time (and mañana/tarde); it opens the hour / minute wheels.
+#   TimeField(label: "Hora", value: "10:30", from: 9, to: 19, step: 15, onChange: setTime)      → "HH:MM"
+# shadcn-for-muten · Custom (kit dates) · host JS time-field.js.
+part TimeField(label: text = "Hora", value: text = "", from: number = 9, to: number = 19, step: number = 15, onChange: action) {
+  Custom TimeField inputs(label: $label, value: $value, from: $from, to: $to, step: $step) on(change: $onChange) class("cx-tf-host")
+}

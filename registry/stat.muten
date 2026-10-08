@@ -1,0 +1,23 @@
+# StatCard - one number for any use (sales, bookings, wait time…): label, the value, the change against a period and
+# its line. The icon goes in the slot (or leave it empty). `tone` says if the change is good (ok) or bad (bad) -
+# for a cost or a wait, going down is the good one.
+#   StatCard(label: "Ventas", value: "$1.284.000", delta: "▲ 12 %", tone: "ok", compare: "vs. semana pasada", series: "3,5,4,6,5,8,9") { Icon "lucide:credit-card" }
+# Lay several in a StatGrid. Spark draws the series alone: Spark(series: "3,5,4", tone: "success").
+# shadcn-for-muten · part + Custom (Spark.js) · kit.css (.cx-stat).
+part StatCard(label: text, value: text, delta: text, tone: text = "ok", compare: text = "", series: text = "") {
+  Section class("cn-card cx-stat") data(slot: "card", size: "sm") {
+    Stack class("cx-stat-body") {
+      Stack class("cx-stat-row") {
+        Span "{$label}" class("cx-text") data(slot: "text", variant: "muted")
+        Stack class("cx-stat-ic") { slot }
+      }
+      Span "{$value}" class("cx-text") data(slot: "text", variant: "title")
+      Stack class("cx-stat-row") {
+        Span "{$delta}" class("cn-badge cn-badge-variant-ghost group/badge") data(slot: "badge", variant: "status", tone: $tone)
+        Span "{$compare}" class("cx-text") data(slot: "text", variant: "caption")
+      }
+      Spark(series: $series, tone: $tone)
+    }
+  }
+}
+part StatGrid() { Stack class("cx-stats") { slot } }

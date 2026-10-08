@@ -1,0 +1,5 @@
+# RowMenu - the ⋯ of a row: a menu with arrows, Home/End, type-ahead, Esc back to the button. Put it in ItemActions.
+#   RowMenu(label: "Opciones de Corte clásico", items: @rowActions, onPick: act)
+#   items {id, label, icon (a kit icon id), danger, separator (a line before it)}
+# shadcn-for-muten · Custom (kit menus) · host JS row-menu.js.
+part RowMenu(label: text = "Más opciones", items: list, onPick: action) { Custom RowMenu inputs(label: $label, items: $items) on(pick: $onPick) class("cx-rowmenu-host") }

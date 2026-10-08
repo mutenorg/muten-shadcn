@@ -1,15 +1,39 @@
-# Dropdown Menu - a button that opens a menu below it. The PAGE owns the bool + the toggle action:
-#   state { open = false : bool }   action t mutates open { open.toggle() }
-#   DropdownMenu(label: "Open", open: open, onToggle: t) { DropdownLabel(label) DropdownItem(label, onSelect) … }
-# Each DropdownItem's action should also close the menu (set open false). The backdrop catches outside clicks.
-# shadcn-for-muten · part · no deps · styles via the semantic .dropdown* classes in globals.css.
-part DropdownMenu(label: text, open: bool, onToggle: action) {
-  Stack class("dropdown") {
-    Button "{$label}" -> $onToggle aria(expanded: $open) class("btn btn-outline")
-    when $open { Button -> $onToggle class("dropdown-backdrop") }
-    Stack class("dropdown-content", "dropdown-content-open" when $open) { slot }
+# DropdownMenu - a list of actions that opens from a button (shadcn Nova). Arrows, Home/End and the first letter move;
+# Enter picks; a picked action closes it, a check or radio item stays open. Trigger and content go inside:
+#   DropdownMenu {
+#     DropdownTrigger { TriggerBtn { Span "Opciones"  Icon "lucide:chevron-down" } }
+#     DropdownContent(align: "start") {
+#       DropdownLabel(label: "Pedido")
+#       DropdownItem(label: "Editar", shortcut: "⌘E", onSelect: edit) { Icon "lucide:pencil" }
+#       DropdownSeparator()
+#       DropdownCheckItem(label: "Avisarme", on: notify, onToggle: toggleNotify)
+#       DropdownItem(label: "Eliminar", tone: "destructive", onSelect: remove) { Icon "lucide:trash-2" }
+#     }
+#   }
+# The same items and content serve ContextMenu and Menubar. shadcn-for-muten · parts + Custom (OverlayBehavior) · Nova.
+part DropdownMenu() { Stack class("cx-ov") data(slot: "dropdown-menu") { slot  OverlayBehavior(kind: "menu") } }
+part DropdownTrigger() { Stack class("cx-ov-trigger") data(slot: "dropdown-menu-trigger") { slot } }
+part DropdownContent(align: text = "start", width: text = "12rem") { Stack class("cn-dropdown-menu-content cx-ov-content cx-menu") data(slot: "dropdown-menu-content", align: $align) style(w: "{$width}") { slot } }
+part DropdownItem(label: text, onSelect: action, shortcut: text = "", tone: text = "") {
+  Button -> $onSelect class("cn-dropdown-menu-item group/dropdown-menu-item cx-menu-item") data(slot: "dropdown-menu-item", variant: $tone) aria(role: "menuitem") {
+    slot
+    Span "{$label}" class("cx-menu-label")
+    Span "{$shortcut}" class("cn-dropdown-menu-shortcut") data(slot: "dropdown-menu-shortcut")
   }
 }
-part DropdownItem(label: text, onSelect: action) { Button "{$label}" -> $onSelect class("dropdown-item") }
-part DropdownLabel(label: text) { Span "{$label}" class("dropdown-label") }
-part DropdownSeparator() { Stack class("dropdown-separator") }
+part DropdownCheckItem(label: text, on: bool, onToggle: action, shortcut: text = "") {
+  Button -> $onToggle class("cn-dropdown-menu-checkbox-item cx-menu-item cx-menu-check") data(slot: "dropdown-menu-checkbox-item") aria(role: "menuitemcheckbox", checked: $on) {
+    Span "{$label}" class("cx-menu-label")
+    Span "{$shortcut}" class("cn-dropdown-menu-shortcut")
+    Stack class("cn-dropdown-menu-item-indicator cx-menu-mark") { Icon "lucide:check" }
+  }
+}
+part DropdownRadioItem(value: text, current: text, onSelect: action, label: text) {
+  Button -> $onSelect($value) class("cn-dropdown-menu-radio-item cn-dropdown-menu-checkbox-item cx-menu-item cx-menu-check") data(slot: "dropdown-menu-radio-item") aria(role: "menuitemradio", checked: $value == $current) {
+    Span "{$label}" class("cx-menu-label")
+    Span "" class("cn-dropdown-menu-item-indicator cx-menu-dot")
+  }
+}
+part DropdownLabel(label: text) { Span "{$label}" class("cn-dropdown-menu-label") data(slot: "dropdown-menu-label") }
+part DropdownSeparator() { Stack class("cn-dropdown-menu-separator") data(slot: "dropdown-menu-separator") aria(role: "separator") }
+part DropdownGroup(label: text = "") { Stack class("cx-menu-group") aria(role: "group", label: $label) { slot } }

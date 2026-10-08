@@ -1,0 +1,8 @@
+# Agenda - day columns per person, the week, or a list (the phone keeps the day grid and the list). Drag an
+# appointment to move it (the ghost turns red where it is not free), drag its edge to resize, tap it for its sheet:
+# lifecycle, payment and receipt, write, change the time, cancel with a reason. Block time; create from a free slot.
+# Everything is data (see agenda.js for the shapes); pass lists with @: Agenda(resources: @team, hours: @hours, events: @appointments, blocks: @blocks, onCreate: newAppointment, onChange: saveAgenda)
+# shadcn-for-muten · Custom (kit core) · host JS is agenda.js.
+part Agenda(resources: list, hours: list, events: list, blocks: list, from: number = 9, to: number = 19, slot: number = 30, onCreate: action, onChange: action) {
+  Custom Agenda inputs(resources: $resources, hours: $hours, events: $events, blocks: $blocks, from: $from, to: $to, slot: $slot) on(create: $onCreate, change: $onChange) class("cx-agenda")
+}

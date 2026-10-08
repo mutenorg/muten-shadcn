@@ -1,7 +1,26 @@
-# Avatar - a user's initials in a circle (AvatarFallback). Pass a name; built-in initial() takes the first letter.
-# shadcn-for-muten · part · no deps · styles via the semantic .avatar* classes. For a photo, swap the inner Span for `Image "{$src}" alt("{$name}")`.
-part Avatar(name: text) {
-  Stack class("avatar") {
-    Stack class("avatar-fallback") { Span "{initial($name)}" }
+# Avatar - three sizes (24, 32, 40). Without a photo the initials take a stable tone from the name (hue), mixed with
+# the skin's background so they never clash with the brand. The name shows on hover and on focus. A status dot
+# (online), a stacked group with «+N», and AvatarImage for a photo.
+#   Avatar(name: "Valentina Ruiz", size: "lg")     Avatar(name: "Laura Méndez", size: "lg", status: "online")
+#   AvatarGroup { Avatar(name: "Laura Méndez")  Avatar(name: "Diego Paredes")  AvatarMore(count: "+3", label: "3 personas más") }
+#   Avatar(name: "El Roble", shape: "square")    - a thing, not a person
+# size: sm | default | lg · status: "" | online · shadcn-for-muten · part · no deps · Nova + kit.css (.cx-av).
+part Avatar(name: text, size: text = "default", shape: text = "", status: text = "") {
+  Stack class("cx-av-wrap") data(name: $name) aria(label: $name) {
+    Stack class("cn-avatar group/avatar cx-av") data(slot: "avatar", size: $size, shape: $shape) style(h: "{hue($name)}") {
+      Span "{initials($name)}" class("cn-avatar-fallback") data(slot: "avatar-fallback")
+      when $status == "online" { Span "" class("cn-avatar-badge cx-online") data(slot: "avatar-badge") aria(label: "En línea") }
+    }
   }
 }
+part AvatarImage(src: text, name: text, size: text = "default", shape: text = "") {
+  Stack class("cx-av-wrap") data(name: $name) {
+    Stack class("cn-avatar group/avatar") data(slot: "avatar", size: $size, shape: $shape) {
+      Image "{$src}" alt("{$name}") class("cn-avatar-image") data(slot: "avatar-image")
+    }
+  }
+}
+part AvatarGroup() { Stack class("cn-avatar-group group/avatar-group") data(slot: "avatar-group") { slot } }
+part AvatarMore(count: text, label: text = "") { Span "{$count}" class("cn-avatar-group-count") data(slot: "avatar-group-count", name: $label) }
+# Who - a person with what they are doing now: Who(title: "Laura Méndez", subtitle: "Atiende hoy · 4 citas") { Avatar(…) }
+part Who(title: text, subtitle: text = "") { Stack class("cx-who") { slot  Stack class("cx-who-t") { Span "{$title}" class("cx-who-n")  Span "{$subtitle}" class("cx-who-s") } } }

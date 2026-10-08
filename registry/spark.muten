@@ -1,0 +1,3 @@
+# Spark - a tiny line for a series of numbers (the StatCard's). Spark(series: "3,5,4,6,5,8,9", tone: "ok")
+# tone: ok | bad | info | wait. shadcn-for-muten · Custom · host JS is spark.js.
+part Spark(series: text, tone: text = "ok") { Custom Spark inputs(series: $series, tone: $tone) class("cx-spark-host") }

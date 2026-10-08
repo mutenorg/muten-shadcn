@@ -1,0 +1,9 @@
+# FieldBehavior - what a field does that is not markup, put INSIDE its Field (after the control):
+#   kind "money"  → separates thousands when leaving the field (25000 → 25.000)
+#   kind "email"  → checks the address when leaving the field (not while typing); the error replaces the help text
+#                   in the same place (nothing jumps). message = the error.
+#   kind "search" → Esc clears it.
+#   kind "count"  → «71/160» at the end of the description line (needs maxlength via `max`).
+#   Field(label: "Correo para avisos", description: "Te llegan las reservas nuevas.") { Input(value: mail)  FieldBehavior(kind: "email", message: "Falta algo: revisa que sea como nombre@dominio.co") }
+# shadcn-for-muten · Custom · host JS is field-behavior.js.
+part FieldBehavior(kind: text, message: text = "", max: number = 0) { Custom FieldBehavior inputs(kind: $kind, message: $message, max: $max) class("cx-field-behavior") }

@@ -1,0 +1,10 @@
+# NewAppointment - «Nueva cita» in 4 steps inside the adaptive modal, built only from atoms: a Stepper under the
+# title, the client (search + choice list), the service (choice list with price), the day (tiles) and the hour, and
+# the summary. «Siguiente» stays disabled until the step is answered; steps slide sideways and the height eases.
+# The page owns `open` (true opens it); onClose fires however it closes, onCreate gets json {client, service, day, hour}.
+#   NewAppointment(open: creating, clients: @clients, services: @services, hours: @slots, closed: @closedDays, note: "Le llega la confirmación por WhatsApp.", onCreate: created, onClose: closeNew)
+# clients {name, description} · services {name, duration, price, icon} · hours ["09:00", …] · closed [0] (weekdays).
+# shadcn-for-muten · Custom (kit/structure.js) · the kit's adaptive modal.
+part NewAppointment(open: bool, title: text = "Nueva cita", clients: list, services: list, hours: list, closed: list, note: text = "", onCreate: action, onClose: action) {
+  Custom NewAppointment inputs(open: $open, title: $title, clients: $clients, services: $services, hours: $hours, closed: $closed, note: $note) on(create: $onCreate, close: $onClose) class("cx-wizard-host")
+}

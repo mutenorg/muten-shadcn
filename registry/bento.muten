@@ -1,9 +1,6 @@
-# BentoGallery - a tiling gallery on a fixed row-height grid, so cells of different column widths always line up.
-# Each BentoCell picks its own col-span (and bg / content) via class:
-#   BentoGallery {
-#     BentoCell class("col-span-4 bg-muted") { Span "01" }
-#     BentoCell class("col-span-2 bg-accent") { Span "02" }
-#   }
-# shadcn-for-muten · block · no deps · uses .bento-gallery / .bento-cell from globals.css.
-part BentoGallery() { Stack class("bento-gallery") { slot } }
-part BentoCell() { Stack class("bento-cell") { slot } }
+# BentoGallery - a gallery of tiles on a grid of fixed-height rows, so tiles of different widths always line up.
+# Each BentoCell says how many of the six columns and how many rows it takes (on a phone they stack).
+#   BentoGallery { BentoCell(span: 4, rows: 2) { … }  BentoCell(span: 2) { … }  BentoCell(span: 2) { … } }
+# shadcn-for-muten · parts · no deps · kit.css (.cx-bento).
+part BentoGallery(rowHeight: text = "160px") { Stack class("cx-bento") style(row: "{$rowHeight}") { slot } }
+part BentoCell(span: number = 2, rows: number = 1) { Stack class("cx-bento-cell") style(span: "{$span}", rows: "{$rows}") { slot } }

@@ -1,6 +1,11 @@
-# Toolbar - a grouped button bar with separators. Put icon buttons inside (class("btn btn-ghost btn-icon")).
-#   Toolbar { ToolbarGroup { Button { Icon "lucide:mouse-pointer-2" } class("btn btn-ghost btn-icon") … } ToolbarSeparator ToolbarGroup { … } }
-# shadcn-for-muten · part · no deps · styles via the semantic .toolbar* classes in globals.css.
-part Toolbar() { Stack class("toolbar") { slot } }
-part ToolbarGroup() { Stack class("toolbar-group") { slot } }
-part ToolbarSeparator() { Stack class("toolbar-separator") }
+# Toolbar - the tools of an editor in one bar: groups of icon buttons (Btn, Toggle, ToggleGroup) split by thin lines.
+# It floats over a canvas (CanvasViewport) or sits on top of a panel.
+#   Toolbar(label: "Herramientas") {
+#     ToolbarGroup { ToggleGroup(label: "Herramienta") { ToggleGroupItem(value: "select", current: tool, onSelect: setTool, label: "Seleccionar") { Icon "lucide:mouse-pointer-2" } … } }
+#     ToolbarSeparator()
+#     ToolbarGroup { Btn(variant: "ghost", size: "icon-sm", label: "Deshacer", onClick: undo) { Icon "lucide:undo-2" } }
+#   }
+# shadcn-for-muten · parts · no deps · kit.css (.cx-toolbar).
+part Toolbar(label: text = "Herramientas") { Stack class("cx-toolbar") data(slot: "toolbar") aria(role: "toolbar", label: $label) { slot } }
+part ToolbarGroup() { Stack class("cx-toolbar-group") data(slot: "toolbar-group") { slot } }
+part ToolbarSeparator() { Stack class("cx-toolbar-sep") data(slot: "toolbar-separator") aria(role: "separator", orientation: "vertical") }

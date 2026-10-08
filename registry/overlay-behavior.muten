@@ -1,0 +1,4 @@
+# OverlayBehavior - the opening, placing and closing of a floating panel; the floating parts (Popover, HoverCard,
+# DropdownMenu, ContextMenu, Menubar, NavigationMenu) carry it. kind: popover | hover | menu | context | menubar | navmenu.
+# shadcn-for-muten · Custom · host JS overlay-behavior.js (kit/overlays.js).
+part OverlayBehavior(kind: text = "popover") { Custom OverlayBehavior inputs(kind: $kind) class("cx-ov-behavior") }

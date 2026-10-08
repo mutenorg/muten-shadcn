@@ -1,12 +1,21 @@
-# Tabs - a tab bar + panels. The PAGE owns a `text` state (the active tab) + an action that sets it:
-#   state { tab = "account" : text }   action setTab(v: text) mutates tab { tab.set(v) }
-#   TabsList { TabsTrigger(value: "account", current: tab, label: "Account", onSelect: setTab) … }
-#   TabsContent(value: "account", current: tab) { … }
-# shadcn-for-muten · part · no deps · styles via the semantic .tabs* classes in globals.css.
-part TabsList() { Stack class("tabs-list") { slot } }
-part TabsTrigger(value: text, current: text, label: text, onSelect: action) {
-  Button "{$label}" -> $onSelect($value) aria(selected: $value == $current) class("tabs-trigger", "tabs-trigger-active" when $value == $current)
+# Tabs - the indicator slides from one tab to the next (260 ms). variant "" = segmented (a pill on a muted track),
+# "line" = an underline with a count per tab that scrolls sideways on a phone. Arrows, Home and End move between tabs.
+# The page owns the current value; TabsContent shows the panel of the current one.
+#   Tabs(label: "Periodo") { TabsTrigger(value: "day", current: period, label: "Hoy", onSelect: setPeriod)  TabsTrigger(value: "week", current: period, label: "Semana", onSelect: setPeriod) }
+#   Tabs(label: "Pedidos", variant: "line") { TabsTrigger(value: "new", current: lane, label: "Nuevos", count: "4", onSelect: setLane) … }
+#   TabsContent(value: "new", current: lane) { … }
+# shadcn-for-muten · part + Custom (TabsBehavior: the indicator + keys) · kit.css (.cx-tabs).
+part Tabs(label: text, variant: text = "") {
+  Stack class("cx-tabs {$variant}") data(slot: "tabs") aria(role: "tablist", label: $label) {
+    slot
+    TabsBehavior()
+  }
 }
-part TabsContent(value: text, current: text) {
-  Stack class("tabs-content", "hidden" when $value != $current) { slot }
+part TabsList() { Stack class("cx-tabs") data(slot: "tabs") aria(role: "tablist") { slot  TabsBehavior() } }
+part TabsTrigger(value: text, current: text, label: text, onSelect: action, count: text = "") {
+  Button -> $onSelect($value) class("cn-button cn-button-variant-ghost cn-button-size-sm cx-tab") aria(role: "tab", selected: $value == $current) {
+    Span "{$label}"
+    when $count != "" { Span "{$count}" class("cx-count") }
+  }
 }
+part TabsContent(value: text, current: text) { Stack class("cx-tab-panel", "hidden" when $value != $current) aria(role: "tabpanel") { slot } }

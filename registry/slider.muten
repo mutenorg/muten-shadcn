@@ -1,7 +1,7 @@
-# Slider - a draggable range control. The PAGE owns the value (number) + the action that sets it:
-#   state { vol = 50 : number }   action setVol(v: number) mutates vol { vol.set(v) }
-#   Slider(value: vol, min: 0, max: 100, onInput: setVol)
-# shadcn-for-muten · Custom · the host JS is src/components/Slider.js (copied by `muten add slider`).
-part Slider(value: number, min: number, max: number, onInput: action) {
-  Custom Slider inputs(value: $value, min: $min, max: $max) on(input: $onInput) class("slider")
+# Slider - Storio's slider: a range with the value in a bubble that follows the thumb and a filled track.
+#   Slider(value: deposit, min: 10, max: 100, step: 10, suffix: " %", onInput: setDeposit)
+# bubble: always | drag (only while moving or focused) | off.
+# shadcn-for-muten · Custom · host JS slider.js (Storio's Slider, unchanged).
+part Slider(value: number, min: number = 0, max: number = 100, step: number = 1, suffix: text = "", bubble: text = "always", onInput: action) {
+  Custom Slider inputs(value: $value, min: $min, max: $max, step: $step, suffix: $suffix, bubble: $bubble) on(input: $onInput) class("cx-mslider-host")
 }

@@ -1,14 +1,9 @@
-# Tree View - a file/folder tree (Custom). TWO modes:
-#   nested (default): pass a nested `data` of { name, children }; leaves emit their "/path". Leave the keys "".
-#     TreeView(data: fileTree, labelKey: "", valueKey: "", groupKey: "", selected: "", onSelect: pick)
-#   flat (pass keys): feed a FLAT list (e.g. a `query` of rows) and let the tree group + key it for you -
-#     groupKey buckets rows into folders, labelKey is the text, valueKey is the payload a leaf emits:
-#     state { tiles = query tilesets : list<Tile>  tileUrl = "" : text }
-#     action pick(u: text) mutates tileUrl { tileUrl.set(u) }
-#     TreeView(data: tiles, labelKey: "tname", valueKey: "url", groupKey: "folder", selected: tileUrl, onSelect: pick)
-# `selected` highlights + auto-opens that leaf. Folders only expand; only leaves emit select. (muten parts need
-# every arg, so pass "" for the keys you don't use - an empty key = nested mode.)
-# shadcn-for-muten · Custom · host JS is src/components/TreeView.js (copied by `muten add tree-view`).
-part TreeView(data: list, labelKey: text, valueKey: text, groupKey: text, selected: text, onSelect: action) {
-  Custom TreeView inputs(data: $data, labelKey: $labelKey, valueKey: $valueKey, groupKey: $groupKey, selected: $selected) on(select: $onSelect) class("tree-view")
+# TreeView - folders and files: a folder opens and closes, a file is picked. Keyboard as a real tree: Up/Down move,
+# Right opens (or steps in), Left closes (or goes to the parent), Enter picks. Two ways to feed it:
+#   nested: data [{name, children}] - a file emits its "/path".   TreeView(data: @files, onSelect: open)
+#   flat: a list of rows grouped by a key - groupKey makes the folders, labelKey the text, valueKey what a file emits.
+#     TreeView(data: @tiles, labelKey: "name", valueKey: "url", groupKey: "folder", selected: tileUrl, onSelect: pick)
+# selected highlights that file and opens the folders above it. shadcn-for-muten · Custom · kit.css (.cx-tree) · tree-view.js.
+part TreeView(data: list, labelKey: text = "", valueKey: text = "", groupKey: text = "", selected: text = "", label: text = "Archivos", onSelect: action) {
+  Custom TreeView inputs(data: $data, labelKey: $labelKey, valueKey: $valueKey, groupKey: $groupKey, selected: $selected, label: $label) on(select: $onSelect) class("cx-tree-host")
 }

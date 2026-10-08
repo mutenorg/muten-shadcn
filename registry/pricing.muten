@@ -1,25 +1,17 @@
-# Pricing - a row of tiers. PricingTier / PricingTierFeatured take name/price/period/description; the slot holds
-# the feature list (PricingFeature items) + the CTA. Use PricingTierFeatured to highlight the recommended plan.
+# Pricing - the plans of a landing page side by side: name, the line under it, the price and its period, what it
+# includes (PricingFeature) and its button. featured "on" raises the recommended one, with its badge.
 #   Pricing {
-#     PricingTierFeatured(name: "Pro", price: "$20", period: "/mo", description: "for pro sites") {
-#       Stack class("pricing-features") { PricingFeature { Span "Image optimization" }  PricingFeature { Span "Bot protection" } }
-#       Button "See Pro plan" -> choose class("btn btn-default w-full mt-auto")
-#     }
+#     PricingTier(name: "Gratis", price: "$0", period: "/mes", description: "Para empezar") { PricingFeature(label: "Tu tienda")  LinkBtn(to: "/signup", variant: "outline") { Span "Empezar" } }
+#     PricingTier(name: "Pro", price: "$12", period: "/mes", description: "Para crecer", featured: "on") { … }
 #   }
-# shadcn-for-muten · block · no deps · styles via the semantic .pricing-* classes in globals.css.
-part Pricing() { Stack class("pricing-grid") { slot } }
-part PricingTier(name: text, price: text, period: text, description: text) {
-  Stack class("pricing-tier") {
-    Stack class("gap-1") { Span "{$name}" class("pricing-name")  Span "{$description}" class("pricing-desc") }
-    Stack class("flex flex-row items-baseline gap-1.5") { Span "{$price}" class("pricing-price")  Span "{$period}" class("pricing-period") }
-    slot
+# For the plans inside the app (monthly/yearly, current plan) use Plans. shadcn-for-muten · parts · no deps · kit.css (.cx-pricing).
+part Pricing() { Stack class("cx-pricing") { slot } }
+part PricingTier(name: text, price: text, period: text = "", description: text = "", featured: text = "", badge: text = "Recomendado") {
+  Stack class("cx-tier") data(featured: $featured) {
+    when $featured != "" { Span "{$badge}" class("cx-tier-badge") }
+    Stack class("cx-tier-head") { Span "{$name}" class("cx-tier-name")  Text "{$description}" class("cx-tier-desc") }
+    Stack class("cx-tier-price") { Span "{$price}" class("cx-tier-amount")  Span "{$period}" class("cx-tier-period") }
+    Stack class("cx-tier-body") { slot }
   }
 }
-part PricingTierFeatured(name: text, price: text, period: text, description: text) {
-  Stack class("pricing-tier pricing-tier-featured") {
-    Stack class("gap-1") { Span "{$name}" class("pricing-name")  Span "{$description}" class("pricing-desc") }
-    Stack class("flex flex-row items-baseline gap-1.5") { Span "{$price}" class("pricing-price")  Span "{$period}" class("pricing-period") }
-    slot
-  }
-}
-part PricingFeature() { Stack class("pricing-feature") { Icon "lucide:check" class("size-4 text-primary shrink-0")  slot } }
+part PricingFeature(label: text) { Stack class("cx-tier-feature") { Icon "lucide:check"  Span "{$label}" } }

@@ -1,16 +1,16 @@
-# Timeline - a vertical list of events, each a dot on a connector line + content (title, time, description).
-#   state { events = query events : list<Event> }
-#   Timeline { each events as e { TimelineItem(title: e.title, time: e.time, desc: e.desc) } }
-# Own it with `muten add timeline`.
-# shadcn-for-muten · part · no deps · styles via .timeline / .timeline-* in globals.css.
-part Timeline() { Stack class("timeline") { slot } }
-part TimelineItem(title: text, time: text, desc: text) {
-  Stack class("timeline-item") {
-    Stack class("timeline-dot")
-    Stack class("timeline-content") {
-      Span "{$time}" class("timeline-time")
-      Span "{$title}" class("timeline-title")
-      Span "{$desc}" class("timeline-desc")
-    }
+# Timeline - what happened, in order: a dot and a line join the events; the last one (where things stand now) is
+# marked. Each event has what happened, when, and an optional detail.
+#   Timeline(label: "Historial del pedido") {
+#     TimelineItem(title: "Pedido recibido", time: "hoy · 10:38")
+#     TimelineItem(title: "Esperando tu revisión", time: "ahora", state: "now")
+#   }
+# state: "" (past) | now (where it stands) | next (still to come, faded).
+# shadcn-for-muten · part · no deps · kit.css (.cx-timeline).
+part Timeline(label: text = "") { Stack class("cx-timeline cx-tl") aria(role: "list", label: $label) { slot } }
+part TimelineItem(title: text, time: text = "", description: text = "", state: text = "") {
+  Stack class("cx-tl-item") data(state: $state) aria(role: "listitem") {
+    Span "{$title}" class("cx-text cx-tl-title") data(slot: "text", variant: "body")
+    Text "{$description}" class("cx-tl-desc")
+    Span "{$time}" class("cx-text") data(slot: "text", variant: "caption")
   }
 }

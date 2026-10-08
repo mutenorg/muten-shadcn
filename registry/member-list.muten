@@ -1,0 +1,6 @@
+# MemberList - any group (team, workspace, family plan): who is in, their role in the library's menu, invite.
+#   MemberList(members: @members, roles: @roles, owner: "Propietario", one: "miembro", many: "miembros", cta: "Invitar", note: "Le llega un correo para unirse.")
+# shadcn-for-muten · part over KitWidget (kit core).
+part MemberList(members: list, roles: list, owner: text = "", one: text = "persona", many: text = "personas", cta: text = "Invitar", note: text = "") {
+  Custom KitWidget inputs(name: "memberList", members: $members, roles: $roles, owner: $owner, one: $one, many: $many, cta: $cta, note: $note) class("cx-team")
+}

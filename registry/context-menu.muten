@@ -1,8 +1,9 @@
-# Context Menu - right-click an area to open a menu of items. The PAGE owns the items + the action:
-#   state { items = ["Back", "Forward", "Reload"] : list<text>  picked = "" : text }
-#   action onPick(v: text) mutates picked { picked.set(v) }
-#   ContextMenu(label: "Right-click here", items: items, onSelect: onPick)
-# shadcn-for-muten · Custom · host JS is src/components/ContextMenu.js (copied by `muten add context-menu`).
-part ContextMenu(label: text, items: list, onSelect: action) {
-  Custom ContextMenu inputs(label: $label, items: $items) on(select: $onSelect) class("context-menu-wrap")
-}
+# ContextMenu - the menu of a zone, opened with a right click (or a long press on a phone, or the keyboard's menu key)
+# right where the pointer is. The zone and the menu go inside; the menu uses DropdownContent and its items.
+#   ContextMenu {
+#     ContextTrigger { Stack class("…") { Span "Clic derecho aquí" } }
+#     DropdownContent { DropdownItem(label: "Duplicar", onSelect: dup) { Icon "lucide:copy" } … }
+#   }
+# shadcn-for-muten · parts + Custom (OverlayBehavior) · Nova (dropdown classes) + kit.css.
+part ContextMenu() { Stack class("cx-ov cx-ov-zone") data(slot: "context-menu") { slot  OverlayBehavior(kind: "context") } }
+part ContextTrigger(label: text = "Menú de esta zona") { Stack class("cx-ov-trigger cx-ctx-zone") data(slot: "context-menu-trigger") aria(label: $label) { slot } }

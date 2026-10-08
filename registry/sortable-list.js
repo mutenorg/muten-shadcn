@@ -1,27 +1,11 @@
-// SortableList host (muten Custom). inputs: { items (comma-joined) }. handlers: { reorder(commaJoined) }.
-// Drag a row by its grip to reorder; emits the new order. The page owns a comma-joined text (e.g. layer order).
-export function mount(el, inputs, handlers) {
-  const GRIP = '<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.4"/><circle cx="9" cy="12" r="1.4"/><circle cx="9" cy="18" r="1.4"/><circle cx="15" cy="6" r="1.4"/><circle cx="15" cy="12" r="1.4"/><circle cx="15" cy="18" r="1.4"/></svg>';
-  const parse = (v) => String(v == null ? '' : v).split(',').map((s) => s.trim()).filter(Boolean);
-  let items = parse(inputs.items);
-  let dragIdx = -1;
-
-  const emit = () => { if (handlers.reorder) handlers.reorder(items.join(',')); };
-  const render = () => {
-    el.innerHTML = '';
-    items.forEach((it, i) => {
-      const row = document.createElement('div'); row.className = 'sortable-row'; row.draggable = true;
-      const handle = document.createElement('span'); handle.className = 'sortable-handle'; handle.innerHTML = GRIP;
-      const label = document.createElement('span'); label.className = 'sortable-label'; label.textContent = it;
-      row.appendChild(handle); row.appendChild(label);
-      row.addEventListener('dragstart', () => { dragIdx = i; row.classList.add('sortable-dragging'); });
-      row.addEventListener('dragend', () => row.classList.remove('sortable-dragging'));
-      row.addEventListener('dragover', (e) => e.preventDefault());
-      row.addEventListener('drop', (e) => { e.preventDefault(); if (dragIdx >= 0 && dragIdx !== i) { const [m] = items.splice(dragIdx, 1); items.splice(i, 0, m); dragIdx = -1; render(); emit(); } });
-      el.appendChild(row);
-    });
-  };
-
-  render();
-  return (n) => { items = parse(n.items); render(); };
+// SortableList (muten Custom) - a list of plain names you reorder (layers, steps), from comma-joined text. It draws
+// the same rows as Sortable and lends them Sortable's behaviour (grip, pointer, Up/Down, the announcement).
+// inputs: items ("Fondo,Jugador,Interfaz"), label. handlers: reorder(the names in their new order, comma-joined).
+export function mount(el, inputs, on) {
+  const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+  const GRIP = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="9" cy="6" r="1.5"/><circle cx="9" cy="12" r="1.5"/><circle cx="9" cy="18" r="1.5"/><circle cx="15" cy="6" r="1.5"/><circle cx="15" cy="12" r="1.5"/><circle cx="15" cy="18" r="1.5"/></svg>';
+  const names = String(inputs.items || '').split(',').map((s) => s.trim()).filter(Boolean);
+  el.innerHTML = `<div class="cx-sortable" aria-label="${esc(inputs.label || 'Orden')}">${names.map((n) => `<div class="cn-item cn-item-variant-outline cn-item-size-sm group/item cx-item" data-slot="item" data-key="${esc(n)}"><span class="cn-button cn-button-variant-ghost cn-button-size-icon-xs cx-grip" role="button" aria-label="Mover ${esc(n)}" data-grip="true">${GRIP}</span><div class="cn-item-content"><span class="cn-item-title">${esc(n)}</span></div></div>`).join('')}<span class="cx-sl-anchor"></span></div>`;
+  import('@muten/shadcn/registry/sortable-behavior.js').then((b) => b.mount(el.querySelector('.cx-sl-anchor'), {}, { reorder: (v) => on.reorder?.(v) }));
+  return () => {};
 }

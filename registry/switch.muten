@@ -1,8 +1,16 @@
-# Switch - a toggle. The PAGE owns the bool + the action that flips it (container/presentational):
-#   state { on = false : bool }   action toggle mutates on { on.toggle() }   Switch(on: on, onToggle: toggle)
-# shadcn-for-muten · part · no deps · styles via the semantic .switch* classes in globals.css.
-part Switch(on: bool, onToggle: action) {
-  Button -> $onToggle aria(pressed: $on) class("switch", "switch-on" when $on, "switch-off" when not $on) {
-    Stack class("switch-thumb", "switch-thumb-on" when $on, "switch-thumb-off" when not $on)
+# Switch - on/off; the page owns the bool and the action. SwitchRow is the settings line: label, switch, the why.
+#   Switch(on: dark, onToggle: toggleDark, label: "Modo oscuro")
+#   SwitchRow(on: home, onToggle: toggleHome, label: "También a domicilio", description: "Pide la verificación de identidad…")
+# size: default | sm. shadcn-for-muten · part · no deps · Nova (.cn-switch reads data-checked / data-unchecked).
+part Switch(on: bool, onToggle: action, label: text = "", size: text = "default") {
+  Button -> $onToggle class("cn-switch group/switch") data(slot: "switch", size: $size, checked: $on, unchecked: not $on) aria(role: "switch", checked: $on, label: $label) {
+    Span "" class("cn-switch-thumb") data(slot: "switch-thumb", checked: $on, unchecked: not $on)
+  }
+}
+part SwitchRow(on: bool, onToggle: action, label: text, description: text = "") {
+  Stack class("cx-switch-row") {
+    Span "{$label}" class("cn-label") data(slot: "label")
+    Switch(on: $on, onToggle: $onToggle, label: $label)
+    Text "{$description}" class("cx-switch-why")
   }
 }

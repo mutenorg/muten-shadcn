@@ -4,5 +4,13 @@
 #     Stack class("cx-hstack") { Icon "lucide:store"  Span "Storio" class("font-semibold") }
 #     Stack class("cx-hstack") { Link "Precios" -> "/precios"  LinkBtn(to: "/signup", size: "sm") { Span "Crear mi tienda" } }
 #   }
+# look "tray": a tray in the muted fill at rest that turns to glass once the page moves; the logo and NavLinks sit
+# together on the left, a Span class("cx-grow") pushes the rest right, and the call to action (class "cx-nav-cta")
+# turns primary as you scroll. On a phone NavLinks and anything with class "cx-nav-hide-sm" fold away and a Btn with
+# class "cx-nav-menu" shows instead.
+#   NavPill(look: "tray") { Image "~/logo.svg"  NavLinks { Link "Precios" -> "/pricing" }  Span class("cx-grow")
+#     Link "Entrar" -> "/login" class("cx-nav-hide-sm")  LinkBtn(to: "/signup") class("cx-nav-cta") { Span "Crear mi tienda" }
+#     Btn(variant: "ghost", size: "icon", label: "Menú", onClick: openMenu) class("cx-nav-menu") { Icon "lucide:menu" } }
 # shadcn-for-muten · part · no deps · kit.css (.cx-navpill, scroll-driven where the browser supports it).
-part NavPill(label: text = "Principal") { Stack class("cx-navpill-wrap") { Nav class("cx-navpill") aria(label: $label) { slot } } }
+part NavPill(label: text = "Principal", look: text = "") { Stack class("cx-navpill-wrap") data(look: $look) { Nav class("cx-navpill") data(look: $look) aria(label: $label) { slot } } }
+part NavLinks() { Stack class("cx-nav-links") { slot } }

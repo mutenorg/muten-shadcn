@@ -24,7 +24,7 @@ export function mount(el, inputs, on) {
       const answers = list(i.answers);
       kit.chatbot(el, { name: i.title || 'Asistente', greeting: i.greeting || '', suggestions: list(i.suggestions).map((s) => s.text ?? s),
         respond: (t) => { const a = answers.find((x) => x.match && rx(x.match).test(t)) || answers.find((x) => !x.match) || { text: '' }; return { text: a.text, actions: a.action ? ui.button({ label: a.action, variant: a.primary ? 'default' : 'outline', size: 'xs', attrs: `data-kw-act="${a.action}"` }) : '' }; } });
-      el.addEventListener('click', (e) => { const b = e.target.closest('[data-kw-act]'); if (b) on.action?.(b.dataset.kwAct); });
+      if (!el.__kwBound) { el.__kwBound = true; el.addEventListener('click', (e) => { const b = e.target.closest('[data-kw-act]'); if (b) on.action?.(b.dataset.kwAct); }); }
     },
     barChart: ({ kit, money0, today, addDays, DAY, MON }, i) => {
       // a period is {label, days, values}: the labels are the last `days` days up to today
@@ -55,6 +55,25 @@ export function mount(el, inputs, on) {
     const render = RENDER[inputs.name]; if (!render) return;
     render(core, inputs); el.classList.remove('cx-kw-wait');
     el.animate([{ opacity: 0.001 }, { opacity: 1 }], { duration: 180, easing: 'ease-out' });
+    play(core, render);
   });
+  // demo "on": the widget plays itself for a landing page - it presses its own control in turn (a stamp, a suggestion)
+  // and starts over when it runs out; the first touch hands it to the person. Still under reduced motion.
+  const DEMO = { stampCard: { target: '[data-stamp]', every: 1100, steps: () => (Number(inputs.total) || 10) - (Number(inputs.stamps) || 0) + 1 },
+                 chatbot: { target: '[data-sug]', every: 5200, steps: () => list(inputs.suggestions).length } };
+  function play(core, render) {
+    const d = DEMO[inputs.name];
+    if (!d || inputs.demo !== 'on' || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    let timer = 0, done = 0, stopped = false;
+    const tick = () => {
+      if (stopped) return;
+      const open = [...el.querySelectorAll(d.target)].filter((b) => !b.disabled);
+      if (!open.length || done >= d.steps()) { done = 0; timer = setTimeout(() => { if (stopped) return; el.innerHTML = ''; render(core, inputs); timer = setTimeout(tick, d.every); }, d.every * 1.6); return; }
+      open[0].click(); done++;
+      timer = setTimeout(tick, d.every);
+    };
+    el.addEventListener('pointerdown', () => { stopped = true; clearTimeout(timer); }, { once: true, capture: true });
+    timer = setTimeout(tick, d.every);
+  }
   return () => {};
 }

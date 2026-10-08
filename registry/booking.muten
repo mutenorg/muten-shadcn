@@ -5,7 +5,9 @@
 # week {days [0..6], hours ["09:00", …]} = what the shop offers each weekday (a weekday in no row is closed);
 # taken {day (days from today or "yyyy-mm-dd"), hours} = what is booked (no hours = the whole day). onSelect gets
 # "yyyy-mm-dd HH:MM" on «Continuar».
+# demo "on": it plays itself for a landing (a day, then an hour, again and again) until someone touches it; never
+# confirms, and stays still under reduced motion.
 # shadcn-for-muten · Custom (kit/structure.js) · kit.css (.cx-book, .cx-week, .cx-hours).
-part Booking(week: list, taken: list, wait: number = 0, cta: text = "Continuar", onSelect: action) {
-  Custom Booking inputs(week: $week, taken: $taken, wait: $wait, cta: $cta) on(select: $onSelect) class("cx-book-host")
+part Booking(week: list, taken: list, wait: number = 0, cta: text = "Continuar", demo: text = "", onSelect: action) {
+  Custom Booking inputs(week: $week, taken: $taken, wait: $wait, cta: $cta, demo: $demo) on(select: $onSelect) class("cx-book-host")
 }

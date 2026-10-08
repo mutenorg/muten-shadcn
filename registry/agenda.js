@@ -4,7 +4,9 @@
 //   events [{id, resource, day, start "HH:MM", dur, title, subtitle, price, tone, steps, actions, at, payment, contact}]
 //     day = "yyyy-mm-dd", or a number of days from today (it lands on the next day that person works)
 //   blocks [{id, resource | "all", day, start, dur, reason}] · from / to (hours) · slot (minutes)
-// handlers: create(json {resource, day, start}) · change(json [{id, resource, day, start, dur, status}])
+//   actions [{id, label, icon, primary}] - the toolbar's buttons (default: block and new); «block» and «new» keep their
+//   built-in behaviour, any other id fires the action handler with that id
+// handlers: create(json {resource, day, start}) · change(json [{id, resource, day, start, dur, status}]) · action(id)
 export function mount(el, inputs, on) {
   let latest = inputs;
   import('@muten/shadcn/registry/kit/core.js').then(({ kit, today, addDays }) => {
@@ -20,6 +22,8 @@ export function mount(el, inputs, on) {
       el.innerHTML = '';
       kit.agenda(el, {
         resources: list(i.resources), events, blocks, availability: work,
+        actions: list(i.actions).length ? list(i.actions) : null,
+        onAction: (id) => on.action?.(id),
         from: Number(i.from) || 9, to: Number(i.to) || 19, slot: Number(i.slot) || 30,
         onCreate: (x) => on.create?.(JSON.stringify({ resource: x.resource, day: iso(x.day), start: x.start })),
         onChange: (evs) => on.change?.(JSON.stringify(evs.map((e) => ({ id: e.id, resource: e.resource, day: iso(e.day), start: e.start, dur: e.dur, status: e.status || '' })))),

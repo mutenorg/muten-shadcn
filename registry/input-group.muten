@@ -5,12 +5,13 @@
 # Anything goes in an addon: an Icon, InputGroupText («https://», «COP», «@»), an InputGroupButton, a Kbd, a Spinner.
 # align: inline-start | inline-end (beside the text) | block-start | block-end (a row above / below, for a GroupTextArea).
 #   InputGroup { GroupTextArea(value: msg, placeholder: "Escribe…")  InputAddon(align: "block-end") { InputGroupText(label: "0/160")  InputGroupButton(label: "Enviar", onClick: send) { Icon "lucide:send" } } }
+# InputGroup and SearchInput take size (default | xl | 2xl) and variant (default | filled) like Input.
 # shadcn-for-muten · part · no deps · Nova (.cn-input-group).
-part InputGroup() { Stack class("cn-input-group group/input-group") data(slot: "input-group") aria(role: "group") { slot } }
+part InputGroup(size: text = "default", variant: text = "default") { Stack class("cn-input-group group/input-group") data(slot: "input-group", size: $size, variant: $variant) aria(role: "group") { slot } }
 part InputAddon(align: text = "inline-start") { Stack class("cn-input-group-addon cn-input-group-addon-align-{$align}") data(slot: "input-group-addon", align: $align) { slot } }
 part GroupInput(value: text, placeholder: text = "") { SearchField bind($value) "{$placeholder}" class("cn-input cn-input-group-input cx-num") data(slot: "input-group-control") }
-part SearchInput(value: text, placeholder: text = "Buscar", onClear: action) {
-  Stack class("cn-input-group group/input-group") data(slot: "input-group") aria(role: "group") {
+part SearchInput(value: text, placeholder: text = "Buscar", onClear: action, size: text = "default", variant: text = "default") {
+  Stack class("cn-input-group group/input-group") data(slot: "input-group", size: $size, variant: $variant) aria(role: "group") {
     Stack class("cn-input-group-addon cn-input-group-addon-align-inline-start") data(slot: "input-group-addon", align: "inline-start") { Icon "lucide:search" }
     SearchField bind($value) "{$placeholder}" class("cn-input cn-input-group-input") data(slot: "input-group-control")
     Stack class("cn-input-group-addon cn-input-group-addon-align-inline-end") data(slot: "input-group-addon", align: "inline-end") {

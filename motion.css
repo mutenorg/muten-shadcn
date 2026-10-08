@@ -10,6 +10,11 @@
      stagger           — on a CONTAINER: its direct children rise in sequence (feature grids, lists)
      hover-lift        — on a card/link: lifts + deepens shadow on hover
      hover-zoom         — on an image WRAPPER (add `overflow-hidden`): the <img> scales gently on hover
+     words             — on a HEADLINE whose words are each a Span: they rise in one after another, un-blurring
+     reveal            — rises in as it scrolls into view (scroll-driven); where unsupported it is simply there
+     reveal-stagger    — on a CONTAINER: its children reveal in sequence as they scroll in
+     drift             — on a TRACK holding its items twice: it slides by itself forever, paused under the pointer
+     photo-in          — on an image WRAPPER: the picture settles from a soft zoom as it appears
 */
 
 @keyframes mu-fade-in { from { opacity: 0; } to { opacity: 1; } }
@@ -37,6 +42,31 @@
 .stagger > *:nth-child(11) { animation-delay: 0.80s; }
 .stagger > *:nth-child(n+12) { animation-delay: 0.88s; }
 
+/* Words: a headline that writes itself in, one word after another (wrap each word in a Span). */
+@keyframes mu-word { from { opacity: 0; transform: translateY(0.32em); filter: blur(8px); } to { opacity: 1; transform: none; filter: blur(0); } }
+.words > * { display: inline-block; animation: mu-word 0.9s var(--mu-ease, cubic-bezier(0.23,1,0.32,1)) both; }
+.words > *:nth-child(1) { animation-delay: 0.05s; } .words > *:nth-child(2) { animation-delay: 0.13s; }
+.words > *:nth-child(3) { animation-delay: 0.21s; } .words > *:nth-child(4) { animation-delay: 0.29s; }
+.words > *:nth-child(5) { animation-delay: 0.37s; } .words > *:nth-child(6) { animation-delay: 0.45s; }
+.words > *:nth-child(n+7) { animation-delay: 0.53s; }
+
+/* Reveal: things rise in as they scroll into view, tied to the scroll itself (no script). */
+@supports (animation-timeline: view()) {
+  .reveal, .reveal-stagger > * { animation: mu-rise linear both; animation-timeline: view(); animation-range: entry 5% entry 55%; }
+  .reveal-stagger > *:nth-child(2) { animation-range: entry 10% entry 62%; }
+  .reveal-stagger > *:nth-child(3) { animation-range: entry 15% entry 69%; }
+  .reveal-stagger > *:nth-child(n+4) { animation-range: entry 20% entry 76%; }
+}
+
+/* Drift: a strip that slides by itself (put its items twice, so it loops without a seam). */
+@keyframes mu-drift { to { transform: translateX(-50%); } }
+.drift { display: flex; width: max-content; animation: mu-drift var(--drift, 60s) linear infinite; }
+.drift:hover { animation-play-state: paused; }
+
+/* Photo-in: a picture settles from a soft zoom as it appears. */
+@keyframes mu-photo { from { opacity: 0; transform: scale(1.06); filter: blur(6px); } to { opacity: 1; transform: none; filter: blur(0); } }
+.photo-in { overflow: hidden; } .photo-in img { animation: mu-photo 1.2s var(--mu-ease, cubic-bezier(0.23,1,0.32,1)) both; }
+
 /* Hover affordances. */
 .hover-lift { transition: transform var(--mu-motion, 200ms) var(--mu-ease, cubic-bezier(0.16,1,0.3,1)), box-shadow var(--mu-motion, 200ms) ease; }
 .hover-lift:hover { transform: translateY(-4px); box-shadow: var(--shadow-soft, 0 12px 32px -12px rgb(0 0 0 / 0.25)); }
@@ -44,6 +74,6 @@
 .hover-zoom:hover img { transform: scale(1.05); }
 
 @media (prefers-reduced-motion: reduce) {
-  .animate-fade-in, .animate-rise, .animate-scale-in, .animate-blur-in, .stagger > * { animation: none !important; }
+  .animate-fade-in, .animate-rise, .animate-scale-in, .animate-blur-in, .stagger > *, .words > *, .reveal, .reveal-stagger > *, .drift, .photo-in img { animation: none !important; }
   .hover-lift, .hover-zoom img { transition: none !important; }
 }

@@ -259,6 +259,13 @@
       "description": "DateField(label, value, min, years, onChange): the long date; opens the date wheels."
     },
     {
+      "name": "device-frame",
+      "deps": [],
+      "part": "DeviceFrame",
+      "file": "registry/device-frame.muten",
+      "description": "DeviceFrame - a device around a picture of a product: a phone (rounded bezel) or a browser window (a bar with"
+    },
+    {
       "name": "dialog",
       "deps": [],
       "part": "Dialog",
@@ -469,6 +476,14 @@
       "part": "LinkBtn",
       "file": "registry/link-btn.muten",
       "description": "A navigation link styled as a button. `LinkBtn(to: \"/signup\", variant: \"default\") { Span \"Get started\" }`."
+    },
+    {
+      "name": "live-stack",
+      "deps": [],
+      "part": "LiveStack",
+      "file": "registry/live-stack.muten",
+      "component": "LiveStack",
+      "description": "LiveStack - news that keeps arriving, for a landing page: what the product does while nobody watches («Carla agendó"
     },
     {
       "name": "logo-cloud",
@@ -1037,6 +1052,13 @@
       "part": "WeeklyHours",
       "file": "registry/weekly-hours.muten",
       "description": "WeeklyHours(days, onChange): a switch per day, ranges with the wheel time picker (kit core)."
+    },
+    {
+      "name": "wordline",
+      "deps": [],
+      "part": "WordLine",
+      "file": "registry/wordline.muten",
+      "description": "WordLine - a line of words set as big type: who a product is for, what a shop does. The words sit in a soft grey,"
     },
     {
       "name": "zoom-control",

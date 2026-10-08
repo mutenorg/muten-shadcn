@@ -1,0 +1,8 @@
+# DeviceFrame - a device around a picture of a product: a phone (rounded bezel) or a browser window (a bar with
+# three dots). Put an Image, or any content, in the slot; an Image fills the screen from the top. height crops it
+# (the rest fades out at the bottom), so a tall screenshot can sit beside a short text.
+#   DeviceFrame { Image "~/shots/store.png" alt("Tu tienda en un teléfono") }
+#   DeviceFrame(kind: "browser", height: "420px") { Image "~/shots/panel.png" alt("Tu panel") }
+# width: empty (a phone is 280 px, a browser fills its column) or a width like «320px».
+# kind: phone | browser. shadcn-for-muten · part · no deps · kit.css (.cx-device).
+part DeviceFrame(kind: text = "phone", height: text = "", width: text = "") { Stack class("cx-device") data(kind: $kind, crop: $height != "", sized: $width != "") style(h: "{$height}", w: "{$width}") { slot } }

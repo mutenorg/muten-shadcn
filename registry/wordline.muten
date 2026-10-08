@@ -1,0 +1,6 @@
+# WordLine - a line of words set as big type: who a product is for, what a shop does. The words sit in a soft grey,
+# joined by dots in ink; a Word with tone "strong" stands out in ink too. It wraps like text.
+#   WordLine(label: "Para quién es") { Word(label: "Barberías")  Word(label: "Clases", tone: "strong")  Word(label: "Spa") }
+# shadcn-for-muten · parts · no deps · kit.css (.cx-wordline).
+part WordLine(label: text = "") { Stack class("cx-wordline") aria(label: $label) { slot } }
+part Word(label: text, tone: text = "") { Span "{$label}" class("cx-word") data(tone: $tone) }

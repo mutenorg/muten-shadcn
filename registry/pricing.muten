@@ -4,14 +4,22 @@
 #     PricingTier(name: "Gratis", price: "$0", period: "/mes", description: "Para empezar") { PricingFeature(label: "Tu tienda")  LinkBtn(to: "/signup", variant: "outline") { Span "Empezar" } }
 #     PricingTier(name: "Pro", price: "$12", period: "/mes", description: "Para crecer", featured: "on") { … }
 #   }
+# was: the old price, struck (a yearly discount) · note: how it is billed · lead: the line over the features.
 # For the plans inside the app (monthly/yearly, current plan) use Plans. shadcn-for-muten · parts · no deps · kit.css (.cx-pricing).
 part Pricing() { Stack class("cx-pricing") { slot } }
-part PricingTier(name: text, price: text, period: text = "", description: text = "", featured: text = "", badge: text = "Recomendado") {
+part PricingTier(name: text, price: text, period: text = "", description: text = "", featured: text = "", badge: text = "Recomendado", was: text = "", note: text = "", lead: text = "") {
   Stack class("cx-tier") data(featured: $featured) {
     when $featured != "" { Span "{$badge}" class("cx-tier-badge") }
     Stack class("cx-tier-head") { Span "{$name}" class("cx-tier-name")  Text "{$description}" class("cx-tier-desc") }
-    Stack class("cx-tier-price") { Span "{$price}" class("cx-tier-amount")  Span "{$period}" class("cx-tier-period") }
-    Stack class("cx-tier-body") { slot }
+    Stack class("cx-tier-price") {
+      Span "{$price}" class("cx-tier-amount")  Span "{$period}" class("cx-tier-period")
+      when $was != "" { Span "{$was}" class("cx-tier-was") }
+    }
+    when $note != "" { Text "{$note}" class("cx-tier-note") }
+    Stack class("cx-tier-body") {
+      when $lead != "" { Span "{$lead}" class("cx-tier-lead") }
+      slot
+    }
   }
 }
 part PricingFeature(label: text) { Stack class("cx-tier-feature") { Icon "lucide:check"  Span "{$label}" } }

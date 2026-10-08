@@ -3,7 +3,12 @@
 #   Field(label: "Descripción", description: "Se ve en tu tienda.") { TextArea(value: desc) }
 # Two short fields side by side: FieldRow { Field(…) { … }  Field(…) { … } } (one column on a phone).
 # error: a message that replaces the description in the same place (nothing jumps) and marks the field invalid.
-# orientation: vertical | horizontal. shadcn-for-muten · part · no deps · Nova (.cn-field).
+# orientation: vertical | horizontal.
+# FieldSet - sets the size and the look of every field inside it, the kit's own too (PasswordField, PhoneField…):
+#   FieldSet(size: "2xl", variant: "filled") { Field(label: "Correo") { … }  PasswordField(label: "Contraseña") }
+# FieldSeparator - a line with a word in the middle, between two ways in:   FieldSeparator(label: "o con tu correo")
+# FieldHead - a label with an action beside it:   FieldHead(label: "Contraseña") { LinkBtn(to: "/recover", variant: "link", size: "sm") { Span "¿La olvidaste?" } }
+# shadcn-for-muten · part · no deps · Nova (.cn-field) + kit.css.
 part Field(label: text = "", description: text = "", error: text = "", orientation: text = "vertical") {
   Stack class("cn-field cn-field-orientation-{$orientation} group/field") data(slot: "field", orientation: $orientation, invalid: $error != "") {
     Span "{$label}" class("cn-label") data(slot: "label")
@@ -16,3 +21,6 @@ part FieldRow() { Stack class("cx-2col") { slot } }
 part FieldLabel(label: text) { Span "{$label}" class("cn-label") data(slot: "label") }
 part FieldDescription(label: text) { Text "{$label}" class("cn-field-description") data(slot: "field-description") }
 part FieldError(label: text) { Text "{$label}" class("cn-field-error") data(slot: "field-error") aria(role: "alert") }
+part FieldSet(size: text = "xl", variant: text = "filled") { Stack class("cx-fieldset") data(fields: $size, look: $variant) { slot } }
+part FieldSeparator(label: text) { Stack class("cn-field-separator") data(slot: "field-separator") { Stack class("cn-separator cn-separator-horizontal") data(slot: "separator", orientation: "horizontal") aria(role: "separator")  Span "{$label}" class("cn-field-separator-content") data(slot: "field-separator-content") } }
+part FieldHead(label: text) { Stack class("cx-field-head") { Span "{$label}" class("cn-label") data(slot: "label")  slot } }

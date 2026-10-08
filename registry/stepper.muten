@@ -3,9 +3,10 @@
 # bar (or shows a check); the current one is marked and read out as the current step.
 #   Stepper(count: 4, label: "Paso 2 de 4: Servicio") { Step(num: "1", label: "Cliente", state: "done")  Step(num: "2", label: "Servicio", state: "now") … }
 #   Stepper(count: 3, orientation: "vertical") { Step(num: "1", label: "Tu negocio", description: "Nombre y rubro", state: "done") … }
+# look "list" (vertical): a numbered list for «how it works», ruled rows and a round number, the current one filled.
 # state: done | now | "" (to come). shadcn-for-muten · part · no deps · kit.css (.cx-stepper).
-part Stepper(count: number, orientation: text = "horizontal", label: text = "") {
-  Stack class("cx-stepper cx-stp") data(slot: "stepper", orientation: $orientation) style(n: "{$count}") aria(role: "list", label: $label) { slot }
+part Stepper(count: number, orientation: text = "horizontal", label: text = "", look: text = "") {
+  Stack class("cx-stepper cx-stp") data(slot: "stepper", orientation: $orientation, look: $look) style(n: "{$count}") aria(role: "list", label: $label) { slot }
 }
 part Step(num: text, label: text, state: text = "", description: text = "") {
   Stack class("cx-step cx-stp-step") data(state: $state) aria(role: "listitem", current: $state == "now") {

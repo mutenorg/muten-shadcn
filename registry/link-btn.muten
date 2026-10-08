@@ -2,7 +2,7 @@
 # <a>, so it opens in a new tab with a middle click and reads as a link). Label and icon go in the slot.
 #   LinkBtn(to: "/signup") { Span "Crear cuenta" }
 #   LinkBtn(to: "/docs", variant: "outline", size: "sm") { Span "Ver la guía"  Icon "lucide:arrow-right" }
-# variant: default | outline | secondary | ghost | destructive | link · size: xs | sm | default | lg
+# variant: default | outline | secondary | ghost | destructive | link · size: xs | sm | default | lg | xl (44) | 2xl (52)
 # shadcn-for-muten · part · no deps · Nova classes (nova.css).
 part LinkBtn(to: text, variant: text = "default", size: text = "default") {
   Link -> "{$to}" class("cn-button cn-button-variant-{$variant} cn-button-size-{$size} group/button") data(slot: "button") { slot }

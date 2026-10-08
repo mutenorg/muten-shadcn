@@ -1,0 +1,7 @@
+# LiveStack - news that keeps arriving, for a landing page: what the product does while nobody watches («Carla agendó
+# un corte», «Pedido nuevo», «Tu asistente contestó»). One at a time a card drops in at the front and the older ones
+# step back behind it, smaller, and leave after three. Pointer over it pauses; reduced motion shows the first three still.
+#   LiveStack(items: @news, every: 2800)
+# items {icon (a kit sprite id), title, text, time, tone: "" | ok | wait | info}
+# shadcn-for-muten · Custom · kit.css (.cx-live) · host JS live-stack.js.
+part LiveStack(items: list, every: number = 2800, label: text = "") { Custom LiveStack inputs(items: $items, every: $every, label: $label) class("cx-live") }

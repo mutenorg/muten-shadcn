@@ -2,7 +2,8 @@
 # action button inside the answer (onAction gets its label), rated with 👍 / 👎. answers: {match (regex), text, action,
 # primary}; the one without match is the fallback.
 #   Chatbot(title: "Rober", greeting: "Hola, soy Rober…", suggestions: @ideas, answers: @answers, onAction: act)
+# demo "on": it taps its own suggestions in turn and answers them live, for a landing; the first touch stops it.
 # shadcn-for-muten · part over KitWidget (kit core).
-part Chatbot(title: text, greeting: text, suggestions: list, answers: list, onAction: action) {
-  Custom KitWidget inputs(name: "chatbot", title: $title, greeting: $greeting, suggestions: $suggestions, answers: $answers) on(action: $onAction) class("cx-bot")
+part Chatbot(title: text, greeting: text, suggestions: list, answers: list, demo: text = "", onAction: action) {
+  Custom KitWidget inputs(name: "chatbot", title: $title, greeting: $greeting, suggestions: $suggestions, answers: $answers, demo: $demo) on(action: $onAction) class("cx-bot")
 }

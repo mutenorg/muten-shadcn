@@ -5,7 +5,8 @@
 #   Btn(size: "icon-sm", variant: "ghost", tone: "wait", onClick: due) { Icon "lucide:clock"  Indicator(tone: "wait") }
 #   Btn(onClick: go) class("cx-fill") { Span "Marcar llegada"  Icon "lucide:chevron-right" }   - full width (a card's primary)
 # variant: default | outline | secondary | ghost | destructive | link   (default: default)
-# size: xs (24) | sm (28) | default (32) | lg (36) | icon | icon-xs | icon-sm | icon-lg   (default: default)
+# size: xs (24) | sm (28) | default (32) | lg (36) | xl (44) | 2xl (52) | icon | icon-xs | icon-sm | icon-lg | icon-xl | icon-2xl
+#   xl and 2xl are for big surfaces (a landing, a sign-in) and match the fields' xl / 2xl.
 # tone: "" | info | ok | wait | bad | note - a tinted icon button (a pending thing on a card)
 # label: the name of an icon-only button (aria-label, and the kit's tooltip on hover). Leave it empty when there is text.
 # shadcn-for-muten · part · no deps · Nova classes (nova.css) + kit.css.

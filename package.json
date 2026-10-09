@@ -1,6 +1,6 @@
 {
   "name": "@muten/shadcn",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "shadcn-style component registry for muten - own-the-source parts you add with `muten add`.",
   "repository": {
     "type": "git",

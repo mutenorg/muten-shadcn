@@ -10,7 +10,7 @@
 # mode: auto | dialog | drawer | sheet (a panel from a side) · side: right | left | top | bottom (for sheet)
 # role: dialog | alertdialog · dismiss: on | off (off: no ✕ and the backdrop does not close it; only its buttons do)
 # size: "" | tall (a list that pages)   ·   shadcn-for-muten · part + Custom (ModalBehavior) · kit.css (.cx-modal).
-part Modal(open: bool, onClose: action, title: text, description: text = "", mode: text = "auto", size: text = "", side: text = "right", role: text = "dialog", dismiss: text = "on") {
+part Modal(open: bool, onClose: action, title: text = "", description: text = "", mode: text = "auto", size: text = "", side: text = "right", role: text = "dialog", dismiss: text = "on") {
   Stack class("cx-modal-root") data(open: $open) {
     when $dismiss != "off" { Button "" -> $onClose class("cx-overlay") aria(label: "Cerrar", hidden: "true") data(closes: "true") }
     when $dismiss == "off" { Stack class("cx-overlay") aria(hidden: "true") }

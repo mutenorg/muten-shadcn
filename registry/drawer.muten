@@ -2,6 +2,6 @@
 # It is the adaptive Modal forced to drawer. The page owns open.
 #   Drawer(open: picking, onClose: done, title: "Elige la hora") { … ModalFooter { … } }
 # shadcn-for-muten · part over Modal.
-part Drawer(open: bool, onClose: action, title: text, description: text = "", size: text = "") {
+part Drawer(open: bool, onClose: action, title: text = "", description: text = "", size: text = "") {
   Modal(open: $open, onClose: $onClose, title: $title, description: $description, mode: "drawer", size: $size) { slot }
 }

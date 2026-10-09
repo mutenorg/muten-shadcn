@@ -60,7 +60,7 @@
 
 /* Drift: a strip that slides by itself (put its items twice, so it loops without a seam). */
 @keyframes mu-drift { to { transform: translateX(-50%); } }
-.drift { display: flex; width: max-content; animation: mu-drift var(--drift, 60s) linear infinite; }
+.drift { display: flex; flex-direction: row; width: max-content; animation: mu-drift var(--drift, 60s) linear infinite; }
 .drift:hover { animation-play-state: paused; }
 
 /* Photo-in: a picture settles from a soft zoom as it appears. */

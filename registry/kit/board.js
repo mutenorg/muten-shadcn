@@ -91,7 +91,7 @@ export function orderBoard(root, i, core, on) {
     const groups = GROUP_ORDER.filter((k) => c[k]).map((k) => GROUPS[k](c[k], c));
     const next = c.actions.find(([a]) => a === 'advance');
     return `<div data-slot="card-header" class="cn-card-header">${person}</div>`
-      + (groups.length ? `<div data-slot="card-content" class="cn-card-content"><div data-slot="item-group" class="cn-item-group" role="list">${groups.join(ui.itemSeparator())}</div></div>` : '')
+      + (groups.length ? `<div data-slot="card-content" class="cn-card-content"><div data-slot="item-group" class="cn-item-group">${groups.join(ui.itemSeparator())}</div></div>` : '')
       + (next ? `<div data-slot="card-footer" class="cn-card-footer">${ui.button({ label: `${next[1]}<svg><use href="#right"/></svg>`, variant: 'default', size: 'default', attrs: 'data-bact="advance"', cls: 'cx-fill' })}</div>` : '');
   };
 

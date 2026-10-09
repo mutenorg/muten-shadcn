@@ -1302,7 +1302,7 @@ html.cx-locked { overflow: hidden; }
 .cx-day b { font-size: 16px; font-weight: 600; font-variant-numeric: tabular-nums; }
 .cx-day i { width: 4px; height: 4px; border-radius: 99px; background: var(--success); }
 .cx-day[data-full] i, .cx-day:disabled i { background: transparent; }
-.cx-day[aria-pressed="true"] small { color: inherit; opacity: .8; }
+.cx-day[aria-pressed="true"] small { color: inherit; }
 .cx-day[aria-pressed="true"] i { background: currentColor; }
 .cx-hour-grid .cn-button { width: 100%; font-variant-numeric: tabular-nums; }
 .cx-hour-skel { height: 28px; }
@@ -2761,3 +2761,7 @@ a.cx-bc-item:hover { color: var(--foreground); }
 /* ── Press: anything you press gives way a little (0.97), so the page feels it heard you ── */
 .style-nova .cn-button { transition-property: color, background-color, border-color, box-shadow, transform; transition-duration: 160ms; transition-timing-function: cubic-bezier(.23, 1, .32, 1); }
 .style-nova .cn-button:active:not(:disabled) { transform: scale(0.97); }
+
+/* contrast: the label of the hour groups (Mañana, Tarde) and an appointment's second line read at 4.5:1 */
+.cx-hours-h { margin: 0; font-size: 12px; font-weight: 600; color: var(--muted-foreground); }
+.cx-ag-ev .cx-text[data-variant="caption"], .cx-ag-ev .cx-text[data-variant="muted"] { color: color-mix(in srgb, var(--foreground) 78%, var(--tone)); }

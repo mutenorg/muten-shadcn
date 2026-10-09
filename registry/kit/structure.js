@@ -297,7 +297,8 @@ export function booking(root, i, core, on) {
       b.className = 'cn-button cn-button-variant-outline cx-size-tile cx-day'; b.disabled = s === null;
       if (s && !s.length) b.dataset.full = '';
       b.setAttribute('aria-pressed', !!picked.day && key(d) === key(picked.day));
-      b.setAttribute('aria-label', `${DAYLONG[d.getDay()]} ${d.getDate()}${s === null ? ', cerrado' : s.length ? `, ${s.length} horarios` : ', sin horarios'}`);
+      // the name starts with what the tile shows («vie 9»), so a voice user can say it; the long day and the state follow
+      b.setAttribute('aria-label', `${key(d) === key(today) ? 'hoy' : DAY[d.getDay()]} ${d.getDate()}, ${DAYLONG[d.getDay()]}${s === null ? ', cerrado' : s.length ? `, ${s.length} horarios` : ', sin horarios'}`);
       b.innerHTML = `<small>${key(d) === key(today) ? 'hoy' : DAY[d.getDay()]}</small><b>${d.getDate()}</b><i></i>`;
       b.onclick = () => pickDay(d);
       weekEl.appendChild(b);
@@ -312,7 +313,8 @@ export function booking(root, i, core, on) {
       return;
     }
     const am = s.filter((h) => h < '13:00'), pm = s.filter((h) => h >= '13:00');
-    const grid = (label, hs) => hs.length ? `<h4>${label}</h4><div class="cx-hour-grid">${hs.map((h) => `<button class="cn-button cn-button-variant-outline cn-button-size-sm cx-hour" aria-pressed="${h === picked.hour}">${h}</button>`).join('')}</div>` : '';
+    // the part of the day is a label, not a heading: the picker sits inside pages whose outline it must not break
+    const grid = (label, hs) => hs.length ? `<p class="cx-hours-h">${label}</p><div class="cx-hour-grid">${hs.map((h) => `<button class="cn-button cn-button-variant-outline cn-button-size-sm cx-hour" aria-pressed="${h === picked.hour}">${h}</button>`).join('')}</div>` : '';
     hours.innerHTML = `<div class="cx-panel" style="display:flex;flex-direction:column;gap:10px">${grid('Mañana', am)}${grid('Tarde', pm)}</div>`;
     $$('.cx-hour', hours).forEach((b) => b.onclick = () => { picked.hour = b.textContent; $$('.cx-hour', hours).forEach((x) => x.setAttribute('aria-pressed', x === b)); sum(); });
   };

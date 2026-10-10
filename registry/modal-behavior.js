@@ -33,6 +33,17 @@ export function mount(el, inputs, on) {
     if (pushed) { pushed = false; history.back(); }
   };
   mdl.tabIndex = -1;
+  // A link inside (a menu in a drawer): close first, then go. Closing undoes the history entry the modal pushed, and
+  // doing that after the link's own navigation would take the person straight back to where they were.
+  mdl.addEventListener('click', (e) => {
+    const a = e.target.closest('a[href]');
+    if (!a || !isOpen || !pushed || a.target || e.defaultPrevented || e.button > 0 || e.metaKey || e.ctrlKey || e.shiftKey) return;
+    const url = new URL(a.getAttribute('href'), location.href); if (url.origin !== location.origin) return;
+    e.preventDefault(); e.stopPropagation();
+    const go = () => { removeEventListener('popstate', go); history.pushState({ muDepth: (history.state?.muDepth ?? 0) + 1 }, '', url.pathname + url.search + url.hash); dispatchEvent(new PopStateEvent('popstate')); };
+    pushed = false; addEventListener('popstate', go);
+    close(); history.back();
+  }, true);
   addEventListener('popstate', () => { if (isOpen) { pushed = false; close(); } });
   document.addEventListener('keydown', (e) => {
     if (!isOpen) return;

@@ -4,7 +4,35 @@
 # Everything is data (see agenda.js for the shapes); pass lists with @: Agenda(resources: @team, hours: @hours, events: @appointments, blocks: @blocks, onCreate: newAppointment, onChange: saveAgenda)
 # actions: the toolbar's buttons as data, [{id, label, icon, primary}] (default: Bloquear and Nueva cita); an id other
 # than block or new fires onAction with it:  Agenda(…, actions: @agendaActions, onAction: agendaAction)
+# view: how it opens, day (default) | week | list.
 # shadcn-for-muten · Custom (kit core) · host JS is agenda.js.
-part Agenda(resources: list, hours: list, events: list, blocks: list, actions: list, from: number = 9, to: number = 19, slot: number = 30, onCreate: action, onChange: action, onAction: action) {
-  Custom Agenda inputs(resources: $resources, hours: $hours, events: $events, blocks: $blocks, actions: $actions, from: $from, to: $to, slot: $slot) on(create: $onCreate, change: $onChange, action: $onAction) class("cx-agenda")
+part Agenda(resources: list, hours: list, events: list, blocks: list, actions: list, from: number = 9, to: number = 19, slot: number = 30, view: text = "day", onCreate: action, onChange: action, onAction: action) {
+  Custom Agenda inputs(resources: $resources, hours: $hours, events: $events, blocks: $blocks, actions: $actions, from: $from, to: $to, slot: $slot, view: $view) on(create: $onCreate, change: $onChange, action: $onAction) class("cx-agenda")
+}
+# AgendaDemo - the same agenda for a showcase with no app behind it: «Nueva cita» and a tap on a free hour open a short
+# built-in form (the service from `services` [{name, dur}], the client, the time) and the appointment lands on the
+# agenda at once, with its notice. Block, move and the appointment sheet work as in Agenda. Nothing is saved anywhere.
+part AgendaDemo(resources: list, hours: list, events: list, blocks: list, actions: list, services: list, from: number = 9, to: number = 19, slot: number = 30, view: text = "day", onChange: action, onAction: action) {
+  Custom Agenda inputs(resources: $resources, hours: $hours, events: $events, blocks: $blocks, actions: $actions, from: $from, to: $to, slot: $slot, view: $view, create: "sheet", services: $services) on(change: $onChange, action: $onAction) class("cx-agenda")
+}
+# AgendaLive - the agenda for an APP: it paints what it is given and tells the app what happened; the app keeps the
+# data and its own sheets. Send the lists again and it repaints on the same day, view and person.
+#   free     the server's free hours [{resource, day, start, end}] (the only free hours shown; [] = from `hours`)
+#   queue    who waits for a free hour [{day, name, photo}] · closed  days the shop is shut ["yyyy-mm-dd"]
+#   events   carry status (awaiting_payment | confirmed | started | done | noshow | cancelled) and tint/ink (the service's colours)
+#   lang es | en · currency + locale (prices written with Intl) · cents "yes" · drag "off" · loading "yes" · start "yyyy-mm-dd"
+#   onOpen(json {id, …}) a cita tapped (open your sheet) · onCreate(json {resource, day, start}) a free hour tapped
+#   onBlock(json {resource, day, start, dur, reason}) · onMove(json {id, resource, day, start, dur}) dragged (answer with
+#   the data: it stays where it landed, or goes back if you send it unchanged) · onRange(json {from, to, view}) days shown
+#   phone "nav": on a phone its actions (Bloquear, Nueva cita, yours) and the arrows leave the toolbar for the app's
+#   phone bar (PhoneBar), which sends them back through `command` ("new", "block", "prev", "next", "today", "view:list",
+#   an action id; repeat one with a suffix after #: "new#2"). Nothing runs while loading.
+#   several agendas: resources carry kind (business | person | a room…) and capacity (1 never overlaps, 0 no limit);
+#   a cita takes its resource plus every id in `with`. overlap "never" | "allow" overrides all capacities.
+#   resize "off" · moveAcross "off" (a backend that only moves day and time) · hour12 "yes" (3:00 PM) · timeZone (the shop's today and now) · phoneView "list" · blockScope "all" · placing [{…}]
+#   (the dashed cita while the app's new-cita sheet is open) · events take tags [words] and photo; resources role, hideEmpty
+#   AgendaLive(resources: @team, hours: @hours, events: @citas, blocks: @blocks, free: @free, queue: @queue, closed: @closed,
+#              lang: ui.lang, currency: "USD", onOpen: openCita, onCreate: newCita, onBlock: block, onMove: moveCita, onRange: loadDays)
+part AgendaLive(resources: list, hours: list, events: list, blocks: list, free: list, queue: list, closed: list, lang: text = "es", currency: text = "", locale: text = "", cents: text = "", from: number = 9, to: number = 19, slot: number = 30, view: text = "day", loading: text = "", start: text = "", drag: text = "", phone: text = "", command: text = "", overlap: text = "", hour12: text = "", timeZone: text = "", phoneView: text = "", blockScope: text = "", resize: text = "", moveAcross: text = "", placing: list, onOpen: action, onCreate: action, onBlock: action, onMove: action, onRange: action) {
+  Custom Agenda inputs(resources: $resources, hours: $hours, events: $events, blocks: $blocks, free: $free, queue: $queue, closed: $closed, lang: $lang, currency: $currency, locale: $locale, cents: $cents, from: $from, to: $to, slot: $slot, view: $view, loading: $loading, start: $start, drag: $drag, phone: $phone, command: $command, overlap: $overlap, hour12: $hour12, timeZone: $timeZone, phoneView: $phoneView, blockScope: $blockScope, resize: $resize, moveAcross: $moveAcross, placing: $placing, sheet: "app") on(open: $onOpen, create: $onCreate, block: $onBlock, move: $onMove, range: $onRange) class("cx-agenda")
 }

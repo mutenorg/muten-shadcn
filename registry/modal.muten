@@ -20,7 +20,7 @@ part Modal(open: bool, onClose: action, title: text = "", description: text = ""
         Span "{$title}" class("cx-modal-title")
         Span "{$description}" class("cx-modal-desc")
       }
-      when $dismiss != "off" { Button -> $onClose class("cn-button cn-button-variant-ghost cn-button-size-icon-sm group/button cx-modal-x") aria(label: "Cerrar") { Icon "lucide:x" } }
+      when $dismiss != "off" { Btn(variant: "ghost", size: "icon-sm", label: "Cerrar", onClick: $onClose) class("cx-modal-x") { Icon "lucide:x" } }
       Stack class("cx-modal-body") { slot }
       ModalBehavior(open: $open, onClose: $onClose)
     }

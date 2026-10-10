@@ -1,0 +1,20 @@
+# ProductPlay - a product sheet shown, not used: the photo, the shop, the name with its price, a line about it, its
+# options (one picked) and the quantity beside «Agregar». For a landing; a picture (aria-hidden), `label` says what.
+#   ProductPlay(photo: "/pomade.webp", shop: "Bruma Barbería", name: "Pomada mate", price: "USD 14",
+#               text: "Fijación media.", cta: "Agregar · USD 14", label: "…") {
+#     ProductPlayOption(label: "50 g")  ProductPlayOption(label: "100 g", on: "yes")
+#   }
+# shadcn-for-muten · part · no deps · kit.css (.cx-pdp).
+part ProductPlay(photo: text, shop: text, name: text, price: text, text: text = "", cta: text, label: text = "") {
+  Stack class("cx-pdp cx-play") aria(role: "img", label: $label) {
+    Image "{$photo}" alt("") class("cx-pdp-img")
+    Stack class("cx-pdp-in") aria(hidden: true) {
+      Span "{$shop}" class("cx-pdp-k")
+      Stack class("cx-pdp-t") { Span "{$name}"  Span "{$price}" }
+      Span "{$text}" class("cx-pdp-d")
+      Stack class("cx-pdp-opts") { slot }
+      Stack class("cx-pdp-go") { Stack class("cx-pdp-q") { Icon "lucide:minus"  Span "1"  Icon "lucide:plus" }  Span "{$cta}" class("cx-pdp-add") }
+    }
+  }
+}
+part ProductPlayOption(label: text, on: text = "") { Span "{$label}" class("cx-pdp-opt") data(on: $on) }

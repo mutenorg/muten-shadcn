@@ -6,6 +6,8 @@
 #     SidebarGroup(label: "Principal") { SidebarItem(label: "Agenda", value: "agenda", current: place, count: "14", onSelect: go) { Icon "lucide:calendar" } }
 #     SidebarFooter { … }
 #   }
+# SidebarLink is the same item as a link to a route: the app marks where you are by itself (no `current` to keep).
+#   SidebarLink(label: "Citas", to: "/schedule", count: "6") { Icon "lucide:calendar-days" }
 # The name AppSidebar avoids muten's own Sidebar primitive. shadcn-for-muten · parts · no deps · Nova (.cn-sidebar-*) + kit.css.
 part AppSidebar(collapsed: bool, label: text = "Menú") {
   Nav class("cx-sidebar") data(slot: "sidebar", collapsed: $collapsed) aria(label: $label) { Stack class("cn-sidebar-inner cx-sb-inner") data(slot: "sidebar-inner") { slot } }
@@ -20,6 +22,13 @@ part SidebarGroup(label: text = "") {
 }
 part SidebarItem(label: text, value: text, current: text, onSelect: action, count: text = "") {
   Button -> $onSelect($value) class("cn-sidebar-menu-button cn-sidebar-menu-button-variant-default cn-sidebar-menu-button-size-default cx-sb-item") data(slot: "sidebar-menu-button", active: $value == $current, name: $label) aria(current: $value == $current) {
+    slot
+    Span "{$label}" class("cx-sb-label")
+    Span "{$count}" class("cn-sidebar-menu-badge cx-sb-count") data(slot: "sidebar-menu-badge")
+  }
+}
+part SidebarLink(label: text, to: text, count: text = "") {
+  Link -> "{$to}" class("cn-sidebar-menu-button cn-sidebar-menu-button-variant-default cn-sidebar-menu-button-size-default cx-sb-item") data(slot: "sidebar-menu-button", name: $label) {
     slot
     Span "{$label}" class("cx-sb-label")
     Span "{$count}" class("cn-sidebar-menu-badge cx-sb-count") data(slot: "sidebar-menu-badge")

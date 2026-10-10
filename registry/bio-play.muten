@@ -1,0 +1,16 @@
+# BioPlay - a social profile shown, not used: the photo, the handle, the followers, the bio with the store's link
+# and the two buttons, as Instagram draws a profile. For a landing; a picture (aria-hidden), `label` says what.
+#   BioPlay(photo: "/owner.webp", handle: "brumabarberia", followers: "1.284 seguidores", bio: "Cortes y barba.",
+#           link: "storio.ink/bruma-barberia", follow: "Seguir", message: "Mensaje", label: "…")
+# shadcn-for-muten · part · no deps · kit.css (.cx-bio).
+part BioPlay(photo: text, handle: text, followers: text, bio: text, link: text, follow: text, message: text, label: text = "") {
+  Stack class("cx-bio cx-play") aria(role: "img", label: $label) {
+    Stack class("cx-bio-top") aria(hidden: true) {
+      Image "{$photo}" alt("") class("cx-bio-av")
+      Stack class("cx-bio-n") { Span "{$handle}" class("cx-bio-h")  Span "{$followers}" }
+    }
+    Span "{$bio}" class("cx-bio-text") aria(hidden: true)
+    Stack class("cx-bio-link") aria(hidden: true) { Icon "lucide:link"  Span "{$link}" }
+    Stack class("cx-bio-btns") aria(hidden: true) { Span "{$follow}" data(tone: "primary")  Span "{$message}" }
+  }
+}

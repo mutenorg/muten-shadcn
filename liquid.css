@@ -1,0 +1,29 @@
+/* LIQUID GLASS: clear glass that bends what is behind it, for bars, popovers and tooltips that float over content.
+ *
+ *   .lq                 the glass: blur + saturation, a lit top edge, a soft inner rim, a long shadow, a sheen
+ *   .lq-dark            a denser tint, for panels and tooltips that carry text
+ *   --lq-tint           the colour the glass is tinted with (default: a near-black violet). Take it from the theme
+ *                       or the content's own dark: tinted glass keeps white text legible over light photos.
+ *
+ * The bending is an SVG filter: put this once in the page (Chromium honours it; Safari and Firefox keep the frost):
+ *   <svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="lq-bend" x="0" y="0" width="100%" height="100%">
+ *     <feTurbulence type="fractalNoise" baseFrequency="0.008 0.012" numOctaves="2" seed="7" result="n"/>
+ *     <feGaussianBlur in="n" stdDeviation="2" result="b"/>
+ *     <feDisplacementMap in="SourceGraphic" in2="b" scale="38" xChannelSelector="R" yChannelSelector="G"/></filter></svg>
+ *
+ * The element must be positioned (fixed, absolute or relative) for its sheen. First used by Storio's store bar. */
+.lq { --lq-tint: #1d1830; isolation: isolate; color: #fff; border: 0;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--lq-tint) 34%, rgb(255 255 255 / .14)), color-mix(in srgb, var(--lq-tint) 52%, transparent));
+  -webkit-backdrop-filter: blur(10px) saturate(180%) brightness(1.05); backdrop-filter: blur(10px) saturate(180%) brightness(1.05);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / .65), inset 0 -1px 0 rgb(255 255 255 / .18), inset 0 0 0 1px rgb(255 255 255 / .22), inset 0 0 22px rgb(255 255 255 / .08), 0 14px 34px -12px rgb(0 0 0 / .45);
+  text-shadow: 0 1px 2px rgb(0 0 0 / .25); }
+@supports (backdrop-filter: url(#lq-bend)) { .lq { backdrop-filter: url(#lq-bend) blur(6px) saturate(180%) brightness(1.05); } }
+.lq::after { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; z-index: -1;
+  background: radial-gradient(120% 70% at 18% 0%, rgb(255 255 255 / .35), transparent 55%), radial-gradient(80% 60% at 90% 110%, rgb(255 255 255 / .12), transparent 60%); }
+.lq.lq-dark { background: linear-gradient(180deg, color-mix(in srgb, var(--lq-tint) 58%, rgb(255 255 255 / .08)), color-mix(in srgb, var(--lq-tint) 72%, transparent)); }
+/* a piece inside the glass (an icon button, a field): a lighter pane with its own lit edge */
+.lq-pane { background: rgb(255 255 255 / .16); box-shadow: inset 0 1px 0 rgb(255 255 255 / .45); }
+/* the arrow of a tooltip or popover hanging under its trigger: set --ax to the trigger's centre */
+.lq-arrow::before { content: ""; position: absolute; top: -5px; left: var(--ax, 50%); width: 10px; height: 10px; margin-left: -5px; transform: rotate(45deg); border-radius: 2px 0 0 0;
+  background: color-mix(in srgb, var(--lq-tint) 70%, transparent); box-shadow: inset 1px 1px 0 rgb(255 255 255 / .45); }
+@media (prefers-reduced-transparency: reduce) { .lq, .lq.lq-dark { -webkit-backdrop-filter: none; backdrop-filter: none; background: var(--lq-tint); } }

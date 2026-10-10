@@ -1,0 +1,33 @@
+# OrderPlay - an order shown, not used: who ordered, the products with their photos, how it is paid and delivered,
+# and the one next step. In a loop the step is pressed and the order moves on (its badge and the button change).
+# BookingPlay's twin, for a landing's bento: the same sheet, the same rhythm. The real board is OrderBoard.
+#   OrderPlay(who: "Diego Paredes", sub: "#1046 · hace 2 min", status: "Nuevo", statusNext: "Preparando",
+#             pay: "Efectivo al retirar", total: "USD 32", delivery: "Retira hoy · 6:00 PM", cta: "Preparar",
+#             ctaNext: "Avisar que está listo", label: "Un pedido como te llega") {
+#     OrderPlayItem(name: "Pomada mate", detail: "1 × USD 14", price: "USD 14", photo: "/img/pomada.webp")
+#   }
+# photo: the client's face (empty = their initial).
+# Reduced motion: the order as it arrives. shadcn-for-muten · part · no deps · kit.css (.cx-odp).
+part OrderPlay(who: text, photo: text = "", sub: text = "", status: text = "", statusNext: text = "", pay: text = "", total: text = "", delivery: text = "", cta: text = "", ctaNext: text = "", label: text = "") {
+  Stack class("cx-odp cx-play") aria(role: "img", label: $label) {
+    Stack class("cx-odp-who") aria(hidden: true) {
+      when $photo != "" { Image "{$photo}" alt("") class("cx-odp-av cx-play-face") }
+      when $photo == "" { Span "{initial($who)}" class("cx-odp-av") }
+      Stack class("cx-odp-name") { Span "{$who}" class("cx-odp-t")  Span "{$sub}" class("cx-odp-s") }
+      when $status != "" { Stack class("cx-odp-badge") data(next: $statusNext != "") { Span "{$status}" class("cx-odp-b1")  Span "{$statusNext}" class("cx-odp-b2") } }
+    }
+    Stack class("cx-odp-items") aria(hidden: true) { slot }
+    Stack class("cx-odp-rows") aria(hidden: true) {
+      Stack class("cx-odp-row") { Icon "lucide:wallet"  Span "{$pay}" class("cx-odp-rt")  Span "{$total}" class("cx-odp-total") }
+      Stack class("cx-odp-row") { Icon "lucide:store"  Span "{$delivery}" class("cx-odp-rt") }
+    }
+    Stack class("cx-odp-go") data(next: $ctaNext != "") aria(hidden: true) { Span "{$cta}" class("cx-odp-g1")  Span "{$ctaNext}" class("cx-odp-g2") }
+  }
+}
+part OrderPlayItem(name: text, detail: text = "", price: text = "", photo: text = "") {
+  Stack class("cx-odp-item") {
+    when $photo != "" { Image "{$photo}" alt("") class("cx-odp-ph") }
+    Stack class("cx-odp-name") { Span "{$name}" class("cx-odp-t")  Span "{$detail}" class("cx-odp-s") }
+    Span "{$price}" class("cx-odp-price")
+  }
+}

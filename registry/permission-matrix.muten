@@ -1,6 +1,32 @@
-# PermissionMatrix - any rows × any roles; one role can be locked (always allowed).
-#   PermissionMatrix(roles: @roleNames, rows: @permissions, locked: "Propietario", onChange: savePerms)   rows: {name, description, allow [1,0,…]}
-# shadcn-for-muten · part over KitWidget (kit core).
-part PermissionMatrix(roles: list, rows: list, locked: text = "", onChange: action) {
-  Custom KitWidget inputs(name: "permissionMatrix", roles: $roles, rows: $rows, locked: $locked) on(action: $onChange) class("cx-perms")
+# PermissionMatrix - what each role may do: any permissions (rows) × any roles (columns), a checkbox where they meet, one
+# role locked (always allowed). A real table (muten's Table / Row / Cell): the header names line up over their column and
+# every checkbox sits in the middle of its cell. On a phone the columns narrow; the table scrolls sideways if it must.
+# The grants are a list of "permission:role" keys, so the page flips one with `toggle`:
+#   state  { granted = ["Ver:Editor", "Ver:Lector", "Editar:Editor"] : list<text> }
+#   action flip(key: text) mutates granted { granted.toggle(key) }
+#   PermissionMatrix(roles: @roles, rows: @permissions, granted: granted, locked: "Propietario", onToggle: flip)
+# roles {name} · rows {name, description}. label names the first column.
+# shadcn-for-muten · part · no deps · kit.css (.cx-perm).
+part PermissionMatrix(roles: list, rows: list, granted: list, locked: text = "", label: text = "Permiso", onToggle: action) {
+  Stack class("cx-dt-scroll cx-scroll cx-perms") {
+    Table class("cx-dt cx-perm") {
+      Row head {
+        Cell "{$label}"
+        each $roles as role { Cell "{role.name}" class("cx-perm-c") }
+      }
+      each $rows as perm {
+        Row {
+          Cell {
+            Span "{perm.name}" class("cx-perm-name")
+            Span "{perm.description}" class("cx-perm-desc")
+          }
+          each $roles as role {
+            Cell class("cx-perm-c") {
+              Checkbox checked(role.name == $locked or $granted contains perm.name + ":" + role.name) -> $onToggle(perm.name + ":" + role.name) disabled when role.name == $locked aria(label: role.name + ": " + perm.name)
+            }
+          }
+        }
+      }
+    }
+  }
 }

@@ -1,6 +1,13 @@
-# GradientBlinds - an animated gradient behind a hero: diagonal blinds and a light that follows the pointer, drawn on
-# the GPU (WebGL, through `ogl`: npm i ogl). Make it the first child of the hero and it fills the hero, fading out
-# at the bottom into the page; the content goes on top. colors: hex stops separated by commas.
+# GradientBlinds - an animated gradient behind a hero, drawn on the GPU (WebGL, through `ogl`: npm i ogl): the colour is
+# born on one side (`from`) and melts into the page over a long, eased fall, with soft diagonal blinds, a light that
+# follows the pointer and a fine grain. Make it the first child of the hero (`cx-hero-blinds`) and it fills it; the
+# content goes on top. It melts into any page background, light or dark, and is still under reduced motion.
 #   Stack class("cx-hero-blinds") { GradientBlinds(colors: "#9B80FF,#6B46F2")  Stack class("…") { … } }
+#   GradientBlinds(colors: "#FFB38A,#FF6F91,#9B80FF", from: "left", angle: 30, strength: 0.4, blinds: 8)
+# colors: hex stops separated by commas. from: top | bottom | left | right | center. angle: the blinds' tilt in degrees
+# (-25). strength: how much they shade, 0 (none) to 1 (0.22). blinds: how many at most (12; fewer on a narrow hero).
+# noise: the grain, 0 to 0.2 (0.035).
 # shadcn-for-muten · Custom · needs ogl · host JS gradient-blinds.js.
-part GradientBlinds(colors: text = "#9B80FF,#6B46F2") { Custom GradientBlinds inputs(colors: $colors) class("cx-blinds") }
+part GradientBlinds(colors: text = "#9B80FF,#6B46F2", from: text = "top", angle: number = -25, strength: number = 0.22, blinds: number = 12, noise: number = 0.035) {
+  Custom GradientBlinds inputs(colors: $colors, from: $from, angle: $angle, strength: $strength, blindCount: $blinds, noise: $noise) class("cx-blinds")
+}

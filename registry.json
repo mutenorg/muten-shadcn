@@ -94,6 +94,20 @@
       "description": "BLOCK: fixed-row-height tiling gallery; cells pick their col-span. Parts: BentoGallery, BentoCell."
     },
     {
+      "name": "bio-play",
+      "deps": [],
+      "part": "BioPlay",
+      "file": "registry/bio-play.muten",
+      "description": "BioPlay - a social profile shown, not used: the photo, the handle, the followers, the bio with the store's link"
+    },
+    {
+      "name": "booking-play",
+      "deps": [],
+      "part": "BookingPlay",
+      "file": "registry/booking-play.muten",
+      "description": "BookingPlay - a booking shown, not used: one service, a few days and hours, and a booking that plays itself in a"
+    },
+    {
       "name": "booking",
       "deps": [],
       "part": "Booking",
@@ -161,6 +175,13 @@
       "file": "registry/carousel.muten",
       "component": "Carousel",
       "description": "Carousel(label, perView, center, loop, autoplay, indicator, arrows) { CarouselSlide }: one component, options instead of copies."
+    },
+    {
+      "name": "chat-play",
+      "deps": [],
+      "part": "ChatPlay",
+      "file": "registry/chat-play.muten",
+      "description": "ChatPlay - a conversation shown, not used: the messages come in one by one (in `step` order, 1-6) and the"
     },
     {
       "name": "chatbot",
@@ -257,6 +278,13 @@
       "file": "registry/date-field.muten",
       "component": "DateField",
       "description": "DateField(label, value, min, years, onChange): the long date; opens the date wheels."
+    },
+    {
+      "name": "day-plan",
+      "deps": [],
+      "part": "DayPlan",
+      "file": "registry/day-plan.muten",
+      "description": "DayPlan - the owner's day as a list in order: hour, a dot on a line, who and what, a tag on the right. The hours"
     },
     {
       "name": "device-frame",
@@ -385,6 +413,13 @@
       "file": "registry/image-upload.muten",
       "component": "ImageUpload",
       "description": "ImageUpload(title, hint, maxMb, size, uploadUrl, sample, onReady): validate, decode, crop, shrink, upload with progress."
+    },
+    {
+      "name": "inbox-play",
+      "deps": [],
+      "part": "InboxPlay",
+      "file": "registry/inbox-play.muten",
+      "description": "InboxPlay - a messages list shown, not used: the shop's inbox as the channel's app draws it (skin: instagram |"
     },
     {
       "name": "indicator",
@@ -579,6 +614,20 @@
       "description": "BLOCK: the floating glass navbar (sticky wrapper + glass pill + scroll animation baked in). Drop logo/links/CTA inside."
     },
     {
+      "name": "legal-doc",
+      "deps": [],
+      "part": "DocHead",
+      "file": "registry/legal-doc.muten",
+      "description": "A legal document (terms, privacy): the title and its line, the contents that follow the reading, the sections at reading width."
+    },
+    {
+      "name": "phone-bar",
+      "deps": [],
+      "part": "PhoneBar",
+      "file": "registry/phone-bar.muten",
+      "description": "The app's bar at the bottom of a phone: three fixed cells (menu · the screen's tools · its create). Screens hand it their toolbar buttons on a phone."
+    },
+    {
       "name": "new-appointment",
       "deps": [],
       "part": "NewAppointment",
@@ -601,6 +650,13 @@
       "file": "registry/order-board.muten",
       "component": "OrderBoard",
       "description": "OrderBoard(lanes, cards, onChange, onAction) / OrderCards(cards, sizes): order board and card with its modals."
+    },
+    {
+      "name": "order-play",
+      "deps": [],
+      "part": "OrderPlay",
+      "file": "registry/order-play.muten",
+      "description": "OrderPlay - an order shown, not used: who ordered, the products with their photos, how it is paid and delivered,"
     },
     {
       "name": "overlay-behavior",
@@ -690,6 +746,13 @@
       "description": "BLOCK: a row of pricing tiers (name/price/features/CTA), featured highlight. Parts: Pricing, PricingTier, PricingFeature."
     },
     {
+      "name": "product-play",
+      "deps": [],
+      "part": "ProductPlay",
+      "file": "registry/product-play.muten",
+      "description": "ProductPlay - a product sheet shown, not used: the photo, the shop, the name with its price, a line about it, its"
+    },
+    {
       "name": "progress",
       "deps": [],
       "part": "Progress",
@@ -758,6 +821,14 @@
       "file": "registry/scale-slider.muten",
       "component": "ScaleSlider",
       "description": "ScaleSlider(label, min, max, step, values, gap, format, onChange): value rides on the thumb; two bubbles merge."
+    },
+    {
+      "name": "screen-tour",
+      "deps": [],
+      "part": "ScreenTour",
+      "file": "registry/screen-tour.muten",
+      "component": "ScreenTour",
+      "description": "ScreenTour - how a product is used, played on its real screens: numbered steps on one side, a phone on the other"
     },
     {
       "name": "scroll-area",
@@ -1066,6 +1137,13 @@
       "part": "ZoomControl",
       "file": "registry/zoom-control.muten",
       "description": "A - 100% + zoom widget; page owns the zoom number."
+    },
+    {
+      "name": "site-footer",
+      "deps": [],
+      "part": "SiteFooter",
+      "file": "registry/site-footer.muten",
+      "description": "A site's footer: the brand and its two ways in over a hairline, every group of links on one row, then a bar with the company and contacts (FooterHead, FooterBrand, FooterActions, FooterLinks, FooterCol, FooterBar)."
     }
   ],
   "classComponents": {

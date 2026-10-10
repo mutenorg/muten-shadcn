@@ -8,10 +8,11 @@
 # size: xs (24) | sm (28) | default (32) | lg (36) | xl (44) | 2xl (52) | icon | icon-xs | icon-sm | icon-lg | icon-xl | icon-2xl
 #   xl and 2xl are for big surfaces (a landing, a sign-in) and match the fields' xl / 2xl.
 # tone: "" | info | ok | wait | bad | note - a tinted icon button (a pending thing on a card)
+# disabled: a bool (a state or a getter: a part argument can't be an expression) - the button can't be pressed.
 # label: the name of an icon-only button (aria-label, and the kit's tooltip on hover). Leave it empty when there is text.
 # shadcn-for-muten · part · no deps · Nova classes (nova.css) + kit.css.
-part Btn(variant: text = "default", size: text = "default", tone: text = "", label: text = "", onClick: action) {
-  Button -> $onClick class("cn-button cn-button-variant-{$variant} cn-button-size-{$size} group/button", "cx-tonal cx-has-indicator" when $tone != "") data(slot: "button", tone: $tone, name: $label) aria(label: $label) { slot }
+part Btn(variant: text = "default", size: text = "default", tone: text = "", label: text = "", onClick: action, disabled: bool = false) {
+  Button -> $onClick class("cn-button cn-button-variant-{$variant} cn-button-size-{$size} group/button", "cx-tonal cx-has-indicator" when $tone != "") data(slot: "button", tone: $tone, name: $label) aria(label: $label) disabled when $disabled { slot }
 }
 # TriggerBtn - a Btn that only opens what sits next to it (a Popover, a DropdownMenu, a SplitButton's menu): it has no
 # action of its own, so opening never runs something else. Same variants and sizes as Btn.

@@ -4,8 +4,8 @@
 # shadcn-for-muten · part · no deps · kit.css (.cx-zoom).
 part ZoomControl(value: number, onOut: action, onIn: action, onReset: action) {
   Stack class("cx-zoom") data(slot: "zoom-control") aria(role: "group", label: "Zoom") {
-    Button -> $onOut class("cn-button cn-button-variant-ghost cn-button-size-icon-sm group/button") data(name: "Alejar") aria(label: "Alejar") { Icon "lucide:minus" }
-    Button "{$value} %" -> $onReset class("cn-button cn-button-variant-ghost cn-button-size-sm group/button cx-zoom-value") data(name: "Volver a 100 %") aria(label: "Zoom {$value} %, volver a 100")
-    Button -> $onIn class("cn-button cn-button-variant-ghost cn-button-size-icon-sm group/button") data(name: "Acercar") aria(label: "Acercar") { Icon "lucide:plus" }
+    Btn(variant: "ghost", size: "icon-sm", label: "Alejar", onClick: $onOut) { Icon "lucide:minus" }
+    Button "{$value} %" -> $onReset class("cn-button cn-button-variant-ghost cn-button-size-sm group/button cx-zoom-value") data(name: "Volver a 100 %") aria(label: "Zoom {$value} %, volver a 100")   # its words carry $value: a part arg cannot interpolate an outer param, so it stays a Button
+    Btn(variant: "ghost", size: "icon-sm", label: "Acercar", onClick: $onIn) { Icon "lucide:plus" }
   }
 }

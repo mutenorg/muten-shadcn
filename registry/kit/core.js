@@ -15,8 +15,96 @@ const sprite = document.createElementNS('http://www.w3.org/2000/svg', 'svg'); sp
 sprite.innerHTML = `<defs><symbol id="b-whatsapp" viewBox="0 0 24 24"><path fill="currentColor" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></symbol><symbol id="b-instagram" viewBox="0 0 24 24"><path fill="currentColor" d="M7.0301.084c-1.2768.0602-2.1487.264-2.911.5634-.7888.3075-1.4575.72-2.1228 1.3877-.6652.6677-1.075 1.3368-1.3802 2.127-.2954.7638-.4956 1.6365-.552 2.914-.0564 1.2775-.0689 1.6882-.0626 4.947.0062 3.2586.0206 3.6671.0825 4.9473.061 1.2765.264 2.1482.5635 2.9107.308.7889.72 1.4573 1.388 2.1228.6679.6655 1.3365 1.0743 2.1285 1.38.7632.295 1.6361.4961 2.9134.552 1.2773.056 1.6884.069 4.9462.0627 3.2578-.0062 3.668-.0207 4.9478-.0814 1.28-.0607 2.147-.2652 2.9098-.5633.7889-.3086 1.4578-.72 2.1228-1.3881.665-.6682 1.0745-1.3378 1.3795-2.1284.2957-.7632.4966-1.636.552-2.9124.056-1.2809.0692-1.6898.063-4.948-.0063-3.2583-.021-3.6668-.0817-4.9465-.0607-1.2797-.264-2.1487-.5633-2.9117-.3084-.7889-.72-1.4568-1.3876-2.1228C21.2982 1.33 20.628.9208 19.8378.6165 19.074.321 18.2017.1197 16.9244.0645 15.6471.0093 15.236-.005 11.977.0014 8.718.0076 8.31.0215 7.0301.0839m.1402 21.6932c-1.17-.0509-1.8053-.2453-2.2287-.408-.5606-.216-.96-.4771-1.3819-.895-.422-.4178-.6811-.8186-.9-1.378-.1644-.4234-.3624-1.058-.4171-2.228-.0595-1.2645-.072-1.6442-.079-4.848-.007-3.2037.0053-3.583.0607-4.848.05-1.169.2456-1.805.408-2.2282.216-.5613.4762-.96.895-1.3816.4188-.4217.8184-.6814 1.3783-.9003.423-.1651 1.0575-.3614 2.227-.4171 1.2655-.06 1.6447-.072 4.848-.079 3.2033-.007 3.5835.005 4.8495.0608 1.169.0508 1.8053.2445 2.228.408.5608.216.96.4754 1.3816.895.4217.4194.6816.8176.9005 1.3787.1653.4217.3617 1.056.4169 2.2263.0602 1.2655.0739 1.645.0796 4.848.0058 3.203-.0055 3.5834-.061 4.848-.051 1.17-.245 1.8055-.408 2.2294-.216.5604-.4763.96-.8954 1.3814-.419.4215-.8181.6811-1.3783.9-.4224.1649-1.0577.3617-2.2262.4174-1.2656.0595-1.6448.072-4.8493.079-3.2045.007-3.5825-.006-4.848-.0608M16.953 5.5864A1.44 1.44 0 1 0 18.39 4.144a1.44 1.44 0 0 0-1.437 1.4424M5.8385 12.012c.0067 3.4032 2.7706 6.1557 6.173 6.1493 3.4026-.0065 6.157-2.7701 6.1506-6.1733-.0065-3.4032-2.771-6.1565-6.174-6.1498-3.403.0067-6.156 2.771-6.1496 6.1738M8 12.0077a4 4 0 1 1 4.008 3.9921A3.9996 3.9996 0 0 1 8 12.0077"/></symbol><symbol id="b-facebook" viewBox="0 0 24 24"><path fill="currentColor" d="M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.258.42-.374.995-.374 1.752v1.297h3.919l-.386 2.103-.287 1.564h-3.246v8.245C19.396 23.238 24 18.179 24 12.044c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.628 3.874 10.35 9.101 11.647Z"/></symbol><symbol id="b-x" viewBox="0 0 24 24"><path fill="currentColor" d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/></symbol><symbol id="b-telegram" viewBox="0 0 24 24"><path fill="currentColor" d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></symbol><symbol id="b-gmail" viewBox="0 0 24 24"><path fill="currentColor" d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 9.548l6.545-4.91 1.528-1.145C21.69 2.28 24 3.434 24 5.457z"/></symbol><symbol id="b-tiktok" viewBox="0 0 24 24"><path fill="currentColor" d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></symbol><symbol id="x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></symbol><symbol id="check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></symbol><symbol id="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></symbol><symbol id="chevup" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></symbol><symbol id="updown" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 15 5 5 5-5M7 9l5-5 5 5"/></symbol><symbol id="right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></symbol><symbol id="left" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></symbol><symbol id="arrowup" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 7-7 7 7M12 19V5"/></symbol><symbol id="arrowleft" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7M19 12H5"/></symbol><symbol id="more" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></symbol><symbol id="search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></symbol><symbol id="okc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></symbol><symbol id="info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></symbol><symbol id="folder" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></symbol><symbol id="cal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></symbol><symbol id="smile" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01"/></symbol><symbol id="calc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M8 6h8M16 14v4M8 10h.01M12 10h.01M16 10h.01M8 14h.01M12 14h.01M8 18h.01M12 18h.01"/></symbol><symbol id="user" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></symbol><symbol id="card" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></symbol><symbol id="gear" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></symbol><symbol id="loader" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></symbol><symbol id="bold" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 12h9a4 4 0 0 1 0 8H7a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h7a4 4 0 0 1 0 8"/></symbol><symbol id="italic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 4h-9M14 20H5M15 4 9 20"/></symbol><symbol id="under" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4v6a6 6 0 0 0 12 0V4M4 20h16"/></symbol><symbol id="bookmark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></symbol><symbol id="ext" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10M7 17 17 7"/></symbol><symbol id="badgecheck" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"/><path d="m9 12 2 2 4-4"/></symbol><symbol id="plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></symbol><symbol id="grip" viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.6"/><circle cx="15" cy="6" r="1.6"/><circle cx="9" cy="12" r="1.6"/><circle cx="15" cy="12" r="1.6"/><circle cx="9" cy="18" r="1.6"/><circle cx="15" cy="18" r="1.6"/></symbol><symbol id="scissors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M20 4 8.12 15.88M14.47 14.48 20 20M8.12 8.12 12 12"/></symbol><symbol id="store" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9h18l-1.5-5h-15z"/><path d="M5 9v11h14V9M9 20v-6h6v6"/></symbol><symbol id="clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol><symbol id="pencil" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.85 0 0 1 4 4L7.5 20.5 2 22l1.5-5.5z"/></symbol><symbol id="trash" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></symbol><symbol id="caloff" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M9.5 14.5l5 5M14.5 14.5l-5 5"/></symbol><symbol id="copyi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></symbol><symbol id="mappin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></symbol><symbol id="quote" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></symbol><symbol id="truck" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2M15 18H9M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.62l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/></symbol><symbol id="call" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></symbol><symbol id="pause" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></symbol><symbol id="play" viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15l13-7.5z"/></symbol><symbol id="filter" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5h18M6 12h12M10 19h4"/></symbol><symbol id="upload" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></symbol><symbol id="image" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.1-3.1a2 2 0 0 0-2.8 0L6 21"/></symbol><symbol id="sort" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 15 5 5 5-5M7 9l5-5 5 5"/></symbol><symbol id="arrowdown" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></symbol><symbol id="share" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></symbol><symbol id="home" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></symbol><symbol id="bag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4zM3 6h18M16 10a4 4 0 0 1-8 0"/></symbol><symbol id="menu-lines" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h16"/></symbol><symbol id="mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></symbol><symbol id="link" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></symbol><symbol id="qrc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM20 14v.01M14 20h.01M17 20h4v-3"/></symbol><symbol id="i-bell" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10.3 21a1.94 1.94 0 0 0 3.4 0"/></symbol><symbol id="i-clip" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.4 11.1-9.2 9.2a6 6 0 0 1-8.5-8.5l9.2-9.2a4 4 0 0 1 5.7 5.7l-9.2 9.2a2 2 0 0 1-2.8-2.8l8.5-8.5"/></symbol><symbol id="i-send" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4z"/></symbol><symbol id="i-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></symbol><symbol id="i-eyeoff" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.9 4.2A10 10 0 0 1 12 4c6.5 0 10 7 10 7a17 17 0 0 1-2.2 3.2M6.6 6.6A17 17 0 0 0 2 12s3.5 7 10 7a10 10 0 0 0 5.4-1.6M2 2l20 20M14.1 14.1a3 3 0 0 1-4.2-4.2"/></symbol><symbol id="i-gift" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7M7.5 8a2.5 2.5 0 0 1 0-5C10 3 12 8 12 8s2-5 4.5-5a2.5 2.5 0 0 1 0 5"/></symbol><symbol id="i-doc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h5"/></symbol><symbol id="i-ticks" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 7 17l-5-5M22 10l-7.5 7.5L13 16"/></symbol><symbol id="i-tick" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></symbol><symbol id="i-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></symbol><symbol id="i-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></symbol><symbol id="i-archive" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="5" rx="1"/><path d="M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8M10 12h4"/></symbol><symbol id="i-bot" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect x="4" y="8" width="16" height="12" rx="2"/><path d="M2 14h2M20 14h2M15 13v2M9 13v2"/></symbol><symbol id="i-hand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 11V6a2 2 0 0 0-4 0v5M14 10V4a2 2 0 0 0-4 0v2M10 10.5V6a2 2 0 0 0-4 0v8"/><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/></symbol><symbol id="i-inbox" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></symbol><symbol id="i-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h16"/></symbol><symbol id="i-panel" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M15 3v18"/></symbol><symbol id="i-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></symbol></defs>`; document.body.prepend(sprite);
 // follow the page's skin: the layer sits outside the app, so it copies data-skin from the nearest skinned element
 // (only when it differs: writing the same value is still a mutation, and the observer would feed itself forever)
-const skinSync = () => { const s = document.querySelector('[data-skin]:not(.cx-kit-layer)')?.dataset.skin || ''; if ((lib.dataset.skin || '') === s) return; if (s) lib.dataset.skin = s; else delete lib.dataset.skin; };
-new MutationObserver((records) => { if (records.some((r) => r.target !== lib)) skinSync(); }).observe(document.body, { subtree: true, attributes: true, attributeFilter: ['data-skin'] }); skinSync();
+// It copies the style too (style-nova…) and the density: the library's rules hang off them, and a modal on a layer
+// without them drew its icons at their natural size and its fields bare.
+const skinSync = () => {
+  const page = document.querySelector('[data-skin]:not(.cx-kit-layer)');
+  const s = page?.dataset.skin || '', d = page?.dataset.density || '';
+  const style = page ? [...page.classList].filter((c) => /^style-/.test(c)).join(' ') : '';
+  const want = `cx-kit-layer${style ? ` ${style}` : ''}`;
+  if (lib.className !== want) lib.className = want;
+  if ((lib.dataset.density || '') !== d) { if (d) lib.dataset.density = d; else delete lib.dataset.density; }
+  if ((lib.dataset.skin || '') === s) return; if (s) lib.dataset.skin = s; else delete lib.dataset.skin;
+};
+new MutationObserver((records) => { if (records.some((r) => r.target !== lib)) skinSync(); }).observe(document.body, { subtree: true, attributes: true, attributeFilter: ['data-skin', 'data-density'] }); skinSync();
+
+// ── sheets: a button with data-sheet="open" (aria-controls = the sheet's id) opens a full-screen sheet such as the
+// NavPill's phone menu (.cx-nav-sheet); data-sheet="close", a link inside it or Escape closes it. While one is open the
+// page behind does not scroll. Delegated once, so a sheet rendered later works the same. ──
+const sheetSet = (sheet, open) => {
+  if (!sheet) return;
+  if (open) sheet.setAttribute('data-open', ''); else sheet.removeAttribute('data-open');
+  document.documentElement.style.overflow = open ? 'hidden' : '';
+  document.querySelectorAll(`[data-sheet="open"][aria-controls="${sheet.id}"]`).forEach((b) => b.setAttribute('aria-expanded', open ? 'true' : 'false'));
+};
+document.addEventListener('click', (event) => {
+  const target = event.target instanceof Element ? event.target : null;
+  if (!target) return;
+  const opener = target.closest('[data-sheet="open"]');
+  if (opener) { event.preventDefault(); sheetSet(document.getElementById(opener.getAttribute('aria-controls')), true); return; }
+  const sheet = target.closest('.cx-nav-sheet[data-open]');
+  if (!sheet) return;
+  if (target.closest('[data-sheet="close"]')) { event.preventDefault(); sheetSet(sheet, false); return; }
+  if (target.closest('a[href]')) sheetSet(sheet, false);
+});
+document.addEventListener('keydown', (event) => { if (event.key === 'Escape') document.querySelectorAll('.cx-nav-sheet[data-open]').forEach((s) => sheetSet(s, false)); });
+
+// ── contents that follow the reading: in a navbar with data-spy="on", the link whose #section is on screen gets
+// aria-current (the first one at the top of the page). Delegated: a page rendered later is found by the observer below. ──
+const spyWatch = (nav) => {
+  if (nav.dataset.spied) return; nav.dataset.spied = '';
+  const links = [...nav.querySelectorAll('a[href^="#"]')]; const map = new Map();
+  links.forEach((a) => { const t = document.getElementById(decodeURIComponent(a.getAttribute('href').slice(1))); if (t) map.set(t, a); });
+  if (!map.size) return;
+  const mark = (a) => links.forEach((l) => { if (l === a) l.setAttribute('aria-current', 'true'); else l.removeAttribute('aria-current'); });
+  mark(links[0]);
+  const seen = new Set();
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e) => { if (e.isIntersecting) seen.add(e.target); else seen.delete(e.target); });
+    const first = [...map.keys()].find((t) => seen.has(t)); if (first) mark(map.get(first));
+  }, { rootMargin: '-20% 0px -65% 0px' });
+  map.forEach((a, t) => io.observe(t));
+};
+const spyScan = (root) => root.querySelectorAll?.('[data-spy="on"]').forEach(spyWatch);
+new MutationObserver((records) => records.forEach((r) => r.addedNodes.forEach((n) => { if (n.nodeType === 1) spyScan(n.parentElement || document); }))).observe(document.body, { subtree: true, childList: true });
+spyScan(document);
+
+// ── plays (BookingPlay, OrderPlay, DayPlan, ChatPlay) loop only while on screen: data-in starts the loop from its
+// first frame, leaving takes it off; off screen a play rests still (no work, and a checker never reads it mid-fade) ──
+const playSeen = new IntersectionObserver((entries) => entries.forEach((e) => { if (e.isIntersecting) e.target.dataset.in = ''; else delete e.target.dataset.in; }), { threshold: 0.25 });
+const watchPlays = (root) => root.querySelectorAll?.('.cx-play:not([data-watched])').forEach((el) => { el.dataset.watched = ''; playSeen.observe(el); });
+new MutationObserver((records) => records.forEach((r) => r.addedNodes.forEach((n) => { if (n.nodeType === 1) { if (n.matches('.cx-play')) watchPlays(n.parentElement || document); else watchPlays(n); } }))).observe(document.body, { subtree: true, childList: true });
+watchPlays(document);
+
+// ── reveal-blur: under a .reveal-blur root, each block of the marketing system comes in from a blur as it enters the
+// screen. What is on screen when it is found shows at once (never half-faded at the fold, never holding the first
+// paint); without this script, or with reduced motion, nothing is ever hidden. Siblings enter a beat apart. ──
+const RV = ['.cx-mk-head', '.cx-mk-sec > .cx-mk-h2', '.cx-mk-sec > .cx-mk-lead', '.cx-mk-row-copy', '.cx-mk-stage', '.cx-mk-tiles > *', '.cx-mk-feats > *', '.cx-mk-steps > *', '.cx-mk-fund > *', '.cx-mk-which > *', '.cx-mk-stores > *', '.cx-mk-vals-row > *', '.cx-mk-band-copy', '.cx-mk-frame', '.cx-mk-bring', '.cx-mk-cta', '.cx-mk-serp', '.cx-mk-vs-table > .cn-table-row', '.cn-accordion > *', '.cx-bento > *', '.cx-features > *', '.cx-wordline'].map((q) => `.reveal-blur ${q}`).join(',');
+const rvStill = typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
+// The observer decides, never a measurement of ours (no forced layout while the page loads): its first word on a block
+// is whether it is on screen now (shown whole) or not (hidden until it enters).
+const rvSeen = new IntersectionObserver((entries) => entries.forEach((e) => {
+  const el = e.target;
+  if (e.isIntersecting) { el.dataset.rv = 'in'; rvSeen.unobserve(el); } else if (el.dataset.rv === undefined) el.dataset.rv = '';
+}));
+let rvPending = false;
+const rvScan = () => {
+  rvPending = false;
+  document.querySelectorAll(RV).forEach((el) => {
+    if (el.dataset.rvWatched !== undefined) return;
+    el.dataset.rvWatched = '';
+    el.style.setProperty('--rv-i', String([...el.parentElement.children].indexOf(el) % 4));
+    rvSeen.observe(el);
+  });
+};
+// Scans are batched into an idle moment: a block not yet marked is simply shown, so waiting costs nothing.
+const watchReveal = () => {
+  if (rvStill || rvPending) return;
+  rvPending = true;
+  (typeof requestIdleCallback === 'function' ? requestIdleCallback : (fn) => setTimeout(fn, 120))(rvScan, { timeout: 400 });
+};
+new MutationObserver(watchReveal).observe(document.body, { subtree: true, childList: true });
+watchReveal();
 
 // ── dates, money, text ──
   const DAY = ['dom', 'lun', 'mar', 'mié', 'jue', 'vie', 'sáb'];
@@ -170,6 +258,7 @@ const CONTENT = {};
 const focusables = () => $$('button:not([disabled]), input, textarea, select, [tabindex]:not([tabindex="-1"])', mdl).filter((x) => x.offsetParent !== null || x === mdl);
   function openModal(kind, mode) {
     if (open) return;
+    skinSync();   // the page on screen now, not the one the kit first saw
     CONTENT[kind]();
     if (kind === 'list') mdl.dataset.size = 'tall'; else delete mdl.dataset.size;
     mdl.dataset.mode = mode === 'auto' ? (phone.matches ? 'drawer' : 'dialog') : mode;
@@ -333,23 +422,26 @@ let wheelsNow = [];
 
 
   // ── Calendar: mode 'single' | 'range'; months 1 | 2; onChange(value) ──
-  kit.calendar = (root, { mode = 'single', months = 1, value = null, onChange = () => {}, min = null } = {}) => {
+  kit.calendar = (root, { mode = 'single', months = 1, value = null, onChange = () => {}, min = null, mon = MON, weekdays = null, prevLabel = 'Mes anterior', nextLabel = 'Mes siguiente', prevYear = 'Año anterior', nextYear = 'Año siguiente', pickLabel = 'Elegir mes' } = {}) => {
+    let picking = false;   // the month's title opens a year of months: far dates in two taps
     let view = new Date((mode === 'range' ? value?.[0] : value) || today); view.setDate(1);
     let sel = value, hover = null, focusDay = startOfDay((mode === 'range' ? value?.[0] : value) || today);
-    const WD = ['lu', 'ma', 'mi', 'ju', 'vi', 'sá', 'do'];
+    const WD = weekdays || ['lu', 'ma', 'mi', 'ju', 'vi', 'sá', 'do'];
     const inRange = (d) => mode === 'range' && sel?.[0] && (sel[1] || hover) && d > startOfDay(sel[0]) && d < startOfDay(sel[1] || hover) ;
     const isEdge = (d) => mode === 'range' ? (sameDay(d, sel?.[0]) || sameDay(d, sel?.[1])) : sameDay(d, sel);
     const month = (m) => {
       const first = new Date(view.getFullYear(), view.getMonth() + m, 1), lead = (first.getDay() + 6) % 7, days = new Date(first.getFullYear(), first.getMonth() + 1, 0).getDate();
       const cells = Array.from({ length: 42 }, (_, i) => addDays(first, i - lead)).slice(0, Math.ceil((lead + days) / 7) * 7);
-      return `<div class="cx-cal-month" role="grid" aria-label="${MON[first.getMonth()]} ${first.getFullYear()}"><div class="cx-cal-title">${ui.text(`${MON[first.getMonth()][0].toUpperCase()}${MON[first.getMonth()].slice(1)} ${first.getFullYear()}`, 'heading')}</div><div class="cx-cal-grid" role="row">${WD.map((w) => `<span class="cx-cal-wd" role="columnheader">${ui.text(w, 'caption')}</span>`).join('')}</div><div class="cx-cal-grid">${cells.map((d) => {
+      return `<div class="cx-cal-month" role="grid" aria-label="${mon[first.getMonth()]} ${first.getFullYear()}"><button type="button" class="cx-cal-title cx-cal-pick" data-cal-pick aria-label="${pickLabel}: ${mon[first.getMonth()]} ${first.getFullYear()}">${ui.text(`${mon[first.getMonth()][0].toUpperCase()}${mon[first.getMonth()].slice(1)} ${first.getFullYear()}`, 'heading')}${ui.icon('chev')}</button><div class="cx-cal-grid" role="row">${WD.map((w) => `<span class="cx-cal-wd" role="columnheader">${ui.text(w, 'caption')}</span>`).join('')}</div><div class="cx-cal-grid">${cells.map((d) => {
         const out = d.getMonth() !== first.getMonth(), off = min && d < startOfDay(min);
         const st = isEdge(d) ? 'edge' : inRange(d) ? 'mid' : '';
-        return `<button class="cn-button cn-button-variant-ghost cn-button-size-icon cx-cal-day" role="gridcell" data-day="${+d}" ${out ? 'data-out' : ''} ${sameDay(d, today) ? 'data-today' : ''} ${st ? `data-range="${st}"` : ''} aria-pressed="${st === 'edge'}" aria-label="${DAYLONG[d.getDay()]} ${d.getDate()} de ${MON[d.getMonth()]}" tabindex="${sameDay(d, focusDay) && !out ? 0 : -1}" ${off ? 'disabled' : ''}>${d.getDate()}</button>`;
+        return `<button class="cn-button cn-button-variant-ghost cn-button-size-icon cx-cal-day" role="gridcell" data-day="${+d}" ${out ? 'data-out' : ''} ${sameDay(d, today) ? 'data-today' : ''} ${st ? `data-range="${st}"` : ''} aria-pressed="${st === 'edge'}" aria-label="${DAYLONG[d.getDay()]} ${d.getDate()} de ${mon[d.getMonth()]}" tabindex="${sameDay(d, focusDay) && !out ? 0 : -1}" ${off ? 'disabled' : ''}>${d.getDate()}</button>`;
       }).join('')}</div></div>`;
     };
+    const picker = () => `<div class="cx-cal cx-cal-picker"><div class="cx-cal-nav">${ui.button({ icon: 'left', variant: 'ghost', size: 'icon-sm', attrs: `data-cal-year="-1" aria-label="${prevYear}" title="${prevYear}"` })}${ui.button({ icon: 'right', variant: 'ghost', size: 'icon-sm', attrs: `data-cal-year="1" aria-label="${nextYear}" title="${nextYear}"` })}</div><div class="cx-cal-title">${ui.text(String(view.getFullYear()), 'heading')}</div><div class="cx-cal-mgrid">${mon.map((m, k) => `<button type="button" class="cn-button cn-button-variant-ghost cn-button-size-sm cx-cal-m" data-cal-month="${k}" ${k === view.getMonth() ? 'aria-current="true"' : ''} ${today.getFullYear() === view.getFullYear() && today.getMonth() === k ? 'data-today' : ''}>${m[0].toUpperCase()}${m.slice(1, 3)}</button>`).join('')}</div></div>`;
     const paint = (focus) => {
-      root.innerHTML = `<div class="cx-cal" data-months="${months}"><div class="cx-cal-nav">${ui.button({ icon: 'left', variant: 'ghost', size: 'icon-sm', attrs: 'data-cal-nav="-1" aria-label="Mes anterior" title="Mes anterior"' })}${ui.button({ icon: 'right', variant: 'ghost', size: 'icon-sm', attrs: 'data-cal-nav="1" aria-label="Mes siguiente" title="Mes siguiente"' })}</div><div class="cx-cal-months">${Array.from({ length: months }, (_, m) => month(m)).join('')}</div></div>`;
+      if (picking) { root.innerHTML = picker(); root.querySelector('[aria-current="true"]')?.focus(); return; }
+      root.innerHTML = `<div class="cx-cal" data-months="${months}"><div class="cx-cal-nav">${ui.button({ icon: 'left', variant: 'ghost', size: 'icon-sm', attrs: `data-cal-nav="-1" aria-label="${prevLabel}" title="${prevLabel}"` })}${ui.button({ icon: 'right', variant: 'ghost', size: 'icon-sm', attrs: `data-cal-nav="1" aria-label="${nextLabel}" title="${nextLabel}"` })}</div><div class="cx-cal-months">${Array.from({ length: months }, (_, m) => month(m)).join('')}</div></div>`;
       if (focus) root.querySelector(`[data-day="${+focusDay}"]:not([data-out])`)?.focus();
     };
     const pick = (d) => {
@@ -360,6 +452,9 @@ let wheelsNow = [];
     };
     root.addEventListener('click', (e) => {
       const n = e.target.closest('[data-cal-nav]'); if (n) { view.setMonth(view.getMonth() + +n.dataset.calNav); paint(); return; }
+      if (e.target.closest('[data-cal-pick]')) { picking = true; paint(); return; }
+      const yr = e.target.closest('[data-cal-year]'); if (yr) { view.setFullYear(view.getFullYear() + +yr.dataset.calYear); paint(); return; }
+      const mo = e.target.closest('[data-cal-month]'); if (mo) { view = new Date(view.getFullYear(), +mo.dataset.calMonth, 1); picking = false; paint(); return; }
       const b = e.target.closest('[data-day]'); if (b && !b.disabled) pick(new Date(+b.dataset.day));
     });
     root.addEventListener('pointerover', (e) => { const b = e.target.closest('[data-day]'); if (mode === 'range' && b && sel?.[0] && !sel[1]) { hover = new Date(+b.dataset.day); $$('[data-day]', root).forEach((x) => { const d = new Date(+x.dataset.day); x.toggleAttribute('data-range', false); if (isEdge(d)) x.dataset.range = 'edge'; else if (inRange(d)) x.dataset.range = 'mid'; }); } });
@@ -377,63 +472,264 @@ let wheelsNow = [];
     return { set: (v) => { sel = v; const a = mode === 'range' ? v?.[0] : v; if (a) { view = new Date(a.getFullYear(), a.getMonth(), 1); focusDay = startOfDay(a); } paint(); } };
   };
 
-  // ── Agenda (generic). Everything is data:
-  // resources [{id,name}] · events [{id,resource,day:Date,start:'HH:MM',dur,title,subtitle,tone,steps,at,payment,contact}]
-  // availability(resourceId, day) → [[fromMin,toMin],…] · blocks [{id,resource,day,start,dur,reason}]
-  // hooks: onCreate({resource,day,start}) · onChange(events) — the sheet (detail, lifecycle, move, cancel) is built in.
-  kit.agenda = (root, { resources, events, blocks = [], availability = () => [[9 * 60, 19 * 60]], from = 9, to = 19, slot = 30, hourPx = 56, onCreate = () => {}, onChange = () => {}, onAction = () => {}, actions = null, nouns = { item: 'cita', items: 'citas', resource: 'profesional' } }) => {
-    let day = new Date(today), view = 'day', who = 'all', narrow = false;
+  // ── AGENDA ──
+  // Day columns per person, the week, or a list (the phone keeps the day grid and the list). Two ways to use it:
+  //   · a SHOWCASE (no app behind it): its own sheets open, book, block, move and cancel, all in memory;
+  //   · an APP (sheet: 'app'): the app owns the data. The agenda paints what it is given and tells the app what
+  //     happened: onOpen(event) when a cita is tapped, onCreate({resource, day, start}) on a free hour, onBlock(block)
+  //     when a block is asked, onMove(change) when one is dragged, onRange({from, to, view}) when the days shown
+  //     change (so the app loads them). The app answers with update(next): new data, same day, view and person.
+  // The free hours can come from the server (free: [{resource, day, start, end}]): then they are the ONLY free hours,
+  // so the owner never sees a slot the client's page would not offer. Without them they come from availability().
+  // Words, days and months follow `lang` ('es' | 'en'), any of them can be replaced through `words`; prices are
+  // written with `currency` + `locale` (Intl), in units or in cents (`cents: true`).
+  const AG_WORDS = {
+    es: {
+      item: 'cita', items: 'citas', resource: 'profesional', newItem: 'Nueva cita', theItem: 'la cita', It: 'Cita',
+      today: 'Hoy', todayShort: 'hoy', prevDay: 'Día anterior', nextDay: 'Día siguiente', prevWeek: 'Semana anterior', nextWeek: 'Semana siguiente',
+      view: 'Vista', vDay: 'Día', vWeek: 'Semana', vList: 'Lista', block: 'Bloquear', all: 'Todos', days: 'Días',
+      weekOf: (d) => `Semana del ${d}`, dayTitle: (wd, n, m) => `${wd} ${n} de ${m}`,
+      off: 'No trabaja este día', blocked: 'Bloqueado', minutes: 'minutos', with: 'con', notFree: 'no está libre', notFreeLong: 'Ese horario no está libre',
+      nowLasts: (m) => `Ahora dura ${m} min`, movedTo: (t, who) => `Movida a las ${t}${who ? ` con ${who}` : ''}`,
+      free: 'Libre', freeFromTo: (a, b) => `Libre de ${a} a ${b}, agendar`, until: 'a', noHours: 'No hay horario este día', freeSlot: 'Hora libre',
+      now: 'Ahora', waiting: (n) => (n === 1 ? '1 en espera' : `${n} en espera`), closed: 'Cerrado', countOf: (n) => (n === 1 ? '1 cita' : `${n} citas`),
+      move: 'Cambiar la hora', day: 'Día', current: 'Es su hora actual', noneFree: 'No queda una hora libre ese día.', back: 'Volver', saveMove: 'Guardar nueva hora',
+      cancelOf: 'Cancelar la cita', why: '¿Por qué?', reasons: ['El cliente pidió cancelar', 'No vino', 'Me surgió algo', 'Otro'], reasonLabel: 'Motivo', tellClient: 'Le avisamos al cliente con este motivo.',
+      close: 'Cerrar', finished: 'Terminada', proofShow: 'Ver comprobante', proofHide: 'Ocultar comprobante', proof: 'Comprobante', paidBtn: 'Pago recibido', openFirst: 'Ábrelo primero',
+      confirmFirst: 'Primero confirma el pago', write: 'Escribir', opening: (x) => `Abriendo ${x}`, paid: 'Pagado', cancelled: 'Cita cancelada', movedDay: (d, t) => `Movida al ${d} a las ${t}`,
+      newDesc: 'Elige el servicio, quién viene y a qué hora.', service: 'Servicio', client: 'Cliente', clientPh: 'Nombre y apellido', hour: 'Hora', cancel: 'Cancelar',
+      schedule: 'Agendar', scheduled: (t) => `Cita agendada · ${t}`,
+      blockTitle: 'Bloquear un horario', blockDesc: 'Nadie puede reservar en ese rato.', for: 'Para', wholeShop: 'Todo el negocio', from: 'Desde', to: 'Hasta',
+      reasonDefault: 'Almuerzo', onlyYou: 'Solo lo ves tú.', blockedOk: 'Horario bloqueado', loading: 'Cargando la agenda',
+      business: 'Negocio', team: 'Equipo', whose: 'Agenda de', goTo: 'Ir a un día', prevMonth: 'Mes anterior', nextMonth: 'Mes siguiente', prevYear: 'Año anterior', nextYear: 'Año siguiente', pickMonth: 'Elegir mes', oneDay: 'Un día', someDays: 'Varios días', noItems: 'Sin citas', rangeHint: 'Toca el primer día y luego el último.', full: 'A esa hora ya no cabe nadie más', clashOne: 'Se cruza', clash: (n) => `${n} citas se cruzan este día`, clashHow: 'Muévelas a otra hora o a otra persona.', clashSee: 'Ver cuáles',
+      capacityOf: (n) => `hasta ${n} a la vez`,
+      status: { awaiting_payment: 'Por revisar', confirmed: 'Confirmada', started: 'En curso', done: 'Cumplida', noshow: 'No vino' },
+      dayS: ['dom', 'lun', 'mar', 'mié', 'jue', 'vie', 'sáb'], dayL: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+      mon: ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'],
+    },
+    en: {
+      item: 'appointment', items: 'appointments', resource: 'team member', newItem: 'New appointment', theItem: 'the appointment', It: 'Appointment',
+      today: 'Today', todayShort: 'today', prevDay: 'Previous day', nextDay: 'Next day', prevWeek: 'Previous week', nextWeek: 'Next week',
+      view: 'View', vDay: 'Day', vWeek: 'Week', vList: 'List', block: 'Block', all: 'Everyone', days: 'Days',
+      weekOf: (d) => `Week of ${d}`, dayTitle: (wd, n, m) => `${wd}, ${m} ${n}`,
+      off: 'Not working this day', blocked: 'Blocked', minutes: 'minutes', with: 'with', notFree: 'not free', notFreeLong: 'That time is not free',
+      nowLasts: (m) => `Now ${m} min long`, movedTo: (t, who) => `Moved to ${t}${who ? ` with ${who}` : ''}`,
+      free: 'Free', freeFromTo: (a, b) => `Free from ${a} to ${b}, book`, until: 'to', noHours: 'No hours this day', freeSlot: 'Free time',
+      now: 'Now', waiting: (n) => `${n} waiting`, closed: 'Closed', countOf: (n) => (n === 1 ? '1 appointment' : `${n} appointments`),
+      move: 'Change the time', day: 'Day', current: 'Its current time', noneFree: 'No free time left that day.', back: 'Back', saveMove: 'Save new time',
+      cancelOf: 'Cancel the appointment', why: 'Why?', reasons: ['The client asked to cancel', 'No-show', 'Something came up', 'Other'], reasonLabel: 'Reason', tellClient: 'We tell the client with this reason.',
+      close: 'Close', finished: 'Finished', proofShow: 'See receipt', proofHide: 'Hide receipt', proof: 'Receipt', paidBtn: 'Payment received', openFirst: 'Open it first',
+      confirmFirst: 'Confirm the payment first', write: 'Message', opening: (x) => `Opening ${x}`, paid: 'Paid', cancelled: 'Appointment cancelled', movedDay: (d, t) => `Moved to the ${d} at ${t}`,
+      newDesc: 'Pick the service, who is coming and when.', service: 'Service', client: 'Client', clientPh: 'First and last name', hour: 'Time', cancel: 'Cancel',
+      schedule: 'Book', scheduled: (t) => `Appointment booked · ${t}`,
+      blockTitle: 'Block a time', blockDesc: 'Nobody can book in that window.', for: 'For', wholeShop: 'The whole business', from: 'From', to: 'To',
+      reasonDefault: 'Lunch', onlyYou: 'Only you see it.', blockedOk: 'Time blocked', loading: 'Loading the calendar',
+      business: 'Business', team: 'Team', whose: 'Calendar of', goTo: 'Go to a day', prevMonth: 'Previous month', nextMonth: 'Next month', prevYear: 'Previous year', nextYear: 'Next year', pickMonth: 'Pick a month', oneDay: 'One day', someDays: 'Several days', noItems: 'No appointments', rangeHint: 'Tap the first day, then the last.', full: 'No room left at that time', clashOne: 'Overlaps', clash: (n) => `${n} appointments overlap this day`, clashHow: 'Move them to another time or person.', clashSee: 'Show me',
+      capacityOf: (n) => `up to ${n} at once`,
+      status: { awaiting_payment: 'To review', confirmed: 'Confirmed', started: 'In progress', done: 'Done', noshow: 'No-show' },
+      dayS: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'], dayL: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+      mon: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+    },
+  };
+  // a cita's status as the agenda draws it: its tone (the colour family) and whether it still occupies its time
+  const AG_STATUS = { awaiting_payment: 'info', confirmed: 'ok', started: 'live', done: 'done', noshow: 'bad' };
+
+  let agSeq = 0, agOwner = 0;   // several agendas on one page: each its own sheets, and only the one that opened the sheet answers it
+  kit.agenda = (root, opts) => {
+    const me = ++agSeq, K = (name) => `${name}${me}`;
+    const sheetOf = (name) => { agOwner = me; openModal(K(name), 'auto'); };
+    let { resources, events, blocks = [], availability = () => [[9 * 60, 19 * 60]], free: freeList = null, queue = [], closed = [], loading = false,
+      lang = 'es', words = {}, currency = '', locale = '', cents = false, overlap = 'auto', placing = null } = opts;   // all of these can change later through update()
+    const { from = 9, to = 19, slot = 30, hourPx = 56, onCreate = () => {}, onChange = () => {}, onAction = () => {}, onOpen = null, onBlock = null, onMove = null, onRange = () => {},
+      actions = null, createSheet = false, services = [], view: startView = 'day', sheet: sheetMode = 'built-in', drag: dragOn = true,
+      resize: resizeMode = 'on', moveAcross = 'on',
+      start: startDay = null, phone: phoneMode = '', hour12 = false, timeZone = '', phoneView = '', blockScope = 'each' } = opts;
+    // THE SHOP'S CLOCK: with a timeZone, «today», «now» and «the past» are the shop's, not the browser's (an owner
+    // travelling, or a phone set to another zone, still sees the shop's day)
+    const clockNow = () => { if (!timeZone) return new Date(); try { const p = Object.fromEntries(new Intl.DateTimeFormat('en-US', { timeZone, year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).formatToParts(new Date()).map((x) => [x.type, x.value])); return new Date(+p.year, +p.month - 1, +p.day, +p.hour % 24, +p.minute); } catch { return new Date(); } };
+    const today = (() => { const d = clockNow(); d.setHours(0, 0, 0, 0); return d; })();
+    const nowMin = () => { const d = clockNow(); return d.getHours() * 60 + d.getMinutes(); };
+    // how a time is WRITTEN (the data stays "HH:MM"): 24 h, or 12 h with AM/PM where the shop reads it that way
+    const clk = (hm) => { if (!hour12 || !hm || !/^\d{1,2}:\d{2}$/.test(hm)) return hm; const [h, m] = hm.split(':').map(Number); return `${((h + 11) % 12) + 1}:${String(m).padStart(2, '0')} ${h < 12 ? 'AM' : 'PM'}`; };
+    // the view on screen: the phone has no week, and an app can open the phone on its list (phoneView) until a view is picked
+    let picked = false, rangeSel = null;   // rangeSel [from, to] while the range view is on
+    const eff = () => (view === 'range' && rangeSel ? 'range' : narrow ? (!picked && phoneView ? phoneView : view === 'week' ? 'day' : view) : view);
+    // phone "nav": on a narrow agenda the actions and the arrows leave its toolbar, because the app's phone bar carries
+    // them and calls run(id) (the same ids: new, block, prev, next, today, any action id; view:day|week|list)
+    if (phoneMode === 'nav') root.dataset.phone = 'nav';
+    let w = { ...(AG_WORDS[lang] || AG_WORDS.es), ...words };
+    const appMode = sheetMode === 'app';
+    const fmtMoney = (n) => { const v = cents ? n / 100 : n; if (!currency) return money0(v); try { return new Intl.NumberFormat(locale || (lang === 'en' ? 'en-US' : 'es'), { style: 'currency', currency, maximumFractionDigits: v % 1 ? 2 : 0 }).format(v); } catch { return money0(v); } };
+    const fmtD = (d) => (lang === 'en' ? `${w.mon[d.getMonth()].slice(0, 3)} ${d.getDate()}` : `${d.getDate()} ${w.mon[d.getMonth()].slice(0, 3)}`);
+    const It = (s) => s[0].toUpperCase() + s.slice(1);
+    // narrow (the phone layout) is known before the first paint, from the width the agenda already has: painting the
+    // wide layout first and switching a frame later made it jump.
     const toMin = (t) => { const [h, m] = t.split(':').map(Number); return h * 60 + m; };
+    let day = startDay ? new Date(startDay) : new Date(today), view = ['day', 'week', 'list'].includes(startView) ? startView : 'day', who = 'all', narrow = (root.clientWidth || root.parentElement?.clientWidth || 999) < 700;
     const toHM = (m) => `${String(Math.floor(m / 60)).padStart(2, '0')}:${String(m % 60).padStart(2, '0')}`;
     const y = (m) => ((m - from * 60) / 60) * hourPx;
     const weekDays = () => { const mon = addDays(day, -((day.getDay() + 6) % 7)); return Array.from({ length: 7 }, (_, i) => addDays(mon, i)); };
-    const shown = () => (who === 'all' ? resources : resources.filter((r) => r.id === who));
-    const evOn = (d, rid) => events.filter((e) => sameDay(e.day, d) && (rid ? e.resource === rid : who === 'all' || e.resource === who) && e.status !== 'cancelled');
+    // SEVERAL AGENDAS: a resource is an agenda (kind "business" for the shop's own, "person" for each worker, or any other
+    // kind: a room, a chair). The business goes first. A cita belongs to its `resource` and also takes every agenda in
+    // `with` (a worker AND the room). `capacity` says how many citas an agenda holds at once: 1 (the default) = they never
+    // overlap, 3 = a class of three, 0 = no limit. `overlap` "never" | "allow" overrides it for the whole agenda.
+    const kindOf = (r) => r?.kind || 'person';
+    const ordered = () => [...resources].sort((a, b) => (kindOf(a) === 'business' ? 0 : 1) - (kindOf(b) === 'business' ? 0 : 1));
+    const shown = () => (who === 'all' ? ordered() : who.startsWith('kind:') ? ordered().filter((r) => kindOf(r) === who.slice(5)) : resources.filter((r) => r.id === who));
+    // what an agenda is, under its name: its role («Barbero»), else its kind (the business, a room's group), plus how many fit
+    const roleOf = (r) => [r.role || (kindOf(r) === 'business' ? w.business : kindOf(r) !== 'person' ? r.group || '' : ''), capOf(r.id) > 1 ? w.capacityOf(capOf(r.id)) : ''].filter(Boolean).join(' · ');
+    // a resource with hideEmpty (the business's own agenda, which only holds what nobody was given) shows its column
+    // only on days it has something; the rest of the agendas always show
+    const bookable = (rid) => resources.find((r) => r.id === rid)?.bookable !== false;
+    const dayCols = () => { const rs = shown().filter((r) => !r.hideEmpty || evOn(day, r.id).length || who === r.id); return rs.length ? rs : shown(); };
+    const pick = () => (who === 'all' || who.startsWith('kind:') ? (shown()[0] || resources[0]).id : who);
+    const occ = (e) => [e.resource, ...(Array.isArray(e.with) ? e.with : [])];
+    const capOf = (rid) => { if (overlap === 'never') return 1; if (overlap === 'allow') return 0; const c = resources.find((r) => r.id === rid)?.capacity; return c === undefined || c === null || c === '' ? 1 : Math.max(0, Number(c) || 0); };
+    const evOn = (d, rid) => { const ids = rid ? [rid] : who === 'all' ? null : shown().map((r) => r.id); return events.filter((e) => sameDay(e.day, d) && e.status !== 'cancelled' && (!ids || occ(e).some((x) => ids.includes(x)))); };
+    // the most citas one agenda holds at once inside [st, st + dur) (except one, the cita being moved)
+    const peak = (rid, d, st, dur, except) => { const iv = events.filter((x) => x.id !== except && x.status !== 'cancelled' && sameDay(x.day, d) && occ(x).includes(rid)).map((x) => [toMin(x.start), toMin(x.start) + x.dur]).filter(([a, b]) => a < st + dur && b > st); return Math.max(0, ...[st, ...iv.map(([a]) => a).filter((a) => a > st)].map((pt) => iv.filter(([a, b]) => a <= pt && b > pt).length)); };
+    const roomFor = (rid, d, st, dur, except) => { const cap = capOf(rid); return cap === 0 || peak(rid, d, st, dur, except) < cap; };
+    // citas that break an agenda's capacity (data from the server that crossed): they say so, in words
+    let clash = new Set();
+    const findClashes = () => { const out = new Set(); resources.forEach((r) => { const cap = capOf(r.id); if (!cap) return; events.filter((x) => x.status !== 'cancelled' && occ(x).includes(r.id)).forEach((e) => { if (peak(r.id, e.day, toMin(e.start), e.dur, null) > cap) out.add(e.id); }); }); return out; };
     const blOn = (d, rid) => blocks.filter((b) => sameDay(b.day, d) && (!rid || b.resource === rid || b.resource === 'all'));
     const resName = (id) => resources.find((r) => r.id === id)?.name || '';
+    const toneOf = (e) => AG_STATUS[e.status] || e.tone || 'ok';
+    const paint1 = (e) => (e.tint ? ` data-tint style="--tint:${e.tint};--ink:${e.ink || 'inherit'};` : ' style="');
+    // the server's free windows of one person on one day, in minutes (only when the app sends them)
+    const freeOf = (rid, d) => (freeList || []).filter((f) => f.resource === rid && sameDay(f.day, d)).map((f) => [toMin(f.start), toMin(f.end)]);
+    const works = (rid, d) => (freeList ? true : availability(rid, d).length > 0);
+    const isClosed = (d) => closed.some((c) => sameDay(c, d)) || (!freeList && shown().every((r) => !availability(r.id, d).length));
     // overlapping events share the column: each gets a lane and the lane count of its cluster
     const lanes = (list) => { const s = [...list].sort((a, b) => toMin(a.start) - toMin(b.start)); const out = new Map(); let cluster = [], end = -1; const flush = () => { const lanesEnd = []; cluster.forEach((e) => { const st = toMin(e.start); let l = lanesEnd.findIndex((x) => x <= st); if (l < 0) { l = lanesEnd.length; lanesEnd.push(0); } lanesEnd[l] = st + e.dur; out.set(e.id, [l, 0]); }); cluster.forEach((e) => { out.get(e.id)[1] = lanesEnd.length; }); }; s.forEach((e) => { const st = toMin(e.start); if (st >= end && cluster.length) { flush(); cluster = []; } cluster.push(e); end = Math.max(end, st + e.dur); }); if (cluster.length) flush(); return out; };
-    const evHtml = (e, ln, showWho) => { const [l, n] = ln.get(e.id) || [0, 1]; const short = e.dur < 45; return `<button class="cx-ag-ev" data-ev="${e.id}" data-tone="${e.tone}" style="top:${y(toMin(e.start))}px;height:${(e.dur / 60) * hourPx - 3}px;left:calc(${(l / n) * 100}% + 3px);width:calc(${100 / n}% - 6px)" aria-label="${e.title}, ${e.start}, ${e.dur} minutos${showWho ? ', con ' + resName(e.resource) : ''}">${short ? ui.text(`${e.title} · ${e.start}`, 'label') : `${ui.text(e.title, 'label')}${ui.text(`${e.start} · ${e.subtitle}${showWho ? ' · ' + resName(e.resource) : ''}`, 'caption')}`}<span class="cx-ag-grip" aria-hidden="true"></span></button>`; };
-    const offHtml = (d, rid) => { const av = availability(rid, d); if (!av.length) return `<div class="cx-ag-off" data-all style="top:0;height:100%">${ui.text('No trabaja este día', 'caption')}</div>`; const out = []; let cur = from * 60; av.forEach(([a, b]) => { if (a > cur) out.push([cur, a]); cur = Math.max(cur, b); }); if (cur < to * 60) out.push([cur, to * 60]); return out.map(([a, b]) => `<div class="cx-ag-off" style="top:${y(a)}px;height:${y(b) - y(a)}px"></div>`).join(''); };
-    const blockHtml = (b) => `<div class="cx-ag-block" style="top:${y(toMin(b.start))}px;height:${(b.dur / 60) * hourPx - 2}px">${ui.text(`${b.reason || 'Bloqueado'} · ${b.start}`, 'caption')}</div>`;
-    const title = () => view === 'week' ? `Semana del ${fmtDay(weekDays()[0])}` : `${DAYLONG[day.getDay()]} ${day.getDate()} de ${MON[day.getMonth()]}`;
-    const toolbar = () => `<div class="cx-ag-bar">${ui.button({ label: 'Hoy', size: 'sm', attrs: 'data-ag="today"' })}<div class="cx-hstack" style="gap:2px;flex-wrap:nowrap">${ui.button({ icon: 'left', variant: 'ghost', size: 'icon-sm', attrs: `data-ag="prev" aria-label="${view === 'week' ? 'Semana anterior' : 'Día anterior'}"` })}${ui.button({ icon: 'right', variant: 'ghost', size: 'icon-sm', attrs: `data-ag="next" aria-label="${view === 'week' ? 'Semana siguiente' : 'Día siguiente'}"` })}</div>${ui.text(title(), 'heading')}<span class="cx-grow"></span><div class="cx-tabs" role="tablist" aria-label="Vista">${[['day', 'Día'], ['week', 'Semana'], ['list', 'Lista']].filter(([k]) => !narrow || k !== 'week').map(([k, l]) => `<button class="cn-button cn-button-variant-ghost cn-button-size-sm cx-tab" role="tab" aria-selected="${(narrow && view === 'week' ? 'day' : view) === k}" data-ag-view="${k}">${l}</button>`).join('')}</div>${bar()}</div>`;
-    // the toolbar's own buttons are data: [{id, label, icon, primary}]; «block» and «new» keep their built-in behaviour, any other id goes to onAction
-    function bar() { const list = Array.isArray(actions) && actions.length ? actions : [{ id: 'block', label: 'Bloquear', icon: 'i-lock' }, { id: 'new', label: `Nueva ${nouns.item}`, icon: 'plus', primary: true }]; return list.map((x) => ui.button({ label: `${x.icon ? ui.icon(x.icon) : ''}${x.label}`, variant: x.primary ? 'default' : 'outline', size: 'sm', attrs: `data-ag="${x.id}"` })).join(''); }
-    const people = () => resources.length > 1 ? `<div class="cx-hstack cx-ag-who" role="radiogroup" aria-label="${nouns.resource}">${ui.button({ label: 'Todos', size: 'sm', variant: 'ghost', attrs: `role="radio" aria-checked="${who === 'all'}" aria-pressed="${who === 'all'}" data-who="all"` })}${resources.map((r) => ui.button({ label: `${ui.avatar(r.name, { size: 'sm' })}${r.name}`, size: 'sm', variant: 'ghost', attrs: `role="radio" aria-checked="${who === r.id}" aria-pressed="${who === r.id}" data-who="${r.id}"` })).join('')}</div>` : '';
-    const strip = () => `<div class="cx-ag-strip" role="group" aria-label="Días">${weekDays().map((d) => { const n = evOn(d).length; return `<button class="cn-button cn-button-variant-ghost cx-size-tile cx-ag-day" data-ag-day="${+d}" aria-pressed="${sameDay(d, day)}" ${sameDay(d, today) ? 'data-today' : ''} aria-label="${DAYLONG[d.getDay()]} ${d.getDate()}, ${n} ${n === 1 ? nouns.item : nouns.items}"><small>${sameDay(d, today) ? 'hoy' : DAY[d.getDay()]}</small><b>${d.getDate()}</b><span class="cx-ag-count">${n ? n : ''}</span></button>`; }).join('')}</div>`;
-    const grid = (cols) => { const hours = Array.from({ length: to - from }, (_, i) => from + i); const nowM = new Date().getHours() * 60 + new Date().getMinutes(); return `<div class="cx-ag-scroll cx-scroll"><div class="cx-ag" style="--cols:${cols.length};--h:${hourPx}px;height:${(to - from) * hourPx + 44}px"><div class="cx-ag-head"><span></span>${cols.map((c) => `<div class="cx-ag-colhead" ${c.today ? 'data-today' : ''}>${c.head}</div>`).join('')}</div><div class="cx-ag-body"><div class="cx-ag-times">${hours.map((h) => `<span style="top:${(h - from) * hourPx}px">${ui.text(`${String(h).padStart(2, '0')}:00`, 'caption')}</span>`).join('')}</div>${cols.map((c) => { const evs = evOn(c.day, c.rid === 'all' ? null : c.rid); const ln = lanes(evs); return `<div class="cx-ag-col" data-day="${+c.day}" data-rid="${c.rid}" role="group" aria-label="${c.label}">${c.rid !== 'all' ? offHtml(c.day, c.rid) : ''}${Array.from({ length: ((to - from) * 60) / slot }, (_, i) => `<button class="cx-ag-slot" data-slot-time="${from * 60 + i * slot}" style="top:${y(from * 60 + i * slot)}px;height:${(slot / 60) * hourPx}px" aria-label="Nueva ${nouns.item}, ${c.label}, ${toHM(from * 60 + i * slot)}" tabindex="-1"></button>`).join('')}${blOn(c.day, c.rid === 'all' ? null : c.rid).map(blockHtml).join('')}${evs.map((e) => evHtml(e, ln, c.rid === 'all' && who === 'all')).join('')}${sameDay(c.day, today) && nowM > from * 60 && nowM < to * 60 ? `<div class="cx-ag-now" style="top:${y(nowM)}px" aria-hidden="true"><i></i></div>` : ''}</div>`; }).join('')}</div></div></div>`; };
-    // list = the phone's agenda (Storio's panel): a solid row is sold, a dashed one is still free
+    // an app's own words on a cita («A domicilio», «Llegó 10:02», «Confirmó»): said next to its time, never as colour
+    const tagsOf = (e) => (Array.isArray(e.tags) ? e.tags.filter(Boolean).join(' · ') : '');
+    const SAY = ['started', 'awaiting_payment', 'noshow'];   // the statuses a cita SAYS in words (no stripes, no glow)
+    const evHtml = (e, ln, showWho, rid = null, gut = false) => { const [l, n] = ln.get(e.id) || [0, 1]; const short = e.dur < 45; const said = clash.has(e.id) ? w.clashOne : SAY.includes(e.status) && w.status[e.status] ? w.status[e.status] : ''; const others = rid ? occ(e).filter((x) => x !== rid).map(resName).filter(Boolean).join(', ') : ''; const tg = tagsOf(e);
+      const span = gut ? '(100% - 22px)' : '100%'; /* an agenda with no limit keeps a strip on the right to book beside */ return `<button class="cx-ag-ev" data-ev="${e.id}" data-tone="${toneOf(e)}" ${e.status ? `data-status="${e.status}"` : ''}${paint1(e)}top:${y(toMin(e.start))}px;height:${(e.dur / 60) * hourPx - 3}px;left:calc(${span} * ${l / n} + 3px);width:calc(${span} / ${n} - 6px)"${clash.has(e.id) ? ' data-conflict' : ''} aria-label="${e.title}, ${clk(e.start)}, ${e.dur} ${w.minutes}${tg ? ', ' + tg : ''}${showWho ? `, ${w.with} ${resName(e.resource)}` : ''}${others ? `, ${w.with} ${others}` : ''}${e.status && w.status[e.status] ? `, ${w.status[e.status]}` : ''}${clash.has(e.id) ? `, ${w.clashOne}` : ''}">${short ? ui.text(`${e.title} · ${said || tg || clk(e.start)}`, 'label') : `${ui.text(e.title, 'label')}${ui.text(`${said ? said + ' · ' : ''}${tg ? tg + ' · ' : ''}${clk(e.start)} · ${e.subtitle || ''}${showWho ? ' · ' + resName(e.resource) : ''}${others ? ' · ' + others : ''}`, 'caption')}`}${dragOn && resizeMode !== 'off' ? '<span class="cx-ag-grip" aria-hidden="true"></span>' : ''}</button>`; };
+    // the hours a person does not work: hatched. With server free hours, everything that is neither free nor booked.
+    const offHtml = (d, rid) => {
+      const av = freeList ? null : availability(rid, d);
+      if (av && !av.length) return `<div class="cx-ag-off" data-all style="top:0;height:100%">${ui.text(w.off, 'caption')}</div>`;
+      if (!av) return '';
+      const out = []; let cur = from * 60; av.forEach(([a, b]) => { if (a > cur) out.push([cur, a]); cur = Math.max(cur, b); }); if (cur < to * 60) out.push([cur, to * 60]);
+      return out.map(([a, b]) => `<div class="cx-ag-off" style="top:${y(a)}px;height:${y(b) - y(a)}px"></div>`).join('');
+    };
+    // the server's free windows, drawn as dashed «free» tiles you tap to book (they replace the bare slot buttons)
+    const freeHtml = (d, rid, label) => freeOf(rid, d).map(([a, b]) => `<button class="cx-ag-free" data-free="${a}" data-rid="${rid}" data-day="${+d}" style="top:${y(a)}px;height:${y(b) - y(a) - 2}px" aria-label="${w.freeFromTo(clk(toHM(a)), clk(toHM(b)))}, ${label}">${b - a >= 45 ? ui.text(`${w.free} · ${clk(toHM(a))}`, 'caption') : ''}</button>`).join('');
+    // PLACING: while the app's «new cita» sheet is open, where the cita will land, drawn dashed (placing {resource, day,
+    // start, dur, title, tint}); the app clears it when the sheet closes
+    // what already went by: today up to now, and whole past days, under a quiet veil (nothing to book there)
+    const goneHtml = (d) => { const k = new Date(d); k.setHours(0, 0, 0, 0); if (k > today) return ''; const h = k < today ? (to - from) * hourPx : Math.max(0, Math.min(y(nowMin()), (to - from) * hourPx)); return h ? `<div class="cx-ag-gone" style="height:${h}px" aria-hidden="true"></div>` : ''; };
+    const ghostHtml = (d, rid) => { const g = placing; if (!g || !g.start || !sameDay(g.day, d) || (rid && g.resource !== rid)) return ''; return `<div class="cx-ag-ghostnew" style="${g.tint ? `--tint:${g.tint};` : ''}top:${y(toMin(g.start))}px;height:${((Number(g.dur) || slot) / 60) * hourPx - 3}px" aria-hidden="true">${ui.text(`${g.title || w.newItem} · ${clk(g.start)}`, 'label')}</div>`; };
+    const blockHtml = (b) => `<div class="cx-ag-block" style="top:${y(toMin(b.start))}px;height:${(b.dur / 60) * hourPx - 2}px">${ui.text(`${b.reason || w.blocked} · ${clk(b.start)}`, 'caption')}</div>`;
+    // while loading, everything that would ask the server for something is shut (days, views, arrows, actions, hours)
+    const shut = () => (loading ? ' disabled aria-disabled="true"' : '');
+    const title = () => (eff() === 'range' ? `${fmtD(rangeSel[0])} → ${fmtD(rangeSel[1])}` : view === 'week' && !narrow ? w.weekOf(fmtD(weekDays()[0])) : w.dayTitle(w.dayL[day.getDay()], day.getDate(), w.mon[day.getMonth()]));
+    const toolbar = () => `<div class="cx-ag-bar">${ui.button({ label: w.today, size: 'sm', attrs: `data-ag="today"${shut()}` })}<div class="cx-hstack" style="gap:2px;flex-wrap:nowrap">${ui.button({ icon: 'left', variant: 'ghost', size: 'icon-sm', attrs: `data-ag="prev" data-ag-move aria-label="${view === 'week' && !narrow ? w.prevWeek : w.prevDay}"${shut()}` })}${ui.button({ icon: 'right', variant: 'ghost', size: 'icon-sm', attrs: `data-ag="next" data-ag-move aria-label="${view === 'week' && !narrow ? w.nextWeek : w.nextDay}"${shut()}` })}</div><button type="button" class="cx-ag-title" data-ag-date aria-haspopup="dialog" aria-expanded="false" aria-label="${w.goTo}: ${title()}"${shut()}>${ui.text(title(), 'heading')}${ui.icon('chev')}</button><span class="cx-grow"></span><div class="cx-tabs" role="tablist" aria-label="${w.view}">${[['day', w.vDay], ['week', w.vWeek], ['list', w.vList]].filter(([k]) => !narrow || k !== 'week').map(([k, l]) => `<button class="cn-button cn-button-variant-ghost cn-button-size-sm cx-tab" role="tab" aria-selected="${eff() === k}" data-ag-view="${k}"${shut()}>${l}</button>`).join('')}</div>${bar()}</div>`;
+    // the toolbar's own buttons are data: [{id, label, icon, primary}]; «block» and «new» keep their behaviour, any other id goes to onAction
+    function bar() { const list = Array.isArray(actions) && actions.length ? actions : [{ id: 'block', label: w.block, icon: 'i-lock' }, { id: 'new', label: w.newItem, icon: 'plus', primary: true }]; return list.map((x) => ui.button({ label: `${x.icon ? ui.icon(x.icon) : ''}${x.label}`, variant: x.primary ? 'default' : 'outline', size: 'sm', attrs: `data-ag="${x.id}" data-ag-act${shut()}` })).join(''); }
+    const personBtn = (r) => ui.button({ label: `${r.photo ? `<span class="cn-avatar cx-ag-face" style="background-image:url('${r.photo}')"></span>` : ui.avatar(r.name, { size: 'sm' })}${r.name}`, size: 'sm', variant: 'ghost', attrs: `role="radio" aria-checked="${who === r.id}" data-who="${r.id}"` });
+    const groupName = (k) => (k === 'business' ? w.business : k === 'person' ? w.team : resources.find((r) => kindOf(r) === k)?.group || k);
+    // the filter: everyone, then each kind of agenda (the business, the team, rooms…) with its own button when there is more than one kind
+    const people = () => {
+      if (loading) return `<div class="cx-hstack cx-ag-who" aria-hidden="true">${[64, 92, 92, 92].map((wd, i) => `<span class="cx-ag-skpill">${i ? '<s class="skel" style="width:20px;height:20px;border-radius:50%"></s>' : ''}<s class="skel" style="width:${i ? wd - 30 : wd - 20}px"></s></span>`).join('')}</div>`;
+      if (resources.length < 2) return '';
+      const kinds = [...new Set(ordered().map(kindOf))];
+      const all = ui.button({ label: w.all, size: 'sm', variant: 'ghost', attrs: `role="radio" aria-checked="${who === 'all'}" data-who="all"` });
+      if (kinds.length < 2) return `<div class="cx-hstack cx-ag-who" role="radiogroup" aria-label="${w.whose}"><span class="cx-ag-wholabel" aria-hidden="true">${w.whose}</span>${all}${resources.map(personBtn).join('')}</div>`;
+      return `<div class="cx-hstack cx-ag-who" role="radiogroup" aria-label="${w.whose}"><span class="cx-ag-wholabel" aria-hidden="true">${w.whose}</span>${all}${kinds.map((k) => { const rs = ordered().filter((r) => kindOf(r) === k); return `<span class="cx-ag-sep" aria-hidden="true"></span>${rs.length > 1 ? ui.button({ label: groupName(k), size: 'sm', variant: 'ghost', attrs: `role="radio" aria-checked="${who === 'kind:' + k}" data-who="kind:${k}"`, cls: 'cx-ag-group' }) : ''}${rs.map(personBtn).join('')}`; }).join('')}</div>`;
+    };
+    // the week strip: each day with how many citas it has (a plain number), closed days dimmed
+    const strip = () => `<div class="cx-ag-strip" role="group" aria-label="${w.days}">${weekDays().map((d) => { const evs = loading ? [] : evOn(d); const n = evs.length; const shut = isClosed(d); return `<button class="cn-button cn-button-variant-ghost cx-size-tile cx-ag-day" data-ag-day="${+d}" aria-pressed="${sameDay(d, day)}" ${sameDay(d, today) ? 'data-today' : ''} ${shut ? 'data-closed' : ''} aria-label="${w.dayL[d.getDay()]} ${d.getDate()}, ${shut && !n ? w.closed : w.countOf(n)}"${loading ? ' disabled aria-disabled="true"' : ''}><small>${sameDay(d, today) ? w.todayShort : w.dayS[d.getDay()]}</small><b>${d.getDate()}</b><span class="cx-ag-count" aria-hidden="true">${loading ? '<s class="skel"></s>' : n || ''}</span></button>`; }).join('')}</div>`;
+    // «Ahora»: on today, the cita in progress (started, or whose time is now), first thing, one tap to open it
+    const nowCard = () => {
+      if (!sameDay(day, today)) return '';
+      const nowM = nowMin();
+      const e = evOn(today).find((x) => x.status === 'started') || evOn(today).find((x) => !['done', 'noshow'].includes(x.status) && nowM >= toMin(x.start) && nowM < toMin(x.start) + x.dur);
+      if (!e) return '';
+      const left = Math.min(e.dur, Math.max(0, toMin(e.start) + e.dur - nowM));   // started early or ahead of the clock: never more than the cita itself
+      return `<button class="cx-ag-nowcard" data-ev="${e.id}"><span class="cx-vstack" style="gap:0;min-width:0">${ui.text(`${w.now} · ${clk(e.start)}–${clk(toHM(toMin(e.start) + e.dur))}`, 'caption')}${ui.text(e.title, 'heading')}${ui.text(`${e.subtitle || ''}${resources.length > 1 ? ' · ' + resName(e.resource) : ''}${tagsOf(e) ? ' · ' + tagsOf(e) : ''}`, 'muted')}</span><span class="cx-grow"></span>${ui.text(`${left} min`, 'strong')}</button>`;
+    };
+    // who waits for a free hour that day: two faces and how many (never grows with the line)
+    const queueLine = () => { const q = queue.filter((x) => sameDay(x.day, day)); if (!q.length) return ''; return `<div class="cx-ag-queue">${q.slice(0, 2).map((x) => (x.photo ? `<span class="cn-avatar cx-ag-face" style="background-image:url('${x.photo}')" aria-hidden="true"></span>` : ui.avatar(x.name, { size: 'sm' }))).join('')}${ui.text(w.waiting(q.length), 'caption')}</div>`; };
+    // the loading head keeps the real head's shape: the face, the name and, when the agenda has one, its role line
+    const skHead = (c) => { const r = resources.find((x) => x.id === c.rid); return v0() === 'week' ? `<span class="cx-ag-skhead" aria-hidden="true"><s class="skel" style="width:56px"></s></span>` : `<span class="cx-ag-skhead" aria-hidden="true"><s class="skel" style="width:24px;height:24px;border-radius:50%"></s><span class="cx-ag-colname"><b><s class="skel cx-ag-skline" style="width:64px"></s></b>${r && roleOf(r) ? `<small><s class="skel cx-ag-skline" style="width:48px"></s></small>` : ''}</span></span>`; };
+    const v0 = eff;
+    const grid = (cols) => { const hours = Array.from({ length: to - from }, (_, i) => from + i); const nowM = nowMin(); return `<div class="cx-ag-scroll cx-scroll"><div class="cx-ag" style="--cols:${cols.length};--h:${hourPx}px;grid-template-rows:auto auto"><div class="cx-ag-head"><span></span>${cols.map((c) => `<div class="cx-ag-colhead" ${c.today ? 'data-today' : ''} ${c.closed ? 'data-closed' : ''}>${loading ? skHead(c) : c.head}</div>`).join('')}</div><div class="cx-ag-body" style="height:${(to - from) * hourPx}px"><div class="cx-ag-times">${cols.some((k) => sameDay(k.day, today)) && nowM > from * 60 && nowM < to * 60 ? `<b class="cx-ag-nowtime" style="top:${y(nowM)}px">${clk(toHM(nowM))}</b>` : ''}${hours.map((h) => `<span style="top:${(h - from) * hourPx}px">${ui.text(hour12 ? `${((h + 11) % 12) + 1} ${h < 12 ? 'AM' : 'PM'}` : `${String(h).padStart(2, '0')}:00`, 'caption')}</span>`).join('')}</div>${cols.map((c, ci) => { const rid = c.rid === 'all' ? null : c.rid; const evs = evOn(c.day, rid); const cap = rid ? capOf(rid) : 1; const ln = lanes(evs); if (cap > 1) ln.forEach((v) => { v[1] = Math.max(v[1], Math.min(cap, 4)); }); const rids = rid ? [rid] : shown().map((r) => r.id); if (loading) return `<div class="cx-ag-col" data-day="${+c.day}" data-rid="${c.rid}" aria-hidden="true">${rid && !freeList ? offHtml(c.day, rid) : ''}${skelCol(ci)}</div>`;
+      return `<div class="cx-ag-col" data-day="${+c.day}" data-rid="${c.rid}" role="group" aria-label="${c.label}">${rid ? offHtml(c.day, rid) : ''}${!rids.some(bookable) ? '' : freeList ? rids.filter(bookable).map((r) => freeHtml(c.day, r, c.label)).join('') : Array.from({ length: ((to - from) * 60) / slot }, (_, i) => gone(c.day, from * 60 + i * slot) ? '' : `<button class="cx-ag-slot" data-slot-time="${from * 60 + i * slot}" style="top:${y(from * 60 + i * slot)}px;height:${(slot / 60) * hourPx}px" aria-label="${w.newItem}, ${c.label}, ${toHM(from * 60 + i * slot)}" tabindex="-1"></button>`).join('')}${blOn(c.day, rid).map(blockHtml).join('')}${evs.map((e) => evHtml(e, ln, c.rid === 'all' && resources.length > 1, rid, cap === 0)).join('')}${ghostHtml(c.day, rid)}${goneHtml(c.day)}${sameDay(c.day, today) && nowM > from * 60 && nowM < to * 60 ? `<div class="cx-ag-now" style="top:${y(nowM)}px" aria-hidden="true">${cols.findIndex((k) => sameDay(k.day, today)) === ci ? '<i></i>' : ''}</div>` : ''}</div>`; }).join('')}</div></div></div>`; };
+    // list = the phone's agenda: a solid row is sold, a dashed one is still free
+    // one cita as a row of the list (the day's list and the range's)
+    const evRow = (e) => `<button class="cx-ag-row" data-ev="${e.id}"${clash.has(e.id) ? ' data-conflict' : ''} data-tone="${toneOf(e)}" ${e.status ? `data-status="${e.status}"` : ''}${paint1(e)}"><span class="cx-ag-row-t">${ui.text(clk(e.start), 'strong')}${ui.text(`${e.dur} min`, 'caption')}</span>${e.photo ? `<span class="cn-avatar cx-ag-face cx-ag-rowface" style="background-image:url('${e.photo}')" aria-hidden="true"></span>` : ''}<span class="cx-vstack" style="gap:0;min-width:0">${ui.text(e.title, 'heading')}${ui.text(`${e.subtitle || ''}${resources.length > 1 ? ' · ' + resName(e.resource) : ''}${tagsOf(e) ? ' · ' + tagsOf(e) : ''}`, 'muted')}</span>${e.status && w.status[e.status] ? ui.badge(w.status[e.status], { tone: { info: 'info', live: 'wait', done: 'ok', bad: 'bad', ok: 'ok' }[toneOf(e)] || 'ok' }) : e.steps ? ui.badge(e.steps[e.at], { tone: e.tone === 'wait' ? 'wait' : e.tone === 'info' ? 'info' : 'ok' }) : ''}${e.price ? ui.text(fmtMoney(e.price), 'strong') : ''}</button>`;
+    // RANGE: the days picked in the calendar, one after another, each with its citas (a day with none says so)
+    const rangeList = () => { const [a, b] = rangeSel; const n = Math.min(62, Math.round((b - a) / 864e5) + 1); return `<div class="cx-ag-list cx-ag-range" role="list">${Array.from({ length: n }, (_, k) => { const d = addDays(a, k); const evs = evOn(d).sort((x, z) => toMin(x.start) - toMin(z.start)); return `<button type="button" class="cx-ag-rangeday" data-ag-day="${+d}" ${sameDay(d, today) ? 'data-today' : ''}>${ui.text(`${w.dayL[d.getDay()]} ${d.getDate()} ${w.mon[d.getMonth()]}`, 'strong')}${ui.text(isClosed(d) && !evs.length ? w.closed : evs.length ? w.countOf(evs.length) : w.noItems, 'caption')}</button>${evs.map(evRow).join('')}`; }).join('')}</div>`; };
     const list = () => {
       const rids = shown().map((r) => r.id), rows = [];
       const evs = evOn(day).sort((a, b) => toMin(a.start) - toMin(b.start));
-      const busy = (rid, m) => evOn(day, rid).some((e) => m >= toMin(e.start) && m < toMin(e.start) + e.dur) || blOn(day, rid).some((b) => m >= toMin(b.start) && m < toMin(b.start) + b.dur);
+      const busy = (rid, m) => !roomFor(rid, day, m, slot) || blOn(day, rid).some((b) => m >= toMin(b.start) && m < toMin(b.start) + b.dur);
+      const freeAt = (rid, m) => !gone(day, m) && !closed.some((c) => sameDay(c, day)) && (freeList ? freeOf(rid, day).some(([a, b]) => m >= a && m + slot <= b) : availability(rid, day).some(([a, b]) => m >= a && m + slot <= b) && !busy(rid, m));
       for (let m = from * 60; m < to * 60; m += slot) {
-        evs.filter((e) => toMin(e.start) >= m && toMin(e.start) < m + slot).forEach((e) => rows.push(`<button class="cx-ag-row" data-ev="${e.id}" data-tone="${e.tone}"><span class="cx-ag-row-t">${ui.text(e.start, 'strong')}${ui.text(`${e.dur} min`, 'caption')}</span><span class="cx-vstack" style="gap:0;min-width:0">${ui.text(e.title, 'heading')}${ui.text(`${e.subtitle}${resources.length > 1 ? ' · ' + resName(e.resource) : ''}`, 'muted')}</span>${e.steps ? ui.badge(e.steps[e.at], { tone: e.tone === 'wait' ? 'wait' : e.tone === 'info' ? 'info' : 'ok' }) : ''}</button>`));
-        blOn(day).filter((b) => toMin(b.start) === m && (who === 'all' || b.resource === who || b.resource === 'all')).forEach((b) => rows.push(`<div class="cx-ag-row" data-kind="block"><span class="cx-ag-row-t">${ui.text(b.start, 'strong')}${ui.text(`${b.dur} min`, 'caption')}</span>${ui.text(`${b.reason || 'Bloqueado'}${resources.length > 1 && b.resource !== 'all' ? ' · ' + resName(b.resource) : ''}`, 'muted')}</div>`));
-        const free = rids.filter((rid) => availability(rid, day).some(([a, b]) => m >= a && m + slot <= b) && !busy(rid, m));
-        const key = free.join(','), lastRow = rows.at(-1);
-        if (free.length && !evs.some((e) => toMin(e.start) <= m && toMin(e.start) + e.dur > m && (who !== 'all' || rids.length === 1))) {
+        evs.filter((e) => toMin(e.start) >= m && toMin(e.start) < m + slot).forEach((e) => rows.push(evRow(e)));
+        blOn(day).filter((b) => toMin(b.start) === m && (who === 'all' || b.resource === who || b.resource === 'all')).forEach((b) => rows.push(`<div class="cx-ag-row" data-kind="block"><span class="cx-ag-row-t">${ui.text(clk(b.start), 'strong')}${ui.text(`${b.dur} min`, 'caption')}</span>${ui.text(`${b.reason || w.blocked}${resources.length > 1 && b.resource !== 'all' ? ' · ' + resName(b.resource) : ''}`, 'muted')}</div>`));
+        const fr = rids.filter((rid) => bookable(rid) && freeAt(rid, m));
+        const key = fr.join(','), lastRow = rows.at(-1);
+        if (fr.length && !evs.some((e) => toMin(e.start) <= m && toMin(e.start) + e.dur > m && (who !== 'all' || rids.length === 1))) {
           if (lastRow?.kind === 'free' && lastRow.key === key && lastRow.end === m) lastRow.end = m + slot;
-          else rows.push({ kind: 'free', key, start: m, end: m + slot, free });
+          else rows.push({ kind: 'free', key, start: m, end: m + slot, free: fr });
         }
       }
-      const html = rows.map((r) => (typeof r === 'string' ? r : `<button class="cx-ag-row" data-kind="free" data-free="${r.start}" data-rid="${r.free[0]}" aria-label="Libre de ${toHM(r.start)} a ${toHM(r.end)}, crear"><span class="cx-ag-row-t">${ui.text(toHM(r.start), 'strong')}${r.end - r.start > slot ? ui.text(`a ${toHM(r.end)}`, 'caption') : ''}</span>${ui.text(`Libre${rids.length > 1 ? ` · ${r.free.map(resName).join(', ')}` : ''}`, 'muted')}<span class="cx-grow"></span>${ui.icon('plus')}</button>`)).join('');
-      return `<div class="cx-ag-list" role="list">${html || `<div class="cn-empty" style="padding:32px 12px"><div class="cn-empty-header"><div class="cn-empty-title">No hay horario este día</div></div></div>`}</div>`;
+      const html = rows.map((r) => (typeof r === 'string' ? r : `<button class="cx-ag-row" data-kind="free" data-free="${r.start}" data-rid="${r.free[0]}" aria-label="${w.freeFromTo(clk(toHM(r.start)), clk(toHM(r.end)))}"><span class="cx-ag-row-t">${ui.text(clk(toHM(r.start)), 'strong')}${r.end - r.start > slot ? ui.text(`${w.until} ${clk(toHM(r.end))}`, 'caption') : ''}</span>${ui.text(`${w.free}${rids.length > 1 ? ` · ${r.free.map(resName).join(', ')}` : ''}`, 'muted')}<span class="cx-grow"></span>${ui.icon('plus')}</button>`)).join('');
+      return `<div class="cx-ag-list" role="list">${html || `<div class="cn-empty" style="padding:32px 12px"><div class="cn-empty-header"><div class="cn-empty-title">${isClosed(day) ? w.closed : w.noHours}</div></div></div>`}</div>`;
     };
+    // LOADING keeps the very layout it is about to show: the same toolbar, strip, column heads, hours and height,
+    // with grey citas where the real ones will land. Nothing jumps when the data arrives, nothing shrinks while it loads.
+    const SKEL = [[0.5, 1], [2, 1.5], [4.5, 1], [6, 2], [8, 1]];
+    const skelCol = (ci) => SKEL.filter(([h], i) => (i + ci) % 3 !== 2 && h < to - from).map(([h, len]) => `<span class="cx-ag-skev skel" style="top:${h * hourPx + 2}px;height:${Math.min(len, to - from - h) * hourPx - 4}px"></span>`).join('');
+    const skelList = () => `<div class="cx-ag-list" aria-hidden="true">${Array.from({ length: Math.max(6, Math.round((to - from) * 60 / slot / 2)) }, (_, i) => `<div class="cx-ag-row cx-ag-skrow"><span class="cx-ag-row-t"><s class="skel" style="width:38px"></s><s class="skel" style="width:28px"></s></span><span class="cx-vstack" style="gap:6px;flex:1"><s class="skel" style="width:${[46, 38, 54, 42][i % 4]}%"></s><s class="skel" style="width:${[30, 26, 34, 22][i % 4]}%"></s></span></div>`).join('')}</div>`;
+    // the top band keeps what it had (the «Ahora» card, the queue) as grey shapes, so its height holds too
+    let hadNow = false, hadQueue = false;
+    const skelTop = () => `${hadNow && sameDay(day, today) ? '<div class="cx-ag-nowcard cx-ag-sknow" aria-hidden="true"><span class="cx-vstack" style="gap:0;flex:1">' + [[90, 'caption'], [160, 'heading'], [120, 'muted']].map(([wd, v]) => ui.text(`<s class="skel cx-ag-skline" style="width:${wd}px"></s>`, v)).join('') + '</span></div>' : ''}${hadQueue ? '<div class="cx-ag-queue" aria-hidden="true"><s class="skel" style="width:24px;height:24px;border-radius:50%"></s><s class="skel" style="width:24px;height:24px;border-radius:50%;margin-left:4px"></s><s class="skel" style="width:70px;margin-left:8px"></s></div>' : ''}`;
+    // the days shown, so an app can load exactly those (it is told once per change)
+    let lastRange = '';
+    // every toolbar command in one place: the toolbar's own buttons and an app's phone bar (api.run) go through here.
+    // While loading, nothing that would ask the server runs.
+    function run(k) {
+      if (loading || !k) return;
+      if (k.startsWith('view:')) { const v = k.slice(5); if (['day', 'week', 'list'].includes(v)) { view = v; picked = true; paint(); } return; }
+      if (k === 'today') { day = new Date(today); if (view === 'range') { view = 'day'; rangeSel = null; } }
+      else if ((k === 'prev' || k === 'next') && eff() === 'range') { const len = Math.round((rangeSel[1] - rangeSel[0]) / 864e5) + 1, s2 = (k === 'next' ? 1 : -1) * len; rangeSel = [addDays(rangeSel[0], s2), addDays(rangeSel[1], s2)]; day = new Date(rangeSel[0]); }
+      else if (k === 'prev' || k === 'next') day = addDays(day, (k === 'next' ? 1 : -1) * (view === 'week' && !narrow ? 7 : 1));
+      else if (k === 'new') return create({ resource: pick(), day, start: null });
+      else if (k === 'block') return openBlock();
+      else return onAction(k);
+      paint();
+    }
+    const tellRange = () => { const v = eff(); const a = v === 'range' ? rangeSel[0] : v === 'week' ? weekDays()[0] : day, b = v === 'range' ? rangeSel[1] : v === 'week' ? weekDays()[6] : day; const key = `${v}|${+a}|${+b}`; if (key === lastRange) return; lastRange = key; onRange({ from: a, to: b, view: v }); };
     const paint = () => {
       if (typeof drag !== 'undefined' && drag) { const d = drag; drag = null; clearTimeout(d.timer); cancelAnimationFrame(scrollRaf); d.ghost?.remove(); }
-      const v = narrow && view === 'week' ? 'day' : view; // the phone keeps the calendar: day grid or list, the week needs a wide screen
-      const cols = v === 'week' ? weekDays().map((d) => ({ day: d, rid: who === 'all' ? 'all' : who, head: `${DAY[d.getDay()]} ${d.getDate()}`, label: `${DAYLONG[d.getDay()]} ${d.getDate()}`, today: sameDay(d, today) })) : shown().map((r) => ({ day, rid: r.id, head: `${ui.avatar(r.name, { size: 'sm' })}${r.name}`, label: r.name }));
-      root.innerHTML = toolbar() + `<div class="cx-ag-frame"><div class="cx-ag-top">${people()}${strip()}</div>${v === 'list' ? `<div class="cx-ag-listwrap">${list()}</div>` : grid(cols)}</div>`;
+      const v = eff(); // the phone keeps the calendar: day grid or list, the week needs a wide screen
+      const cols = v === 'week' ? weekDays().map((d) => ({ day: d, rid: who === 'all' || who.startsWith('kind:') ? 'all' : who, head: `${w.dayS[d.getDay()]} ${d.getDate()}`, label: `${w.dayL[d.getDay()]} ${d.getDate()}`, today: sameDay(d, today), closed: isClosed(d) })) : dayCols().map((r) => ({ day, rid: r.id, head: `${r.photo ? `<span class="cn-avatar cx-ag-face" style="background-image:url('${r.photo}')"></span>` : ui.avatar(r.name, { size: 'sm' })}<span class="cx-ag-colname"><b>${r.name}</b>${roleOf(r) ? `<small>${roleOf(r)}</small>` : ''}</span>`, label: r.name }));
+      clash = loading ? new Set() : findClashes();
+      const crossed = loading ? 0 : evOn(day).filter((e) => clash.has(e.id)).length;
+      const top = loading ? skelTop() : nowCard() + queueLine();
+      const alert = crossed ? ui.alert({ icon: 'info', title: w.clash(crossed), description: w.clashHow, action: ui.button({ label: w.clashSee, size: 'sm', variant: 'outline', attrs: 'data-ag-clash' }), tone: 'bad', attrs: 'data-ag-alert' }) : '';
+      if (!loading) { hadNow = top.includes('cx-ag-nowcard'); hadQueue = top.includes('cx-ag-queue'); }
+      root.innerHTML = toolbar() + `<div class="cx-ag-frame"${loading ? ` aria-busy="true" aria-label="${w.loading}"` : ''}><div class="cx-ag-top">${people()}${strip()}${top}${alert}</div>${v === 'range' ? `<div class="cx-ag-listwrap">${loading ? skelList() : rangeList()}</div>` : v === 'list' ? `<div class="cx-ag-listwrap">${loading ? skelList() : list()}</div>` : grid(cols)}</div>`;
+      root.toggleAttribute('data-loading', !!loading);
       $$('.cx-tabs', root).forEach(initTabs);
       const now = $('.cx-ag-now', root); if (now) $('.cx-ag-scroll', root).scrollTop = Math.max(0, parseFloat(now.style.top) - 120);
+      tellRange();
     };
     // drag to move · drag the bottom edge to resize (15 min). A ghost shows where it lands and turns red where the
     // time is not free; the real event never moves until a valid drop. Mouse starts after 6 px, touch after a long press.
-    const free = (rid, d, st, dur, except) => availability(rid, d).some(([a, b]) => st >= a && st + dur <= b)
-      && !evOn(d, rid).some((x) => x.id !== except && st < toMin(x.start) + x.dur && st + dur > toMin(x.start))
-      && !blOn(d, rid).some((b) => st < toMin(b.start) + b.dur && st + dur > toMin(b.start));
+    // With server free hours, «free» means inside one of them or inside the cita's own time.
+    // the past and the closed days are never free, whatever the hours say
+    const gone = (d, st) => { const k = new Date(d); k.setHours(0, 0, 0, 0); return k < today || (sameDay(k, today) && st < nowMin()); };
+    const fits = (rid, d, st, dur, except) => {
+      if (gone(d, st) || closed.some((c) => sameDay(c, d))) return false;
+      if (freeList) { const own = events.find((x) => x.id === except); const wins = freeOf(rid, d); if (own && own.resource === rid && sameDay(own.day, d)) wins.push([toMin(own.start), toMin(own.start) + own.dur]); wins.sort((a, b) => a[0] - b[0]); let cur = st; for (const [a, b] of wins) { if (a <= cur && b > cur) cur = b; } return cur >= st + dur && !blOn(d, rid).some((b) => st < toMin(b.start) + b.dur && st + dur > toMin(b.start)); }
+      return availability(rid, d).some(([a, b]) => st >= a && st + dur <= b) && roomFor(rid, d, st, dur, except) && !blOn(d, rid).some((b) => st < toMin(b.start) + b.dur && st + dur > toMin(b.start));
+    };
     let drag = null, justDragged = false, scrollRaf = 0;
     const arm = () => {
       const d = drag; d.armed = true; clearTimeout(d.timer);
@@ -446,16 +742,18 @@ let wheelsNow = [];
       const d = drag; if (!d?.armed) return; d.lastX = cx; d.lastY = cy;
       if (d.resize) { const top = d.ev.getBoundingClientRect().top; d.dur = Math.max(15, Math.min(to * 60 - toMin(d.it.start), Math.round(((cy - top) / hourPx) * 60 / 15) * 15)); d.target = { day: d.it.day, resource: d.it.resource, start: d.it.start }; }
       else {
-        const col = document.elementsFromPoint(cx, cy).find((x) => x.classList?.contains('cx-ag-col')); if (!col) return;
+        let col = document.elementsFromPoint(cx, cy).find((x) => x.classList?.contains('cx-ag-col')); if (!col) return;
+        // moveAcross "off": over another person's column the cita stays in its own (only its time changes)
+        if (moveAcross === 'off' && col.dataset.rid !== 'all' && col.dataset.rid !== d.it.resource) col = root.querySelector(`.cx-ag-col[data-rid="${d.it.resource}"][data-day="${col.dataset.day}"]`) || col;
         const cr = col.getBoundingClientRect(), m = Math.round((((cy - d.dy - cr.top) / hourPx) * 60 + from * 60) / 15) * 15;
-        d.target = { day: new Date(+col.dataset.day), resource: col.dataset.rid === 'all' ? d.it.resource : col.dataset.rid, start: toHM(Math.max(from * 60, Math.min(to * 60 - d.it.dur, m))) };
+        d.target = { day: new Date(+col.dataset.day), resource: col.dataset.rid === 'all' || moveAcross === 'off' ? d.it.resource : col.dataset.rid, start: toHM(Math.max(from * 60, Math.min(to * 60 - d.it.dur, m))) };
         if (d.ghost.parentElement !== col) { col.appendChild(d.ghost); d.ghost.style.left = '3px'; d.ghost.style.width = 'calc(100% - 6px)'; }
       }
       const st = toMin(d.target.start), dur = d.resize ? d.dur : d.it.dur;
-      d.ok = free(d.target.resource, d.target.day, st, dur, d.it.id);
+      d.ok = fits(d.target.resource, d.target.day, st, dur, d.it.id) && occ(d.it).filter((x) => x !== d.it.resource).every((x) => roomFor(x, d.target.day, st, dur, d.it.id));
       d.ghost.style.top = y(st) + 'px'; d.ghost.style.height = (dur / 60) * hourPx - 3 + 'px';
       d.ghost.toggleAttribute('data-invalid', !d.ok);
-      $('.cx-ag-ghost-t', d.ghost).textContent = `${d.target.start}–${toHM(st + dur)}${resources.length > 1 ? ' · ' + resName(d.target.resource) : ''}${d.ok ? '' : ' · no está libre'}`;
+      $('.cx-ag-ghost-t', d.ghost).textContent = `${d.target.start}–${toHM(st + dur)}${resources.length > 1 ? ' · ' + resName(d.target.resource) : ''}${d.ok ? '' : ' · ' + w.notFree}`;
     };
     const stop = (commit) => {
       const d = drag; drag = null; cancelAnimationFrame(scrollRaf); if (!d) return; clearTimeout(d.timer);
@@ -464,21 +762,23 @@ let wheelsNow = [];
       delete d.ev.dataset.dragging;
       const changed = d.target && (d.resize ? d.dur !== d.it.dur : d.target.start !== d.it.start || d.target.resource !== d.it.resource || !sameDay(d.target.day, d.it.day));
       if (commit && d.ok && changed) {
+        // drawn where it landed at once; an app confirms with update() (or puts it back by sending the old data)
         if (d.resize) d.it.dur = d.dur; else Object.assign(d.it, d.target);
-        paint(); onChange(events);
-        island('done', d.resize ? `Ahora dura ${d.it.dur} min` : `Movida a las ${d.it.start}${resources.length > 1 ? ' con ' + resName(d.it.resource) : ''}`, 2000);
+        paint(); onChange(events); onMove?.({ id: d.it.id, resource: d.it.resource, day: d.it.day, start: d.it.start, dur: d.it.dur });
+        if (!appMode) island('done', d.resize ? w.nowLasts(d.it.dur) : w.movedTo(d.it.start, resources.length > 1 ? resName(d.it.resource) : ''), 2000);
         $(`.cx-ag-ev[data-ev="${d.it.id}"]`, root)?.animate([{ boxShadow: '0 0 0 2px var(--selected)' }, { boxShadow: '0 0 0 0 transparent' }], { duration: 700 });
         return;
       }
-      if (commit && !d.ok && changed) island('error', 'Ese horario no está libre', 2000);
+      if (commit && !d.ok && changed) island('error', w.notFreeLong, 2000);
       // back to where it was: the ghost flies home, then goes
       const home = d.ev.getBoundingClientRect(), g = d.ghost.getBoundingClientRect();
       d.ghost.animate([{ transform: 'none', opacity: 1 }, { transform: `translate(${home.left - g.left}px, ${home.top - g.top}px)`, opacity: 0.4 }], { duration: 220, easing: 'cubic-bezier(.22,1,.36,1)', fill: 'forwards' }).finished.then(() => d.ghost.remove());
     };
     root.addEventListener('pointerdown', (e) => {
+      if (!dragOn || loading) return;
       const ev = e.target.closest('.cx-ag-ev'); if (!ev || e.button > 0 || drag) return;
-      const it = events.find((x) => x.id === ev.dataset.ev), r = ev.getBoundingClientRect();
-      drag = { ev, it, resize: !!e.target.closest('.cx-ag-grip'), dy: e.clientY - r.top, x0: e.clientX, y0: e.clientY, lastX: e.clientX, lastY: e.clientY, armed: false, touch: e.pointerType === 'touch', dur: it.dur, pid: e.pointerId };
+      const it = events.find((x) => x.id === ev.dataset.ev), r = ev.getBoundingClientRect(); if (!it || ['done', 'noshow', 'started'].includes(it.status)) return;   // what happened, or is happening, stays where it is
+      drag = { ev, it, resize: resizeMode !== 'off' && !!e.target.closest('.cx-ag-grip'), dy: e.clientY - r.top, x0: e.clientX, y0: e.clientY, lastX: e.clientX, lastY: e.clientY, armed: false, touch: e.pointerType === 'touch', dur: it.dur, pid: e.pointerId };
       if (drag.touch) drag.timer = setTimeout(() => { if (drag && !drag.armed) { arm(); move(drag.lastX, drag.lastY); } }, 320);
     });
     root.addEventListener('pointermove', (e) => {
@@ -492,85 +792,203 @@ let wheelsNow = [];
     root.addEventListener('pointerup', (e) => { if (drag && e.pointerId === drag.pid) stop(true); });
     root.addEventListener('pointercancel', () => stop(false));
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && drag?.armed) { e.preventDefault(); stop(false); } });
+    // DRAG TO PAN: when the agenda is smaller than its day (a narrow window, many people, the hours below the fold), a
+    // mouse drag on the empty grid moves it, in both directions, like a finger does on a phone (the finger keeps the
+    // native scroll). It never changes the day. Citas keep their own drag; the end of a pan is not a tap on an hour.
+    let pan = null, justSwiped = false;
+    root.addEventListener('pointerdown', (e) => {
+      if (e.pointerType !== 'mouse' || e.button > 0 || drag || e.target.closest('.cx-ag-ev, .cx-ag-nowcard, .cx-ag-bar, input')) return;
+      const el = e.target.closest('.cx-ag-scroll, .cx-ag-who'); if (!el) return;
+      if (el.scrollWidth <= el.clientWidth + 1 && el.scrollHeight <= el.clientHeight + 1) return;   // nothing hidden: nothing to pan
+      pan = { el, x0: e.clientX, y0: e.clientY, sl: el.scrollLeft, st: el.scrollTop, on: false, pid: e.pointerId };
+    });
+    root.addEventListener('pointermove', (e) => {
+      const pn = pan; if (!pn || e.pointerId !== pn.pid || drag?.armed) return;
+      const dx = e.clientX - pn.x0, dy = e.clientY - pn.y0;
+      if (!pn.on) { if (Math.hypot(dx, dy) < 6) return; pn.on = true; pn.el.dataset.panning = ''; try { pn.el.setPointerCapture(e.pointerId); } catch { /* gone */ } }
+      pn.el.scrollLeft = pn.sl - dx; pn.el.scrollTop = pn.st - dy;
+    });
+    const endPan = () => { const pn = pan; pan = null; if (!pn?.on) return; delete pn.el.dataset.panning; justSwiped = true; setTimeout(() => { justSwiped = false; }, 0); };
+    root.addEventListener('pointerup', (e) => { if (pan && e.pointerId === pan.pid) endPan(); });
+    root.addEventListener('pointercancel', endPan);
     root.addEventListener('click', (e) => {
-      const evb = e.target.closest('.cx-ag-ev'); if (evb) { if (!justDragged) openEvent(events.find((x) => x.id === evb.dataset.ev)); return; }
-      const a = e.target.closest('[data-ag]'); if (a) { const k = a.dataset.ag; if (k === 'today') day = new Date(today); if (k === 'prev' || k === 'next') day = addDays(day, (k === 'next' ? 1 : -1) * (view === 'week' && !narrow ? 7 : 1)); if (k === 'new') return onCreate({ resource: who === 'all' ? resources[0].id : who, day, start: null }); if (k === 'block') return openBlock(); if (!['today', 'prev', 'next'].includes(k)) return onAction(k); paint(); return; }
-      const v = e.target.closest('[data-ag-view]'); if (v) { view = v.dataset.agView; paint(); return; }
-      const w = e.target.closest('[data-who]'); if (w) { who = w.dataset.who; paint(); return; }
-      const dd = e.target.closest('[data-ag-day]'); if (dd) { day = new Date(+dd.dataset.agDay); if (view === 'week' && !narrow) view = 'day'; paint(); return; }
-      const s = e.target.closest('.cx-ag-slot'); if (s) { const col = s.closest('.cx-ag-col'); onCreate({ resource: col.dataset.rid === 'all' ? resources[0].id : col.dataset.rid, day: new Date(+col.dataset.day), start: toHM(+s.dataset.slotTime) }); return; }
-      const f = e.target.closest('[data-free]'); if (f) { onCreate({ resource: f.dataset.rid, day, start: toHM(+f.dataset.free) }); return; }
-      const row = e.target.closest('.cx-ag-row[data-ev]'); if (row) openEvent(events.find((x) => x.id === row.dataset.ev));
+      if (justSwiped) { e.preventDefault(); return; }   // the end of a pan is not a tap on an hour
+      if (loading && !e.target.closest('[data-who]')) return;   // only the person filter works while loading: it asks nothing
+      const evb = e.target.closest('.cx-ag-ev, .cx-ag-nowcard, .cx-ag-row[data-ev]'); if (evb) { if (!justDragged) openEvent(events.find((x) => x.id === evb.dataset.ev)); return; }
+      const a = e.target.closest('[data-ag]'); if (a) { run(a.dataset.ag); return; }
+      if (e.target.closest('[data-ag-date]')) { openDate(); return; }
+      if (e.target.closest('[data-ag-clash]')) { seeClash(); return; }
+      const v = e.target.closest('[data-ag-view]'); if (v) { view = v.dataset.agView; rangeSel = null; picked = true; paint(); return; }
+      const wh = e.target.closest('[data-who]'); if (wh) { who = wh.dataset.who; paint(); return; }
+      const dd = e.target.closest('[data-ag-day]'); if (dd) { day = new Date(+dd.dataset.agDay); if (view === 'range') { view = 'day'; rangeSel = null; } if (view === 'week' && !narrow) view = 'day'; paint(); return; }
+      const s = e.target.closest('.cx-ag-slot'); if (s) { const col = s.closest('.cx-ag-col'); const rid = col.dataset.rid === 'all' ? pick() : col.dataset.rid, d = new Date(+col.dataset.day), st = +s.dataset.slotTime;
+        if (!fits(rid, d, st, slot)) { island('error', capOf(rid) !== 1 && availability(rid, d).some(([a, b]) => st >= a && st + slot <= b) ? w.full : w.notFreeLong, 2000); return; }   // a full agenda says so instead of opening a sheet
+        create({ resource: rid, day: d, start: toHM(st) }); return; }
+      const f = e.target.closest('[data-free]'); if (f) { create({ resource: f.dataset.rid, day: f.dataset.day ? new Date(+f.dataset.day) : day, start: toHM(+f.dataset.free) }); return; }
     });
     root.addEventListener('keydown', (e) => { const ev = e.target.closest('.cx-ag-ev'); if (ev && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); openEvent(events.find((x) => x.id === ev.dataset.ev)); } });
-    new ResizeObserver(() => { const n = root.clientWidth < 700; if (n !== narrow) { narrow = n; paint(); } }).observe(root);
+    // A width change repaints on the NEXT frame: repainting inside the observer changes the agenda's own size in the frame
+    // it is being measured, and the browser reports a resize loop.
+    // the time keeps moving: every half minute the now line, its time and the veil over what went by follow the clock
+    const tick = setInterval(() => {
+      if (!root.isConnected) { clearInterval(tick); return; }
+      if (drag || loading) return; const m = nowMin(); if (m <= from * 60 || m >= to * 60) return;
+      $$('.cx-ag-now', root).forEach((x) => { x.style.top = y(m) + 'px'; }); const t = $('.cx-ag-nowtime', root); if (t) { t.style.top = y(m) + 'px'; t.textContent = clk(toHM(m)); }
+      $$('.cx-ag-col', root).forEach((c) => { if (!sameDay(new Date(+c.dataset.day), today)) return; const g = $('.cx-ag-gone', c); if (g) g.style.height = y(m) + 'px'; });
+    }, 30000);
+    new ResizeObserver(() => requestAnimationFrame(() => { const n = root.clientWidth < 700; if (n !== narrow) { narrow = n; paint(); } })).observe(root);
 
-    // ── the event sheet: detail · lifecycle · payment · move (second step) · cancel (second step) ──
+    // ── the event sheet (showcase): detail · lifecycle · payment · move (second step) · cancel (second step).
+    // In app mode a tapped cita goes to onOpen and the app opens its own sheet. ──
     let open1 = null, step = 'detail', moveTo = null;
-    const openEvent = (ev) => { open1 = ev; step = 'detail'; moveTo = null; openModal('agEvent', 'auto'); };
+    const openEvent = (ev) => { if (!ev) return; if (appMode && onOpen) return onOpen(ev); open1 = ev; step = 'detail'; moveTo = null; sheetOf('agEvent'); };
     const sheet = () => {
       const e = open1;
       if (step === 'move') {
-        const days = Array.from({ length: 6 }, (_, i) => addDays(today, i)).filter((d) => availability(e.resource, d).length);
-        const md = moveTo?.day || e.day, free = [];
-        const nowMin = sameDay(md, new Date()) ? new Date().getHours() * 60 + new Date().getMinutes() : -1;
-        for (let m = from * 60; m + e.dur <= to * 60; m += slot) { const ok = m > nowMin && availability(e.resource, md).some(([a, b]) => m >= a && m + e.dur <= b) && !evOn(md, e.resource).some((x) => x.id !== e.id && m < toMin(x.start) + x.dur && m + e.dur > toMin(x.start)); if (ok) free.push(toHM(m)); }
-        $('#mdl-title').textContent = 'Cambiar la hora'; $('#mdl-desc').textContent = `${e.title} · ${e.dur} min con ${resName(e.resource)}`;
-        body.innerHTML = `<div class="cx-vstack" style="gap:14px">${ui.text('Día', 'label')}<div class="cx-wz-days" style="grid-template-columns:repeat(${days.length},1fr)">${days.map((d) => `<button class="cn-button cn-button-variant-outline cx-size-tile cx-day" data-mv-day="${+d}" aria-pressed="${sameDay(d, md)}"><small>${sameDay(d, today) ? 'hoy' : DAY[d.getDay()]}</small><b>${d.getDate()}</b><i></i></button>`).join('')}</div>${ui.text('Hora libre', 'label')}${free.length ? `<div class="cx-hour-grid">${free.map((h) => (sameDay(md, e.day) && h === e.start ? ui.button({ label: h, size: 'sm', attrs: `disabled title="Es su hora actual" aria-label="${h}, su hora actual"` }) : ui.button({ label: h, size: 'sm', attrs: `aria-pressed="${moveTo?.start === h}" data-mv-h="${h}"` }))).join('')}</div>` : ui.text('No queda una hora libre ese día.', 'muted', 'p')}</div>`;
-        foot.innerHTML = ui.button({ label: `${ui.icon('left')}Volver`, size: 'default', attrs: 'data-ev-back', cls: 'cx-exit' }) + ui.button({ label: 'Guardar nueva hora', variant: 'default', size: 'default', attrs: `data-ev-move ${moveTo?.start ? '' : 'disabled'}`, cls: 'cx-go' });
+        const days = Array.from({ length: 6 }, (_, i) => addDays(today, i)).filter((d) => works(e.resource, d));
+        const md = moveTo?.day || e.day, fr = [];
+        const nowMin = sameDay(md, today) ? nowMin() : -1;
+        for (let m = from * 60; m + e.dur <= to * 60; m += slot) { if (m > nowMin && fits(e.resource, md, m, e.dur, e.id)) fr.push(toHM(m)); }
+        $('#mdl-title').textContent = w.move; $('#mdl-desc').textContent = `${e.title} · ${e.dur} min${resources.length > 1 ? ` · ${resName(e.resource)}` : ''}`;
+        body.innerHTML = `<div class="cx-vstack" style="gap:14px">${ui.text(w.day, 'label')}<div class="cx-wz-days" style="grid-template-columns:repeat(${days.length},1fr)">${days.map((d) => `<button class="cn-button cn-button-variant-outline cx-size-tile cx-day" data-mv-day="${+d}" aria-pressed="${sameDay(d, md)}"><small>${sameDay(d, today) ? w.todayShort : w.dayS[d.getDay()]}</small><b>${d.getDate()}</b><i></i></button>`).join('')}</div>${ui.text(w.freeSlot, 'label')}${fr.length ? `<div class="cx-hour-grid">${fr.map((h) => (sameDay(md, e.day) && h === e.start ? ui.button({ label: h, size: 'sm', attrs: `disabled title="${w.current}" aria-label="${h}, ${w.current}"` }) : ui.button({ label: h, size: 'sm', attrs: `aria-pressed="${moveTo?.start === h}" data-mv-h="${h}"` }))).join('')}</div>` : ui.text(w.noneFree, 'muted', 'p')}</div>`;
+        foot.innerHTML = ui.button({ label: `${ui.icon('left')}${w.back}`, size: 'default', attrs: 'data-ev-back', cls: 'cx-exit' }) + ui.button({ label: w.saveMove, variant: 'default', size: 'default', attrs: `data-ev-move ${moveTo?.start ? '' : 'disabled'}`, cls: 'cx-go' });
         return;
       }
       if (step === 'cancel') {
-        const R = ['El cliente pidió cancelar', 'No vino', 'Me surgió algo', 'Otro'];
-        $('#mdl-title').textContent = `Cancelar la ${nouns.item}`; $('#mdl-desc').textContent = `${e.title} · ${e.start}`;
-        body.innerHTML = `<div class="cx-vstack" role="radiogroup" aria-label="Motivo" style="gap:8px">${ui.text('¿Por qué?', 'label')}${R.map((r, i) => ui.choice({ title: r, checked: i === 0, attrs: `data-why="${r}"` })).join('')}</div>${ui.text('Le avisamos al cliente con este motivo.', 'caption', 'p')}`;
-        foot.innerHTML = ui.button({ label: `${ui.icon('left')}Volver`, size: 'default', attrs: 'data-ev-back', cls: 'cx-exit' }) + ui.button({ label: `Cancelar la ${nouns.item}`, variant: 'destructive', size: 'default', attrs: 'data-ev-cancel-go', cls: 'cx-go' });
+        $('#mdl-title').textContent = w.cancelOf; $('#mdl-desc').textContent = `${e.title} · ${e.start}`;
+        body.innerHTML = `<div class="cx-vstack" role="radiogroup" aria-label="${w.reasonLabel}" style="gap:8px">${ui.text(w.why, 'label')}${w.reasons.map((r, i) => ui.choice({ title: r, checked: i === 0, attrs: `data-why="${r}"` })).join('')}</div>${ui.text(w.tellClient, 'caption', 'p')}`;
+        foot.innerHTML = ui.button({ label: `${ui.icon('left')}${w.back}`, size: 'default', attrs: 'data-ev-back', cls: 'cx-exit' }) + ui.button({ label: w.cancelOf, variant: 'destructive', size: 'default', attrs: 'data-ev-cancel-go', cls: 'cx-go' });
         return;
       }
       const last = e.steps && e.at >= e.steps.length - 1, next = e.steps && !last ? e.steps[e.at + 1] : null;
-      $('#mdl-title').textContent = e.title; $('#mdl-desc').textContent = `${DAYLONG[e.day.getDay()]} ${e.day.getDate()} · ${e.start} · ${e.dur} min · ${resName(e.resource)}`;
+      $('#mdl-title').textContent = e.title; $('#mdl-desc').textContent = `${w.dayL[e.day.getDay()]} ${e.day.getDate()} · ${e.start} · ${e.dur} min${resources.length > 1 ? ` · ${resName(e.resource)}` : ''}`;
       body.innerHTML = `${e.steps ? ui.stepper(e.steps, e.at) : ''}<div class="cn-item-group" style="gap:0">${[
-        ui.item({ media: ui.itemMedia(ui.icon('scissors')), title: e.subtitle, description: e.price ? money0(e.price) : '' }),
-        e.payment ? ui.item({ media: ui.itemMedia(ui.icon('card')), title: e.payment.label, description: e.payment.detail, actions: ui.badge(e.payment.state, { tone: e.payment.tone }), footer: e.payment.receipt ? `<div class="cx-vstack" style="gap:8px">${e.payment.seen ? `<span class="cx-rcpt-mini" style="background:linear-gradient(135deg,#e8e3d6,#cfc6b0)" role="img" aria-label="Comprobante"></span>` : ''}<div class="cx-hstack">${ui.button({ label: `${ui.icon('image')}${e.payment.seen ? 'Ocultar' : 'Ver'} comprobante`, size: 'sm', attrs: 'data-ev-proof' })}${e.payment.tone === 'info' ? ui.button({ label: 'Pago recibido', size: 'sm', variant: 'default', attrs: `data-ev-paid ${e.payment.seen ? '' : 'disabled title="Ábrelo primero"'}` }) : ''}</div></div>` : '' }) : '',
-        e.contact ? ui.item({ media: ui.itemMedia(ui.icon('i-mail')), title: e.contact.label, description: e.contact.handle, actions: ui.button({ label: 'Escribir', size: 'xs', attrs: 'data-ev-write' }) }) : '',
-      ].filter(Boolean).join(ui.itemSeparator())}</div><div class="cx-hstack">${ui.button({ label: `${ui.icon('clock')}Cambiar la hora`, size: 'sm', variant: 'ghost', attrs: 'data-ev-step="move"' })}${ui.button({ label: `${ui.icon('caloff')}Cancelar`, size: 'sm', variant: 'ghost', attrs: 'data-ev-step="cancel"' })}</div>`;
-      foot.innerHTML = ui.button({ label: 'Cerrar', size: 'default', attrs: 'data-dismiss', cls: 'cx-exit' }) + (next ? ui.button({ label: `${e.actions?.[e.at] || next}${ui.icon('right')}`, variant: 'default', size: 'default', attrs: `data-ev-next ${e.payment && e.payment.tone === 'info' && e.at === 0 ? 'disabled title="Primero confirma el pago"' : ''}`, cls: 'cx-go' }) : ui.button({ label: `${ui.icon('check')}Terminada`, size: 'default', attrs: 'disabled', cls: 'cx-go' }));
+        ui.item({ media: ui.itemMedia(ui.icon('scissors')), title: e.subtitle, description: e.price ? fmtMoney(e.price) : '' }),
+        e.payment ? ui.item({ media: ui.itemMedia(ui.icon('card')), title: e.payment.label, description: e.payment.detail, actions: ui.badge(e.payment.state, { tone: e.payment.tone }), footer: e.payment.receipt ? `<div class="cx-vstack" style="gap:8px">${e.payment.seen ? `<span class="cx-rcpt-mini" style="background:linear-gradient(135deg,#e8e3d6,#cfc6b0)" role="img" aria-label="${w.proof}"></span>` : ''}<div class="cx-hstack">${ui.button({ label: `${ui.icon('image')}${e.payment.seen ? w.proofHide : w.proofShow}`, size: 'sm', attrs: 'data-ev-proof' })}${e.payment.tone === 'info' ? ui.button({ label: w.paidBtn, size: 'sm', variant: 'default', attrs: `data-ev-paid ${e.payment.seen ? '' : `disabled title="${w.openFirst}"`}` }) : ''}</div></div>` : '' }) : '',
+        e.contact ? ui.item({ media: ui.itemMedia(ui.icon('i-mail')), title: e.contact.label, description: e.contact.handle, actions: ui.button({ label: w.write, size: 'xs', attrs: 'data-ev-write' }) }) : '',
+      ].filter(Boolean).join(ui.itemSeparator())}</div><div class="cx-hstack">${ui.button({ label: `${ui.icon('clock')}${w.move}`, size: 'sm', variant: 'ghost', attrs: 'data-ev-step="move"' })}${ui.button({ label: `${ui.icon('caloff')}${w.cancel}`, size: 'sm', variant: 'ghost', attrs: 'data-ev-step="cancel"' })}</div>`;
+      foot.innerHTML = ui.button({ label: w.close, size: 'default', attrs: 'data-dismiss', cls: 'cx-exit' }) + (next ? ui.button({ label: `${e.actions?.[e.at] || next}${ui.icon('right')}`, variant: 'default', size: 'default', attrs: `data-ev-next ${e.payment && e.payment.tone === 'info' && e.at === 0 ? `disabled title="${w.confirmFirst}"` : ''}`, cls: 'cx-go' }) : ui.button({ label: `${ui.icon('check')}${w.finished}`, size: 'default', attrs: 'disabled', cls: 'cx-go' }));
     };
-    CONTENT.agEvent = sheet;
+    CONTENT[K('agEvent')] = sheet;
     const reSheet = () => easeHeight(mdl, sheet);
     document.addEventListener('click', (e) => {
-      if (!open1 || !mdl.contains(e.target)) return;
+      if (agOwner !== me || !open1 || !mdl.contains(e.target)) return;
       const st = e.target.closest('[data-ev-step]'); if (st) { step = st.dataset.evStep; moveTo = null; return reSheet(); }
       if (e.target.closest('[data-ev-back]')) { step = 'detail'; return reSheet(); }
       if (e.target.closest('[data-ev-proof]')) { open1.payment.seen = !open1.payment.seen; return reSheet(); }
-      if (e.target.closest('[data-ev-paid]')) { Object.assign(open1.payment, { state: 'Pagado', tone: 'ok', receipt: false }); open1.tone = 'ok'; paint(); return reSheet(); }
+      if (e.target.closest('[data-ev-paid]')) { Object.assign(open1.payment, { state: w.paid, tone: 'ok', receipt: false }); open1.tone = 'ok'; if (open1.status === 'awaiting_payment') open1.status = 'confirmed'; paint(); return reSheet(); }
       if (e.target.closest('[data-ev-next]')) { open1.at++; if (open1.at >= open1.steps.length - 1) open1.tone = 'ok'; paint(); onChange(events); return reSheet(); }
       const md = e.target.closest('[data-mv-day]'); if (md) { moveTo = { day: new Date(+md.dataset.mvDay), start: null }; return reSheet(); }
       const mh = e.target.closest('[data-mv-h]'); if (mh) { moveTo = { day: moveTo?.day || open1.day, start: mh.dataset.mvH }; return sheet(); }
-      if (e.target.closest('[data-ev-move]')) { Object.assign(open1, moveTo); day = new Date(moveTo.day); paint(); onChange(events); closeModal(); island('done', `Movida al ${moveTo.day.getDate()} a las ${moveTo.start}`, 2200); return; }
+      if (e.target.closest('[data-ev-move]')) { Object.assign(open1, moveTo); day = new Date(moveTo.day); paint(); onChange(events); closeModal(); island('done', w.movedDay(moveTo.day.getDate(), moveTo.start), 2200); return; }
       const why = e.target.closest('[data-why]'); if (why) { $$('[data-why]', body).forEach((x) => x.setAttribute('aria-checked', x === why)); return; }
-      if (e.target.closest('[data-ev-cancel-go]')) { open1.status = 'cancelled'; paint(); onChange(events); closeModal(); island('done', `${nouns.item[0].toUpperCase()}${nouns.item.slice(1)} cancelada`, 2400); return; }
-      if (e.target.closest('[data-ev-write]')) island('info', `Abriendo ${open1.contact.label}`, 1800);
+      if (e.target.closest('[data-ev-cancel-go]')) { open1.status = 'cancelled'; paint(); onChange(events); closeModal(); island('done', w.cancelled, 2400); return; }
+      if (e.target.closest('[data-ev-write]')) island('info', w.opening(open1.contact.label), 1800);
     });
 
-    // ── block time ──
-    const openBlock = () => openModal('agBlock', 'auto');
-    CONTENT.agBlock = () => {
-      $('#mdl-title').textContent = 'Bloquear un horario'; $('#mdl-desc').textContent = 'Nadie puede reservar en ese rato.';
-      const sel = (id, label, v) => ui.field({ id, label, control: kit.timeButton(v, `id="${id}" data-blt="${label}" style="width:100%;justify-content:flex-start"`) });
-      body.innerHTML = `${resources.length > 1 ? ui.field({ id: 'bl-r', label: 'Para', control: `<button type="button" class="cn-button cn-button-variant-outline cn-button-size-default cx-sel-btn cx-fill" id="bl-r" data-v="all"></button>` }) : ''}<div class="cx-frange">${sel('bl-f', 'Desde', '13:00')}${sel('bl-t', 'Hasta', '14:00')}</div>${ui.field({ id: 'bl-why', label: 'Motivo', control: ui.input({ id: 'bl-why', value: 'Almuerzo' }), description: 'Solo lo ves tú.' })}`;
-      foot.innerHTML = ui.button({ label: 'Cancelar', size: 'default', attrs: 'data-dismiss', cls: 'cx-exit' }) + ui.button({ label: `${ui.icon('i-lock')}Bloquear`, variant: 'default', size: 'default', attrs: 'data-bl-go', cls: 'cx-go' });
-      const br = $('#bl-r', body); if (br) kit.selectMenu(br, { label: 'Para', value: 'all', options: [{ value: 'all', label: 'Todo el negocio' }, ...resources.map((r) => ({ value: r.id, label: r.name }))], onChange: (v) => { br.dataset.v = v; } });
+    // ── a new appointment: the page's own form (onCreate), or, with createSheet, a short one built in: the service, the
+    // client and the time, and it lands on the agenda at once (a showcase agenda has no app behind it to open) ──
+    let draft = null;
+    const create = (x) => { if (!createSheet) return onCreate(x); draft = { ...x, start: x.start || toHM(from * 60 + 60) }; sheetOf('agNew'); };
+    const svcList = () => (services.length ? services : [{ name: w.It, dur: slot }]);
+    CONTENT[K('agNew')] = () => {
+      $('#mdl-title').textContent = w.newItem; $('#mdl-desc').textContent = w.newDesc;
+      body.innerHTML = `<div class="cx-vstack" style="gap:16px">`
+        + ui.field({ id: 'nw-s', label: w.service, control: `<button type="button" class="cn-button cn-button-variant-outline cn-button-size-default cx-sel-btn cx-fill" id="nw-s" data-v="0"></button>` })
+        + ui.field({ id: 'nw-c', label: w.client, control: ui.input({ id: 'nw-c', placeholder: w.clientPh, attrs: 'autocomplete="off"' }) })
+        + `<div class="cx-hstack" style="gap:12px;align-items:end">`
+        + ui.field({ id: 'nw-t', label: w.hour, control: kit.timeButton(draft.start, `id="nw-t" data-nwt="${w.hour}" style="width:100%;justify-content:flex-start"`) })
+        + (resources.length > 1 ? ui.field({ id: 'nw-r', label: It(w.resource), control: `<button type="button" class="cn-button cn-button-variant-outline cn-button-size-default cx-sel-btn cx-fill" id="nw-r" data-v="${draft.resource}"></button>` }) : '')
+        + `</div></div>`;
+      foot.innerHTML = ui.button({ label: w.cancel, size: 'default', attrs: 'data-dismiss', cls: 'cx-exit' }) + ui.button({ label: `${ui.icon('check')}${w.schedule}`, variant: 'default', size: 'default', attrs: 'data-nw-go', cls: 'cx-go' });
+      kit.selectMenu($('#nw-s', body), { label: w.service, value: '0', options: svcList().map((x, i) => ({ value: String(i), label: x.dur ? `${x.name} · ${x.dur} min` : x.name })), onChange: (v) => { $('#nw-s', body).dataset.v = v; } });
+      const nr = $('#nw-r', body); if (nr) kit.selectMenu(nr, { label: w.resource, value: draft.resource, options: resources.map((r) => ({ value: r.id, label: r.name })), onChange: (v) => { nr.dataset.v = v; } });
     };
-    body.addEventListener('click', async (e) => { const b = e.target.closest('[data-blt]'); if (!b) return; const v = await kit.pickTime({ value: b.querySelector('span').textContent, label: b.dataset.blt, from, to, step: 15 }); if (!v) return; b.querySelector('span').textContent = v; b.removeAttribute('aria-invalid'); const fb = $('#bl-f span', body), tb = $('#bl-t span', body); if (toMin(tb.textContent) <= toMin(fb.textContent)) tb.textContent = toHM(Math.min(toMin(fb.textContent) + 60, to * 60)); });
+    body.addEventListener('click', async (e) => { const b = e.target.closest('[data-nwt]'); if (agOwner !== me || !b || !draft) return; const v = await kit.pickTime({ value: b.querySelector('span').textContent, label: w.hour, from, to, step: slot }); if (v) b.querySelector('span').textContent = v; });
     document.addEventListener('click', (e) => {
-      if (!e.target.closest('[data-bl-go]')) return;
-      const f = toMin($('#bl-f span', body).textContent), t2 = toMin($('#bl-t span', body).textContent); if (t2 <= f) { $('#bl-t', body).setAttribute('aria-invalid', 'true'); return; }
-      blocks.push({ id: 'b' + Date.now(), resource: $('#bl-r', body)?.dataset.v || resources[0].id, day: new Date(day), start: toHM(f), dur: t2 - f, reason: $('#bl-why', body).value.trim() || 'Bloqueado' });
-      closeModal(); paint(); onChange(events);
+      if (agOwner !== me || !e.target.closest('[data-nw-go]') || !draft) return;
+      const svc = svcList()[+($('#nw-s', body)?.dataset.v || 0)] || svcList()[0];
+      const name = $('#nw-c', body).value.trim();
+      if (!name) { $('#nw-c', body).setAttribute('aria-invalid', 'true'); $('#nw-c', body).focus(); return; }
+      const start = $('#nw-t span', body).textContent;
+      events.push({ id: 'n' + Date.now(), resource: $('#nw-r', body)?.dataset.v || draft.resource, day: new Date(draft.day), start, dur: svc.dur || slot, title: name, subtitle: svc.name, status: 'confirmed', tint: svc.tint, at: 0 });
+      draft = null; closeModal(); paint(); onChange(events); island('done', w.scheduled(start), 2400);
     });
+
+    // ── block time: the form is the agenda's; the block itself is the app's when it listens (onBlock), else local ──
+    let blockOpen = false;
+    // THE TITLE OPENS A MONTH, floating under it (on a phone, the sheet from below): one day, or a range of days
+    // («Varios días»: the citas of each day one after another), and the month's title opens a year of months.
+    // «Ver cuáles»: each press scrolls to the next crossed cita and marks it for a moment
+    let clashAt = 0;
+    const seeClash = () => { const els = $$('.cx-ag-ev[data-conflict], .cx-ag-row[data-conflict]', root); if (!els.length) return; const el = els[clashAt++ % els.length]; const sc = $('.cx-ag-scroll', root);
+      if (sc && sc.contains(el)) { const a = sc.getBoundingClientRect(), b = el.getBoundingClientRect(); sc.scrollTo({ top: sc.scrollTop + b.top - a.top - 60, left: sc.scrollLeft + b.left - a.left - 60, behavior: 'smooth' }); } else el.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      el.animate([{ outline: '2px solid var(--destructive)', outlineOffset: '2px' }, { outline: '2px solid transparent', outlineOffset: '2px' }], { duration: 1400, delay: 250 }); };
+    let pop = null, dateMode = 'day';
+    const calWords = () => ({ mon: w.mon, weekdays: w.dayS.slice(1).concat(w.dayS[0]).map((x) => x.slice(0, 2).toLowerCase()), prevLabel: w.prevMonth, nextLabel: w.nextMonth, prevYear: w.prevYear, nextYear: w.nextYear, pickLabel: w.pickMonth });
+    const dateUI = (host, done) => {
+      const draw = () => {
+        host.innerHTML = `<div class="cx-tabs cx-ag-datemode" role="tablist" aria-label="${w.goTo}">${[['day', w.oneDay], ['range', w.someDays]].map(([k, l]) => `<button type="button" class="cn-button cn-button-variant-ghost cn-button-size-sm cx-tab" role="tab" aria-selected="${dateMode === k}" data-date-mode="${k}">${l}</button>`).join('')}</div><div class="cx-ag-datecal"></div>${dateMode === 'range' ? `<p class="cx-ag-datehint">${w.rangeHint}</p>` : ''}<div class="cx-ag-datefoot">${ui.button({ label: w.today, size: 'sm', variant: 'outline', attrs: 'data-date-today' })}</div>`;
+        $$('.cx-tabs', host).forEach(initTabs);
+        const wide = dateMode === 'range' && innerWidth > 720;
+        kit.calendar($('.cx-ag-datecal', host), { ...calWords(), mode: dateMode === 'range' ? 'range' : 'single', months: wide ? 2 : 1, value: dateMode === 'range' ? (rangeSel ? [new Date(rangeSel[0]), new Date(rangeSel[1])] : null) : new Date(day),
+          onChange: (v) => { if (dateMode === 'single' || dateMode === 'day') { if (v) done({ day: v }); return; } if (v?.[0] && v?.[1]) done({ range: v }); } });
+      };
+      host.addEventListener('click', (e) => { const m = e.target.closest('[data-date-mode]'); if (m) { dateMode = m.dataset.dateMode; draw(); return; } if (e.target.closest('[data-date-today]')) done({ day: new Date(today), today: true }); });
+      draw();
+    };
+    const applyDate = (r) => { if (r.range) { rangeSel = [new Date(r.range[0]), new Date(r.range[1])]; view = 'range'; day = new Date(rangeSel[0]); picked = true; } else { day = new Date(r.day); if (view === 'range') { view = 'day'; rangeSel = null; } } paint(); };
+    const closePop = () => { if (!pop) return; pop.remove(); pop = null; document.removeEventListener('pointerdown', popAway, true); document.removeEventListener('keydown', popKey, true); $('[data-ag-date]', root)?.setAttribute('aria-expanded', 'false'); };
+    const popAway = (e) => { if (pop && !pop.contains(e.target) && !e.target.closest?.('[data-ag-date]')) closePop(); };
+    const popKey = (e) => { if (e.key === 'Escape' && pop) { e.stopPropagation(); closePop(); $('[data-ag-date]', root)?.focus(); } };
+    const openDate = () => {
+      if (pop) return closePop();
+      if (matchMedia('(max-width: 640px)').matches) return sheetOf('agDate');
+      const trig = $('[data-ag-date]', root);
+      skinSync(); pop = document.createElement('div'); pop.className = 'cn-popover-content pg-pop cx-ag-pop'; pop.dataset.open = ''; pop.setAttribute('role', 'dialog'); pop.setAttribute('aria-label', w.goTo);
+      lib.append(pop); dateUI(pop, (r) => { closePop(); applyDate(r); trig?.focus(); });
+      place(pop, trig, 'start', 6);
+      trig?.setAttribute('aria-expanded', 'true');
+      document.addEventListener('pointerdown', popAway, true); document.addEventListener('keydown', popKey, true);
+      $('.cx-cal-day[data-range="edge"], .cx-cal-day[aria-pressed="true"], .cx-cal-day[data-today]', pop)?.focus();
+    };
+    addEventListener('scroll', () => { if (pop) place(pop, $('[data-ag-date]', root), 'start', 6); }, { passive: true });
+    addEventListener('resize', () => closePop());
+    CONTENT[K('agDate')] = () => {
+      $('#mdl-title').textContent = w.goTo; $('#mdl-desc').textContent = ''; foot.innerHTML = '';
+      body.innerHTML = '<div class="cx-ag-datesheet"></div>';
+      dateUI($('.cx-ag-datesheet', body), (r) => { closeModal(); applyDate(r); });
+    };
+    const openBlock = () => { blockOpen = true; sheetOf('agBlock'); };
+    CONTENT[K('agBlock')] = () => {
+      $('#mdl-title').textContent = w.blockTitle; $('#mdl-desc').textContent = w.blockDesc;
+      const sel = (id, label, v) => ui.field({ id, label, control: kit.timeButton(v, `id="${id}" data-blt="${label}" style="width:100%;justify-content:flex-start"`) });
+      body.innerHTML = `${resources.length > 1 && blockScope !== 'all' ? ui.field({ id: 'bl-r', label: w.for, control: `<button type="button" class="cn-button cn-button-variant-outline cn-button-size-default cx-sel-btn cx-fill" id="bl-r" data-v="${who === 'all' ? 'all' : who}"></button>` }) : ''}<div class="cx-frange">${sel('bl-f', w.from, '13:00')}${sel('bl-t', w.to, '14:00')}</div>${ui.field({ id: 'bl-why', label: w.reasonLabel, control: ui.input({ id: 'bl-why', value: w.reasonDefault }), description: w.onlyYou })}`;
+      foot.innerHTML = ui.button({ label: w.cancel, size: 'default', attrs: 'data-dismiss', cls: 'cx-exit' }) + ui.button({ label: `${ui.icon('i-lock')}${w.block}`, variant: 'default', size: 'default', attrs: 'data-bl-go', cls: 'cx-go' });
+      const br = $('#bl-r', body); if (br) kit.selectMenu(br, { label: w.for, value: br.dataset.v, options: [{ value: 'all', label: w.wholeShop }, ...resources.map((r) => ({ value: r.id, label: r.name }))], onChange: (v) => { br.dataset.v = v; } });
+    };
+    body.addEventListener('click', async (e) => { const b = e.target.closest('[data-blt]'); if (agOwner !== me || !b || !blockOpen) return; const v = await kit.pickTime({ value: b.querySelector('span').textContent, label: b.dataset.blt, from, to, step: 15 }); if (!v) return; b.querySelector('span').textContent = v; b.removeAttribute('aria-invalid'); const fb = $('#bl-f span', body), tb = $('#bl-t span', body); if (toMin(tb.textContent) <= toMin(fb.textContent)) tb.textContent = toHM(Math.min(toMin(fb.textContent) + 60, to * 60)); });
+    document.addEventListener('click', (e) => {
+      if (agOwner !== me || !e.target.closest('[data-bl-go]') || !blockOpen) return;
+      const f = toMin($('#bl-f span', body).textContent), t2 = toMin($('#bl-t span', body).textContent); if (t2 <= f) { $('#bl-t', body).setAttribute('aria-invalid', 'true'); return; }
+      const b = { id: 'b' + Date.now(), resource: $('#bl-r', body)?.dataset.v || resources[0].id, day: new Date(day), start: toHM(f), dur: t2 - f, reason: $('#bl-why', body).value.trim() || w.blocked };
+      blockOpen = false; closeModal();
+      if (onBlock) { onBlock(b); return; }
+      blocks.push(b); paint(); onChange(events); island('done', w.blockedOk, 1800);
+    });
+
     paint();
-    return { refresh: paint };
+    // the app's answer: new data (and/or loading off), same day, view and person on screen
+    const update = (next = {}) => {
+      if ('resources' in next) resources = next.resources; if ('events' in next) events = next.events; if ('blocks' in next) blocks = next.blocks;
+      if ('availability' in next) availability = next.availability; if ('free' in next) freeList = next.free; if ('queue' in next) queue = next.queue;
+      if ('closed' in next) closed = next.closed; if ('loading' in next) loading = next.loading;
+      if ('overlap' in next) overlap = next.overlap; if ('placing' in next) placing = next.placing; if ('currency' in next) currency = next.currency; if ('locale' in next) locale = next.locale; if ('cents' in next) cents = next.cents;
+      if ('lang' in next || 'words' in next) { lang = next.lang ?? lang; words = next.words ?? words; w = { ...(AG_WORDS[lang] || AG_WORDS.es), ...words }; }
+      if (who !== 'all' && !(who.startsWith('kind:') ? resources.some((r) => kindOf(r) === who.slice(5)) : resources.some((r) => r.id === who))) who = 'all';
+      if (!drag) paint();
+    };
+    return { refresh: paint, update, run, go: (d) => { day = new Date(d); paint(); } };
   };
 
   // ── Chat thread + composer (shared by the inbox and the chatbot) ──
@@ -853,7 +1271,7 @@ let wheelsNow = [];
 
   // ── Checklist { title, steps [{title, desc, done, action}] } ──
   kit.checklist = (root, { title, steps }) => {
-    const paint = () => { const n = steps.filter((s) => s.done).length; root.innerHTML = `<div data-slot="card" data-size="sm" class="cn-card"><div class="cx-vstack" style="gap:8px;padding:14px 14px 4px">${ui.text(title, 'heading')}<div class="cx-hstack" style="flex-wrap:nowrap;gap:10px">${ui.progress((n / steps.length) * 100, `${n} de ${steps.length} pasos`)}${ui.text(`${n}/${steps.length}`, 'caption')}</div></div><div class="cn-card-content" style="padding:0 12px 8px"><div class="cn-item-group">${steps.map((s, i) => ui.item({ media: `<div class="cn-item-media"><span class="cx-check-dot" ${s.done ? 'data-done' : ''}>${s.done ? ui.icon('i-tick') : i + 1}</span></div>`, title: s.title, description: s.desc, actions: s.done ? '' : ui.button({ label: s.action, size: 'xs', attrs: `data-step="${i}"` }) })).join(ui.itemSeparator())}</div></div></div>`; };
+    const paint = () => { const n = steps.filter((s) => s.done).length; root.innerHTML = `<div data-slot="card" data-size="sm" class="cn-card"><div class="cx-vstack" style="gap:8px;padding:14px 14px 4px">${ui.text(title, 'heading')}<div class="cx-hstack" style="flex-wrap:nowrap;gap:10px">${ui.progress((n / steps.length) * 100, `$%n de ${steps.length} pasos`)}${ui.text(`$%n/${steps.length}`, 'caption')}</div></div><div class="cn-card-content" style="padding:0 12px 8px"><div class="cn-item-group">${steps.map((s, i) => ui.item({ media: `<div class="cn-item-media"><span class="cx-check-dot" ${s.done ? 'data-done' : ''}>${s.done ? ui.icon('i-tick') : i + 1}</span></div>`, title: s.title, description: s.desc, actions: s.done ? '' : ui.button({ label: s.action, size: 'xs', attrs: `data-step="${i}"` }) })).join(ui.itemSeparator())}</div></div></div>`; };
     root.addEventListener('click', (e) => { const b = e.target.closest('[data-step]'); if (!b) return; steps[+b.dataset.step].done = true; easeHeight(root, paint); });
     paint();
   };
@@ -942,8 +1360,10 @@ let wheelsNow = [];
   };
 
   // ── Stamp card { owner, total, stamps, reward } ──
-  kit.stampCard = (root, { owner, total, stamps, reward, store }) => {
-    const paint = (popIdx = -1) => { const done = stamps >= total; root.innerHTML = `<div data-slot="card" class="cn-card cx-stamps"><div class="cx-vstack" style="gap:2px;padding:16px 16px 0">${ui.text(store, 'caption')}${ui.text(`Cartilla de ${owner}`, 'heading')}</div><div class="cx-stamp-grid" role="img" aria-label="${stamps} de ${total} sellos">${Array.from({ length: total }, (_, i) => `<span class="cx-stamp" ${i < stamps ? 'data-on' : ''} ${i === total - 1 ? 'data-gift' : ''} ${i === popIdx ? 'data-pop' : ''}>${i < stamps ? ui.icon('scissors') : i === total - 1 ? ui.icon('i-gift') : ''}</span>`).join('')}</div><div class="cx-vstack" style="gap:10px;padding:0 16px 16px">${ui.text(done ? `¡Completa! Ganó ${reward}.` : `${stamps} de ${total} · faltan ${total - stamps} para ${reward}`, done ? 'label' : 'muted', 'p')}${done ? ui.button({ label: `${ui.icon('i-gift')}Canjear premio`, variant: 'default', size: 'default', cls: 'cx-fill', attrs: 'data-redeem' }) : ui.button({ label: `${ui.icon('plus')}Sellar visita`, variant: 'outline', size: 'default', cls: 'cx-fill', attrs: 'data-stamp' })}</div></div>`; };
+  kit.stampCard = (root, { owner, total, stamps, reward, store, title = 'Cartilla de %owner', progress = '%n de %total · faltan %left para %reward', complete = '¡Completa! Ganó %reward.', count = '%n de %total sellos', redeem = 'Canjear premio', stamp = 'Sellar visita' }) => {
+    // the words are templates, so the card speaks the page's language: %owner %n %total %left %reward
+    const say = (tpl) => String(tpl).replace(/%(owner|total|left|reward|n)/g, (_, k) => ({ owner, n: stamps, total, left: total - stamps, reward })[k]);
+    const paint = (popIdx = -1) => { const done = stamps >= total; root.innerHTML = `<div data-slot="card" class="cn-card cx-stamps"><div class="cx-vstack" style="gap:2px;padding:16px 16px 0">${ui.text(store, 'caption')}${ui.text(say(title), 'heading')}</div><div class="cx-stamp-grid" role="img" aria-label="${say(count)}">${Array.from({ length: total }, (_, i) => `<span class="cx-stamp" ${i < stamps ? 'data-on' : ''} ${i === total - 1 ? 'data-gift' : ''} ${i === popIdx ? 'data-pop' : ''}>${i < stamps ? ui.icon('scissors') : i === total - 1 ? ui.icon('i-gift') : ''}</span>`).join('')}</div><div class="cx-vstack" style="gap:10px;padding:0 16px 16px">${ui.text(say(done ? complete : progress), done ? 'label' : 'muted', 'p')}${done ? ui.button({ label: `${ui.icon('i-gift')}${redeem}`, variant: 'default', size: 'default', cls: 'cx-fill', attrs: 'data-redeem' }) : ui.button({ label: `${ui.icon('plus')}${stamp}`, variant: 'outline', size: 'default', cls: 'cx-fill', attrs: 'data-stamp' })}</div></div>`; };
     root.addEventListener('click', (e) => { if (e.target.closest('[data-stamp]') && stamps < total) { stamps++; paint(stamps - 1); } if (e.target.closest('[data-redeem]')) { stamps = 0; paint(); } });
     paint();
   };

@@ -9,7 +9,9 @@
 # shadcn-for-muten · part · no deps · Nova (.cn-input-group).
 part InputGroup(size: text = "default", variant: text = "default") { Stack class("cn-input-group group/input-group") data(slot: "input-group", size: $size, variant: $variant) aria(role: "group") { slot } }
 part InputAddon(align: text = "inline-start") { Stack class("cn-input-group-addon cn-input-group-addon-align-{$align}") data(slot: "input-group-addon", align: $align) { slot } }
-part GroupInput(value: text, placeholder: text = "") { SearchField bind($value) "{$placeholder}" class("cn-input cn-input-group-input cx-num") data(slot: "input-group-control") }
+# GroupInput - the field inside an InputGroup. `label` names it for a screen reader when the group shows no label of its own
+# (a literal: an interpolated arg cannot reach aria(); without it the placeholder names the field).
+part GroupInput(value: text, placeholder: text = "", label: text = "") { SearchField bind($value) "{$placeholder}" class("cn-input cn-input-group-input cx-num") data(slot: "input-group-control") aria(label: $label) }
 part SearchInput(value: text, placeholder: text = "Buscar", onClear: action, size: text = "default", variant: text = "default") {
   Stack class("cn-input-group group/input-group") data(slot: "input-group", size: $size, variant: $variant) aria(role: "group") {
     Stack class("cn-input-group-addon cn-input-group-addon-align-inline-start") data(slot: "input-group-addon", align: "inline-start") { Icon "lucide:search" }

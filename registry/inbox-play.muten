@@ -1,0 +1,56 @@
+# InboxPlay - a messages list shown, not used: the shop's inbox as the channel's app draws it (skin: instagram |
+# whatsapp), with the unread ones in bold and their dot. For a landing, beside «nobody answered them»; the real inbox
+# is Messaging. The rows are a picture (aria-hidden); `label` says what it shows.
+#   InboxPlay(title: "brumabarberia", tabs: "Principal", requests: "Solicitudes (12)", label: "…") {
+#     InboxPlayRow(name: "lau.mtz", text: "precio??", time: "2 h", unread: "yes")
+#     InboxPlayRow(name: "carlos.r", text: "Visto", time: "1 d", photo: "/face.webp")
+#   }
+# search (a placeholder) draws the app's search bar; InboxPlayNotes, InboxPlayTabs and InboxPlayFilters go in the list
+# in that order. A row takes ring (yes: a story ring), badge (WhatsApp's unread count), tag (who answered: «Asistente»);
+# and Instagram rows show the camera at the end.
+# shadcn-for-muten · part · no deps · kit.css (.cx-ip).
+part InboxPlay(title: text, tabs: text = "", requests: text = "", skin: text = "instagram", label: text = "", search: text = "") {
+  Stack class("cx-ip cx-play") data(skin: $skin) aria(role: "img", label: $label) {
+    Stack class("cx-ip-head") aria(hidden: true) {
+      Span "{$title}" class("cx-ip-t")
+      Icon "lucide:chevron-down"
+      Stack class("cx-ip-ic") { Icon "lucide:square-pen" }
+    }
+    when $search != "" { Stack class("cx-ip-search") aria(hidden: true) { Icon "lucide:search"  Span "{$search}" } }
+    when $tabs != "" { Stack class("cx-ip-tabs") aria(hidden: true) { Span "{$tabs}" data(on: "yes")  Span "{$requests}" } }
+    Stack class("cx-ip-list") aria(hidden: true) { slot }
+  }
+}
+part InboxPlayRow(name: text, text: text, time: text = "", photo: text = "", unread: text = "", ring: text = "", badge: text = "", tag: text = "") {
+  Stack class("cx-ip-row") data(unread: $unread, ring: $ring) {
+    Stack class("cx-ip-avw") {
+      when $photo != "" { Image "{$photo}" alt("") class("cx-ip-av") }
+      when $photo == "" { Span "{initial($name)}" class("cx-ip-av cx-ip-init") }
+    }
+    Stack class("cx-ip-tx") {
+      Stack class("cx-ip-top") { Span "{$name}" class("cx-ip-n")  Span "{$time}" class("cx-ip-tr") }
+      Stack class("cx-ip-l") {
+        when $tag != "" { Span "{$tag}" class("cx-ip-tag") }
+        Span "{$text}" class("cx-ip-m")
+        Span "· {$time}" class("cx-ip-time")
+        when $badge != "" { Span "{$badge}" class("cx-ip-badge") }
+      }
+    }
+    Span "" class("cx-ip-dot")
+    Stack class("cx-ip-cam") { Icon "lucide:camera" }
+  }
+}
+# Instagram's notes over the list: a face with its short note above it.
+part InboxPlayNotes() { Stack class("cx-ip-notes") { slot } }
+part InboxPlayNote(name: text, note: text = "", photo: text = "") {
+  Stack class("cx-ip-note") {
+    when $note != "" { Span "{$note}" class("cx-ip-bub") }
+    when $photo != "" { Image "{$photo}" alt("") class("cx-ip-av") }
+    when $photo == "" { Span "{initial($name)}" class("cx-ip-av cx-ip-init") }
+    Span "{$name}" class("cx-ip-nn")
+  }
+}
+# Tabs as the app draws them (Instagram: Principal · General … Solicitudes) and WhatsApp's filter chips.
+part InboxPlayTabs(primary: text, general: text = "", requests: text = "") { Stack class("cx-ip-tabs") { Span "{$primary}" data(on: "yes")  when $general != "" { Span "{$general}" }  when $requests != "" { Span "{$requests}" class("cx-ip-req") } } }
+part InboxPlayFilters() { Stack class("cx-ip-filters") { slot } }
+part InboxPlayFilter(label: text, on: text = "") { Span "{$label}" class("cx-ip-filter") data(on: $on) }

@@ -36,7 +36,7 @@ export function mount(el, inputs, on) {
     cardField: ({ kit }) => kit.cardField(el, { onSubmit: (x) => on.action?.(JSON.stringify(x || {})) }),
     memberList: ({ kit }, i) => kit.memberList(el, { members: list(i.members), roles: list(i.roles), ownerRole: i.owner || '', noun: [i.one || 'persona', i.many || 'personas'], invite: { cta: i.cta || 'Invitar', title: i.cta || 'Invitar', description: i.note || '' } }),
     permissionMatrix: ({ kit }, i) => kit.permissionMatrix(el, { roles: list(i.roles).map((r) => r.name ?? r), rows: list(i.rows), lockedRole: i.locked || '', onChange: (rows) => on.action?.(JSON.stringify(rows)) }),
-    stampCard: ({ kit }, i) => kit.stampCard(el, { store: i.store || '', owner: i.owner || '', total: Number(i.total) || 10, stamps: Number(i.stamps) || 0, reward: i.reward || '' }),
+    stampCard: ({ kit }, i) => kit.stampCard(el, { store: i.store || '', owner: i.owner || '', total: Number(i.total) || 10, stamps: Number(i.stamps) || 0, reward: i.reward || '', ...Object.fromEntries(['title', 'progress', 'complete', 'count', 'redeem', 'stamp'].filter((k) => i[k]).map((k) => [k, i[k]])) }),
     bell: ({ kit }, i) => kit.bell(el, { items: list(i.items) }),
     queue: ({ kit }, i) => kit.queue(el, { title: i.title || '', people: list(i.people), offerMinutes: Number(i.minutes) || 10 }),
     password: ({ kit }, i) => kit.password(el, { label: i.label || 'Contraseña' }),

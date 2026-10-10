@@ -1,0 +1,77 @@
+# ChatPlay - a conversation shown, not used: the messages come in one by one (in `step` order, 1-6) and the
+# assistant closes with a confirmation card, then it starts over. Its height is the conversation's: no empty chat.
+# For a landing; the real assistant is Chatbot. The suggestions and the composer are a picture (not focusable).
+#   ChatPlay(title: "Bruma Barbería", status: "Asistente · en línea", placeholder: "Escribe un mensaje", label: "…") {
+#     ChatPlayLog {
+#       ChatPlayMsg(text: "Hola, ¿tienes hora hoy?", who: "in", step: 1)
+#       ChatPlayMsg(text: "Hoy quedan 4:30 PM y 6:00 PM.", step: 2)
+#       ChatPlayCard(title: "Corte clásico", text: "Hoy · 4:30 PM", step: 5)
+#     }
+#     ChatPlayChips { ChatPlayChip(label: "¿Cuánto cuesta?") … }
+#   }
+# who: out (the shop and its assistant: right, dark, the default) | in (the client: left). Seen from the shop, as
+# its inbox shows it. The confirmation card is the shop's, so it sits right too. Reduced motion: the whole conversation, still.
+# skin: "" (the kit's own) | whatsapp | instagram | telegram - the conversation as that app shows it on the shop's phone
+# (its wallpaper, bubbles with their tail, the hour and the ticks inside, its composer); theme: "" | dark (WhatsApp at night).
+# With a skin, `photo` puts the person in the header instead of the assistant's face, ChatPlayDay sets a day chip,
+# ChatPlayMsg takes a `time`, ChatPlayButtons + ChatPlayButton hang reply buttons under the message before them
+# (Telegram draws them as its keyboard, two per row), and ChatPlayNote adds «Visto» or who answered. The header carries
+# the app's back arrow and call buttons, and the composer is that app's own. With a skin it is a phone screen (300 × 600,
+# a status bar with `clock`), and Instagram puts `photo` beside the client's last message of each turn.
+# shadcn-for-muten · part · no deps · kit.css (.cx-cp).
+part ChatPlay(title: text, status: text = "", placeholder: text = "", label: text = "", skin: text = "", theme: text = "", photo: text = "", clock: text = "9:41") {
+  # With a skin, the chat is a phone screen inside the library's one phone (the same iPhone as DeviceFrame), drawn at
+  # a real phone's 390 × 844 and scaled to the frame. Without one the wrappers do not count for layout.
+  Stack class("cx-cp-phone") data(skin: $skin) {
+  Stack class("cx-cp-frame") {
+  Stack class("cx-cp-screen") {
+  Stack class("cx-cp cx-play") data(skin: $skin, theme: $theme) style(face: "url('{$photo}')") aria(role: "img", label: $label) {
+    Stack class("cx-cp-sb") aria(hidden: true) { Span "{$clock}"  Stack class("cx-cp-sbi") { Icon "lucide:signal"  Icon "lucide:wifi"  Icon "lucide:battery-full" } }
+    Stack class("cx-cp-head") aria(hidden: true) {
+      Stack class("cx-cp-back") { Icon "lucide:chevron-left" }
+      when $photo == "" { Stack class("cx-cp-face") { Span ""  Span "" } }
+      when $photo != "" { Stack class("cx-cp-ring") { Image "{$photo}" alt("") class("cx-cp-photo") } }
+      Stack class("cx-cp-name") { Span "{$title}" class("cx-cp-t")  Span "{$status}" class("cx-cp-s") }
+      Stack class("cx-cp-acts") { Icon "lucide:video"  Icon "lucide:phone"  Icon "lucide:ellipsis-vertical" }
+    }
+    slot
+    # The composer as each app draws it (the skin decides which of these show): Instagram's blue camera, WhatsApp's
+    # field with its emoji, clip and camera beside the green mic, Telegram's flat bar.
+    Stack class("cx-cp-comp") aria(hidden: true) {
+      Stack class("cx-cp-cam") { Icon "lucide:camera" }
+      Stack class("cx-cp-emo") { Icon "lucide:smile" }
+      Span "{$placeholder}" class("cx-cp-ph")
+      Stack class("cx-cp-tools") { Icon "lucide:paperclip"  Icon "lucide:camera" }
+      Stack class("cx-cp-igtools") { Icon "lucide:mic"  Icon "lucide:image"  Icon "lucide:sticker" }
+      Stack class("cx-cp-menu") { Icon "lucide:menu"  Span "Menú" }
+      Stack class("cx-cp-send") { Icon "lucide:send-horizontal" }
+      Stack class("cx-cp-mic") { Icon "lucide:mic" }
+    }
+  }
+  }
+  }
+  }
+}
+
+part ChatPlayLog() { Stack class("cx-cp-log") aria(hidden: true) { slot } }
+part ChatPlayMsg(text: text, who: text = "out", step: number = 1, time: text = "") {
+  Stack class("cx-cp-msg") data(who: $who, step: $step) {
+    Span "{$text}"
+    when $time != "" { Stack class("cx-cp-time") { Span "{$time}"  Icon "lucide:check-check" } }
+  }
+}
+part ChatPlayDay(label: text) { Span "{$label}" class("cx-cp-day") }
+# The start of a conversation as Instagram shows it: the person's photo (ChatPlay's `photo`), name, handle and «Ver perfil».
+part ChatPlayProfile(name: text, sub: text = "", action: text = "") { Stack class("cx-cp-prof") { Span "" class("cx-cp-prof-ph")  Span "{$name}" class("cx-cp-prof-n")  Span "{$sub}" class("cx-cp-prof-s")  Span "{$action}" class("cx-cp-prof-a") } }
+# A small line under a message: Instagram's «Visto», or who answered («Respondió el asistente de Bruma»).
+part ChatPlayNote(label: text, step: number = 1) { Span "{$label}" class("cx-cp-note") data(step: $step) }
+part ChatPlayButtons(step: number = 1) { Stack class("cx-cp-btns") data(step: $step) { slot } }
+part ChatPlayButton(label: text) { Stack class("cx-cp-btn") { Icon "lucide:reply"  Span "{$label}" } }
+part ChatPlayCard(title: text, text: text = "", step: number = 1) {
+  Stack class("cx-cp-card") data(step: $step) {
+    Stack class("cx-cp-ok") { Icon "lucide:check" }
+    Stack class("cx-cp-name") { Span "{$title}" class("cx-cp-ct")  Span "{$text}" class("cx-cp-cd") }
+  }
+}
+part ChatPlayChips() { Stack class("cx-cp-chips") aria(hidden: true) { slot } }
+part ChatPlayChip(label: text) { Span "{$label}" class("cx-cp-chip") }

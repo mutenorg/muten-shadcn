@@ -1,0 +1,27 @@
+# Legal document - the pages a business must have (terms, privacy, data deletion), the way Storio's site writes them:
+# the title and its line, then two columns, the contents (they follow the reading: the section on screen is marked)
+# and the text at reading width, each section titled «N. Title». On a phone the contents become a row that slides.
+#   DocHead(title: "Términos y condiciones") { Text "Última actualización: 7 de octubre de 2026" class("cx-doc-line") }
+#   DocBody {
+#     DocToc(label: "Contenido") { DocTocLink(label: "1. Quiénes somos", to: "#s1")  DocTocLink(label: "2. Tus datos", to: "#s2") }
+#     DocArticle { DocSection(anchor: "s1", title: "1. Quiénes somos") { Text "Storio es un producto de Candhrly LLC." class("cx-doc-p") } }
+#   }
+# shadcn-for-muten · parts · no deps · kit.css (.cx-doc-*).
+part DocHead(title: text) {
+  Section class("cx-mk-col cx-doc-head") {
+    Title "{$title}" h1 class("cx-mk-h1 cx-mk-h1-wrap cx-doc-h1")
+    slot
+  }
+}
+part DocBody() { Section class("cx-mk-col cx-doc-body") { slot } }
+part DocToc(label: text = "Contenido") { Stack class("cx-navbar cx-doc-toc") data(orientation: "vertical", spy: "on") aria(role: "navigation", label: $label) { slot } }
+part DocTocLink(label: text, to: text) {
+  Link "{$label}" -> "{$to}" class("cn-button cn-button-variant-ghost cn-button-size-sm group/button cx-nav cx-doc-toc-item") data(slot: "button", marker: "fill")
+}
+part DocArticle() { Stack class("cx-doc-article") { slot } }
+part DocSection(anchor: text, title: text) {
+  Stack class("cx-doc-sec") id("{$anchor}") {
+    Title "{$title}" h2 class("cx-doc-h2")
+    slot
+  }
+}

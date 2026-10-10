@@ -13,7 +13,7 @@ const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<
 export function phoneShell(root, i, core, on) {
   const { $, $$ } = core;
   const tabs = list(i.tabs), rows = list(i.rows);
-  root.innerHTML = `<div class="cx-phone-frame"><div class="cx-ph-screen">
+  root.innerHTML = `<div class="cx-device cx-ph-device" data-kind="phone"><div class="cx-device-screen"><div class="cx-ph-screen">
     <div class="cx-ph-status"><span>9:41</span><span class="cx-ph-island"></span><span>100 %</span></div>
     <header class="cx-ph-head"><div class="cx-ph-bar">
       <button data-slot="button" class="cn-button cn-button-variant-ghost cn-button-size-icon group/button" aria-label="Atrás" title="Atrás"><svg><use href="#left"/></svg></button>
@@ -22,7 +22,7 @@ export function phoneShell(root, i, core, on) {
     </div></header>
     <div class="cx-ph-body cx-scroll"></div>
     <nav class="cx-ph-nav" aria-label="Principal">${tabs.map((t, k) => `<button class="cn-button cn-button-variant-ghost cx-size-tile cx-ph-tab" data-tab="${k}" ${k === 0 ? 'aria-current="page"' : ''}>${t.badge ? `<span class="cx-ph-ico"><svg><use href="#${t.icon}"/></svg><i class="cx-ph-badge">${esc(t.badge)}</i></span>` : `<svg><use href="#${t.icon}"/></svg>`}<span>${esc(t.label)}</span></button>`).join('')}</nav>
-  </div></div>`;
+  </div></div></div>`;
   const head = $('.cx-ph-head', root), phBody = $('.cx-ph-body', root);
   const screen = (label) => {
     const mine = rows.filter((r) => r.tab === label);
@@ -299,7 +299,7 @@ export function booking(root, i, core, on) {
       b.setAttribute('aria-pressed', !!picked.day && key(d) === key(picked.day));
       // the name starts with what the tile shows («vie 9»), so a voice user can say it; the long day and the state follow
       b.setAttribute('aria-label', `${key(d) === key(today) ? 'hoy' : DAY[d.getDay()]} ${d.getDate()}, ${DAYLONG[d.getDay()]}${s === null ? ', cerrado' : s.length ? `, ${s.length} horarios` : ', sin horarios'}`);
-      b.innerHTML = `<small>${key(d) === key(today) ? 'hoy' : DAY[d.getDay()]}</small><b>${d.getDate()}</b><i></i>`;
+      b.innerHTML = `<small>${key(d) === key(today) ? 'hoy' : DAY[d.getDay()]}</small> <b>${d.getDate()}</b><i></i>`;
       b.onclick = () => pickDay(d);
       weekEl.appendChild(b);
     }

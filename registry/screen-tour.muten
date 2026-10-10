@@ -1,0 +1,10 @@
+# ScreenTour - how a product is used, played on its real screens: numbered steps on one side, a phone on the other
+# that shows each step's capture, a tap where the finger would land, and at the end the sheet that confirms it. It
+# moves on by itself while it is on screen (each step's bar fills for its time); touching a step goes to it and stays.
+# Several tracks (book · order) get the library's tabs on top. Reduced motion: the first step, still; steps still work.
+#   ScreenTour(tracks: tour, label: "Así te reservan")      tour = a getter or a state list
+# tracks [{id, label, steps: [{title, text, shot, tap: [x%, y%], ms, scroll (% of the capture's height), done}],
+#          done: {title, rows: [[label, value]], code, codeLabel, note}}]
+# shot: an image url (a long capture can scroll: give the first step `scroll`). A step with done: true shows the sheet.
+# shadcn-for-muten · Custom · kit.css (.cx-tour) · host JS screen-tour.js.
+part ScreenTour(tracks: list, label: text = "", width: text = "300px") { Custom ScreenTour inputs(tracks: $tracks, label: $label, width: $width) class("cx-tour") }

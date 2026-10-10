@@ -77,3 +77,18 @@
   .animate-fade-in, .animate-rise, .animate-scale-in, .animate-blur-in, .stagger > *, .words > *, .reveal, .reveal-stagger > *, .drift, .photo-in img { animation: none !important; }
   .hover-lift, .hover-zoom img { transition: none !important; }
 }
+
+/* smooth-scroll - on any element of the page: a jump to an anchor of the same page glides instead of snapping. */
+@media (prefers-reduced-motion: no-preference) {
+  html:has(.smooth-scroll) { scroll-behavior: smooth; }
+}
+
+/* reveal-blur - on a page's root: as you scroll down, each block of the marketing system (headings, rows, cards,
+   steps, tables, questions, the closer; never the hero) comes in from a blur, rising a little. Kit core marks each
+   block (data-rv) and lets it in as it enters the screen; what is on screen when the page opens is shown whole, so the
+   first paint, the LCP and a contrast checker never meet a half-faded block. No script or reduced motion: all shown. */
+@media (prefers-reduced-motion: no-preference) {
+  /* hiding is instant (it happens off screen, while the page loads); only the entrance moves */
+  [data-rv=""] { opacity: 0; filter: blur(14px); transform: translateY(28px); }
+  [data-rv="in"] { transition: opacity 700ms cubic-bezier(.22, 1, .36, 1), filter 700ms cubic-bezier(.22, 1, .36, 1), transform 700ms cubic-bezier(.22, 1, .36, 1); transition-delay: calc(var(--rv-i, 0) * 70ms); }
+}

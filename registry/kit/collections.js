@@ -115,7 +115,8 @@ export function carouselBehavior(root, i, core) {
   const thumbOf = (k) => { const media = cards[k].querySelector('img, [role=img], .cx-gallery-img'); const bg = media ? getComputedStyle(media).backgroundImage : ''; return media?.tagName === 'IMG' ? `<img src="${media.src}" alt="">` : `<span class="cx-thumb-fill" style="background-image:${bg}"></span>`; };
   const paint = () => {
     const n = pages(), cur = current();
-    if (indicator === 'dots') { if (ind.childElementCount !== n) ind.innerHTML = Array.from({ length: n }, (_, k) => ui.button({ variant: 'ghost', size: 'icon-xs', cls: 'cx-dotb', attrs: `role="tab" data-go="${k}" aria-label="Ir a ${k + 1} de ${n}"`, label: '<span class="cx-dot-mark"></span>' })).join(''); $$('[data-go]', ind).forEach((d, k) => d.setAttribute('aria-selected', k === cur)); }
+    // the dots are tabs, so their holder is the tablist (a tab without one fails the a11y check)
+    if (indicator === 'dots') { ind.setAttribute('role', 'tablist'); ind.setAttribute('aria-label', 'Diapositivas'); if (ind.childElementCount !== n) ind.innerHTML = Array.from({ length: n }, (_, k) => ui.button({ variant: 'ghost', size: 'icon-xs', cls: 'cx-dotb', attrs: `role="tab" data-go="${k}" aria-label="Ir a ${k + 1} de ${n}"`, label: '<span class="cx-dot-mark"></span>' })).join(''); $$('[data-go]', ind).forEach((d, k) => d.setAttribute('aria-selected', k === cur)); }
     if (indicator === 'progress') ind.innerHTML = `<div class="cx-hstack" style="gap:10px;flex-wrap:nowrap">${ui.progress(((cur + 1) / n) * 100, `Diapositiva ${cur + 1} de ${n}`)}${ui.text(`${cur + 1} / ${n}`, 'caption')}</div>`;
     if (indicator === 'count') ind.innerHTML = ui.text(`${cur + 1} de ${n}`, 'caption');
     if (indicator === 'thumbs') { if (!ind.childElementCount) ind.innerHTML = `<div class="cx-hstack" role="tablist" aria-label="Miniaturas">${cards.map((_, k) => ui.button({ variant: 'ghost', size: 'icon-lg', cls: 'cx-thumb', attrs: `role="tab" data-go="${k}" aria-label="Foto ${k + 1}"`, label: thumbOf(k) })).join('')}</div>`; $$('[data-go]', ind).forEach((d, k) => { d.setAttribute('aria-selected', k === cur); d.setAttribute('aria-pressed', k === cur); }); }
@@ -135,7 +136,14 @@ export function carouselBehavior(root, i, core) {
   let drag = null;
   track.addEventListener('pointerdown', (e) => { if (e.pointerType !== 'mouse' || e.button > 0) return; drag = { x: e.clientX, left: track.scrollLeft, moved: false }; track.classList.add('dragging'); });
   addEventListener('pointermove', (e) => { if (!drag) return; const dx = e.clientX - drag.x; if (Math.abs(dx) > 4) drag.moved = true; track.scrollLeft = drag.left - dx; });
-  addEventListener('pointerup', () => { if (!drag) return; const moved = drag.moved; drag = null; track.classList.remove('dragging'); if (moved) track.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); }, { capture: true, once: true }); });
+  // A drag lets go between two pages (snapping is off while dragging): settle on the nearest one, as a swipe does,
+  // or the track rests half-way and the dots and arrows disagree about where it is.
+  const nearest = () => {
+    if (center) return current();
+    if (track.scrollLeft >= track.scrollWidth - track.clientWidth - 4) return pages() - 1;
+    return Math.max(0, Math.min(pages() - 1, Math.round(track.scrollLeft / (step() * perPage()))));
+  };
+  addEventListener('pointerup', () => { if (!drag) return; const moved = drag.moved; drag = null; track.classList.remove('dragging'); if (moved) { go(nearest()); track.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); }, { capture: true, once: true }); } });
   let playing = !!autoplay && !matchMedia('(prefers-reduced-motion: reduce)').matches, hold = false;
   if (autoplay) {
     if (!playing) { const b = $('[data-car="play"]', root); b.innerHTML = ui.icon('play'); b.setAttribute('aria-label', 'Reproducir'); }

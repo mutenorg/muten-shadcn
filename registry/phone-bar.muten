@@ -1,0 +1,18 @@
+# PhoneBar - the app's bar at the bottom of a phone, the shape Storio's app uses: three fixed cells. The left one holds
+# the menu (or a back), the middle one the screen's tools as grey icons, the right one the screen's «create» (black),
+# or nothing. A screen whose buttons live in its own toolbar on a desktop hands them here on a phone (AgendaLive with
+# phone: "nav" does), so the page stays clean and the hand finds them in the same place on every screen.
+#   PhoneBar(label: "Agenda") {
+#     PhoneBarCell(side: "left") { PhoneBarButton(label: "Menú", onClick: openMenu) { Icon "lucide:menu" } }
+#     PhoneBarCell() { PhoneBarButton(label: "Día anterior", onClick: prev) { Icon "lucide:chevron-left" } … }
+#     PhoneBarCell(side: "right") { PhoneBarButton(label: "Nueva cita", look: "primary", onClick: add) { Icon "lucide:plus" } }
+#   }
+# place: "" (fixed to the bottom of the screen, only below 64rem: a desktop keeps its toolbars) · "inline" (where it
+# sits, always) · "frame" (the bottom of its positioned box: a phone mockup). The page's scroll keeps room for it with
+# padding-bottom: var(--cx-pbar-space). Every button needs its label: icon-only on screen, named for a screen reader.
+# shadcn-for-muten · part · no deps · kit.css (.cx-pbar).
+part PhoneBar(label: text = "Acciones", place: text = "") { Nav class("cx-pbar") data(place: $place) aria(label: $label) { slot } }
+part PhoneBarCell(side: text = "center") { Stack class("cx-pbar-cell") data(side: $side) { slot } }
+part PhoneBarButton(label: text = "", onClick: action, look: text = "", current: bool = false) {
+  Button -> $onClick class("cx-pbar-btn") data(look: $look) aria(label: $label, pressed: $current) { slot }
+}

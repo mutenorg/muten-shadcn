@@ -1,0 +1,43 @@
+# BookingPlay - a booking shown, not used: one service, a few days and hours, and a booking that plays itself in a
+# loop (a day is picked, then an hour, «Reservar» is pressed and the confirmation comes up with its pass). For a
+# landing or a bento cell, where the real Booking would be a form nobody fills. Taken hours are struck through.
+#   BookingPlay(service: "Corte clásico", place: "Bruma Barbería · 30 min", price: "USD 15", cta: "Reservar",
+#               doneTitle: "¡Listo, Carla!", doneText: "Corte clásico · hoy · 4:30 PM", code: "STO-4F2K", label: "Así reserva tu cliente") {
+#     BookingPlayDays { BookingPlayDay(weekday: "lun", day: "5", state: "off") … BookingPlayDay(weekday: "hoy", day: "9", state: "pick") }
+#     BookingPlayHours { BookingPlayHour(time: "10:00", state: "taken") … BookingPlayHour(time: "4:30", state: "pick", picked: "4:30 PM") }
+#   }
+# photo: the owner's face in the circle (empty = the service's initial).
+# state: "" | off (closed day) | taken (hour) | pick (the one the loop chooses; one day and one hour).
+# Reduced motion: the pick is shown, the confirmation is not. shadcn-for-muten · part · no deps · kit.css (.cx-bkp).
+part BookingPlay(service: text, photo: text = "", place: text = "", price: text = "", cta: text = "Reservar", doneTitle: text = "", doneText: text = "", code: text = "", label: text = "") {
+  Stack class("cx-bkp cx-play") aria(role: "img", label: $label) {
+    Stack class("cx-bkp-who") aria(hidden: true) {
+      when $photo != "" { Image "{$photo}" alt("") class("cx-bkp-av cx-play-face") }
+      when $photo == "" { Span "{initial($service)}" class("cx-bkp-av") }
+      Stack class("cx-bkp-name") { Span "{$service}" class("cx-bkp-t")  Span "{$place}" class("cx-bkp-s") }
+      Span "{$price}" class("cx-bkp-price")
+    }
+    slot
+    Span "{$cta}" class("cx-bkp-go") aria(hidden: true)
+    Stack class("cx-bkp-done") aria(hidden: true) {
+      Stack class("cx-bkp-ok") { Icon "lucide:check" }
+      Span "{$doneTitle}" class("cx-bkp-dt")
+      Span "{$doneText}" class("cx-bkp-dd")
+      when $code != "" { Stack class("cx-bkp-pass") { Icon "lucide:qr-code"  Span "{$code}" } }
+    }
+  }
+}
+part BookingPlayDays() { Stack class("cx-bkp-days") aria(hidden: true) { slot } }
+part BookingPlayDay(weekday: text, day: text, state: text = "") {
+  Stack class("cx-bkp-day") data(state: $state) {
+    Span "{$weekday}" class("cx-bkp-wd")  Span "{$day}" class("cx-bkp-d")
+    when $state == "pick" { Stack class("cx-bkp-on") { Span "{$weekday}" class("cx-bkp-wd")  Span "{$day}" class("cx-bkp-d") } }
+  }
+}
+part BookingPlayHours() { Stack class("cx-bkp-hours") aria(hidden: true) { slot } }
+part BookingPlayHour(time: text, state: text = "", picked: text = "") {
+  Stack class("cx-bkp-hour") data(state: $state) {
+    Span "{$time}"
+    when $state == "pick" { Span "{$picked}" class("cx-bkp-on") }
+  }
+}

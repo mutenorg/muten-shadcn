@@ -1,6 +1,8 @@
 # Accordion - stacked questions; each opens to its content's exact height (200 ms) and the arrow turns instead of
 # swapping icons. The page owns a bool per item and the toggle.
 #   Accordion { AccordionItem(title: "¿Puedo cancelar mi cita?", open: a1, onToggle: t1) { Text "Sí, hasta 3 horas antes…" } }
+# No state to own (or a search engine must read the answers closed)? The same look on the native details:
+#   Accordion(size: "lg") { Details "¿…?" group("faq") class("cn-accordion-item") { Text "…" class("cn-accordion-content-inner") } }
 # size "lg": taller rows and bigger type, for the questions of a landing page.
 # shadcn-for-muten · part · no deps · Nova (.cn-accordion) + kit.css.
 part Accordion(size: text = "default") { Stack class("cn-accordion") data(slot: "accordion", size: $size) { slot } }
@@ -14,4 +16,12 @@ part AccordionItem(title: text, open: bool, onToggle: action) {
       Stack class("cn-accordion-content-inner") { slot }
     }
   }
+}
+# FaqItem - one question of an Accordion on the native <details>: no state to keep, and items sharing a `group` open one
+# at a time (they share the group «faq»). The answer goes in the slot (text, or text with a button). FaqItemOpen starts open (the first of a list).
+part FaqItem(question: text) {
+  Details "{$question}" group("faq") class("cn-accordion-item") { Stack class("cn-accordion-content-inner") { slot } }
+}
+part FaqItemOpen(question: text) {
+  Details "{$question}" group("faq") open class("cn-accordion-item") { Stack class("cn-accordion-content-inner") { slot } }
 }

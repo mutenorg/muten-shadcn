@@ -1,129 +1,128 @@
-// GradientBlinds - ported from React Bits (reactbits.dev) to a muten Custom. A WebGL fragment shader (via `ogl`)
-// draws diagonal blinds over an animated gradient with a spotlight that FOLLOWS THE MOUSE + grain. Faithful and
-// GPU-fast. A Custom (graphics = the vanilla-JS escape); ogl loads via dynamic import() (a Custom is inlined into
-// an IIFE, so a top-level import is illegal). Inputs mirror the React props: colors, angle, noise, blindCount,
-// blindMinWidth, spotlightRadius/Softness/Opacity, mouseDampening, distort, shineDirection, mirror. Needs `ogl`.
+// GradientBlinds - first ported from React Bits (reactbits.dev), then made calm: a WebGL fragment shader (via `ogl`)
+// lays a gradient that is born on one side of the hero (`from`) and dissolves into the page over a long, eased fall,
+// with soft blinds that only shade it (never down to black), a light that follows the pointer and only adds, and a
+// fine grain. The fall is the canvas's own alpha, so it melts into any page background, light or dark.
+// A Custom (graphics = the vanilla-JS escape); ogl loads via dynamic import() (a Custom is inlined into an IIFE, so a
+// top-level import is illegal). Inputs: colors, from (top | bottom | left | right | center), angle, blindCount,
+// blindMinWidth, strength (how much the blinds shade, 0..1), noise. It draws only while on screen; with reduced
+// motion it is still (no drift, the light stays put). Needs `ogl`.
 const MAX_COLORS = 8;
+const FROM = { top: 0, bottom: 1, left: 2, right: 3, center: 4 };
 const hexToRGB = (hex) => {
   const c = String(hex).replace("#", "").padEnd(6, "0");
   return [parseInt(c.slice(0, 2), 16) / 255, parseInt(c.slice(2, 4), 16) / 255, parseInt(c.slice(4, 6), 16) / 255];
 };
 const prepStops = (stops) => {
-  const base = (stops && stops.length ? stops : ["#FF9FFC", "#5227FF"]).slice(0, MAX_COLORS);
+  const base = (stops.length ? stops : ["#9B80FF", "#6B46F2"]).slice(0, MAX_COLORS);
   if (base.length === 1) base.push(base[0]);
+  const count = base.length;
   while (base.length < MAX_COLORS) base.push(base[base.length - 1]);
-  return { arr: base.map(hexToRGB), count: Math.max(2, Math.min(MAX_COLORS, stops && stops.length ? stops.length : 2)) };
+  return { arr: base.map(hexToRGB), count };
 };
 
-export function mount(el, inputs) {
-  const num = (v, d) => { const n = Number(v); return Number.isFinite(n) ? n : d; };
-  const I = inputs || {};
-  const colors = (I.colors ? String(I.colors) : "#FF9FFC,#5227FF").split(",").map((s) => s.trim()).filter(Boolean);
-  const angle = num(I.angle, -25), noise = num(I.noise, 0.22);
-  const blindCount = num(I.blindCount, 16), blindMinWidth = num(I.blindMinWidth, 55);
-  const spotRadius = num(I.spotlightRadius, 0.6), spotSoft = num(I.spotlightSoftness, 1), spotOpacity = num(I.spotlightOpacity, 0.75);
-  const damp = num(I.mouseDampening, 0.15), distort = num(I.distort, 0);
-  const shineFlip = I.shineDirection === "right" ? 1 : 0, mirror = I.mirror ? 1 : 0;
-
-  import("ogl").then(({ Renderer, Program, Mesh, Triangle }) => {
-    const renderer = new Renderer({ dpr: Math.min(2, window.devicePixelRatio || 1), alpha: true, antialias: true });
-    const gl = renderer.gl;
-    const canvas = gl.canvas;
-    canvas.style.cssText = "position:absolute;inset:0;width:100%;height:100%;display:block;-webkit-mask-image:linear-gradient(to bottom,#000 42%,transparent 94%);mask-image:linear-gradient(to bottom,#000 42%,transparent 94%)";
-    el.appendChild(canvas);
-
-    const vertex = "attribute vec2 position;attribute vec2 uv;varying vec2 vUv;void main(){vUv=uv;gl_Position=vec4(position,0.0,1.0);}";
-    const fragment = `#ifdef GL_ES
-precision mediump float;
-#endif
+const vertex = "attribute vec2 position;attribute vec2 uv;varying vec2 vUv;void main(){vUv=uv;gl_Position=vec4(position,0.0,1.0);}";
+const fragment = `precision mediump float;
 uniform vec3 iResolution; uniform vec2 iMouse; uniform float iTime;
-uniform float uAngle, uNoise, uBlindCount, uSpotlightRadius, uSpotlightSoftness, uSpotlightOpacity, uMirror, uDistort, uShineFlip;
+uniform float uAngle, uNoise, uBlindCount, uStrength, uFrom;
 uniform vec3 uColor0,uColor1,uColor2,uColor3,uColor4,uColor5,uColor6,uColor7; uniform int uColorCount;
 varying vec2 vUv;
 float rand(vec2 co){ return fract(sin(dot(co, vec2(12.9898,78.233))) * 43758.5453); }
 vec2 rotate2D(vec2 p, float a){ float c=cos(a), s=sin(a); return mat2(c,-s,s,c)*p; }
-vec3 getGradientColor(float t){
-  float tt=clamp(t,0.0,1.0); int count=uColorCount; if(count<2) count=2;
-  float scaled=tt*float(count-1); float seg=floor(scaled); float f=fract(scaled);
+vec3 gradient(float t){
+  float scaled = clamp(t,0.0,1.0) * float(uColorCount-1); float seg = floor(scaled); float f = smoothstep(0.0,1.0,fract(scaled));
   if(seg<1.0) return mix(uColor0,uColor1,f);
-  if(seg<2.0 && count>2) return mix(uColor1,uColor2,f);
-  if(seg<3.0 && count>3) return mix(uColor2,uColor3,f);
-  if(seg<4.0 && count>4) return mix(uColor3,uColor4,f);
-  if(seg<5.0 && count>5) return mix(uColor4,uColor5,f);
-  if(seg<6.0 && count>6) return mix(uColor5,uColor6,f);
-  if(seg<7.0 && count>7) return mix(uColor6,uColor7,f);
-  if(count>7) return uColor7; if(count>6) return uColor6; if(count>5) return uColor5;
-  if(count>4) return uColor4; if(count>3) return uColor3; if(count>2) return uColor2; return uColor1;
+  if(seg<2.0) return mix(uColor1,uColor2,f);
+  if(seg<3.0) return mix(uColor2,uColor3,f);
+  if(seg<4.0) return mix(uColor3,uColor4,f);
+  if(seg<5.0) return mix(uColor4,uColor5,f);
+  if(seg<6.0) return mix(uColor5,uColor6,f);
+  return mix(uColor6,uColor7,f);
 }
-void mainImage(out vec4 fragColor, in vec2 fragCoord){
-  vec2 uv0 = fragCoord.xy / iResolution.xy;
+// how far a point is from the side the colour is born on: 0 there, 1 at the far side
+float away(vec2 uv){
+  if(uFrom<0.5) return 1.0-uv.y;
+  if(uFrom<1.5) return uv.y;
+  if(uFrom<2.5) return uv.x;
+  if(uFrom<3.5) return 1.0-uv.x;
+  vec2 d = (uv-0.5)*vec2(iResolution.x/iResolution.y,1.0); return clamp(length(d)*0.9,0.0,1.0);
+}
+void main(){
+  vec2 uv0 = vUv;
   float aspect = iResolution.x / iResolution.y;
-  vec2 p = uv0*2.0-1.0; p.x*=aspect; vec2 pr = rotate2D(p, uAngle); pr.x/=aspect; vec2 uv = pr*0.5+0.5;
-  vec2 uvMod = uv;
-  if(uDistort>0.0){ float a=uvMod.y*6.0, b=uvMod.x*6.0, w=0.01*uDistort; uvMod.x+=sin(a)*w; uvMod.y+=cos(b)*w; }
-  float t = uvMod.x; if(uMirror>0.5){ t = 1.0 - abs(1.0 - 2.0*fract(t)); }
-  vec3 base = getGradientColor(t);
-  vec2 offset = vec2(iMouse.x/iResolution.x, iMouse.y/iResolution.y);
-  float d = length(uv0-offset); float r = max(uSpotlightRadius, 1e-4); float dn = d/r;
-  float spot = (1.0 - 2.0*pow(dn, uSpotlightSoftness)) * uSpotlightOpacity;
-  vec3 cir = vec3(spot);
-  float stripe = fract(uvMod.x * max(uBlindCount,1.0)); if(uShineFlip>0.5) stripe = 1.0-stripe;
-  vec3 ran = vec3(stripe);
-  vec3 col = cir + base - ran;
-  col += (rand(gl_FragCoord.xy + iTime) - 0.5) * uNoise;
-  fragColor = vec4(col, 1.0);
-}
-void main(){ vec4 color; mainImage(color, vUv*iResolution.xy); gl_FragColor = color; }`;
+  vec2 p = uv0*2.0-1.0; p.x *= aspect; vec2 pr = rotate2D(p, uAngle); pr.x /= aspect; vec2 uv = pr*0.5+0.5;
+  float t = uv.x + iTime*0.012;
+  float wave = fract(t*0.5)*2.0; wave = wave > 1.0 ? 2.0-wave : wave;   // there and back, so the colours never jump
+  vec3 col = gradient(wave);
+  // blinds: a rounded light-to-shade profile per blind, shading the colour by at most uStrength
+  float stripe = fract(t * uBlindCount);
+  float shade = 0.5 - 0.5*cos(stripe*6.28318);
+  col *= 1.0 - uStrength*shade;
+  // the light under the pointer: a wide, soft lift
+  vec2 m = iMouse / iResolution.xy; vec2 dm = (uv0-m)*vec2(aspect,1.0);
+  col += exp(-dot(dm,dm)*3.5) * 0.18;
+  col += (rand(gl_FragCoord.xy + floor(iTime*24.0)) - 0.5) * uNoise;
+  // the fall into the page: full near the side it comes from, gone by the far side, eased so there is no edge
+  float a = 1.0 - smoothstep(0.0, 1.0, away(uv0));
+  a = a*a*(3.0-2.0*a);
+  gl_FragColor = vec4(col*a, a);
+}`;
+
+export function mount(el, inputs) {
+  const num = (v, d) => { const n = Number(v); return Number.isFinite(n) ? n : d; };
+  const I = inputs || {};
+  const colors = String(I.colors || "").split(",").map((s) => s.trim()).filter(Boolean);
+  const from = FROM[I.from] ?? FROM.top;
+  const angle = num(I.angle, -25), noise = num(I.noise, 0.035), strength = num(I.strength, 0.22);
+  const blindCount = num(I.blindCount, 12), blindMinWidth = num(I.blindMinWidth, 80);
+  const still = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  import("ogl").then(({ Renderer, Program, Mesh, Triangle }) => {
+    const renderer = new Renderer({ dpr: Math.min(2, window.devicePixelRatio || 1), alpha: true, premultipliedAlpha: true });
+    const gl = renderer.gl;
+    const canvas = gl.canvas;
+    canvas.style.cssText = "position:absolute;inset:0;width:100%;height:100%;display:block";
+    el.appendChild(canvas);
 
     const { arr, count } = prepStops(colors);
     const uniforms = {
-      iResolution: { value: [gl.drawingBufferWidth, gl.drawingBufferHeight, 1] },
-      iMouse: { value: [0, 0] }, iTime: { value: 0 },
-      uAngle: { value: (angle * Math.PI) / 180 }, uNoise: { value: noise },
-      uBlindCount: { value: Math.max(1, blindCount) },
-      uSpotlightRadius: { value: spotRadius }, uSpotlightSoftness: { value: spotSoft }, uSpotlightOpacity: { value: spotOpacity },
-      uMirror: { value: mirror }, uDistort: { value: distort }, uShineFlip: { value: shineFlip },
+      iResolution: { value: [1, 1, 1] }, iMouse: { value: [0, 0] }, iTime: { value: 0 },
+      uAngle: { value: (angle * Math.PI) / 180 }, uNoise: { value: noise }, uStrength: { value: strength },
+      uBlindCount: { value: blindCount }, uFrom: { value: from }, uColorCount: { value: count },
       uColor0: { value: arr[0] }, uColor1: { value: arr[1] }, uColor2: { value: arr[2] }, uColor3: { value: arr[3] },
       uColor4: { value: arr[4] }, uColor5: { value: arr[5] }, uColor6: { value: arr[6] }, uColor7: { value: arr[7] },
-      uColorCount: { value: count },
     };
-    const program = new Program(gl, { vertex, fragment, uniforms });
-    const mesh = new Mesh(gl, { geometry: new Triangle(gl), program });
+    const mesh = new Mesh(gl, { geometry: new Triangle(gl), program: new Program(gl, { vertex, fragment, uniforms, transparent: true }) });
 
-    let first = true;
+    let tx = 0, ty = 0, last = 0, seen = true, placed = false;
+    const draw = () => { try { renderer.render({ scene: mesh }); } catch (_) { /* context lost */ } };
     const resize = () => {
       const rect = el.getBoundingClientRect();
       renderer.setSize(rect.width || 1, rect.height || 1);
       uniforms.iResolution.value = [gl.drawingBufferWidth, gl.drawingBufferHeight, 1];
-      const maxByMin = blindMinWidth > 0 ? Math.max(1, Math.floor((rect.width || 1) / blindMinWidth)) : blindCount;
-      uniforms.uBlindCount.value = Math.max(1, blindCount ? Math.min(blindCount, maxByMin) : maxByMin);
-      if (first) { first = false; const cx = gl.drawingBufferWidth / 2, cy = gl.drawingBufferHeight / 2; uniforms.iMouse.value = [cx, cy]; tx = cx; ty = cy; }
+      uniforms.uBlindCount.value = Math.max(1, Math.min(blindCount, Math.floor((rect.width || 1) / blindMinWidth)));
+      if (!placed) { placed = true; tx = gl.drawingBufferWidth / 2; ty = gl.drawingBufferHeight * 0.7; uniforms.iMouse.value = [tx, ty]; }
+      draw();
     };
-    let tx = 0, ty = 0, last = 0;
     resize();
     try { new ResizeObserver(resize).observe(el); } catch (_) {}
+    try { new IntersectionObserver(([e]) => { seen = e.isIntersecting; }).observe(el); } catch (_) {}
 
-    // listen on window so the spotlight tracks the cursor even through the hero content overlaid on top.
+    if (still) return;
+    // on window, so the light follows the pointer even over the hero's content
     window.addEventListener("pointermove", (e) => {
-      const rect = canvas.getBoundingClientRect();
-      const scale = renderer.dpr || 1;
+      const rect = canvas.getBoundingClientRect(), scale = renderer.dpr || 1;
       tx = (e.clientX - rect.left) * scale;
       ty = (rect.height - (e.clientY - rect.top)) * scale;
-      if (damp <= 0) uniforms.iMouse.value = [tx, ty];
-    });
-
-    const loop = (t) => {
+    }, { passive: true });
+    const loop = (time) => {
       requestAnimationFrame(loop);
-      uniforms.iTime.value = t * 0.001;
-      if (damp > 0) {
-        if (!last) last = t;
-        const dt = (t - last) / 1000; last = t;
-        let factor = 1 - Math.exp(-dt / Math.max(1e-4, damp)); if (factor > 1) factor = 1;
-        const cur = uniforms.iMouse.value;
-        cur[0] += (tx - cur[0]) * factor; cur[1] += (ty - cur[1]) * factor;
-      }
-      try { renderer.render({ scene: mesh }); } catch (e) { /* context lost */ }
+      if (!seen || document.hidden) { last = time; return; }
+      const dt = last ? (time - last) / 1000 : 0; last = time;
+      const ease = 1 - Math.exp(-dt / 0.35), cur = uniforms.iMouse.value;
+      cur[0] += (tx - cur[0]) * ease; cur[1] += (ty - cur[1]) * ease;
+      uniforms.iTime.value = time * 0.001;
+      draw();
     };
     requestAnimationFrame(loop);
-  }).catch(() => { /* no ogl - the hero just has a flat background */ });
+  }).catch(() => { /* no ogl: the hero keeps its flat background */ });
 }

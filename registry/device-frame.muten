@@ -1,8 +1,26 @@
-# DeviceFrame - a device around a picture of a product: a phone (rounded bezel) or a browser window (a bar with
-# three dots). Put an Image, or any content, in the slot; an Image fills the screen from the top. height crops it
-# (the rest fades out at the bottom), so a tall screenshot can sit beside a short text.
+# DeviceFrame - a device around a picture of a product, drawn like the real thing: a phone (the iPhone 18 Pro, to scale:
+# aluminium band, black border, the side buttons, an optional Dynamic Island) or a browser window (the bar with its three
+# dots and, when given, the address). Put an Image, or any content, in the slot; an Image fills the screen from the top.
+# height crops it (the whole device fades out at the bottom), so a tall screenshot can sit beside a short text. Every
+# measure of the phone follows its width, so it keeps the same proportions at any size. ChatPlay wears this same phone.
 #   DeviceFrame { Image "~/shots/store.png" alt("Tu tienda en un teléfono") }
-#   DeviceFrame(kind: "browser", height: "420px") { Image "~/shots/panel.png" alt("Tu panel") }
-# width: empty (a phone is 280 px, a browser fills its column) or a width like «320px».
-# kind: phone | browser. shadcn-for-muten · part · no deps · kit.css (.cx-device).
-part DeviceFrame(kind: text = "phone", height: text = "", width: text = "") { Stack class("cx-device") data(kind: $kind, crop: $height != "", sized: $width != "") style(h: "{$height}", w: "{$width}") { slot } }
+#   DeviceFrame(island: "on", width: "300px") { Image "~/shots/app.png" alt("La app") }
+#   DeviceFrame(kind: "browser", url: "storio.ink/elroble", height: "420px") { Image "~/shots/panel.png" alt("Tu panel") }
+#   DeviceFrame(href: "/aurora", label: "Estudio Aurora, una tienda de muestra", shot: "/stores/aurora.webp")
+# width: empty (a phone is 280 px, a browser fills its column) or a width like «320px» or «100%». island: "on" draws the
+# island (leave it off over a page that has its own top bar). kind: phone | browser.
+# href: the whole device is a link there (it lifts on hover); label says where, for a screen reader.
+# shot: a picture of the screen (390 × 844 at twice the pixels) laid as its background. Unlike an Image it is not
+# downloaded until the device comes near the screen (content-visibility), so a long row of phones costs nothing.
+# A name under the phone: wrap it with its spans in `Stack class("cx-mk-store")`.
+# shadcn-for-muten · part · no deps · kit.css (.cx-device).
+part DeviceFrame(kind: text = "phone", height: text = "", width: text = "", url: text = "", island: text = "", href: text = "", label: text = "", shot: text = "") {
+  Stack class("cx-device") data(kind: $kind, crop: $height != "", sized: $width != "", island: $island, link: $href != "", shot: $shot != "") style(h: "{$height}", w: "{$width}", shot: "url('{$shot}')") {
+    when $url != "" { Span "{$url}" class("cx-device-url") aria(hidden: true) }
+    when $href != "" { Link "" -> "{$href}" class("cx-device-link") aria(label: $label) }
+    Stack class("cx-device-screen") {
+      when $shot != "" { Stack class("cx-device-shot") }
+      slot
+    }
+  }
+}

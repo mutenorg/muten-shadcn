@@ -1,0 +1,40 @@
+# DayPlan - the owner's day as a list in order: hour, a dot on a line, who and what, a tag on the right. The hours
+# already gone are faded, a red line says what time it is now, and one free slot can fill itself in a loop (a new
+# booking drops in with a green ring and the count steps up) - a picture of «your day keeps itself», not the Agenda.
+#   DayPlan(title: "Hoy", date: "viernes 9 de octubre", count: "5 citas", countNext: "6 citas") {
+#     DayPlanRow(time: "9:00 AM", title: "Pedro Ruiz", detail: "Corte clásico", tag: "Atendido", state: "done")
+#     DayPlanNow(time: "3:12 PM")
+#     DayPlanRow(time: "3:30 PM", title: "Laura Gómez", detail: "Corte y barba", tag: "Confirmada", tone: "ok")
+#     DayPlanRow(time: "4:30 PM", title: "Carla Méndez", detail: "Corte clásico", tag: "La agendó tu asistente", tone: "ai", state: "fill", free: "Libre")
+#   }
+# state: "" | done (gone, faded) | fill (shows `free` dashed, then fills; one per plan). tone: "" | ok | ai.
+# countNext: the count after the fill (empty = no count change). shadcn-for-muten · part · no deps · kit.css (.cx-dp).
+part DayPlan(title: text, date: text = "", count: text = "", countNext: text = "", label: text = "") {
+  Stack class("cx-dp cx-play") aria(label: $label) {
+    Stack class("cx-dp-top") {
+      Span "{$title}" class("cx-dp-t")
+      Span "{$date}" class("cx-dp-date")
+      when $count != "" {
+        Stack class("cx-dp-count") data(next: $countNext != "") { Span "{$count}" class("cx-dp-c1")  Span "{$countNext}" class("cx-dp-c2") aria(hidden: true) }
+      }
+    }
+    Stack class("cx-dp-list") aria(role: "list") { slot }
+  }
+}
+part DayPlanRow(time: text, title: text, detail: text = "", tag: text = "", tone: text = "", state: text = "", free: text = "") {
+  Stack class("cx-dp-row") data(state: $state) aria(role: "listitem") {
+    Span "{$time}" class("cx-dp-time")
+    Span "" class("cx-dp-dot")
+    Stack class("cx-dp-card") {
+      when $state == "fill" { Span "{$free}" class("cx-dp-free") aria(hidden: true) }
+      Stack class("cx-dp-body") {
+        Span "{$title}" class("cx-dp-who")
+        Span "{$detail}" class("cx-dp-what")
+        when $tag != "" { Span "{$tag}" class("cx-dp-tag") data(tone: $tone) }
+      }
+    }
+  }
+}
+part DayPlanNow(time: text) {
+  Stack class("cx-dp-now") aria(hidden: true) { Span "{$time}"  Span "" class("cx-dp-now-dot")  Span "" class("cx-dp-now-line") }
+}

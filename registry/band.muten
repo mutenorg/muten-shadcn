@@ -9,7 +9,7 @@ part Band(open: bool, tone: text = "muted", text: text, action: text = "", onAct
       Stack class("cx-band") data(tone: $tone) aria(role: "status") {
         slot
         Span "{$text}" class("cx-band-text")
-        when $action != "" { Button "{$action}" -> $onAction class("cn-button cn-button-variant-outline cn-button-size-xs group/button") }
+        when $action != "" { Btn(variant: "outline", size: "xs", onClick: $onAction) { Span "{$action}" } }
       }
     }
   }

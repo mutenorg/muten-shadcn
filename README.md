@@ -8,6 +8,13 @@ is 100% shadcn (zinc dark theme, the same tokens, the same animations).
 This is a **muten plugin**: a registry of components you either **import** (use as-is) or **eject** (`muten add`,
 copy the source and own it, the shadcn way). It is not a runtime - the components compile away with your app.
 
+## Before you build anything
+
+Use what the library has before drawing your own: one phone (`DeviceFrame`), one button (`Btn`), one field family,
+one modal. The reuse loop, the "if you need X, use Y" table and the mistakes not to repeat are in
+[AGENTS.md](AGENTS.md#read-this-first-reuse-before-you-build). To check an app:
+`node node_modules/@muten/shadcn/scripts/reuse-audit.mjs src`.
+
 ## Requirements
 
 A muten app using **Tailwind CSS v4** (scaffold with `npm create muten@latest` and pick Tailwind, or add it). The

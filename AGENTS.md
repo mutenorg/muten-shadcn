@@ -1,5 +1,66 @@
 # @muten/shadcn - component catalog (for an AI assembling a muten app)
 
+## Read this first: reuse before you build
+
+This library is the app's component set, built as atoms that compose into molecules and organisms. The most common
+mistake when building with muten is to draw from scratch something the library already has: a phone mockup, a button
+with its own border, a picker glued inside an input, a skeleton, a legal page. Each copy looks a little different, has
+its own bugs, and is one more thing to fix. So before you write any UI piece, walk this loop:
+
+1. **Look it up.** List the parts: `ls node_modules/@muten/shadcn/registry/`. Each `<name>.muten` opens with a header
+   comment: what it is, its props, an example. Read the header of every candidate (the catalog below names them; the
+   header is the API). Search by meaning: `grep -il "phone\|chat\|calendar" node_modules/@muten/shadcn/registry/*.muten`.
+2. **Compose, don't redraw.** If a part covers 80% of it, use the part and add the rest around it (layout, data, copy).
+   Build bigger pieces out of smaller ones: a form is `Field` + `Input` + `Btn`, a store tile is `DeviceFrame` +
+   two spans. Never copy a part's look into your own classes.
+3. **Your CSS only places and sizes.** Write classes for layout (grid, gaps, where a thing sits) and sizes, set through
+   the variable a part exposes (`--dw` for DeviceFrame, `width`/`height` props). Do not restyle what a part draws: its
+   border, radius, shadow, bezel, padding or colours. If that look is wrong, it is wrong everywhere: fix it in the library.
+4. **Missing for real? Add it to the library, not to the app.** A new part goes in `registry/` with its header comment,
+   its CSS in `kit.css`, an entry in `registry.json` and a page in the library's bench (`plugins/playground/docs/` in
+   its repo). If you cannot change the library, say so instead of building a private copy. Then every app
+   gets it, and the next person finds it in step 1.
+5. **Check.** `node node_modules/@muten/shadcn/scripts/reuse-audit.mjs src` lists the markup in your app that redraws a
+   library piece (a Button wearing `cn-button` classes, a hand-made avatar, a phone frame of its own, a skeleton by
+   hand). Every finding is a question: answer it before adding more. Then `muten check`.
+
+### If you need… use…
+
+| You need | Use | Not |
+|---|---|---|
+| a button / icon button / link that looks like one | `Btn(variant, size, label, onClick, disabled)`, `LinkBtn(to, variant)` | `Button … class("cn-button …")` |
+| buttons joined in a row, an action with a menu | `ButtonGroup`, `SplitButton` | two buttons with their own borders |
+| a text field, with an icon, a currency or a country | `Input`, `InputGroup` + `GroupInput`, `MoneyField`, `PhoneField` | a select drawn inside an input |
+| a label, help text and error around a control | `Field(label, description, error)` | spans with margins |
+| a person's face or initials, a name with a subtitle | `Avatar`, `AvatarImage`, `Who` | a circle div with a letter |
+| **a phone or browser mockup** (screenshot, live screen, store preview) | **`DeviceFrame`** (`island`, `width`, `href`, `label`, `shot`, `kind: "browser"`, `url`) | any frame of your own: it is the one phone, the iPhone 18 Pro to scale |
+| a chat preview in WhatsApp, Instagram or Telegram style | `ChatPlay` (+ `ChatPlayMsg`, `ChatPlayDay`, …) | a hand-made chat screen |
+| a conversation column | `MessageScroller` + `Message` + `Marker` | a scrolling div of bubbles |
+| a dialog, a drawer, a side sheet | `Modal(mode: "auto" \| "drawer" \| …)` | a fixed div with a backdrop |
+| a short notice, an alert, a band | `Island`, `Alert`, `Band` | a toast of your own |
+| a loading state | `Loading(busy, kind) { … }`, `Skeletons(kind)`, `Skeleton` | grey boxes by hand |
+| an empty state | `Empty(title, description)` | a centred paragraph |
+| tabs, a segmented switch | `Tabs`, `SegmentedControl` | buttons with an active class |
+| the app's left menu, the phone's bottom bar | `AppSidebar` + `SidebarLink`, `PhoneBar` | a nav of your own |
+| a menu, a searchable picker | `DropdownMenu`, `Combobox` | a native `<select>` |
+| dates and times, an agenda | `Calendar`, `DateField`, `TimeField`, `AgendaLive` | an input with a library |
+| a KPI, a price, a status | `StatCard`, `Price`, `Badge` / `StatusBadge` | a styled number |
+| a legal or long document | `DocHead`, `DocToc` + `DocTocLink`, `DocSection` | a wall of paragraphs |
+| a hero background, a product tour | `GradientBlinds(colors, from)`, `ScreenTour` | your own canvas or gradient |
+| text with the library's type scale | `Txt(value, variant: "title" \| "heading" \| "muted" \| "caption")` | font sizes in your CSS |
+
+### Things that went wrong before (don't repeat them)
+
+- A second (and third) phone drawn by hand in the app, each with its own bezel and buttons. There is one phone:
+  `DeviceFrame`. Size it with `width` or `--dw`; give it `island: "on"` or a `shot`; never redraw it.
+- A percent `padding` used for a bezel or a border: a percent padding is a share of the PARENT's width, so the border
+  grows with the page. Shares of the element itself come from its children's margin or from `cqw`.
+- A picker given its own border and radius inside an input: it reads as a button stuck in a field. `InputGroup` makes
+  it a segment of the same field.
+- Bubbles squashed and hours drawn over the text in a fixed-height column: flex shrank them. The library's parts already
+  hold their size; a hand-made list did not.
+- A gradient with hard stripes and a sudden cut: `GradientBlinds` melts into the page and can come `from` any side.
+
 ## Setup (once): `plugins { shadcn {} }` in muten.config + `@import "@muten/shadcn/globals.css";` in src/styles.css. Then everything below is usable directly; `muten add <name>` only ejects a source.
 
 > **Native primitives always win — for a checkbox / select / number / range / date / chart, use the native muten
@@ -160,4 +221,6 @@ Rules the kit keeps: the page owns the state and gets JSON back through actions;
 
 ### Gotcha: a part can not be named after a core primitive — the **primitive wins** and any same-named plugin part is unreachable on import. The primitives include `Button/Link/Form/Image/SearchField/DataTable/Icon/Text/Title/Span` (→ this plugin uses `Btn`/`Input`/`LinkBtn`) AND `Select/Checkbox/Number/Range/Date/Chart` (→ use those primitives directly, see the note at the top). If you write a part call and the oracle says `missing-prop: X is missing the required "bind"`, X is a primitive shadowing the part — switch to the primitive's API.
 
-### Gotcha: a **part takes NO trailing modifiers** — `Part(...) class(...)`, `Part(...) disabled when x`, `Part(...) on(...)` and `Part(...) aria(...)` are all syntax errors (a part call ends at its `)`/`{}`). When you need `class`/`disabled when`/`on`/`aria` on a control, use the **native primitive** (`Button "Save" -> save disabled when not valid class("btn btn-default")`), not the `Btn(...)` part.
+### Gotcha: at the CALL SITE a part takes only `class(...)`, which is added to the part's root (for placing and sizing:
+`DeviceFrame(island: "on") class("my-phone-slot")`). `disabled when`, `on(...)` and `aria(...)` there are syntax
+errors: pass them as the part's props when it has them (`Btn(disabled: busy)`), or use the native primitive.

@@ -1,0 +1,13 @@
+# StackedBars - bars over time with one or more series stacked in each: the year by month, citas and pedidos together.
+# The axis is in the page's unit (USD 8K), a bar can be picked (it is pressed, and onPick gets its id), while nothing
+# is there yet a calm note sits over the plot (`empty`, with `emptyTitle` on top), and while it loads (`busy`) a skeleton keeps the shape. When the
+# data changes the bars slide to their new height. Each bar says its values to a screen reader and on hover.
+#   StackedBars(rows: @months, series: @kinds, selected: monthId, unit: "USD", onPick: pickMonth, label: "Ventas por mes")
+# rows {id, label, <key>: number…} · series {key, label, tone}: tone brand | coral | teal | amber | blue | pink, the
+# series palette (the first series sits at the bottom). One series is a plain bar chart. A legend shows from two.
+# readonly: true shows the pick but lets no bar be pressed (a plan that cannot change month).
+# For a single quick chart with no picking, muten's own `Chart` primitive is enough.
+# shadcn-for-muten · Custom · no deps · host JS stacked-bars.js · kit.css (.cx-stb).
+part StackedBars(rows: list, series: list, selected: text = "", unit: text = "", locale: text = "es", empty: text = "", emptyTitle: text = "", busy: bool = false, readonly: bool = false, label: text = "", onPick: action) {
+  Custom StackedBars inputs(rows: $rows, series: $series, selected: $selected, unit: $unit, locale: $locale, empty: $empty, emptyTitle: $emptyTitle, busy: $busy, readonly: $readonly, label: $label) on(pick: $onPick) class("cx-stb")
+}

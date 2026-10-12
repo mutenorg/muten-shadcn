@@ -1,0 +1,167 @@
+# Marketing - the pieces a site's pages are built from (the cx-mk-* system in kit.css): a section with its title, the
+# hero's pill and two-line headline, the address field with its button, a list of checks, numbered steps, cards,
+# columns of facts, a path of steps, a checked list with explanations and the closing call. Every argument is text,
+# so the words can come from a translation function: MkCheck(label: "{t(lang, "x")}").
+#   MkSection(anchor: "how", title: "Así funciona") {
+#     MkChecks { MkCheck(label: "Sin app para tu cliente")  MkCheck(label: "Confirma solo") }
+#   }
+#   MkHero { MkHeroCopy { MkPill(label: "Para músicos") { Icon "lucide:music" }  MkHeadline(first: "Tu música,", second: "en un link.")
+#     MkClaim(value: handle, to: joinUrl, cta: "Crear mi tienda") class("animate-rise") }  … }
+#   MkCta(title: "Tu negocio,", soft: "vende y agenda solo.") { MkClaim(value: handle, to: joinUrl, cta: "Crear mi tienda") }
+# shadcn-for-muten · parts · no deps · kit.css (.cx-mk-*), uses InputGroup and LinkBtn.
+
+# MkSection - a page section at reading width with its h2. anchor is its id (a link can go to #anchor).
+part MkSection(anchor: text, title: text = "") {
+  Section class("cx-mk-sec cx-mk-col") id("{$anchor}") {
+    when $title != "" { Title "{$title}" h2 class("cx-mk-h2") }
+    slot
+  }
+}
+# MkHead - a section's heading block when it has more than the title: an eyebrow above, a lead under it, and in the
+# slot whatever follows in the same block (a button, a field).
+part MkHead(title: text, lead: text = "", eyebrow: text = "") {
+  Stack class("cx-mk-head") {
+    when $eyebrow != "" { Span "{$eyebrow}" class("cx-mk-eyebrow") }
+    Title "{$title}" h2 class("cx-mk-h2")
+    when $lead != "" { Text "{$lead}" class("cx-mk-lead") }
+    slot
+  }
+}
+# MkLead - the line under a section's title, a little closer to it than a paragraph.
+part MkLead(text: text) { Text "{$text}" class("cx-mk-lead cx-mk-sub") }
+# MkNote - a small line after a block: where a thing comes from, what it depends on.
+part MkNote(text: text) { Text "{$text}" class("cx-mk-note") }
+
+# ── the hero ──
+part MkHero() { Section class("cx-mk-hero") { slot } }
+part MkHeroCopy() { Stack class("cx-mk-hero-copy") { slot } }
+# MkPill - the brand pill over a hero's headline; its icon goes in the slot.
+part MkPill(label: text) { Stack class("cx-pill animate-rise cx-mk-pill") data(slot: "pill", tone: "brand") { slot  Span "{$label}" } }
+# MkHeadline - an h1 in two lines that fit the column (the second is part of the same sentence). fit: false keeps
+# the poster size (a home page).
+part MkHeadline(first: text, second: text, fit: bool = true) {
+  Stack class("words cx-mk-title") {
+    Title "{$first}" h1 class("cx-mk-h1", "cx-mk-h1-fit" when $fit)
+    Span "{$second}" class("cx-mk-h1", "cx-mk-h1-fit" when $fit)
+  }
+}
+# MkTitle - an h1 in one line of text. size: "fit" fits the column, "wrap" lets a whole sentence wrap a size smaller,
+# "" keeps the poster size.
+part MkTitle(text: text, size: text = "") {
+  Title "{$text}" h1 class("cx-mk-h1 words", "cx-mk-h1-fit" when $size == "fit", "cx-mk-h1-wrap" when $size == "wrap")
+}
+# MkClaim - the address field and its button: «storio.ink/ [your-name] [Create]». value is the page's text state.
+part MkClaim(value: text, to: text, cta: text, placeholder: text = "", prefix: text = "storio.ink/") {
+  Stack class("cx-mk-claim") {
+    InputGroup(size: "2xl", variant: "filled") {
+      InputAddon { InputGroupText(label: $prefix) }
+      GroupInput(value: $value, placeholder: $placeholder)
+    }
+    LinkBtn(to: $to, variant: "default", size: "2xl") { Span "{$cta}" }
+  }
+}
+# MkCta - the closing call: two lines of title (the second softer) and, in the slot, what to do (an MkClaim).
+part MkCta(title: text, soft: text) {
+  Stack class("cx-mk-cta") {
+    Stack class("cx-mk-cta-copy") { Span "{$title}" class("cx-mk-h2")  Span "{$soft}" class("cx-mk-h2 cx-mk-soft") }
+    slot
+  }
+}
+
+# ── lists ──
+# MkChecks / MkCheck - short claims, each with a check.
+part MkChecks() { Stack class("cx-mk-checks") aria(role: "list") { slot } }
+part MkCheck(label: text) { Stack class("cx-mk-check") aria(role: "listitem") { Stack class("cx-mk-ic") { Icon "lucide:check" }  Span "{$label}" } }
+# MkCheckList / MkCheckRow - two columns of things a product does, each a check, a title and how it works.
+part MkCheckList() { Stack class("cx-mk-donelist") aria(role: "list") { slot } }
+part MkCheckRow(title: text, text: text) {
+  Stack class("cx-mk-done") aria(role: "listitem") {
+    Icon "lucide:check" class("cx-mk-done-i")
+    Stack class("cx-mk-done-tx") { Span "{$title}" class("cx-mk-done-t")  Text "{$text}" class("cx-mk-done-p") }
+  }
+}
+# MkSteps / MkStep - numbered steps in boxes; the step's picture goes in the slot (a Stack class("cx-mk-step-vis")).
+part MkSteps() { Stack class("cx-mk-steps") aria(role: "list") { slot } }
+part MkStep(n: text, title: text, text: text) {
+  Stack class("cx-mk-step") aria(role: "listitem") {
+    Span "{$n}" class("cx-mk-step-n") aria(hidden: true)
+    Span "{$title}" class("cx-mk-step-t")
+    Text "{$text}" class("cx-mk-step-p")
+    slot
+  }
+}
+# MkPath / MkPathStep - a short way through, one sentence per step, numbers in circles (four across, two, then one).
+part MkPath() { Stack class("cx-mk-path") aria(role: "list") { slot } }
+part MkPathStep(n: text, text: text) {
+  Stack class("cx-mk-path-s") aria(role: "listitem") { Span "{$n}" class("cx-mk-path-n") aria(hidden: true)  Text "{$text}" class("cx-mk-path-p") }
+}
+# MkFund / MkFundCard - cards in a grid, each with a title and its paragraph; tag is a small label above (the piece
+# that does it). MkFundSource is a card that also says where its number comes from.
+part MkFund() { Stack class("cx-mk-fund") aria(role: "list") { slot } }
+part MkFundCard(title: text, text: text, tag: text = "") {
+  Stack class("cx-mk-fund-c") aria(role: "listitem") {
+    when $tag != "" { Span "{$tag}" class("cx-mk-fund-tag") }
+    Title "{$title}" h3 class("cx-mk-fund-t")
+    Text "{$text}" class("cx-mk-fund-p")
+  }
+}
+part MkFundSource(n: text, title: text, text: text, source: text) {
+  Stack class("cx-mk-fund-c") aria(role: "listitem") {
+    Span "{$n}" class("cx-mk-fund-n")
+    Title "{$title}" h3 class("cx-mk-fund-t")
+    Text "{$text}" class("cx-mk-fund-p")
+    Span "{$source}" class("cx-mk-fund-src")
+  }
+}
+# MkFacts / MkFact - columns split by hairlines, a key word and its line (four across, two, then one).
+part MkFacts() { Stack class("cx-mk-facts") aria(role: "list") { slot } }
+part MkFact(key: text, text: text) { Stack class("cx-mk-fact") aria(role: "listitem") { Span "{$key}" class("cx-mk-fact-k")  Text "{$text}" class("cx-mk-fact-p") } }
+# MkBoxes / MkBox - outlined boxes with a title and a line (three across, two, then one).
+part MkBoxes() { Stack class("cx-mk-boxes") aria(role: "list") { slot } }
+part MkBox(title: text, text: text) { Stack class("cx-mk-box") aria(role: "listitem") { Span "{$title}" class("cx-mk-box-t")  Text "{$text}" class("cx-mk-box-p") } }
+
+# ── us and them ──
+# VsTable / VsRow - a comparison of one thing per row: what, how we do it (with a check), how they do it. On a phone
+# each row stacks and the cells carry their column's name. us is the first column's name, logo its picture.
+part VsTable(us: text, them: text, logo: text = "") {
+  Stack class("cn-table-container") data(slot: "table-container") {
+    Stack class("cn-table cx-mk-vs-table") data(slot: "table") aria(role: "table") {
+      Stack class("cn-table-row cx-mk-vs-head") data(slot: "table-row") aria(role: "row") {
+        Span "" class("cn-table-head") data(slot: "table-head") aria(role: "columnheader")
+        Stack class("cn-table-head") data(slot: "table-head") aria(role: "columnheader") { Image "{$logo}" alt("{$us}") class("cx-mk-vs-logo") }
+        Span "{$them}" class("cn-table-head") data(slot: "table-head") aria(role: "columnheader")
+      }
+      slot
+    }
+  }
+}
+part VsRow(what: text, us: text, them: text, usName: text, themName: text) {
+  Stack class("cn-table-row") data(slot: "table-row") aria(role: "row") {
+    Span "{$what}" class("cn-table-cell cx-mk-vs-what") data(slot: "table-cell") aria(role: "cell")
+    Stack class("cn-table-cell cx-mk-vs-us") data(slot: "table-cell", label: $usName) aria(role: "cell") { Icon "lucide:check"  Span "{$us}" }
+    Span "{$them}" class("cn-table-cell cx-mk-vs-them") data(slot: "table-cell", label: $themName) aria(role: "cell")
+  }
+}
+
+# ── rows, features, stores ──
+# MkRows / MkRow - zigzag rows: the words on one side and a picture on the other (MkStage); reverse puts the words on
+# the right. MkRowCopy is the words: its title (an h2, or h3 under a section that already has one), a line and, in the
+# slot, anything after it (MkChecks).
+#   MkRows { MkRow { MkRowCopy(title: "Tu agenda", text: "Se llena sola.") { MkChecks { … } }  MkStage { … } } }
+part MkRows() { Stack class("cx-mk-rows") { slot } }
+part MkRow(reverse: bool = false) { Stack class("cx-mk-row", "cx-mk-rev" when $reverse) { slot } }
+part MkRowCopy(title: text, text: text, level: text = "h2") {
+  Stack class("cx-mk-row-copy") {
+    when $level == "h2" { Title "{$title}" h2 class("cx-mk-h3") }
+    when $level != "h2" { Title "{$title}" h3 class("cx-mk-h3") }
+    Text "{$text}" class("cx-mk-p")
+    slot
+  }
+}
+# MkStage - the soft panel a row's picture sits on; tone "dark" for a dark one.
+part MkStage(tone: text = "") { Stack class("cx-mk-stage", "cx-mk-stage-dark" when $tone == "dark") { slot } }
+# MkFeats / MkFeat - a grid of short features, each with its icon (in the slot) and a label.
+part MkFeats() { Stack class("cx-mk-feats") aria(role: "list") { slot } }
+part MkFeat(label: text) { Stack class("cx-mk-feat") aria(role: "listitem") { Stack class("cx-mk-ic") { slot }  Span "{$label}" } }
+# MkStore - a store in a carousel: its phone (a DeviceFrame in the slot), its name and what it is.
+part MkStore(name: text, caption: text = "") { Stack class("cx-mk-store") { slot  Span "{$name}"  Span "{$caption}" } }

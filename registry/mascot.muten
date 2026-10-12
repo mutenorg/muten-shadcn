@@ -1,0 +1,28 @@
+# Mascot - the brand's mascot (in Storio, Storio): an AssistantOrb that acts. Its gestures are hand-set keyframes that
+# follow the principles of character animation (it gets ready before it moves, squashes and stretches without losing
+# volume, travels in arcs, its shadow tells the height) and its face is worn on the sphere's surface, so the eyes and
+# the blush curve with the body and take its light.
+#   Mascot(mood: "happy")
+#   Mascot(mood: storioMood, size: "360", look: "left", say: asSay, name: "Storio")
+# mood: idle | happy | shy | surprised | thinking | wink | celebrate | oops - happy, surprised, wink, celebrate and oops
+#   play once and settle into idle; shy and thinking stay while the mood is set; changing it plays the new one.
+#   idle (waiting) · happy (it went well) · shy (the password) · surprised (something unexpected) · thinking (saving) ·
+#   wink («leave it to me») · celebrate (the end of a flow) · oops (it failed, apologetic, no drama).
+# size: the box in px (the sphere fills two thirds of it) · look: left | right - the side it faces (toward the form)
+# say: what it says ("" = quiet). It speaks in a paper bubble that comes out of its side (up and toward where it looks),
+#   pops in like in games and swaps with a little pop when the line changes; a line changing while someone types waits
+#   for a pause. name: the name on top of the bubble ("Storio"). voice: on | off - a soft blip per syllable that follows
+#   the sentence's tune (off by default; it only sounds after the person has touched the page).
+#   Where the bubble sits is the page's call, per screen, in CSS: `--cx-mascot-say: side` (default: up and to the side,
+#   tail on the sphere's upper rim) `top` (right over its head) or `low` (level with it, beside it, the tail on its side; for when there's no room above).
+# With reduced motion each gesture shows its key pose, still, and the bubble fades.
+# shadcn-for-muten · part over AssistantOrb + Custom Mascot · kit.css (.cx-mascot).
+part Mascot(mood: text = "idle", size: text = "240", look: text = "left", say: text = "", name: text = "", voice: text = "off") {
+  Stack class("cx-mascot") style(m: "{$size}px") {
+    Stack class("cx-mascot-floor")
+    Stack class("cx-mascot-rig") {
+      Stack class("cx-mascot-squash") { AssistantOrb(size: $size) }
+    }
+    Custom Mascot inputs(mood: $mood, look: $look, say: $say, name: $name, voice: $voice) class("cx-mascot-run")
+  }
+}

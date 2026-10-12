@@ -1,0 +1,11 @@
+# MediaQuery - tells the page whether a CSS media query matches, now and every time that changes, so a page can DRAW
+# one version or the other (a phone layout, a desktop one) instead of drawing both and hiding one with CSS.
+#     state { onPhone = false : bool }
+#     action seePhone(m: text) mutates onPhone { onPhone.set(m == "yes") }
+#     MediaQuery(query: "(max-width: 63.99rem)", onChange: seePhone)
+#     when onPhone { … the phone's version … }   when not onPhone { … the desktop's … }
+# onChange gets "yes" or "no": once at mount and again whenever the answer flips (a rotated phone, a resized window).
+# It draws nothing. shadcn-for-muten · Custom (host JS media-query.js).
+part MediaQuery(query: text, onChange: action) {
+  Custom MediaQuery inputs(query: $query) on(change: $onChange) class("cx-mq")
+}

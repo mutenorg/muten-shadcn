@@ -1,0 +1,19 @@
+# InfoTable - shadcn's Table for content (not a data grid: for rows from a list with filters, use TableView). A header row
+# of InfoHead, then rows of InfoCell. variant "compare" is the comparison look (first column strong, the rest
+# softer, stacked with their column's name on a phone); a cell's tone picks "strong" or "soft" inside it.
+#   InfoTable(variant: "compare") {
+#     InfoHeadRow { InfoHead(label: "")  InfoHead(label: "Storio")  InfoHead(label: "Linktree") }
+#     InfoRow { InfoCell(label: "Agenda", tone: "strong")  InfoCell(label: "Incluida")  InfoCell(label: "No", tone: "soft") }
+#   }
+# shadcn-for-muten · parts · no deps · Nova (.cn-table) + kit.css (.cx-mk-vs-table).
+part InfoTable(variant: text = "default") {
+  Stack class("cn-table-container") data(slot: "table-container") {
+    Stack class("cn-table", "cx-mk-vs-table" when $variant == "compare") data(slot: "table") aria(role: "table") { slot }
+  }
+}
+part InfoHeadRow() { Stack class("cn-table-row cx-mk-vs-head") data(slot: "table-row") aria(role: "row") { slot } }
+part InfoRow() { Stack class("cn-table-row") data(slot: "table-row") aria(role: "row") { slot } }
+part InfoHead(label: text) { Span "{$label}" class("cn-table-head") data(slot: "table-head") aria(role: "columnheader") }
+part InfoCell(label: text, tone: text = "") {
+  Span "{$label}" class("cn-table-cell", "cx-mk-vs-what" when $tone == "strong", "cx-mk-vs-them" when $tone == "soft") data(slot: "table-cell") aria(role: "cell")
+}

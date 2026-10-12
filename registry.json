@@ -41,6 +41,22 @@
       "description": "AppShell(brand, user, nav, pages, rows, commands, narrow, onNavigate, onOpen, onAction): Sidebar, page header, detail Sheet, ⌘K Command."
     },
     {
+      "name": "assistant-orb",
+      "deps": [],
+      "part": "AssistantOrb",
+      "file": "registry/assistant-orb.muten",
+      "component": "AssistantOrb",
+      "description": "AssistantOrb - the assistant, as a living sphere of light with eyes: light flows inside it (a WebGL shader), it"
+    },
+    {
+      "name": "assistant-play",
+      "deps": [],
+      "part": "AssistantPlay",
+      "file": "registry/assistant-play.muten",
+      "component": "AssistantPlay",
+      "description": "AssistantPlay - the assistant at work, shown (not used): a card with the day, the assistant typing, saying what it did"
+    },
+    {
       "name": "attachment",
       "deps": [],
       "part": "Attachment",
@@ -392,6 +408,13 @@
       "description": "Animated WebGL gradient + diagonal-blinds hero background that follows the cursor and fades into the page (needs ogl)."
     },
     {
+      "name": "heatmap",
+      "deps": [],
+      "part": "Heatmap",
+      "file": "registry/heatmap.muten",
+      "description": "Rows × columns (weekday × hour), each cell darker the more it holds, a less…more scale, a note while empty."
+    },
+    {
       "name": "hotkey",
       "deps": [],
       "part": "Hotkey",
@@ -427,6 +450,13 @@
       "part": "Indicator",
       "file": "registry/indicator.muten",
       "description": "Indicator(tone): the corner dot that says something needs you."
+    },
+    {
+      "name": "info-table",
+      "deps": [],
+      "part": "InfoTable",
+      "file": "registry/info-table.muten",
+      "description": "InfoTable - shadcn's Table for content (not a data grid: for rows from a list with filters, use TableView). A header row"
     },
     {
       "name": "input-group",
@@ -506,6 +536,13 @@
       "description": "Host of the system kit widgets (Custom, kit core). Use the named parts."
     },
     {
+      "name": "legal-doc",
+      "deps": [],
+      "part": "DocHead",
+      "file": "registry/legal-doc.muten",
+      "description": "A legal document (terms, privacy): the title and its line, the contents that follow the reading, the sections at reading width."
+    },
+    {
       "name": "link-btn",
       "deps": [],
       "part": "LinkBtn",
@@ -526,6 +563,21 @@
       "part": "LogoCloud",
       "file": "registry/logo-cloud.muten",
       "description": "BLOCK: a 'trusted by' strip of logos, muted + grayscale until hover. Parts: LogoCloud, LogoCloudItem."
+    },
+    {
+      "name": "marketing",
+      "deps": [],
+      "part": "MkSection",
+      "file": "registry/marketing.muten",
+      "description": "Marketing - the pieces a site's pages are built from (the cx-mk-* system in kit.css): a section with its title, the"
+    },
+    {
+      "name": "mascot",
+      "deps": [],
+      "part": "Mascot",
+      "file": "registry/mascot.muten",
+      "component": "Mascot",
+      "description": "Mascot - the brand's mascot (in Storio, Storio): an AssistantOrb that acts. Its gestures are hand-set keyframes that"
     },
     {
       "name": "member-list",
@@ -614,20 +666,6 @@
       "description": "BLOCK: the floating glass navbar (sticky wrapper + glass pill + scroll animation baked in). Drop logo/links/CTA inside."
     },
     {
-      "name": "legal-doc",
-      "deps": [],
-      "part": "DocHead",
-      "file": "registry/legal-doc.muten",
-      "description": "A legal document (terms, privacy): the title and its line, the contents that follow the reading, the sections at reading width."
-    },
-    {
-      "name": "phone-bar",
-      "deps": [],
-      "part": "PhoneBar",
-      "file": "registry/phone-bar.muten",
-      "description": "The app's bar at the bottom of a phone: three fixed cells (menu · the screen's tools · its create). Screens hand it their toolbar buttons on a phone."
-    },
-    {
       "name": "new-appointment",
       "deps": [],
       "part": "NewAppointment",
@@ -698,6 +736,13 @@
       "part": "PermissionMatrix",
       "file": "registry/permission-matrix.muten",
       "description": "PermissionMatrix - any rows × any roles; one role can be locked (always allowed)."
+    },
+    {
+      "name": "phone-bar",
+      "deps": [],
+      "part": "PhoneBar",
+      "file": "registry/phone-bar.muten",
+      "description": "The app's bar at the bottom of a phone: three fixed cells (menu · the screen's tools · its create). Screens hand it their toolbar buttons on a phone."
     },
     {
       "name": "phone-field",
@@ -784,6 +829,15 @@
       "description": "RangeSlider(lo, hi, min, max, step, onLo, onHi): two thumbs on the kit ScaleSlider."
     },
     {
+      "name": "rank-item",
+      "deps": [
+        "progress"
+      ],
+      "part": "RankItem",
+      "file": "registry/rank-item.muten",
+      "description": "A ranking row or a thing to act on: a lead (rank or count), title, tag, a line, an optional share bar, the value, and an action in the slot."
+    },
+    {
       "name": "resizable",
       "deps": [],
       "part": "ResizablePanelGroup",
@@ -854,6 +908,13 @@
       "description": "Separator(orientation): a hairline. horizontal | vertical."
     },
     {
+      "name": "share-bar",
+      "deps": [],
+      "part": "ShareBar",
+      "file": "registry/share-bar.muten",
+      "description": "How one whole splits: a bar at 100 % cut into its parts, each in its tone, with each part's value and name under it."
+    },
+    {
       "name": "share-button",
       "deps": [],
       "part": "ShareButton",
@@ -874,6 +935,13 @@
       "part": "AppSidebar",
       "file": "registry/sidebar.muten",
       "description": "AppSidebar - a collapsible nav panel (SidebarHeader / SidebarGroup / SidebarItem). Named AppSidebar so it never shadows muten's core Sidebar <aside> primitive."
+    },
+    {
+      "name": "site-footer",
+      "deps": [],
+      "part": "SiteFooter",
+      "file": "registry/site-footer.muten",
+      "description": "A site's footer: the brand and its two ways in over a hairline, every group of links on one row, then a bar with the company and contacts (FooterHead, FooterBrand, FooterActions, FooterLinks, FooterCol, FooterBar)."
     },
     {
       "name": "skeleton",
@@ -936,6 +1004,14 @@
       "part": "SplitButton",
       "file": "registry/split-button.muten",
       "description": "A main action + a caret dropdown; page owns the open bool."
+    },
+    {
+      "name": "stacked-bars",
+      "deps": [],
+      "part": "StackedBars",
+      "file": "registry/stacked-bars.muten",
+      "component": "StackedBars",
+      "description": "Bars over time with series stacked, an axis in the page's unit, a bar you can pick, an empty note and a skeleton."
     },
     {
       "name": "stamp-card",
@@ -1108,12 +1184,35 @@
       "description": "Paired NumberFields (X/Y) for position or size."
     },
     {
+      "name": "veil",
+      "deps": [],
+      "part": "Veil",
+      "file": "registry/veil.muten",
+      "description": "A calm note (title and line) over a card's content while it has nothing to show yet; the content stays faded behind."
+    },
+    {
       "name": "virtual-list",
       "deps": [],
       "part": "VirtualList",
       "file": "registry/virtual-list.muten",
       "component": "VirtualList",
       "description": "VirtualList(rows, total, rowHeight, label, jump): only visible rows in the DOM."
+    },
+    {
+      "name": "media-query",
+      "deps": [],
+      "part": "MediaQuery",
+      "file": "registry/media-query.muten",
+      "component": "MediaQuery",
+      "description": "MediaQuery(query, onChange): says \"yes\"/\"no\" for a CSS media query at mount and on every change, so a page draws one version (phone or desktop) instead of both."
+    },
+    {
+      "name": "virtual-window",
+      "deps": [],
+      "part": "VirtualWindow",
+      "file": "registry/virtual-window.muten",
+      "component": "VirtualWindow",
+      "description": "VirtualWindow(count, item, over, onRange): a muten list where only the rows on screen exist; it says which rows to draw (\"from,to\") and keeps the scrollbar's full length."
     },
     {
       "name": "weekly-hours",
@@ -1137,13 +1236,6 @@
       "part": "ZoomControl",
       "file": "registry/zoom-control.muten",
       "description": "A - 100% + zoom widget; page owns the zoom number."
-    },
-    {
-      "name": "site-footer",
-      "deps": [],
-      "part": "SiteFooter",
-      "file": "registry/site-footer.muten",
-      "description": "A site's footer: the brand and its two ways in over a hairline, every group of links on one row, then a bar with the company and contacts (FooterHead, FooterBrand, FooterActions, FooterLinks, FooterCol, FooterBar)."
     }
   ],
   "classComponents": {

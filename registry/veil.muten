@@ -1,0 +1,18 @@
+# Veil - a calm note over a card's content while it has nothing to show yet: the content stays behind, faded (ghost
+# rows, an empty chart), and a title and a line say what will appear. With `on` false it is the content alone.
+#   Veil(on: noSales, title: "Nada vendido todavía", text: "Lo que más te reserven y te compren aparece aquí.") { … }
+# StackedBars and Heatmap carry their own (empty / emptyTitle); use Veil for anything else.
+# shadcn-for-muten · part · no deps · kit.css (.cx-veil).
+part Veil(on: bool, title: text = "", text: text = "") {
+  Stack class("cx-veil") data(on: $on) {
+    Stack class("cx-veil-body") aria(hidden: $on) { slot }
+    when $on {
+      Stack class("cx-veil-note") {
+        Stack class("cx-veil-box") {
+          Span "{$title}" class("cx-veil-t")
+          Span "{$text}" class("cx-veil-s")
+        }
+      }
+    }
+  }
+}

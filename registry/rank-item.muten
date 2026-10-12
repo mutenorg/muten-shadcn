@@ -1,0 +1,32 @@
+# RankItem - one row of a ranking or a short list of things to act on: a lead (the rank «1», or a count «13»), the title
+# with an optional tag, a line under it, an optional bar for its share, and the value on the right. Whatever goes in
+# the slot sits at the end of the row (an action: «Agregar», «Responder»).
+#   RankItem(lead: "1", title: "Corte clásico", tag: "Servicio", sub: "38 veces", value: "USD 760", share: 100)
+#   RankItem(lead: "13", title: "«tinte»", sub: "No está entre tus servicios") { Btn(variant: "outline", size: "sm", onClick: addService) { Span "Agregar" } }
+# share: 0-100 draws a Progress under the title (leave it at -1 for none). tone: the bar's colour (series palette).
+# busy: true keeps the row's shape with a skeleton.
+# shadcn-for-muten · part · no deps · kit.css (.cx-rank) + Item, Badge, Progress.
+part RankItem(lead: text, title: text = "", tag: text = "", sub: text = "", value: text = "", share: number = -1, tone: text = "brand", busy: bool = false) {
+  Stack class("cn-item cn-item-variant-default cn-item-size-sm cx-rank") data(slot: "item", size: "sm", busy: $busy) {
+    Stack class("cn-item-media cn-item-media-variant-icon cx-rank-lead") data(slot: "item-media", variant: "icon") { Span "{$lead}" }
+    Stack class("cn-item-content cx-rank-mid") data(slot: "item-content") {
+      when $busy {
+        Skeleton() class("cx-rank-sk-t")
+        Skeleton() class("cx-rank-sk-s")
+      }
+      when not $busy {
+        Stack class("cx-rank-t") {
+          Span "{$title}" class("cn-item-title") data(slot: "item-title")
+          when $tag != "" { Span "{$tag}" class("cn-badge cn-badge-variant-secondary group/badge") data(slot: "badge") }
+        }
+        Text "{$sub}" class("cn-item-description cx-rank-sub") data(slot: "item-description")
+        when $share >= 0 { Progress(value: $share, label: $title, tone: $tone) }
+      }
+    }
+    Stack class("cn-item-actions cx-rank-end") data(slot: "item-actions") {
+      when $busy { Skeleton() class("cx-rank-sk-v") }
+      when not $busy { Span "{$value}" class("cx-rank-v") }
+      slot
+    }
+  }
+}

@@ -1,0 +1,22 @@
+# ShareBar - how one whole splits: a bar at 100 % cut into its parts, each in its tone, and under it each part's value
+# and name. Citas against pedidos, new clients against returning ones. All parts at 0 leave the empty track. busy: true
+# shows the bar and the values as a skeleton while they load.
+#   ShareBar(parts: split, label: "Ganado por tipo")
+# parts {label, value (a number: the part's weight), text (what is written: "USD 3.240", "28"), tone}
+# tone: brand | coral | teal | amber | blue | pink (the series palette; Chart and StackedBars use the same colours).
+# shadcn-for-muten · part · no deps · kit.css (.cx-split).
+part ShareBar(parts: list, label: text = "", busy: bool = false) {
+  Stack class("cx-split") data(busy: $busy) aria(busy: $busy) {
+    Stack class("cx-split-bar") aria(role: "img", label: $label) {
+      each $parts as part { Span "" class("cx-split-seg") data(tone: part.tone) style(f: "{part.value}") }
+    }
+    Stack class("cx-split-keys") {
+      each $parts as part {
+        Stack class("cx-split-key") {
+          Span "{part.text}" class("cx-split-v")
+          Span "{part.label}" class("cx-split-l") data(tone: part.tone)
+        }
+      }
+    }
+  }
+}

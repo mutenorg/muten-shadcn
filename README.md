@@ -161,7 +161,7 @@ props are in the header comment of its `registry/<name>.muten`; the data shapes 
 | Notices | `Alert`, `Band`, `Island`, `Modal`/`ModalFooter`, `SettingsForm`/`DirtyBar` |
 | Menus and content | `Combobox`, `RowMenu`, `Accordion`, `StoreQr` |
 | Values | `ScaleSlider`, `RangeSlider`, `Slider`, `ColorPicker` |
-| Collections | `TagInput`, `PaginationNav`, `VirtualList`, `Carousel`/`CarouselSlide` |
+| Collections | `TagInput`, `PaginationNav`, `VirtualList`, `VirtualWindow`, `Carousel`/`CarouselSlide` |
 | Data | `TableView` (filters as data, chips, bulk), `OrderBoard`, `OrderCards` |
 | Dates and files | `Booking`, `Calendar`, `DateField`, `TimeField`, `ImageUpload` |
 | Structure | `PhoneShell`, `ShareButton`, `AppShell` (Sidebar, page header, detail Sheet, ⌘K) |

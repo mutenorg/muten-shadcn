@@ -10,9 +10,10 @@
 # tone: "" | info | ok | wait | bad | note - a tinted icon button (a pending thing on a card)
 # disabled: a bool (a state or a getter: a part argument can't be an expression) - the button can't be pressed.
 # label: the name of an icon-only button (aria-label, and the kit's tooltip on hover). Leave it empty when there is text.
+# shape: "" | pill - fully rounded ends, for the one call to action at the foot of a flow (Btn(size: "2xl", shape: "pill")).
 # shadcn-for-muten · part · no deps · Nova classes (nova.css) + kit.css.
-part Btn(variant: text = "default", size: text = "default", tone: text = "", label: text = "", onClick: action, disabled: bool = false) {
-  Button -> $onClick class("cn-button cn-button-variant-{$variant} cn-button-size-{$size} group/button", "cx-tonal cx-has-indicator" when $tone != "") data(slot: "button", tone: $tone, name: $label) aria(label: $label) disabled when $disabled { slot }
+part Btn(variant: text = "default", size: text = "default", tone: text = "", label: text = "", onClick: action, disabled: bool = false, shape: text = "") {
+  Button -> $onClick class("cn-button cn-button-variant-{$variant} cn-button-size-{$size} group/button", "cx-tonal cx-has-indicator" when $tone != "") data(slot: "button", tone: $tone, name: $label, shape: $shape) aria(label: $label) disabled when $disabled { slot }
 }
 # TriggerBtn - a Btn that only opens what sits next to it (a Popover, a DropdownMenu, a SplitButton's menu): it has no
 # action of its own, so opening never runs something else. Same variants and sizes as Btn.

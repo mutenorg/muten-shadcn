@@ -678,7 +678,8 @@
   .btn-group > * { @apply rounded-none shadow-none; }
   .btn-group > *:first-child { @apply rounded-l-md; }
   .btn-group > *:last-child { @apply rounded-r-md; }
-  .btn-group > * + * { @apply -ml-px; }
+  /* not `* + *`: a sibling rule ending in `*` makes Chrome recheck siblings on every insert in the page */
+  .btn-group > :where(:not(:first-child)) { @apply -ml-px; }
   .input-group { @apply flex flex-row h-8 w-full items-center gap-2 rounded-md border border-input bg-transparent px-3 text-sm shadow-sm outline-none transition-[color,box-shadow] duration-200 focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/50; }
   .input-group-control { @apply h-full flex-1 border-0 bg-transparent p-0 text-sm shadow-none outline-none placeholder:text-muted-foreground; }
 

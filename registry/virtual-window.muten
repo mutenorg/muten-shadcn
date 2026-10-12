@@ -1,0 +1,23 @@
+# VirtualWindow - a long list written in muten like any other, where only the rows on screen exist. Rows keep all
+# their muten (photos, switches, menus, drag to reorder): the window only decides WHICH rows the page draws.
+# Put it FIRST inside the list's container and draw the list as always, keeping only the rows it asks for:
+#     state { seen = "0,20" : text }
+#     action seeRows(r: text) mutates seen { seen.set(r) }
+#     get inWindow = windowIds(products.data, seen)      # two tiny `use` functions in the app (below)
+#     Stack class("gap-3") {
+#       VirtualWindow(count: products.length, item: 104, onRange: seeRows)
+#       each products as p where inWindow contains rowKey(p.id) { … the row, as before … }
+#     }
+#   The list stays the real typed list (rows keep their keys, fields and drag); only the `where` changes. In lib.ts:
+#     export function windowIds(rows: { id: string }[], seen: string): string { const [a, b] = String(seen).split(',').map(Number); return ' ' + (rows || []).slice(Number.isFinite(a) ? a : 0, Number.isFinite(b) ? b : 20).map((r) => r.id).join(' ') + ' '; }
+#     export function rowKey(id: string): string { return ` ${id} `; }
+#   (A sorted or filtered list: give windowIds the same list, in the same order, that the `each` draws. And «0,0» is a
+#   real answer, nothing on screen yet: never read a 0 as «missing».)
+# It stands in for the rows above (its own height) and pads the list below, so the scrollbar keeps the whole length.
+# count = how many rows the list has (after any filter) · item = a first guess of one row's height in px (it learns the
+# real one) · over = rows kept beyond each edge (6). The list scrolls inside its nearest `overflow: auto` parent or the
+# page. Drag to reorder keeps working when the drop sends ids (the rows drawn are the ones you can drag).
+# shadcn-for-muten · Custom (host JS virtual-window.js) · kit.css (.cx-vw).
+part VirtualWindow(count: number, item: number = 72, over: number = 6, onRange: action) {
+  Custom VirtualWindow inputs(count: $count, item: $item, over: $over) on(range: $onRange) class("cx-vw")
+}

@@ -45,6 +45,11 @@ its own bugs, and is one more thing to fix. So before you write any UI piece, wa
 | a menu, a searchable picker | `DropdownMenu`, `Combobox` | a native `<select>` |
 | dates and times, an agenda | `Calendar`, `DateField`, `TimeField`, `AgendaLive` | an input with a library |
 | a KPI, a price, a status | `StatCard`, `Price`, `Badge` / `StatusBadge` | a styled number |
+| a chart: bars, line, area, pie, donut, scatter | muten's `Chart` primitive (styled by the library) | an SVG or a chart library |
+| bars over time with stacked series, a pickable bar, an axis in money | `StackedBars(rows, series, selected, unit, empty, busy, onPick)` | bars of divs |
+| how a whole splits (citas vs pedidos, new vs returning) | `ShareBar(parts)` | two flex boxes |
+| how much happens where two things cross (day × hour) | `Heatmap(rows, cols, cells)` | a grid of coloured cells |
+| a bar per row (channels, a ranking) | `Progress(value, tone)` | a width in % |
 | a legal or long document | `DocHead`, `DocToc` + `DocTocLink`, `DocSection` | a wall of paragraphs |
 | a hero background, a product tour | `GradientBlinds(colors, from)`, `ScreenTour` | your own canvas or gradient |
 | text with the library's type scale | `Txt(value, variant: "title" \| "heading" \| "muted" \| "caption")` | font sizes in your CSS |
@@ -108,7 +113,7 @@ props are in the header comment of its `registry/<name>.muten`; the data shapes 
 | Notices | `Alert`, `Band`, `Island`, `Modal`/`ModalFooter`, `SettingsForm`/`DirtyBar` |
 | Menus and content | `Combobox`, `RowMenu`, `Accordion`, `StoreQr` |
 | Values | `ScaleSlider`, `RangeSlider`, `Slider`, `ColorPicker` |
-| Collections | `TagInput`, `PaginationNav`, `VirtualList`, `Carousel`/`CarouselSlide` |
+| Collections | `TagInput`, `PaginationNav`, `VirtualList`, `VirtualWindow`, `Carousel`/`CarouselSlide` |
 | Data | `TableView` (filters as data, chips, bulk), `OrderBoard`, `OrderCards` |
 | Dates and files | `Booking`, `Calendar`, `DateField`, `TimeField`, `ImageUpload` |
 | Structure | `PhoneShell`, `ShareButton`, `AppShell` (Sidebar, page header, detail Sheet, ⌘K) |

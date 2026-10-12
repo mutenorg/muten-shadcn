@@ -1299,6 +1299,9 @@ html.cx-locked { overflow: hidden; }
 .cx-tab { position: relative; z-index: 1; color: color-mix(in srgb, var(--foreground) 62%, transparent); }
 .cx-tab:hover { background: transparent; color: var(--foreground); }
 .cx-tab[aria-selected="true"] { color: var(--foreground); }
+/* a segment picks with the sliding pill, not with a filled button: beats the generic «pressed = selected» fill above */
+.cx-tabs > .cn-button.cx-tab[aria-pressed="true"][aria-pressed][aria-pressed],
+.cx-tabs > .cn-button.cx-tab[aria-pressed="true"][aria-pressed][aria-pressed]:hover { background: transparent; border-color: transparent; color: var(--foreground); }
 .cx-tabs.line .cx-tab { height: 36px; border-radius: 0; }
 .cx-tab .cx-count { min-width: 18px; height: 18px; padding: 0 5px; border-radius: 99px; background: color-mix(in srgb, var(--foreground) 9%, transparent); font-size: 11px; font-variant-numeric: tabular-nums; display: inline-grid; place-items: center; }
 .cx-tab[aria-selected="true"] .cx-count { background: var(--selected); color: var(--selected-foreground); }
@@ -1537,10 +1540,11 @@ p.cx-text { margin: 0; }
 
 /* ═════ Calendar ═════ */
 .cx-cal { position: relative; display: inline-flex; flex-direction: column; gap: 8px; padding: 12px; border-radius: calc(var(--radius) * 1.2); box-shadow: 0 0 0 1px var(--border); background: var(--background); }
-.cx-cal-nav { position: absolute; top: 10px; left: 8px; right: 8px; display: flex; justify-content: space-between; pointer-events: none; }
-.cx-cal-nav .cn-button { pointer-events: auto; }
+/* the title row: ‹ month › (with two months, ‹ beside the first and › beside the last) */
+.cx-cal-head { display: grid; grid-template-columns: 28px 1fr 28px; align-items: center; gap: 4px; margin-bottom: 4px; }
+.cx-cal-head > .cn-button { width: 28px; height: 28px; }
 .cx-cal-months { display: flex; gap: 24px; flex-wrap: wrap; }
-.cx-cal-title { height: 28px; display: grid; place-items: center; margin-bottom: 4px; }
+.cx-cal-title { height: 28px; display: grid; place-items: center; }
 .cx-cal-grid { display: grid; grid-template-columns: repeat(7, 32px); row-gap: 2px; }
 .cx-cal-wd { height: 28px; display: grid; place-items: center; }
 .cx-cal-day { font-variant-numeric: tabular-nums; font-weight: 400; position: relative; }
@@ -1554,7 +1558,7 @@ p.cx-text { margin: 0; }
 .cx-range-presets .cn-button { width: 9.5rem; }
 
 /* ═════ Agenda ═════ */
-.cx-agenda { display: flex; flex-direction: column; gap: 12px; width: 100%; max-width: 1080px; margin: 0 auto; }
+.cx-agenda { display: flex; flex-direction: column; gap: 12px; width: 100%; max-width: var(--agenda-max, none); margin: 0 auto; }
 .cx-ag-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; }
 .cx-ag-scroll { max-height: 520px; overflow: auto; }
 .cx-ag { position: relative; display: grid; grid-template-rows: 36px 1fr; min-width: calc(56px + var(--cols) * 140px); }
@@ -1800,7 +1804,7 @@ p.cx-text { margin: 0; }
 .cx-ag-row[data-kind="free"]:hover { border-color: var(--selected); color: var(--selected); }
 .cx-ag-row[data-kind="block"] { --tone: var(--muted-foreground); cursor: default; background: repeating-linear-gradient(135deg, color-mix(in srgb, var(--foreground) 5%, transparent) 0 5px, transparent 5px 10px); }
 .cx-rcpt-mini { display: block; width: 120px; aspect-ratio: 3 / 4; border-radius: 8px; box-shadow: inset 0 0 0 1px var(--border); }
-@container (max-width: 700px) { .cx-ag-bar .cx-text[data-variant="heading"] { flex-basis: 100%; order: 9; } }
+@container (max-width: 700px) { .cx-ag-bar > .cx-text[data-variant="heading"] { flex-basis: 100%; order: 9; } }
 
 /* time and menu triggers: field-like buttons, icon and chevron with real padding */
 .cx-time-btn { gap: 6px; padding-inline: 10px 12px; font-variant-numeric: tabular-nums; }
@@ -1963,6 +1967,12 @@ p.cx-text { margin: 0; }
 .cx-ag-listwrap { padding: 12px; }
 .cx-ag-head { background: var(--card, var(--background)); }
 .cx-ag-off[data-all] { display: block; text-align: center; padding-top: 14px; }
+/* a closed day: the whole column hatched, «Cerrado» in the middle where the eye lands (no veil on top, past or not) */
+.cx-ag-shut { display: grid; place-items: center; }
+.cx-ag-shutpill { position: sticky; top: 40%; display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 99px; background: var(--card, var(--background)); box-shadow: 0 0 0 1px var(--border), 0 1px 2px color-mix(in oklab, var(--foreground) 6%, transparent); color: var(--muted-foreground); }
+.cx-ag-shutlist { display: grid; place-items: center; padding: 40px 12px; }
+.cx-ag-shutpill svg { width: 14px; height: 14px; }
+.cx-ag-shutpill .cx-text { color: inherit; font-weight: 500; }
 .cx-ag-off[data-all] > .cx-text { display: inline-block; padding: 2px 10px; border-radius: 99px; background: var(--card, var(--background)); box-shadow: 0 0 0 1px var(--border); }
 .cx-ag-ev { touch-action: pan-y; user-select: none; -webkit-user-select: none; cursor: grab; }
 .cx-ag-ev[data-dragging] { opacity: .35; box-shadow: none; }
@@ -3696,11 +3706,11 @@ a.cx-bc-item:hover { color: var(--foreground); }
   align-items: center;
   min-height: 420px;
 }
-/* EVERYTHING IN A STAGE SITS IN ITS MIDDLE. A part that picks its markup per language (`when ui.lang …`) wraps it in a
-   bare container: that box does not count for layout, so what it holds is centred like a direct child. Each piece keeps
+/* EVERYTHING IN A STAGE SITS IN ITS MIDDLE. A part that picks its markup per language (`when ui.lang …`) has several
+   roots, and muten wraps them in a Stack wearing `mu-part` (muten ≥ 0.0.49): that box does not count for layout, so what it holds is centred like a direct child. Each piece keeps
    its own max width and is centred inside the stage. */
-.style-nova .cx-mk-stage > [class="mu-stack"] { display: contents; }
-.style-nova .cx-mk-stage > :not(.cx-device, [class="mu-stack"]), .style-nova .cx-mk-stage > [class="mu-stack"] > * { width: 100%; margin-inline: auto; }
+.style-nova .cx-mk-stage > .mu-part { display: contents; }
+.style-nova .cx-mk-stage > :not(.cx-device, .mu-part), .style-nova .cx-mk-stage > .mu-part > * { width: 100%; margin-inline: auto; }
 .style-nova .cx-mk-stage-narrow > * {
   max-width: 340px;
   margin-inline: auto;
@@ -3883,10 +3893,11 @@ a.cx-bc-item:hover { color: var(--foreground); }
 .style-nova .cx-mk-step-p { margin: 0; font-size: 15px; line-height: 1.55; color: var(--muted-foreground); }
 .style-nova .cx-mk-step-vis { align-self: stretch; margin-top: 8px; min-height: 240px; border-radius: 16px; background: var(--background); overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px 16px; }
 /* A STEP SHOWS ITS PIECE WHOLE, never chopped at the bottom: the box grows with it (the row of steps keeps the tallest),
-   and each piece takes the size a third of a column allows. A part that picks its markup per language wraps it in a
-   bare container, which does not count for layout. */
-.style-nova .cx-mk-step-vis > [class="mu-stack"] { display: contents; }
-.style-nova .cx-mk-step-vis > *, .style-nova .cx-mk-step-vis > [class="mu-stack"] > * { width: 100%; max-width: 280px; }
+   and each piece takes the size a third of a column allows. A part that picks its markup per language has several roots,
+   wrapped by muten in a `.mu-part` Stack, which does not count for layout. (Named by class: `[class="mu-stack"] > *`
+   made Chrome restyle a whole subtree on every class change in the page.) */
+.style-nova .cx-mk-step-vis > .mu-part { display: contents; }
+.style-nova .cx-mk-step-vis > *, .style-nova .cx-mk-step-vis > .mu-part > * { width: 100%; max-width: 280px; }
 .style-nova .cx-mk-step-vis .cx-pdp { max-width: 250px; }
 .style-nova .cx-mk-step-vis .cx-bio { max-width: 260px; }
 /* «Connect your channel»: each channel as its connection row (logo, account, switch); «It learns your store»: the store
@@ -3948,7 +3959,7 @@ a.cx-bc-item:hover { color: var(--foreground); }
 .style-nova .cx-mk-ig-bio > .cx-bio { border-radius: 20px; box-shadow: 0 30px 60px -30px rgb(11 11 13 / .45); }
 .style-nova .cx-mk-ig-hero > .cx-device { position: absolute; right: 24px; bottom: 24px; }
 .style-nova .cx-mk-web-serp { position: absolute; left: -28px; bottom: 36px; z-index: 2; width: 340px; padding: 16px 18px; border-radius: 16px; background: var(--background); box-shadow: 0 0 0 1px var(--border), 0 30px 60px -30px rgb(11 11 13 / .45); }
-.style-nova .cx-mk-stage > .cn-item-group, .style-nova .cx-mk-stage > [class="mu-stack"] > .cn-item-group { width: 100%; max-width: 380px; margin-inline: auto; padding: 6px; border-radius: 18px; background: var(--background); box-shadow: 0 1px 2px rgb(11 11 13 / .06), 0 24px 48px -28px rgb(11 11 13 / .35); }
+.style-nova .cx-mk-stage > .cn-item-group, .style-nova .cx-mk-stage > .mu-part > .cn-item-group { width: 100%; max-width: 380px; margin-inline: auto; padding: 6px; border-radius: 18px; background: var(--background); box-shadow: 0 1px 2px rgb(11 11 13 / .06), 0 24px 48px -28px rgb(11 11 13 / .35); }
 .style-nova .cx-mk-stage .cn-item-group .cn-item + .cn-item { border-top: 1px solid var(--border); border-radius: 0; }
 .style-nova .cx-mk-edit { width: 100%; max-width: 340px; margin-inline: auto; display: flex; flex-direction: column; gap: 16px; padding: 20px; }
 .style-nova .cx-mk-edit .cn-field { display: flex; flex-direction: column; gap: 8px; }
@@ -4792,8 +4803,9 @@ a.cx-bc-item:hover { color: var(--foreground); }
 .cx-ag-count { display: flex; align-items: center; justify-content: center; height: 12px; font-size: 11px; font-weight: 500; line-height: 1; color: var(--muted-foreground); font-variant-numeric: tabular-nums; }
 .cx-ag-day[aria-pressed="true"] .cx-ag-count { color: inherit; opacity: .8; }
 .cx-ag-count .skel { width: 10px; height: 8px; }
-.cx-ag-day[data-closed]:not([aria-pressed="true"]) { opacity: .45; }
-.cx-ag-day[data-closed] b { text-decoration: line-through; text-decoration-thickness: 1px; }
+/* a closed day in the strip: the grid's hatch and quieter ink, never struck through (it reads as an error) */
+.cx-ag-day[data-closed]:not([aria-pressed="true"]) { color: var(--muted-foreground); background: repeating-linear-gradient(135deg, color-mix(in srgb, var(--muted) 90%, transparent) 0 5px, transparent 5px 10px); }
+.cx-ag-day[data-closed]:not([aria-pressed="true"]) b { font-weight: 500; }
 .cx-ag-colhead[data-closed] { color: var(--muted-foreground); }
 /* «Ahora»: the cita in progress, first thing on today: a plain row on the muted fill, no colour, no motion */
 .cx-ag-nowcard { display: flex; align-items: center; gap: 12px; width: 100%; padding: 12px 14px; border: 1px solid var(--border); border-radius: calc(var(--radius) * 1.1); background: var(--muted); color: var(--foreground); text-align: left; cursor: pointer; font: inherit; }
@@ -4843,7 +4855,7 @@ a.cx-bc-item:hover { color: var(--foreground); }
 .cx-ag-datefoot { display: flex; justify-content: flex-end; }
 .cx-ag-datesheet { display: flex; flex-direction: column; gap: 12px; align-items: stretch; }
 .cx-ag-datesheet .cx-ag-datecal, .cx-ag-pop .cx-ag-datecal { display: flex; justify-content: center; }
-.cx-cal-pick { display: inline-flex; align-items: center; gap: 4px; margin: 0 auto; padding: 4px 8px; border: 0; border-radius: calc(var(--radius) * .7); background: transparent; color: inherit; font: inherit; cursor: pointer; }
+.cx-cal-pick { display: inline-flex; align-items: center; justify-self: center; gap: 4px; margin: 0 auto; padding: 4px 8px; border: 0; border-radius: calc(var(--radius) * .7); background: transparent; color: inherit; font: inherit; cursor: pointer; }
 .cx-cal-pick:hover { background: color-mix(in oklab, var(--foreground) 6%, transparent); }
 .cx-cal-pick svg { width: 14px; height: 14px; opacity: .6; }
 .cx-cal-mgrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; padding-top: 8px; min-width: 252px; }
@@ -4861,7 +4873,8 @@ a.cx-bc-item:hover { color: var(--foreground); }
 /* the crossed-citas alert sits under the strip, full width, with its button */
 .cx-ag-top > [data-ag-alert] { margin: 0; }
 /* no view picked (a range is on): the tabs show none, not the first */
-.cx-tabs:not(:has(.cx-tab[aria-selected="true"])) > .cx-tab-ind { opacity: 0; }
+/* the pill shows while a tab is chosen: Tabs mark it aria-selected, SegmentedItem aria-pressed */
+.cx-tabs:not(:has(.cx-tab:is([aria-selected="true"], [aria-pressed="true"]))) > .cx-tab-ind { opacity: 0; }
 /* who waits that day: two faces and how many */
 .cx-ag-queue { display: flex; align-items: center; gap: 0; }
 .cx-ag-queue > .cn-avatar, .cx-ag-queue > .cx-ag-face { width: 24px; height: 24px; min-width: 24px; font-size: 10px; letter-spacing: 0; overflow: hidden; box-shadow: 0 0 0 2px var(--card, var(--background)); }
@@ -4884,7 +4897,7 @@ a.cx-bc-item:hover { color: var(--foreground); }
 .cx-ag-skhead { display: inline-flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; }
 /* phone "nav": on a narrow agenda the app's phone bar carries the actions and the arrows */
 @container (max-width: 700px) { .cx-agenda[data-phone="nav"] [data-ag-act], .cx-agenda[data-phone="nav"] [data-ag-move] { display: none; } }
-.cx-agenda[data-loading] .cx-ag-day, .cx-agenda[data-loading] .cx-ag-bar .cn-button, .cx-agenda[data-loading] .cx-tab { cursor: progress; }
+.cx-agenda[data-loading]:not([data-shown]) .cx-ag-day, .cx-agenda[data-loading]:not([data-shown]) .cx-ag-bar .cn-button, .cx-agenda[data-loading]:not([data-shown]) .cx-tab { cursor: progress; }   /* only the first load waits */
 .cx-agenda[data-loading] [disabled] { opacity: .5; pointer-events: none; }
 .cx-ag-frame .skel { background: color-mix(in oklab, var(--muted) 85%, var(--foreground) 6%); }
 @media (prefers-reduced-motion: no-preference) { .cx-ag-frame[aria-busy="true"] .skel { animation: cx-ag-skel 1.2s ease-in-out infinite alternate; } }
@@ -5006,22 +5019,311 @@ a.cx-bc-item:hover { color: var(--foreground); }
 /* ScreenTour: the step's bar is placed by left/right; the progress part's own width: 100% pushed it 40px past the step. */
 .cx-tour-steps > li > .cx-stp-bar { width: auto; }
 
-/* ═════ CHART (muten's native primitive) ═════
+/* ═════ CHART (muten's native primitive) and THE SERIES PALETTE ═════
+   One palette for every chart of the library: Chart's series (mu-chart-sN) and the tone of Progress, ShareBar,
+   StackedBars and Heatmap (data-tone="brand|coral|teal|amber|blue|pink"), so a series keeps its colour everywhere. */
+/* (Chart) 
    One series wears the skin's accent (the area's fill follows it, it is currentColor); a series per colour (pie, donut,
    color(field)) takes the palette below, chosen to stay apart from the accent in light and dark. The legend is swatch + name. */
 .mu-chart-wrap { width: 100%; max-width: 640px; margin: 0; gap: 14px; }
 .mu-chart { color: var(--selected, var(--primary)); }
 .mu-chart-bar, .mu-chart-dot { fill: currentColor; }
 .mu-chart-line { stroke: currentColor; }
-.mu-chart-s0 { --s: var(--selected, var(--primary)); }
-.mu-chart-s1 { --s: oklch(0.7 0.14 168); }
-.mu-chart-s2 { --s: oklch(0.78 0.15 78); }
-.mu-chart-s3 { --s: oklch(0.66 0.19 22); }
-.mu-chart-s4 { --s: oklch(0.68 0.13 238); }
-.mu-chart-s5 { --s: oklch(0.7 0.16 330); }
-.mu-chart-s6 { --s: oklch(0.62 0.05 260); }
-.mu-chart-s7 { --s: oklch(0.8 0.1 120); }
-:is(.mu-chart-bar, .mu-chart-dot, .mu-chart-slice)[class*="mu-chart-s"] { fill: var(--s); }
+.mu-chart-s0 { --series: var(--selected, var(--primary)); }
+.mu-chart-s1, [data-tone="coral"] { --series: oklch(0.66 0.19 22); }
+.mu-chart-s2, [data-tone="teal"] { --series: oklch(0.7 0.14 168); }
+.mu-chart-s3, [data-tone="amber"] { --series: oklch(0.78 0.15 78); }
+.mu-chart-s4, [data-tone="blue"] { --series: oklch(0.68 0.13 238); }
+.mu-chart-s5, [data-tone="pink"] { --series: oklch(0.7 0.16 330); }
+.mu-chart-s6 { --series: oklch(0.62 0.05 260); }
+.mu-chart-s7 { --series: oklch(0.8 0.1 120); }
+[data-tone="brand"] { --series: var(--selected, var(--primary)); }
+:is(.mu-chart-bar, .mu-chart-dot, .mu-chart-slice)[class*="mu-chart-s"] { fill: var(--series); }
 .mu-chart-legend { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 6px 18px; font-size: 13px; color: var(--muted-foreground); }
 .mu-chart-legend-item { display: flex; flex-direction: row; align-items: center; gap: 7px; }
-.mu-chart-swatch { width: 10px; height: 10px; border-radius: 3px; background: var(--s); flex: none; }
+.mu-chart-swatch { width: 10px; height: 10px; border-radius: 3px; background: var(--series); flex: none; }
+
+/* Progress with a tone: the bar takes the series colour */
+.cn-progress[data-tone]:not([data-tone=""]) > .cn-progress-indicator { background: var(--series); }
+
+/* ShareBar (share-bar.muten): one whole cut into its parts, each part's value and name under it */
+.cx-split { display: flex; flex-direction: column; gap: 14px; width: 100%; min-width: 0; }
+.cx-split-bar { display: flex; flex-direction: row; gap: 3px; height: 12px; border-radius: 999px; overflow: hidden; background: var(--muted); }
+.cx-split-seg { flex: var(--f, 0) 1 0; min-width: 0; background: var(--series, var(--primary)); transition: flex-grow .5s cubic-bezier(.22, 1, .36, 1); }
+.cx-split-seg[style*="--f: 0;"], .cx-split-seg[style*="--f:0;"] { display: none; }
+.cx-split-keys { display: flex; flex-direction: row; flex-wrap: wrap; gap: 10px 32px; }
+.cx-split-key { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.cx-split-v { font-size: 18px; font-weight: 650; letter-spacing: -.01em; font-variant-numeric: tabular-nums; }
+.cx-split-l { display: flex; flex-direction: row; align-items: center; gap: 7px; font-size: 13px; color: var(--muted-foreground); }
+.cx-split-l::before { content: ""; width: 9px; height: 9px; border-radius: 3px; background: var(--series, var(--primary)); flex: none; }
+@media (prefers-reduced-motion: reduce) { .cx-split-seg { transition: none; } }
+
+/* Heatmap (heatmap.muten): rows × columns, seven levels of the tone, a scale under it */
+.cx-heat { display: flex; flex-direction: column; gap: 12px; width: 100%; min-width: 0; }
+.cx-heat-grid { position: relative; display: grid; grid-template-columns: 40px repeat(var(--n, 12), minmax(0, 1fr)); gap: 4px; align-items: center; }
+.cx-heat-x { font-size: 11.5px; color: var(--muted-foreground); text-align: center; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.cx-heat-y { font-size: 12px; color: var(--muted-foreground); }
+.cx-heat-c { display: block; aspect-ratio: 1.4; min-width: 0; border-radius: 5px; background: var(--muted); }
+.cx-heat-c[data-level="1"] { background: color-mix(in oklab, var(--series) 18%, var(--muted)); }
+.cx-heat-c[data-level="2"] { background: color-mix(in oklab, var(--series) 34%, var(--muted)); }
+.cx-heat-c[data-level="3"] { background: color-mix(in oklab, var(--series) 52%, var(--muted)); }
+.cx-heat-c[data-level="4"] { background: color-mix(in oklab, var(--series) 72%, var(--muted)); }
+.cx-heat-c[data-level="5"] { background: var(--series); }
+.cx-heat-c[data-level="6"] { background: color-mix(in oklab, var(--series) 78%, black); }
+/* only a cell with something to say reacts: never while loading or under the empty note */
+.cx-heat:not([data-busy="true"]) .cx-heat-grid:not(:has(> .cx-veil-note)) > .cx-heat-c[data-name]:not([data-name=""]):hover { outline: 2px solid var(--foreground); outline-offset: 1px; }
+.cx-heat-scale { display: flex; flex-direction: row; align-items: center; gap: 5px; font-size: 12.5px; color: var(--muted-foreground); }
+.cx-heat-scale > .cx-heat-c { width: 16px; aspect-ratio: auto; height: 12px; border-radius: 3px; }
+.cx-heat-scale > span:first-child { margin-right: 3px; } .cx-heat-scale > span:last-child { margin-left: 3px; }
+
+/* StackedBars (stacked-bars.js): series stacked per bar, an axis in the page's unit, a bar that can be picked */
+.cx-stb { display: flex; flex-direction: column; gap: 10px; width: 100%; min-width: 0; }
+.cx-stb-legend { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: row; flex-wrap: wrap; justify-content: flex-end; gap: 6px 16px; font-size: 13px; color: var(--muted-foreground); }
+.cx-stb-legend li { display: flex; align-items: center; gap: 7px; }
+.cx-stb-legend li::before { content: ""; width: 9px; height: 9px; border-radius: 3px; background: var(--series); }
+.cx-stb-body { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 8px 10px; }
+.cx-stb-y { display: flex; flex-direction: column; justify-content: space-between; height: 220px; font-size: 11.5px; color: var(--muted-foreground); text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.cx-stb-y > span { line-height: 1; transform: translateY(-50%); } .cx-stb-y > span:first-child { transform: none; } .cx-stb-y > span:last-child { transform: translateY(0); }
+.cx-stb-plot { position: relative; height: 220px; }
+.cx-stb-grid { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: space-between; pointer-events: none; }
+.cx-stb-grid i { border-top: 1px solid color-mix(in oklab, var(--border) 70%, transparent); }
+.cx-stb-bars { position: relative; height: 100%; display: grid; grid-template-columns: repeat(var(--n, 12), minmax(0, 1fr)); gap: clamp(4px, 1.2vw, 14px); align-items: end; }
+.cx-stb-bar { height: 100%; display: flex; flex-direction: column; justify-content: flex-end; padding: 0; border: 0; background: none; cursor: pointer; border-radius: 6px; }
+.cx-stb-bar:disabled { cursor: default; }
+.cx-stb-bar:focus-visible { outline: 2px solid var(--ring); outline-offset: 3px; }
+.cx-stb-stack { display: flex; flex-direction: column-reverse; gap: 2px; border-radius: 6px 6px 3px 3px; overflow: hidden; transform-origin: bottom; opacity: .55; transition: height .5s cubic-bezier(.22, 1, .36, 1), opacity .2s; }
+.cx-stb-bars:not(:has([aria-pressed="true"])) .cx-stb-stack, .cx-stb-bar[aria-pressed="true"] .cx-stb-stack, .cx-stb-bar:not(:disabled):hover .cx-stb-stack { opacity: 1; }
+.cx-stb-bar:disabled { pointer-events: none; }
+.cx-stb-seg { display: block; flex: 1 1 0; min-height: 2px; background: var(--series); }
+.cx-stb-sk { display: block; width: 100%; border-radius: 6px 6px 3px 3px; }
+.cx-stb-x { display: grid; grid-template-columns: repeat(var(--n, 12), minmax(0, 1fr)); gap: clamp(4px, 1.2vw, 14px); font-size: 12px; color: var(--muted-foreground); text-align: center; }
+.cx-stb-x > span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cx-stb-x > span[data-on] { color: var(--foreground); font-weight: 700; }
+@media (prefers-reduced-motion: reduce) { .cx-stb-stack { transition: none; } }
+
+/* StatCard: the line under the number, the one thing to do at its foot, the skeleton while it loads */
+.cx-stat { display: flex; flex-direction: column; }
+.cx-stat > .cx-stat-body { flex: 1; }
+.cx-stat-line:empty, .cx-stat-delta:has(> .cn-badge:empty):has(> .cx-text:empty), .cx-stat-delta > .cn-badge:empty { display: none; }
+.cx-stat-go { margin-top: auto; padding-top: 8px; align-self: flex-start; display: inline-flex; align-items: center; gap: 4px; font-size: 13.5px; font-weight: 600; color: var(--selected, var(--primary)); text-decoration: none; }
+.cx-stat-go::after { content: "→"; transition: transform .15s; }
+.cx-stat-go:hover::after { transform: translateX(2px); }
+.cx-stat-go:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; border-radius: 4px; }
+.cx-stat-sk-v { width: 55%; height: 26px; border-radius: 6px; }
+.cx-stat-sk-l { width: 80%; height: 12px; border-radius: 6px; }
+
+/* RankItem (rank-item.muten): a ranking row or a thing to act on */
+.cx-rank { padding-inline: 0; align-items: center; }
+.cx-rank-lead { font-size: 12px; font-weight: 700; font-variant-numeric: tabular-nums; min-width: 32px; width: auto; padding-inline: 6px; }
+.cx-rank-mid { gap: 6px; min-width: 0; }
+.cx-rank-t { display: flex; flex-direction: row; align-items: center; gap: 8px; min-width: 0; }
+.cx-rank-t > .cn-item-title { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cx-rank-t > .cn-badge { flex: none; }
+.cx-rank-sub:empty { display: none; }
+.cx-rank-end { flex-direction: row; align-items: center; gap: 10px; }
+.cx-rank-v { font-size: 14px; font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.cx-rank-v:empty { display: none; }
+.cx-rank-sk-t { width: 60%; height: 13px; border-radius: 6px; }
+.cx-rank-sk-s { width: 35%; height: 11px; border-radius: 6px; }
+.cx-rank-sk-v { width: 64px; height: 13px; border-radius: 6px; }
+
+/* Veil (veil.muten): a note over content that has nothing to show yet */
+.cx-veil { position: relative; width: 100%; display: block; }
+.cx-veil-body { display: flex; flex-direction: column; align-items: stretch; gap: 2px; }
+.cx-veil-body > * { width: 100%; }
+.cx-veil[data-on="true"] > .cx-veil-body { opacity: .45; filter: saturate(.4); pointer-events: none; user-select: none; }
+.cx-veil-note { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; padding: 16px; text-align: center; pointer-events: none; }
+.cx-veil-note > * { max-width: 34ch; }
+.cx-veil-t { font-size: 15px; font-weight: 650; }
+.cx-veil-s { font-size: 13.5px; color: var(--muted-foreground); line-height: 1.45; }
+.cx-veil-note * { text-wrap: balance; }
+
+/* the one empty note of the charts (Veil, Heatmap, StackedBars): a floating box over the faded content */
+.cx-veil-box { display: flex; flex-direction: column; gap: 4px; max-width: 36ch; padding: 14px 18px; border-radius: 14px; background: var(--popover, var(--background)); box-shadow: 0 10px 30px -14px rgb(0 0 0 / .3), 0 0 0 1px var(--border); text-align: center; }
+.cx-veil-t:empty { display: none; }
+.cx-heat-grid > .cx-veil-note { inset: 0 0 0 44px; }
+.cx-heat:has(.cx-veil-note) .cx-heat-c:not(.cx-heat-scale > *) { background: var(--muted); }
+/* skeletons */
+.cx-heat[data-busy="true"] .cx-heat-grid > .cx-heat-c { background: var(--muted); animation: cx-sk-pulse 1.4s ease-in-out infinite; }
+.cx-split[data-busy="true"] .cx-split-seg { visibility: hidden; }
+.cx-split[data-busy="true"] .cx-split-bar { animation: cx-sk-pulse 1.4s ease-in-out infinite; }
+.cx-split[data-busy="true"] .cx-split-v { color: transparent; border-radius: 6px; background: var(--muted); animation: cx-sk-pulse 1.4s ease-in-out infinite; }
+@keyframes cx-sk-pulse { 50% { opacity: .55; } }
+@media (prefers-reduced-motion: reduce) { .cx-heat[data-busy="true"] .cx-heat-c, .cx-split[data-busy="true"] .cx-split-bar, .cx-split[data-busy="true"] .cx-split-v { animation: none; } }
+
+.cx-stats { width: 100%; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); grid-auto-rows: 1fr; }
+
+/* StatBand look "tiles": each number on a soft tile, left-aligned (a card inside an app) */
+.cx-statband[data-look="tiles"] { grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr)); gap: 12px; border-block: 0; }
+.cx-statband[data-look="tiles"] > .cx-statband-cell { align-items: flex-start; text-align: left; gap: 2px; padding: 14px 16px; border-radius: calc(var(--radius) * 1.2); background: var(--muted); }
+.cx-statband[data-look="tiles"] > .cx-statband-cell + .cx-statband-cell { border-left: 0; }
+.cx-statband[data-look="tiles"] .cx-statband-value { font-size: 26px; }
+.cx-statband[data-look="tiles"] .cx-statband-value > .cn-skeleton { width: 48px; height: 26px; border-radius: 6px; background: color-mix(in oklab, var(--foreground) 12%, var(--muted)); }
+/* StackedBars in a narrow card (a phone): twelve month labels still fit, a size smaller and never cut with «…» */
+.cx-stb { container-type: inline-size; }
+@container (max-width: 520px) { .cx-stb-x { gap: 2px; font-size: 10px; } .cx-stb-x > span { text-overflow: clip; overflow: visible; } .cx-stb-bars { gap: 4px; } .cx-stb-y { font-size: 10.5px; } }
+
+/* ── MARKETING PARTS (registry/marketing.muten) ──────────────────────────────────────────────────────────────────────
+   The pieces that had lived in Storio's landing as its own classes, now the library's: a lead under a section title,
+   a note after a block, the tag on a fund card, columns of facts, outlined boxes, a path of numbered steps and a
+   checked list with explanations. */
+.style-nova .cx-mk-sub { margin-top: -12px; max-width: 60ch; }
+.style-nova .cx-mk-note { margin: -8px 0 0; font-size: 14px; color: var(--muted-foreground); max-width: 70ch; }
+.style-nova .cx-mk-fund-c:has(> .cx-mk-fund-tag) { grid-row: span 3; }
+.style-nova .cx-mk-fund-tag { justify-self: start; align-self: start; font-size: 12px; font-weight: 600; letter-spacing: .02em; color: var(--muted-foreground); background: var(--background); border: 1px solid var(--border); padding: 3px 10px; border-radius: 999px; }
+.style-nova .cx-mk-facts { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 1px solid var(--border); }
+.style-nova .cx-mk-fact { display: flex; flex-direction: column; gap: 6px; padding: 22px 20px 4px 0; min-width: 0; }
+.style-nova .cx-mk-fact + .cx-mk-fact { padding-left: 20px; border-left: 1px solid var(--border); }
+.style-nova .cx-mk-fact-k { font-weight: 700; font-size: 16px; }
+.style-nova .cx-mk-fact-p { margin: 0; font-size: 15px; line-height: 1.55; color: var(--muted-foreground); }
+.style-nova .cx-mk-boxes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.style-nova .cx-mk-box { display: flex; flex-direction: column; gap: 6px; padding: 20px 20px 22px; border: 1px solid var(--border); border-radius: 18px; min-width: 0; }
+.style-nova .cx-mk-box-t { font-weight: 700; font-size: 16px; }
+.style-nova .cx-mk-box-p { margin: 0; font-size: 15px; line-height: 1.55; color: var(--muted-foreground); }
+.style-nova .cx-mk-path { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; }
+.style-nova .cx-mk-path-s { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.style-nova .cx-mk-path-n { width: 34px; height: 34px; border-radius: 50%; background: var(--foreground); color: var(--background); display: grid; place-items: center; font-weight: 700; font-size: 14px; }
+.style-nova .cx-mk-path-p { margin: 0; font-size: 15px; line-height: 1.55; }
+.style-nova .cx-mk-donelist { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 28px; }
+.style-nova .cx-mk-done { display: flex; flex-direction: row; align-items: flex-start; gap: 14px; padding: 20px 0; border-top: 1px solid var(--border); min-width: 0; }
+.style-nova .cx-mk-done-i { flex: none; width: 26px; height: 26px; border-radius: 50%; background: var(--success-soft); color: var(--success); display: grid; place-items: center; font-size: 15px; margin-top: 1px; }
+.style-nova .cx-mk-done-tx { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.style-nova .cx-mk-done-t { font-weight: 700; font-size: 16px; }
+.style-nova .cx-mk-done-p { margin: 0; font-size: 15px; line-height: 1.55; color: var(--muted-foreground); }
+@media (max-width: 900px) {
+  .style-nova .cx-mk-facts, .style-nova .cx-mk-path { grid-template-columns: 1fr 1fr; row-gap: 22px; }
+  .style-nova .cx-mk-fact:nth-child(3) { padding-left: 0; border-left: 0; }
+  .style-nova .cx-mk-boxes { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 760px) { .style-nova .cx-mk-donelist { grid-template-columns: 1fr; gap: 0; } }
+@media (max-width: 560px) {
+  .style-nova .cx-mk-facts, .style-nova .cx-mk-path, .style-nova .cx-mk-boxes { grid-template-columns: 1fr; }
+  .style-nova .cx-mk-fact + .cx-mk-fact { padding-left: 0; border-left: 0; border-top: 1px solid var(--border); }
+}
+/* The pricing table's note under a value (cx-pr-*): how or how much, stacked under it, never beside it. */
+.style-nova .cx-pr-td .cx-pr-note { display: block; margin-top: 3px; font-size: 12.5px; line-height: 1.45; color: var(--muted-foreground); font-weight: 400; }
+.style-nova .cx-pr-table > .cx-pr-tr > .cx-pr-td:has(> .cx-pr-note), .style-nova .cx-pr-table > .cx-pr-tr > .cx-pr-rh:has(> .cx-pr-note) { flex-direction: column; align-items: flex-start; justify-content: center; gap: 2px; text-align: left; }
+.style-nova .cx-pr-rh > .cx-pr-note { display: block; font-size: 12.5px; line-height: 1.45; color: var(--muted-foreground); font-weight: 400; max-width: 30ch; }
+
+/* Agenda: a week column says how many citas it holds and who waits; a cita card carries its price; the phone's week
+   strip can mark each day with a dot per cita in its service's colour (phoneStrip "dots") */
+.cx-ag-colhead { display: flex; flex-direction: column; align-items: center; gap: 1px; }
+.cx-ag-colday { font-weight: 600; }
+.cx-ag-colsub { font-size: 11px; font-weight: 500; color: var(--muted-foreground); white-space: nowrap; }
+.cx-ag-colsub[data-queue] { color: var(--warning-foreground, var(--foreground)); }
+.cx-ag-ev { position: absolute; }
+.cx-ag-evprice { position: absolute; top: 5px; right: 7px; font-size: 11.5px; font-weight: 650; font-variant-numeric: tabular-nums; opacity: .85; }
+.cx-ag-dots { display: flex; flex-direction: row; justify-content: center; gap: 3px; min-height: 6px; }
+.cx-ag-dots > i { width: 6px; height: 6px; border-radius: 99px; flex: none; }
+.cx-ag-ev:has(> .cx-ag-evprice) { padding-right: 62px; }
+/* a narrow column (the week on a laptop) keeps the client's name: the price shows only where there is room for both */
+.cx-ag-col { container-type: inline-size; }
+@container (max-width: 190px) { .cx-ag-evprice { display: none; } .cx-ag-ev:has(> .cx-ag-evprice) { padding-right: 8px; } }
+
+/* VirtualWindow: the marker that stands in for the rows above (its height is set by virtual-window.js) */
+.cx-vw { display: none; flex: none; pointer-events: none; margin: 0; padding: 0; }
+
+/* ── ASSISTANT (registry/assistant-orb.muten, assistant-play.muten) ──────────────────────────────────────────────────
+   The orb: a sphere of light with eyes. Its box is --orb; the sphere is the middle 69% of it, the halo the rest. The JS
+   moves it with --orb-x/--orb-y (lean and float) and --orb-sx/--orb-sy (breath and squash). */
+.cx-orb { position: relative; display: block; flex: none; width: var(--orb, 240px); height: var(--orb, 240px); transform: translate(var(--orb-x, 0), var(--orb-y, 0)) scale(var(--orb-sx, 1), var(--orb-sy, 1)); will-change: transform; }
+.cx-orb-base { position: absolute; inset: 15.6%; border-radius: 50%; background: radial-gradient(circle at 34% 28%, #C9B8FF 0%, #8E6BFF 30%, #6B46F2 62%, #4A27D0 100%); box-shadow: 0 0 calc(var(--orb, 240px) * .19) calc(var(--orb, 240px) * .03) rgb(107 70 242 / .45), inset 0 0 0 2px rgb(255 255 255 / .25); }
+.cx-orb[data-gl="on"] .cx-orb-base { opacity: 0; transition: opacity .4s ease; }
+.cx-orb-canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.cx-orb-eyes { position: absolute; left: 31.25%; top: 35%; width: 37.5%; height: 25%; overflow: visible; }
+.cx-orb-eyes path { fill: #fff; }
+.cx-orb-cheeks ellipse { fill: #FF9AD5; }
+/* The play: it takes the rest of its panel (a flex column with padding); the card in the flow at the top, the orb past
+   the panel's bottom-right corner (the panel clips it), the bubble beside the orb. */
+.cx-ap { position: relative; flex: 1 1 auto; min-height: 340px; display: flex; flex-direction: column; }
+.cx-ap .cx-ap-card { width: min(430px, 100%); color: var(--foreground); box-shadow: 0 30px 60px -30px rgb(0 0 0 / .7); pointer-events: auto; }
+.cx-ap-count { position: relative; display: block; width: 150px; height: 18px; text-align: right; font-size: 13px; color: var(--muted-foreground); }
+.cx-ap-count > span { position: absolute; right: 0; top: 0; white-space: nowrap; }
+.cx-ap-count-a { opacity: var(--k, 1); }
+.cx-ap-count-b { opacity: var(--k, 0); color: var(--success); transform: translateY(calc((1 - var(--k, 0)) * 6px)); }
+.cx-ap-card .cn-item-group { flex-direction: column; }
+.cx-ap-new { display: block; overflow: hidden; opacity: var(--k, 0); max-height: calc(var(--k, 0) * 64px); transform: translateY(calc((1 - var(--k, 0)) * -10px)); }
+.cx-ap-flash { border-radius: 10px; background: rgb(18 185 129 / calc(var(--f, 0) * .12)); }
+.cx-ap-typing, .cx-ap-said { position: absolute; right: 194px; bottom: 112px; transform-origin: 100% 100%; border-radius: 22px 22px 6px 22px; background: #fff; }
+.cx-ap-typing { height: 44px; padding: 0 16px; display: flex; flex-direction: row; align-items: center; gap: 5px; opacity: var(--k, 0); transform: translateY(calc((1 - var(--k, 0)) * 8px)) scale(calc(.92 + var(--k, 0) * .08)); }
+.cx-ap-dot { width: 7px; height: 7px; border-radius: 4px; background: #6B46F2; opacity: calc(.45 + var(--b, 0) * .55); transform: translateY(calc(var(--b, 0) * -3px)); }
+.cx-ap-said { max-width: 280px; padding: 14px 18px; color: #0B0B0D; font-size: 15px; line-height: 1.4; font-weight: 600; box-shadow: 0 20px 40px -20px rgb(0 0 0 / .6); opacity: var(--k, 0); transform: translateY(calc((1 - var(--k, 0)) * 10px)) scale(calc(.94 + var(--k, 0) * .06)); }
+.cx-ap .cx-ap-orb { position: absolute; right: -80px; bottom: -96px; }
+.cx-ap-run { display: none; }
+@media (max-width: 760px) { .cx-ap .cx-ap-orb { --orb: 220px !important; right: -60px; bottom: -70px; } .cx-ap-typing, .cx-ap-said { right: 110px; bottom: 90px; } }
+/* A Field whose label lives elsewhere (a FieldHead above the control, with its action beside it): no empty label row. */
+.cn-field > .cn-label:empty { display: none; }
+
+/* ══ INPUT GROUP · TILE: the field as a tile, its icon on a soft tile at the left, its label inside above the value and
+   whatever helps it at the right (a «Libre» badge, a chevron, an eye). The same InputGroup and the same addons:
+   InputAddon (inline-start) holds the Icon, InputAddon(align: "block-start") holds InputGroupText, inline-end the rest.
+   A Combobox, a PhoneField or a PasswordField inside a tile group keep their own behaviour. */
+.style-nova .cn-input-group[data-variant="tile"] {
+  display: grid; grid-template-columns: auto minmax(0, 1fr) auto; grid-template-areas: "media label end" "media input end";
+  align-items: center; column-gap: 12px; row-gap: 0; height: auto; min-height: 62px; padding: 10px 14px;
+  border-radius: calc(var(--radius) * 1.6); background: var(--background); border-color: var(--border);
+}
+.style-nova .cn-input-group[data-variant="tile"] > [data-align="inline-start"] {
+  grid-area: media; width: 36px; height: 36px; padding: 0; margin: 0; border-radius: calc(var(--radius) * 1.1);
+  background: var(--selected-soft); color: var(--selected);
+}
+.style-nova .cn-input-group[data-variant="tile"] > [data-align="block-start"] { grid-area: label; width: auto; padding: 0; }
+.style-nova .cn-input-group[data-variant="tile"] > [data-align="block-start"] .cn-input-group-text { font-size: 12.5px; font-weight: 500; }
+.style-nova .cn-input-group[data-variant="tile"] > [data-slot="input-group-control"],
+.style-nova .cn-input-group[data-variant="tile"] > .cn-input-group-input { grid-area: input; height: auto; padding: 0; font-size: 16px; font-weight: 500; }
+.style-nova .cn-input-group[data-variant="tile"] > [data-align="inline-end"] { grid-area: end; padding: 0; margin: 0; }
+.style-nova .cn-input-group[data-variant="tile"]:focus-within { border-color: var(--selected); box-shadow: 0 0 0 4px var(--selected-soft); }
+.style-nova .cn-input-group[data-variant="tile"]:has(> [data-slot="input-group-control"][aria-invalid="true"]) { border-color: var(--destructive); }
+/* a picker as a tile: the value is an InputGroupText where the input would go (cx-placeholder when nothing is chosen
+   yet), and the whole tile sits in a Button with class cx-tile-btn that opens the page's Drawer or Sheet. */
+.style-nova .cn-input-group[data-variant="tile"] > .cn-input-group-text { grid-area: input; font-size: 16px; font-weight: 500; color: var(--foreground); }
+.style-nova .cn-input-group[data-variant="tile"] > .cn-input-group-text.cx-placeholder { color: var(--muted-foreground); font-weight: 400; }
+.cx-tile-btn { display: block; width: 100%; margin: 0; padding: 0; border: 0; background: none; color: inherit; font: inherit; text-align: left; cursor: pointer; border-radius: calc(var(--radius) * 1.6); }
+.cx-tile-btn:focus-visible { outline: none; }
+.style-nova .cx-tile-btn:hover > .cn-input-group[data-variant="tile"] { border-color: color-mix(in srgb, var(--selected) 35%, var(--border)); }
+.style-nova .cx-tile-btn:focus-visible > .cn-input-group[data-variant="tile"] { border-color: var(--selected); box-shadow: 0 0 0 4px var(--selected-soft); }
+
+/* ChoiceItem with a picture: an ItemMedia in its slot sits first and the radio moves to the end, so the row reads as
+   «what it is» first and the choice last (the sign-up's «Tengo un local / Trabajo por mi cuenta»). */
+.cx-choice:has(> .cn-item-media) { gap: 12px; }
+.cx-choice:has(> .cn-item-media) > .cx-radio { order: 9; margin-left: auto; }
+.cx-choice:has(> .cn-item-media) { align-items: center; }
+.style-nova .cx-choice > .cn-item-media.cn-item-media-variant-icon { width: 40px; height: 40px; flex: none; display: grid; place-items: center; border-radius: calc(var(--radius) * 1.1); background: var(--selected-soft); color: var(--selected); }
+
+/* Btn shape "pill": fully rounded ends, for the one call to action at the foot of a flow. */
+.cn-button[data-shape="pill"] { border-radius: 999px; }
+
+/* Stepper (horizontal): its bars are «you are here», so they take the selected colour like the vertical one's
+   current dot (--selected is --primary unless a skin says otherwise; Storio's is violet). */
+.cx-stp-bar > .cn-progress-indicator { background: var(--selected, var(--primary)); }
+
+/* Storio's skin: a pressed Toggle reads as «chosen» in the selected violet (shadcn's muted grey vanishes on this skin's
+   light surfaces). Other skins keep Nova's look. */
+[data-skin="storio"] .cn-toggle:is([aria-pressed="true"], [data-state="on"]) { background: var(--selected-soft); color: var(--selected); border-color: color-mix(in srgb, var(--selected) 45%, transparent); }
+
+/* ══ MASCOT: the brand's mascot (an AssistantOrb that acts). The box is --m square; the sphere fills 2/3 of it (its
+   radius is 33% of the box), so the body squashes from its bottom (83%) and the shadow sits just under it. */
+.cx-mascot { position: relative; width: var(--m, 240px); height: var(--m, 240px); flex: none; }
+.cx-mascot-rig, .cx-mascot-squash { position: absolute; inset: 0; will-change: transform; }
+.cx-mascot-rig { transform-origin: 50% 50%; }
+.cx-mascot-squash { transform-origin: 50% 83%; }
+.cx-mascot .cx-orb { transform: none !important; }
+.cx-orb[data-face="surface"] .cx-orb-eyes { display: none; }
+.cx-mascot-floor { position: absolute; left: 22%; right: 22%; top: 85%; height: 8%; border-radius: 50%; background: radial-gradient(closest-side, rgb(16 8 40 / .5), transparent); pointer-events: none; }
+.cx-mascot-fx { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+.cx-mascot-run { display: none; }
+/* how it speaks: a «paper» bubble (white, its name on top in violet, a drawn tail) placed by mascot.js up and to the
+   left of the sphere, the tail's tip on its rim; it lives beside the box (not scaled with it) and pops in from the tail */
+.cx-mascot-say { position: absolute; left: 0; top: 0; z-index: 3; display: none; box-sizing: border-box; width: max-content; max-width: min(270px, calc(100vw - 48px)); padding: 11px 15px 12px; border-radius: 20px; background: #fff; color: #18122b; box-shadow: 0 1px 0 rgb(255 255 255 / .6) inset, 0 18px 40px -20px rgb(10 4 40 / .7); pointer-events: none; }
+.cx-mascot-say.on { display: block; }
+.cx-mascot-who { display: block; font-size: 11.5px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; margin-bottom: 3px; color: var(--selected, var(--primary, #6B46F2)); }
+.cx-mascot-who:empty { display: none; }
+.cx-mascot-line { display: block; font-size: 15px; line-height: 1.42; font-weight: 500; overflow-wrap: anywhere; }
+.cx-mascot-tail { position: absolute; left: var(--tail, 50%); bottom: -15px; width: 24px; height: 16px; overflow: visible; }
+.cx-mascot-tail path { fill: #fff; }
+.cx-mascot-say[data-side="right"] .cx-mascot-tail { transform: scaleX(-1); }
+.cx-mascot-tail-side { position: absolute; display: none; top: var(--tail, 40%); right: -15px; width: 16px; height: 24px; overflow: visible; }
+.cx-mascot-tail-side path { fill: #fff; }
+.cx-mascot-say[data-at="low"] .cx-mascot-tail { display: none; }
+.cx-mascot-say[data-at="low"] .cx-mascot-tail-side { display: block; }
+.cx-mascot-say[data-at="low"][data-side="right"] .cx-mascot-tail-side { right: auto; left: -15px; transform: scaleX(-1); }

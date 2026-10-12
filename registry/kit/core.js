@@ -152,7 +152,8 @@ watchReveal();
   };
 
 // ── tabs with a sliding indicator (for panels a Custom builds) ──
-  const initTabs = (list) => {
+  // redraws: the owner paints the tabs again on a click (the agenda), so a click does not animate tabs about to go
+  const initTabs = (list, { redraws = false } = {}) => {
     const tabs = $$('.cx-tab', list);
     const ind = document.createElement('span'); ind.className = 'cx-tab-ind'; list.prepend(ind);
     const place = (animate) => {
@@ -168,20 +169,21 @@ watchReveal();
       place(true);
       list.dispatchEvent(new CustomEvent('pick', { detail: tabs.indexOf(tab) }));
     };
-    tabs.forEach((t) => { t.tabIndex = t.getAttribute('aria-selected') === 'true' ? 0 : -1; t.onclick = () => pick(t); });
+    tabs.forEach((t) => { t.tabIndex = t.getAttribute('aria-selected') === 'true' ? 0 : -1; if (!redraws) t.onclick = () => pick(t); });
     list.addEventListener('keydown', (e) => {
       const i = tabs.indexOf(document.activeElement); if (i < 0) return;
       const to = { ArrowRight: i + 1, ArrowLeft: i - 1, Home: 0, End: tabs.length - 1 }[e.key];
       if (to === undefined) return; e.preventDefault(); pick(tabs[(to + tabs.length) % tabs.length], true);
     });
+    // the first placing comes from the observer too: it runs once the browser has laid the tabs out, so it measures
+    // without forcing a layout of the whole page (a list painted again and again paid two each time)
     new ResizeObserver(() => place(false)).observe(list);
-    place(false);
     return pick;
   };
 
 // ── tooltip on any [data-name] ──
   const tip = document.createElement('div'); tip.className = 'cx-tip'; tip.setAttribute('role', 'tooltip'); tip.hidden = true; lib.appendChild(tip);
-  const tipOn = (e) => { const w = e.target.closest?.('[data-name]'); if (!w) return; tip.textContent = w.dataset.name; tip.hidden = false; const r = w.getBoundingClientRect(); if (w.closest('[data-slot="sidebar"]')) { tip.style.left = (r.right + 8) + 'px'; tip.style.top = (r.top + r.height / 2 - tip.offsetHeight / 2) + 'px'; } else { place(tip, w, 'center', 6); tip.style.top = (r.top - tip.offsetHeight - 6) + 'px'; } requestAnimationFrame(() => tip.dataset.state = 'open'); };
+  const tipOn = (e) => { const w = e.target.closest?.('[data-name]'); if (!w || !w.dataset.name) return; /* an empty name (no data yet) says nothing */ tip.textContent = w.dataset.name; tip.hidden = false; const r = w.getBoundingClientRect(); if (w.dataset.side === 'right' || w.closest('[data-slot="sidebar"]')) { tip.style.left = (r.right + 8) + 'px'; tip.style.top = (r.top + r.height / 2 - tip.offsetHeight / 2) + 'px'; } else { place(tip, w, 'center', 6); tip.style.top = (r.top - tip.offsetHeight - 6) + 'px'; } requestAnimationFrame(() => tip.dataset.state = 'open'); };
   const tipOff = (e) => { if (e.target.closest?.('[data-name]')) { tip.dataset.state = 'closed'; tip.hidden = true; } };
   ['pointerover', 'focusin'].forEach((t) => document.addEventListener(t, tipOn)); ['pointerout', 'focusout'].forEach((t) => document.addEventListener(t, tipOff));
 
@@ -429,19 +431,21 @@ let wheelsNow = [];
     const WD = weekdays || ['lu', 'ma', 'mi', 'ju', 'vi', 'sá', 'do'];
     const inRange = (d) => mode === 'range' && sel?.[0] && (sel[1] || hover) && d > startOfDay(sel[0]) && d < startOfDay(sel[1] || hover) ;
     const isEdge = (d) => mode === 'range' ? (sameDay(d, sel?.[0]) || sameDay(d, sel?.[1])) : sameDay(d, sel);
+    // the arrows sit in the title's own row, so they can never land on the month's name
+    const navBtn = (dir, icon, label, kind) => ui.button({ icon, variant: 'ghost', size: 'icon-sm', attrs: `data-cal-${kind}="${dir}" aria-label="${label}" title="${label}"` });
     const month = (m) => {
-      const first = new Date(view.getFullYear(), view.getMonth() + m, 1), lead = (first.getDay() + 6) % 7, days = new Date(first.getFullYear(), first.getMonth() + 1, 0).getDate();
-      const cells = Array.from({ length: 42 }, (_, i) => addDays(first, i - lead)).slice(0, Math.ceil((lead + days) / 7) * 7);
-      return `<div class="cx-cal-month" role="grid" aria-label="${mon[first.getMonth()]} ${first.getFullYear()}"><button type="button" class="cx-cal-title cx-cal-pick" data-cal-pick aria-label="${pickLabel}: ${mon[first.getMonth()]} ${first.getFullYear()}">${ui.text(`${mon[first.getMonth()][0].toUpperCase()}${mon[first.getMonth()].slice(1)} ${first.getFullYear()}`, 'heading')}${ui.icon('chev')}</button><div class="cx-cal-grid" role="row">${WD.map((w) => `<span class="cx-cal-wd" role="columnheader">${ui.text(w, 'caption')}</span>`).join('')}</div><div class="cx-cal-grid">${cells.map((d) => {
+      const first = new Date(view.getFullYear(), view.getMonth() + m, 1), lead = (first.getDay() + 6) % 7;
+      const cells = Array.from({ length: 42 }, (_, i) => addDays(first, i - lead));   // always six weeks: the box keeps its height from month to month (a five-week month made it jump)
+      return `<div class="cx-cal-month" role="grid" aria-label="${mon[first.getMonth()]} ${first.getFullYear()}"><div class="cx-cal-head">${m === 0 ? navBtn(-1, 'left', prevLabel, 'nav') : '<span></span>'}<button type="button" class="cx-cal-title cx-cal-pick" data-cal-pick aria-label="${pickLabel}: ${mon[first.getMonth()]} ${first.getFullYear()}">${ui.text(`${mon[first.getMonth()][0].toUpperCase()}${mon[first.getMonth()].slice(1)} ${first.getFullYear()}`, 'heading')}${ui.icon('chev')}</button>${m === months - 1 ? navBtn(1, 'right', nextLabel, 'nav') : '<span></span>'}</div><div class="cx-cal-grid" role="row">${WD.map((w) => `<span class="cx-cal-wd" role="columnheader">${ui.text(w, 'caption')}</span>`).join('')}</div><div class="cx-cal-grid">${cells.map((d) => {
         const out = d.getMonth() !== first.getMonth(), off = min && d < startOfDay(min);
         const st = isEdge(d) ? 'edge' : inRange(d) ? 'mid' : '';
         return `<button class="cn-button cn-button-variant-ghost cn-button-size-icon cx-cal-day" role="gridcell" data-day="${+d}" ${out ? 'data-out' : ''} ${sameDay(d, today) ? 'data-today' : ''} ${st ? `data-range="${st}"` : ''} aria-pressed="${st === 'edge'}" aria-label="${DAYLONG[d.getDay()]} ${d.getDate()} de ${mon[d.getMonth()]}" tabindex="${sameDay(d, focusDay) && !out ? 0 : -1}" ${off ? 'disabled' : ''}>${d.getDate()}</button>`;
       }).join('')}</div></div>`;
     };
-    const picker = () => `<div class="cx-cal cx-cal-picker"><div class="cx-cal-nav">${ui.button({ icon: 'left', variant: 'ghost', size: 'icon-sm', attrs: `data-cal-year="-1" aria-label="${prevYear}" title="${prevYear}"` })}${ui.button({ icon: 'right', variant: 'ghost', size: 'icon-sm', attrs: `data-cal-year="1" aria-label="${nextYear}" title="${nextYear}"` })}</div><div class="cx-cal-title">${ui.text(String(view.getFullYear()), 'heading')}</div><div class="cx-cal-mgrid">${mon.map((m, k) => `<button type="button" class="cn-button cn-button-variant-ghost cn-button-size-sm cx-cal-m" data-cal-month="${k}" ${k === view.getMonth() ? 'aria-current="true"' : ''} ${today.getFullYear() === view.getFullYear() && today.getMonth() === k ? 'data-today' : ''}>${m[0].toUpperCase()}${m.slice(1, 3)}</button>`).join('')}</div></div>`;
+    const picker = () => `<div class="cx-cal cx-cal-picker"><div class="cx-cal-head">${navBtn(-1, 'left', prevYear, 'year')}<div class="cx-cal-title">${ui.text(String(view.getFullYear()), 'heading')}</div>${navBtn(1, 'right', nextYear, 'year')}</div><div class="cx-cal-mgrid">${mon.map((m, k) => `<button type="button" class="cn-button cn-button-variant-ghost cn-button-size-sm cx-cal-m" data-cal-month="${k}" ${k === view.getMonth() ? 'aria-current="true"' : ''} ${today.getFullYear() === view.getFullYear() && today.getMonth() === k ? 'data-today' : ''}>${m[0].toUpperCase()}${m.slice(1, 3)}</button>`).join('')}</div></div>`;
     const paint = (focus) => {
       if (picking) { root.innerHTML = picker(); root.querySelector('[aria-current="true"]')?.focus(); return; }
-      root.innerHTML = `<div class="cx-cal" data-months="${months}"><div class="cx-cal-nav">${ui.button({ icon: 'left', variant: 'ghost', size: 'icon-sm', attrs: `data-cal-nav="-1" aria-label="${prevLabel}" title="${prevLabel}"` })}${ui.button({ icon: 'right', variant: 'ghost', size: 'icon-sm', attrs: `data-cal-nav="1" aria-label="${nextLabel}" title="${nextLabel}"` })}</div><div class="cx-cal-months">${Array.from({ length: months }, (_, m) => month(m)).join('')}</div></div>`;
+      root.innerHTML = `<div class="cx-cal" data-months="${months}"><div class="cx-cal-months">${Array.from({ length: months }, (_, m) => month(m)).join('')}</div></div>`;
       if (focus) root.querySelector(`[data-day="${+focusDay}"]:not([data-out])`)?.focus();
     };
     const pick = (d) => {
@@ -491,7 +495,7 @@ let wheelsNow = [];
       weekOf: (d) => `Semana del ${d}`, dayTitle: (wd, n, m) => `${wd} ${n} de ${m}`,
       off: 'No trabaja este día', blocked: 'Bloqueado', minutes: 'minutos', with: 'con', notFree: 'no está libre', notFreeLong: 'Ese horario no está libre',
       nowLasts: (m) => `Ahora dura ${m} min`, movedTo: (t, who) => `Movida a las ${t}${who ? ` con ${who}` : ''}`,
-      free: 'Libre', freeFromTo: (a, b) => `Libre de ${a} a ${b}, agendar`, until: 'a', noHours: 'No hay horario este día', freeSlot: 'Hora libre',
+      free: 'Libre', freeFromTo: (a, b) => `Libre de ${a} a ${b}, agendar`, until: 'a', noHours: 'No hay horario este día', dayOver: 'Este día ya pasó', todayOver: 'Ya no quedan horas libres hoy', freeSlot: 'Hora libre',
       now: 'Ahora', waiting: (n) => (n === 1 ? '1 en espera' : `${n} en espera`), closed: 'Cerrado', countOf: (n) => (n === 1 ? '1 cita' : `${n} citas`),
       move: 'Cambiar la hora', day: 'Día', current: 'Es su hora actual', noneFree: 'No queda una hora libre ese día.', back: 'Volver', saveMove: 'Guardar nueva hora',
       cancelOf: 'Cancelar la cita', why: '¿Por qué?', reasons: ['El cliente pidió cancelar', 'No vino', 'Me surgió algo', 'Otro'], reasonLabel: 'Motivo', tellClient: 'Le avisamos al cliente con este motivo.',
@@ -514,7 +518,7 @@ let wheelsNow = [];
       weekOf: (d) => `Week of ${d}`, dayTitle: (wd, n, m) => `${wd}, ${m} ${n}`,
       off: 'Not working this day', blocked: 'Blocked', minutes: 'minutes', with: 'with', notFree: 'not free', notFreeLong: 'That time is not free',
       nowLasts: (m) => `Now ${m} min long`, movedTo: (t, who) => `Moved to ${t}${who ? ` with ${who}` : ''}`,
-      free: 'Free', freeFromTo: (a, b) => `Free from ${a} to ${b}, book`, until: 'to', noHours: 'No hours this day', freeSlot: 'Free time',
+      free: 'Free', freeFromTo: (a, b) => `Free from ${a} to ${b}, book`, until: 'to', noHours: 'No hours this day', dayOver: 'This day is over', todayOver: 'No free hours left today', freeSlot: 'Free time',
       now: 'Now', waiting: (n) => `${n} waiting`, closed: 'Closed', countOf: (n) => (n === 1 ? '1 appointment' : `${n} appointments`),
       move: 'Change the time', day: 'Day', current: 'Its current time', noneFree: 'No free time left that day.', back: 'Back', saveMove: 'Save new time',
       cancelOf: 'Cancel the appointment', why: 'Why?', reasons: ['The client asked to cancel', 'No-show', 'Something came up', 'Other'], reasonLabel: 'Reason', tellClient: 'We tell the client with this reason.',
@@ -540,10 +544,12 @@ let wheelsNow = [];
     const sheetOf = (name) => { agOwner = me; openModal(K(name), 'auto'); };
     let { resources, events, blocks = [], availability = () => [[9 * 60, 19 * 60]], free: freeList = null, queue = [], closed = [], loading = false,
       lang = 'es', words = {}, currency = '', locale = '', cents = false, overlap = 'auto', placing = null } = opts;   // all of these can change later through update()
-    const { from = 9, to = 19, slot = 30, hourPx = 56, onCreate = () => {}, onChange = () => {}, onAction = () => {}, onOpen = null, onBlock = null, onMove = null, onRange = () => {},
+    // the first and last hour can change with the data (a shop's hours arrive after the first paint): update() takes them
+    let { from = 9, to = 19 } = opts;
+    const { slot = 30, hourPx: baseHour = 56, fit = false, ranges = false, onCreate = () => {}, onChange = () => {}, onAction = () => {}, onOpen = null, onBlock = null, onMove = null, onRange = () => {},
       actions = null, createSheet = false, services = [], view: startView = 'day', sheet: sheetMode = 'built-in', drag: dragOn = true,
       resize: resizeMode = 'on', moveAcross = 'on',
-      start: startDay = null, phone: phoneMode = '', hour12 = false, timeZone = '', phoneView = '', blockScope = 'each' } = opts;
+      start: startDay = null, phone: phoneMode = '', hour12 = false, timeZone = '', phoneView = '', blockScope = 'each', phoneStrip = '' } = opts;
     // THE SHOP'S CLOCK: with a timeZone, «today», «now» and «the past» are the shop's, not the browser's (an owner
     // travelling, or a phone set to another zone, still sees the shop's day)
     const clockNow = () => { if (!timeZone) return new Date(); try { const p = Object.fromEntries(new Intl.DateTimeFormat('en-US', { timeZone, year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).formatToParts(new Date()).map((x) => [x.type, x.value])); return new Date(+p.year, +p.month - 1, +p.day, +p.hour % 24, +p.minute); } catch { return new Date(); } };
@@ -606,11 +612,14 @@ let wheelsNow = [];
     const tagsOf = (e) => (Array.isArray(e.tags) ? e.tags.filter(Boolean).join(' · ') : '');
     const SAY = ['started', 'awaiting_payment', 'noshow'];   // the statuses a cita SAYS in words (no stripes, no glow)
     const evHtml = (e, ln, showWho, rid = null, gut = false) => { const [l, n] = ln.get(e.id) || [0, 1]; const short = e.dur < 45; const said = clash.has(e.id) ? w.clashOne : SAY.includes(e.status) && w.status[e.status] ? w.status[e.status] : ''; const others = rid ? occ(e).filter((x) => x !== rid).map(resName).filter(Boolean).join(', ') : ''; const tg = tagsOf(e);
-      const span = gut ? '(100% - 22px)' : '100%'; /* an agenda with no limit keeps a strip on the right to book beside */ return `<button class="cx-ag-ev" data-ev="${e.id}" data-tone="${toneOf(e)}" ${e.status ? `data-status="${e.status}"` : ''}${paint1(e)}top:${y(toMin(e.start))}px;height:${(e.dur / 60) * hourPx - 3}px;left:calc(${span} * ${l / n} + 3px);width:calc(${span} / ${n} - 6px)"${clash.has(e.id) ? ' data-conflict' : ''} aria-label="${e.title}, ${clk(e.start)}, ${e.dur} ${w.minutes}${tg ? ', ' + tg : ''}${showWho ? `, ${w.with} ${resName(e.resource)}` : ''}${others ? `, ${w.with} ${others}` : ''}${e.status && w.status[e.status] ? `, ${w.status[e.status]}` : ''}${clash.has(e.id) ? `, ${w.clashOne}` : ''}">${short ? ui.text(`${e.title} · ${said || tg || clk(e.start)}`, 'label') : `${ui.text(e.title, 'label')}${ui.text(`${said ? said + ' · ' : ''}${tg ? tg + ' · ' : ''}${clk(e.start)} · ${e.subtitle || ''}${showWho ? ' · ' + resName(e.resource) : ''}${others ? ' · ' + others : ''}`, 'caption')}`}${dragOn && resizeMode !== 'off' ? '<span class="cx-ag-grip" aria-hidden="true"></span>' : ''}</button>`; };
+      const span = gut ? '(100% - 22px)' : '100%'; /* an agenda with no limit keeps a strip on the right to book beside */ return `<button class="cx-ag-ev" data-ev="${e.id}" data-tone="${toneOf(e)}" ${e.status ? `data-status="${e.status}"` : ''}${paint1(e)}top:${y(toMin(e.start))}px;height:${(e.dur / 60) * hourPx - 3}px;left:calc(${span} * ${l / n} + 3px);width:calc(${span} / ${n} - 6px)"${clash.has(e.id) ? ' data-conflict' : ''} aria-label="${e.title}, ${clk(e.start)}, ${e.dur} ${w.minutes}${tg ? ', ' + tg : ''}${showWho ? `, ${w.with} ${resName(e.resource)}` : ''}${others ? `, ${w.with} ${others}` : ''}${e.status && w.status[e.status] ? `, ${w.status[e.status]}` : ''}${clash.has(e.id) ? `, ${w.clashOne}` : ''}">${short ? ui.text(`${e.title} · ${said || tg || clk(e.start)}`, 'label') : `${ui.text(e.title, 'label')}${ui.text(`${said ? said + ' · ' : ''}${tg ? tg + ' · ' : ''}${clk(e.start)} · ${e.subtitle || ''}${showWho ? ' · ' + resName(e.resource) : ''}${others ? ' · ' + others : ''}`, 'caption')}`}${e.price && !short ? `<span class="cx-ag-evprice">${fmtMoney(e.price)}</span>` : ''}${dragOn && resizeMode !== 'off' ? '<span class="cx-ag-grip" aria-hidden="true"></span>' : ''}</button>`; };
     // the hours a person does not work: hatched. With server free hours, everything that is neither free nor booked.
+    // a day the business does not open: the column hatched, «Cerrado» in the middle (grid) or as the list's only line
+    const shutPill = () => `<span class="cx-ag-shutpill">${ui.icon('caloff')}${ui.text(w.closed, 'label')}</span>`;
+    const shutHtml = () => `<div class="cx-ag-off cx-ag-shut" style="top:0;height:100%">${shutPill()}</div>`;
     const offHtml = (d, rid) => {
       const av = freeList ? null : availability(rid, d);
-      if (av && !av.length) return `<div class="cx-ag-off" data-all style="top:0;height:100%">${ui.text(w.off, 'caption')}</div>`;
+      if (av && !av.length) return isClosed(d) ? shutHtml() : `<div class="cx-ag-off" data-all style="top:0;height:100%">${ui.text(w.off, 'caption')}</div>`;
       if (!av) return '';
       const out = []; let cur = from * 60; av.forEach(([a, b]) => { if (a > cur) out.push([cur, a]); cur = Math.max(cur, b); }); if (cur < to * 60) out.push([cur, to * 60]);
       return out.map(([a, b]) => `<div class="cx-ag-off" style="top:${y(a)}px;height:${y(b) - y(a)}px"></div>`).join('');
@@ -624,7 +633,10 @@ let wheelsNow = [];
     const ghostHtml = (d, rid) => { const g = placing; if (!g || !g.start || !sameDay(g.day, d) || (rid && g.resource !== rid)) return ''; return `<div class="cx-ag-ghostnew" style="${g.tint ? `--tint:${g.tint};` : ''}top:${y(toMin(g.start))}px;height:${((Number(g.dur) || slot) / 60) * hourPx - 3}px" aria-hidden="true">${ui.text(`${g.title || w.newItem} · ${clk(g.start)}`, 'label')}</div>`; };
     const blockHtml = (b) => `<div class="cx-ag-block" style="top:${y(toMin(b.start))}px;height:${(b.dur / 60) * hourPx - 2}px">${ui.text(`${b.reason || w.blocked} · ${clk(b.start)}`, 'caption')}</div>`;
     // while loading, everything that would ask the server for something is shut (days, views, arrows, actions, hours)
-    const shut = () => (loading ? ' disabled aria-disabled="true"' : '');
+    // the toolbar locks only on the very first load: once the agenda has shown data, a skeleton while the next week
+    // arrives leaves the arrows, the date and the views free (tapping «next» three times in a row must work)
+    let shownOnce = false;
+    const shut = () => (loading && !shownOnce ? ' disabled aria-disabled="true"' : '');
     const title = () => (eff() === 'range' ? `${fmtD(rangeSel[0])} → ${fmtD(rangeSel[1])}` : view === 'week' && !narrow ? w.weekOf(fmtD(weekDays()[0])) : w.dayTitle(w.dayL[day.getDay()], day.getDate(), w.mon[day.getMonth()]));
     const toolbar = () => `<div class="cx-ag-bar">${ui.button({ label: w.today, size: 'sm', attrs: `data-ag="today"${shut()}` })}<div class="cx-hstack" style="gap:2px;flex-wrap:nowrap">${ui.button({ icon: 'left', variant: 'ghost', size: 'icon-sm', attrs: `data-ag="prev" data-ag-move aria-label="${view === 'week' && !narrow ? w.prevWeek : w.prevDay}"${shut()}` })}${ui.button({ icon: 'right', variant: 'ghost', size: 'icon-sm', attrs: `data-ag="next" data-ag-move aria-label="${view === 'week' && !narrow ? w.nextWeek : w.nextDay}"${shut()}` })}</div><button type="button" class="cx-ag-title" data-ag-date aria-haspopup="dialog" aria-expanded="false" aria-label="${w.goTo}: ${title()}"${shut()}>${ui.text(title(), 'heading')}${ui.icon('chev')}</button><span class="cx-grow"></span><div class="cx-tabs" role="tablist" aria-label="${w.view}">${[['day', w.vDay], ['week', w.vWeek], ['list', w.vList]].filter(([k]) => !narrow || k !== 'week').map(([k, l]) => `<button class="cn-button cn-button-variant-ghost cn-button-size-sm cx-tab" role="tab" aria-selected="${eff() === k}" data-ag-view="${k}"${shut()}>${l}</button>`).join('')}</div>${bar()}</div>`;
     // the toolbar's own buttons are data: [{id, label, icon, primary}]; «block» and «new» keep their behaviour, any other id goes to onAction
@@ -633,15 +645,17 @@ let wheelsNow = [];
     const groupName = (k) => (k === 'business' ? w.business : k === 'person' ? w.team : resources.find((r) => kindOf(r) === k)?.group || k);
     // the filter: everyone, then each kind of agenda (the business, the team, rooms…) with its own button when there is more than one kind
     const people = () => {
-      if (loading) return `<div class="cx-hstack cx-ag-who" aria-hidden="true">${[64, 92, 92, 92].map((wd, i) => `<span class="cx-ag-skpill">${i ? '<s class="skel" style="width:20px;height:20px;border-radius:50%"></s>' : ''}<s class="skel" style="width:${i ? wd - 30 : wd - 20}px"></s></span>`).join('')}</div>`;
+      // the loading row keeps the real row's shape: none for one agenda (it has no filter), one pill per agenda otherwise,
+      // so nothing below it jumps when the data lands
       if (resources.length < 2) return '';
+      if (loading) return `<div class="cx-hstack cx-ag-who" aria-hidden="true">${[64, ...Array(Math.min(4, resources.length)).fill(92)].map((wd, i) => `<span class="cx-ag-skpill">${i ? '<s class="skel" style="width:20px;height:20px;border-radius:50%"></s>' : ''}<s class="skel" style="width:${i ? wd - 30 : wd - 20}px"></s></span>`).join('')}</div>`;
       const kinds = [...new Set(ordered().map(kindOf))];
       const all = ui.button({ label: w.all, size: 'sm', variant: 'ghost', attrs: `role="radio" aria-checked="${who === 'all'}" data-who="all"` });
       if (kinds.length < 2) return `<div class="cx-hstack cx-ag-who" role="radiogroup" aria-label="${w.whose}"><span class="cx-ag-wholabel" aria-hidden="true">${w.whose}</span>${all}${resources.map(personBtn).join('')}</div>`;
       return `<div class="cx-hstack cx-ag-who" role="radiogroup" aria-label="${w.whose}"><span class="cx-ag-wholabel" aria-hidden="true">${w.whose}</span>${all}${kinds.map((k) => { const rs = ordered().filter((r) => kindOf(r) === k); return `<span class="cx-ag-sep" aria-hidden="true"></span>${rs.length > 1 ? ui.button({ label: groupName(k), size: 'sm', variant: 'ghost', attrs: `role="radio" aria-checked="${who === 'kind:' + k}" data-who="kind:${k}"`, cls: 'cx-ag-group' }) : ''}${rs.map(personBtn).join('')}`; }).join('')}</div>`;
     };
     // the week strip: each day with how many citas it has (a plain number), closed days dimmed
-    const strip = () => `<div class="cx-ag-strip" role="group" aria-label="${w.days}">${weekDays().map((d) => { const evs = loading ? [] : evOn(d); const n = evs.length; const shut = isClosed(d); return `<button class="cn-button cn-button-variant-ghost cx-size-tile cx-ag-day" data-ag-day="${+d}" aria-pressed="${sameDay(d, day)}" ${sameDay(d, today) ? 'data-today' : ''} ${shut ? 'data-closed' : ''} aria-label="${w.dayL[d.getDay()]} ${d.getDate()}, ${shut && !n ? w.closed : w.countOf(n)}"${loading ? ' disabled aria-disabled="true"' : ''}><small>${sameDay(d, today) ? w.todayShort : w.dayS[d.getDay()]}</small><b>${d.getDate()}</b><span class="cx-ag-count" aria-hidden="true">${loading ? '<s class="skel"></s>' : n || ''}</span></button>`; }).join('')}</div>`;
+    const strip = () => `<div class="cx-ag-strip" role="group" aria-label="${w.days}">${weekDays().map((d) => { const evs = loading ? [] : evOn(d); const n = evs.length; const shut = isClosed(d); return `<button class="cn-button cn-button-variant-ghost cx-size-tile cx-ag-day" data-ag-day="${+d}" aria-pressed="${sameDay(d, day)}" ${sameDay(d, today) ? 'data-today' : ''} ${shut ? 'data-closed' : ''} aria-label="${w.dayL[d.getDay()]} ${d.getDate()}, ${shut && !n ? w.closed : w.countOf(n)}"${loading && !shownOnce ? ' disabled aria-disabled="true"' : ''}><small>${sameDay(d, today) ? w.todayShort : w.dayS[d.getDay()]}</small><b>${d.getDate()}</b>${phoneStrip === 'dots' ? `<span class="cx-ag-dots" aria-hidden="true">${loading ? '' : evs.slice(0, 4).map((e) => `<i style="background:${e.tint || 'var(--selected, var(--primary))'}"></i>`).join('')}</span>` : `<span class="cx-ag-count" aria-hidden="true">${loading ? '<s class="skel"></s>' : n || ''}</span>`}</button>`; }).join('')}</div>`;
     // «Ahora»: on today, the cita in progress (started, or whose time is now), first thing, one tap to open it
     const nowCard = () => {
       if (!sameDay(day, today)) return '';
@@ -656,8 +670,12 @@ let wheelsNow = [];
     // the loading head keeps the real head's shape: the face, the name and, when the agenda has one, its role line
     const skHead = (c) => { const r = resources.find((x) => x.id === c.rid); return v0() === 'week' ? `<span class="cx-ag-skhead" aria-hidden="true"><s class="skel" style="width:56px"></s></span>` : `<span class="cx-ag-skhead" aria-hidden="true"><s class="skel" style="width:24px;height:24px;border-radius:50%"></s><span class="cx-ag-colname"><b><s class="skel cx-ag-skline" style="width:64px"></s></b>${r && roleOf(r) ? `<small><s class="skel cx-ag-skline" style="width:48px"></s></small>` : ''}</span></span>`; };
     const v0 = eff;
+    // the line at the current time, in today's column (closed or not: the time still passes), its dot in the first one
+    const nowLine = (c, ci, cols) => { const nowM = nowMin(); return sameDay(c.day, today) && nowM > from * 60 && nowM < to * 60 ? `<div class="cx-ag-now" style="top:${y(nowM)}px" aria-hidden="true">${cols.findIndex((k) => sameDay(k.day, today)) === ci ? '<i></i>' : ''}</div>` : ''; };
     const grid = (cols) => { const hours = Array.from({ length: to - from }, (_, i) => from + i); const nowM = nowMin(); return `<div class="cx-ag-scroll cx-scroll"><div class="cx-ag" style="--cols:${cols.length};--h:${hourPx}px;grid-template-rows:auto auto"><div class="cx-ag-head"><span></span>${cols.map((c) => `<div class="cx-ag-colhead" ${c.today ? 'data-today' : ''} ${c.closed ? 'data-closed' : ''}>${loading ? skHead(c) : c.head}</div>`).join('')}</div><div class="cx-ag-body" style="height:${(to - from) * hourPx}px"><div class="cx-ag-times">${cols.some((k) => sameDay(k.day, today)) && nowM > from * 60 && nowM < to * 60 ? `<b class="cx-ag-nowtime" style="top:${y(nowM)}px">${clk(toHM(nowM))}</b>` : ''}${hours.map((h) => `<span style="top:${(h - from) * hourPx}px">${ui.text(hour12 ? `${((h + 11) % 12) + 1} ${h < 12 ? 'AM' : 'PM'}` : `${String(h).padStart(2, '0')}:00`, 'caption')}</span>`).join('')}</div>${cols.map((c, ci) => { const rid = c.rid === 'all' ? null : c.rid; const evs = evOn(c.day, rid); const cap = rid ? capOf(rid) : 1; const ln = lanes(evs); if (cap > 1) ln.forEach((v) => { v[1] = Math.max(v[1], Math.min(cap, 4)); }); const rids = rid ? [rid] : shown().map((r) => r.id); if (loading) return `<div class="cx-ag-col" data-day="${+c.day}" data-rid="${c.rid}" aria-hidden="true">${rid && !freeList ? offHtml(c.day, rid) : ''}${skelCol(ci)}</div>`;
-      return `<div class="cx-ag-col" data-day="${+c.day}" data-rid="${c.rid}" role="group" aria-label="${c.label}">${rid ? offHtml(c.day, rid) : ''}${!rids.some(bookable) ? '' : freeList ? rids.filter(bookable).map((r) => freeHtml(c.day, r, c.label)).join('') : Array.from({ length: ((to - from) * 60) / slot }, (_, i) => gone(c.day, from * 60 + i * slot) ? '' : `<button class="cx-ag-slot" data-slot-time="${from * 60 + i * slot}" style="top:${y(from * 60 + i * slot)}px;height:${(slot / 60) * hourPx}px" aria-label="${w.newItem}, ${c.label}, ${toHM(from * 60 + i * slot)}" tabindex="-1"></button>`).join('')}${blOn(c.day, rid).map(blockHtml).join('')}${evs.map((e) => evHtml(e, ln, c.rid === 'all' && resources.length > 1, rid, cap === 0)).join('')}${ghostHtml(c.day, rid)}${goneHtml(c.day)}${sameDay(c.day, today) && nowM > from * 60 && nowM < to * 60 ? `<div class="cx-ag-now" style="top:${y(nowM)}px" aria-hidden="true">${cols.findIndex((k) => sameDay(k.day, today)) === ci ? '<i></i>' : ''}</div>` : ''}</div>`; }).join('')}</div></div></div>`; };
+      const offRid = rid || (shown().length === 1 && !freeList ? shown()[0].id : null);
+      if (c.closed && !evs.length) return `<div class="cx-ag-col" data-day="${+c.day}" data-rid="${c.rid}" data-closed role="group" aria-label="${c.label}, ${w.closed}">${shutHtml()}${nowLine(c, ci, cols)}</div>`;
+      return `<div class="cx-ag-col" data-day="${+c.day}" data-rid="${c.rid}" role="group" aria-label="${c.label}">${offRid ? offHtml(c.day, offRid) : ''}${!rids.some(bookable) ? '' : freeList ? rids.filter(bookable).map((r) => freeHtml(c.day, r, c.label)).join('') : Array.from({ length: ((to - from) * 60) / slot }, (_, i) => gone(c.day, from * 60 + i * slot) ? '' : `<button class="cx-ag-slot" data-slot-time="${from * 60 + i * slot}" style="top:${y(from * 60 + i * slot)}px;height:${(slot / 60) * hourPx}px" aria-label="${w.newItem}, ${c.label}, ${toHM(from * 60 + i * slot)}" tabindex="-1"></button>`).join('')}${blOn(c.day, rid).map(blockHtml).join('')}${evs.map((e) => evHtml(e, ln, c.rid === 'all' && resources.length > 1, rid, cap === 0)).join('')}${ghostHtml(c.day, rid)}${goneHtml(c.day)}${nowLine(c, ci, cols)}</div>`; }).join('')}</div></div></div>`; };
     // list = the phone's agenda: a solid row is sold, a dashed one is still free
     // one cita as a row of the list (the day's list and the range's)
     const evRow = (e) => `<button class="cx-ag-row" data-ev="${e.id}"${clash.has(e.id) ? ' data-conflict' : ''} data-tone="${toneOf(e)}" ${e.status ? `data-status="${e.status}"` : ''}${paint1(e)}"><span class="cx-ag-row-t">${ui.text(clk(e.start), 'strong')}${ui.text(`${e.dur} min`, 'caption')}</span>${e.photo ? `<span class="cn-avatar cx-ag-face cx-ag-rowface" style="background-image:url('${e.photo}')" aria-hidden="true"></span>` : ''}<span class="cx-vstack" style="gap:0;min-width:0">${ui.text(e.title, 'heading')}${ui.text(`${e.subtitle || ''}${resources.length > 1 ? ' · ' + resName(e.resource) : ''}${tagsOf(e) ? ' · ' + tagsOf(e) : ''}`, 'muted')}</span>${e.status && w.status[e.status] ? ui.badge(w.status[e.status], { tone: { info: 'info', live: 'wait', done: 'ok', bad: 'bad', ok: 'ok' }[toneOf(e)] || 'ok' }) : e.steps ? ui.badge(e.steps[e.at], { tone: e.tone === 'wait' ? 'wait' : e.tone === 'info' ? 'info' : 'ok' }) : ''}${e.price ? ui.text(fmtMoney(e.price), 'strong') : ''}</button>`;
@@ -679,7 +697,7 @@ let wheelsNow = [];
         }
       }
       const html = rows.map((r) => (typeof r === 'string' ? r : `<button class="cx-ag-row" data-kind="free" data-free="${r.start}" data-rid="${r.free[0]}" aria-label="${w.freeFromTo(clk(toHM(r.start)), clk(toHM(r.end)))}"><span class="cx-ag-row-t">${ui.text(clk(toHM(r.start)), 'strong')}${r.end - r.start > slot ? ui.text(`${w.until} ${clk(toHM(r.end))}`, 'caption') : ''}</span>${ui.text(`${w.free}${rids.length > 1 ? ` · ${r.free.map(resName).join(', ')}` : ''}`, 'muted')}<span class="cx-grow"></span>${ui.icon('plus')}</button>`)).join('');
-      return `<div class="cx-ag-list" role="list">${html || `<div class="cn-empty" style="padding:32px 12px"><div class="cn-empty-header"><div class="cn-empty-title">${isClosed(day) ? w.closed : w.noHours}</div></div></div>`}</div>`;
+      return `<div class="cx-ag-list" role="list">${html || (isClosed(day) ? `<div class="cx-ag-shutlist">${shutPill()}</div>` : '') || `<div class="cn-empty" style="padding:32px 12px"><div class="cn-empty-header"><div class="cn-empty-title">${!rids.some((rid) => availability(rid, day).length) ? w.noHours : +day < +today && !sameDay(day, today) ? w.dayOver : sameDay(day, today) ? w.todayOver : w.noHours}</div></div></div>`}</div>`;
     };
     // LOADING keeps the very layout it is about to show: the same toolbar, strip, column heads, hours and height,
     // with grey citas where the real ones will land. Nothing jumps when the data arrives, nothing shrinks while it loads.
@@ -694,7 +712,8 @@ let wheelsNow = [];
     // every toolbar command in one place: the toolbar's own buttons and an app's phone bar (api.run) go through here.
     // While loading, nothing that would ask the server runs.
     function run(k) {
-      if (loading || !k) return;
+      // while the next week arrives, moving on stays free; making something (new, block, an app action) waits for the data
+      if (!k || (loading && (!shownOnce || !(k === 'prev' || k === 'next' || k === 'today' || k.startsWith('view:'))))) return;
       if (k.startsWith('view:')) { const v = k.slice(5); if (['day', 'week', 'list'].includes(v)) { view = v; picked = true; paint(); } return; }
       if (k === 'today') { day = new Date(today); if (view === 'range') { view = 'day'; rangeSel = null; } }
       else if ((k === 'prev' || k === 'next') && eff() === 'range') { const len = Math.round((rangeSel[1] - rangeSel[0]) / 864e5) + 1, s2 = (k === 'next' ? 1 : -1) * len; rangeSel = [addDays(rangeSel[0], s2), addDays(rangeSel[1], s2)]; day = new Date(rangeSel[0]); }
@@ -704,20 +723,24 @@ let wheelsNow = [];
       else return onAction(k);
       paint();
     }
+    // a week column says its day and, under it, how many citas it holds and who waits for a free hour (closed: «Cerrado»)
+    const weekHead = (d, rid) => { const n = evOn(d, rid).length, q = queue.filter((x) => sameDay(x.day, d)).length, shut = isClosed(d); const sub = [shut && !n ? w.closed : n ? w.countOf(n) : '', q ? w.waiting(q) : ''].filter(Boolean).join(' · '); return `<span class="cx-ag-colday">${w.dayS[d.getDay()]} ${d.getDate()}</span>${sub ? `<small class="cx-ag-colsub"${q ? ' data-queue' : ''}>${sub}</small>` : ''}`; };
     const tellRange = () => { const v = eff(); const a = v === 'range' ? rangeSel[0] : v === 'week' ? weekDays()[0] : day, b = v === 'range' ? rangeSel[1] : v === 'week' ? weekDays()[6] : day; const key = `${v}|${+a}|${+b}`; if (key === lastRange) return; lastRange = key; onRange({ from: a, to: b, view: v }); };
     const paint = () => {
+      if (fit) { const k = `${eff()}|${from}|${to}|${narrow}`; if (k !== fitKey && fitSeen.has(k)) { hourPx = fitSeen.get(k); fitKey = k; } }
       if (typeof drag !== 'undefined' && drag) { const d = drag; drag = null; clearTimeout(d.timer); cancelAnimationFrame(scrollRaf); d.ghost?.remove(); }
       const v = eff(); // the phone keeps the calendar: day grid or list, the week needs a wide screen
-      const cols = v === 'week' ? weekDays().map((d) => ({ day: d, rid: who === 'all' || who.startsWith('kind:') ? 'all' : who, head: `${w.dayS[d.getDay()]} ${d.getDate()}`, label: `${w.dayL[d.getDay()]} ${d.getDate()}`, today: sameDay(d, today), closed: isClosed(d) })) : dayCols().map((r) => ({ day, rid: r.id, head: `${r.photo ? `<span class="cn-avatar cx-ag-face" style="background-image:url('${r.photo}')"></span>` : ui.avatar(r.name, { size: 'sm' })}<span class="cx-ag-colname"><b>${r.name}</b>${roleOf(r) ? `<small>${roleOf(r)}</small>` : ''}</span>`, label: r.name }));
+      const cols = v === 'week' ? weekDays().map((d) => ({ day: d, rid: who === 'all' || who.startsWith('kind:') ? 'all' : who, head: weekHead(d, who === 'all' || who.startsWith('kind:') ? null : who), label: `${w.dayL[d.getDay()]} ${d.getDate()}`, today: sameDay(d, today), closed: isClosed(d) })) : dayCols().map((r) => ({ day, rid: r.id, head: `${r.photo ? `<span class="cn-avatar cx-ag-face" style="background-image:url('${r.photo}')"></span>` : ui.avatar(r.name, { size: 'sm' })}<span class="cx-ag-colname"><b>${r.name}</b>${roleOf(r) ? `<small>${roleOf(r)}</small>` : ''}</span>`, label: r.name }));
       clash = loading ? new Set() : findClashes();
       const crossed = loading ? 0 : evOn(day).filter((e) => clash.has(e.id)).length;
       const top = loading ? skelTop() : nowCard() + queueLine();
       const alert = crossed ? ui.alert({ icon: 'info', title: w.clash(crossed), description: w.clashHow, action: ui.button({ label: w.clashSee, size: 'sm', variant: 'outline', attrs: 'data-ag-clash' }), tone: 'bad', attrs: 'data-ag-alert' }) : '';
       if (!loading) { hadNow = top.includes('cx-ag-nowcard'); hadQueue = top.includes('cx-ag-queue'); }
-      root.innerHTML = toolbar() + `<div class="cx-ag-frame"${loading ? ` aria-busy="true" aria-label="${w.loading}"` : ''}><div class="cx-ag-top">${people()}${strip()}${top}${alert}</div>${v === 'range' ? `<div class="cx-ag-listwrap">${loading ? skelList() : rangeList()}</div>` : v === 'list' ? `<div class="cx-ag-listwrap">${loading ? skelList() : list()}</div>` : grid(cols)}</div>`;
-      root.toggleAttribute('data-loading', !!loading);
-      $$('.cx-tabs', root).forEach(initTabs);
+      root.innerHTML = toolbar() + `<div class="cx-ag-frame"${loading ? ` aria-busy="true" aria-label="${w.loading}"` : ''}><div class="cx-ag-top">${people()}${v === 'week' ? '' : strip()}${top}${alert}</div>${v === 'range' ? `<div class="cx-ag-listwrap">${loading ? skelList() : rangeList()}</div>` : v === 'list' ? `<div class="cx-ag-listwrap">${loading ? skelList() : list()}</div>` : grid(cols)}</div>`;
+      root.toggleAttribute('data-loading', !!loading); if (!loading) { shownOnce = true; root.setAttribute('data-shown', ''); }
+      $$('.cx-tabs', root).forEach((tl) => initTabs(tl, { redraws: true }));
       const now = $('.cx-ag-now', root); if (now) $('.cx-ag-scroll', root).scrollTop = Math.max(0, parseFloat(now.style.top) - 120);
+      if (refit()) { paint(); return; }   // the hours' height changed: once more at the right size
       tellRange();
     };
     // drag to move · drag the bottom edge to resize (15 min). A ghost shows where it lands and turns red where the
@@ -813,7 +836,9 @@ let wheelsNow = [];
     root.addEventListener('pointercancel', endPan);
     root.addEventListener('click', (e) => {
       if (justSwiped) { e.preventDefault(); return; }   // the end of a pan is not a tap on an hour
-      if (loading && !e.target.closest('[data-who]')) return;   // only the person filter works while loading: it asks nothing
+      // while loading: the person filter (it asks nothing) and, once the agenda has shown data, moving on (arrows, today,
+      // the date, the views, a day of the strip); what makes or opens something waits for the data
+      if (loading && !e.target.closest('[data-who]') && !(shownOnce && e.target.closest('[data-ag], [data-ag-view], [data-ag-date], [data-ag-day]'))) return;
       const evb = e.target.closest('.cx-ag-ev, .cx-ag-nowcard, .cx-ag-row[data-ev]'); if (evb) { if (!justDragged) openEvent(events.find((x) => x.id === evb.dataset.ev)); return; }
       const a = e.target.closest('[data-ag]'); if (a) { run(a.dataset.ag); return; }
       if (e.target.closest('[data-ag-date]')) { openDate(); return; }
@@ -836,7 +861,16 @@ let wheelsNow = [];
       $$('.cx-ag-now', root).forEach((x) => { x.style.top = y(m) + 'px'; }); const t = $('.cx-ag-nowtime', root); if (t) { t.style.top = y(m) + 'px'; t.textContent = clk(toHM(m)); }
       $$('.cx-ag-col', root).forEach((c) => { if (!sameDay(new Date(+c.dataset.day), today)) return; const g = $('.cx-ag-gone', c); if (g) g.style.height = y(m) + 'px'; });
     }, 30000);
-    new ResizeObserver(() => requestAnimationFrame(() => { const n = root.clientWidth < 700; if (n !== narrow) { narrow = n; paint(); } })).observe(root);
+    // only the agenda's own box decides: crossing the phone width repaints, and with fit a new HEIGHT of the box measures
+    // again. Reading the inner scroll's height here looped: new hour size → a scrollbar shows or hides → the scroll's
+    // height changes → measure → paint again, many times a second on a long day (and the grid kept jumping)
+    // and a box that grows with what it holds (an app that gave it no fixed height) can never chase itself: three
+    // re-measures a second at most
+    let boxH = 0, refits = [];
+    new ResizeObserver(([entry]) => requestAnimationFrame(() => { const n = root.clientWidth < 700; const bh = Math.round(entry.contentRect.height); const grew = fit && boxH && Math.abs(bh - boxH) > 1; boxH = bh;
+      if (n !== narrow) { narrow = n; paint(); return; }
+      if (!grew) return; const now = performance.now(); refits = refits.filter((t) => now - t < 1000); if (refits.length >= 3) return; refits.push(now);
+      fitKey = ''; fitSeen.clear(); paint(); })).observe(root);
 
     // ── the event sheet (showcase): detail · lifecycle · payment · move (second step) · cancel (second step).
     // In app mode a tapped cita goes to onOpen and the app opens its own sheet. ──
@@ -924,11 +958,11 @@ let wheelsNow = [];
     const seeClash = () => { const els = $$('.cx-ag-ev[data-conflict], .cx-ag-row[data-conflict]', root); if (!els.length) return; const el = els[clashAt++ % els.length]; const sc = $('.cx-ag-scroll', root);
       if (sc && sc.contains(el)) { const a = sc.getBoundingClientRect(), b = el.getBoundingClientRect(); sc.scrollTo({ top: sc.scrollTop + b.top - a.top - 60, left: sc.scrollLeft + b.left - a.left - 60, behavior: 'smooth' }); } else el.scrollIntoView({ block: 'center', behavior: 'smooth' });
       el.animate([{ outline: '2px solid var(--destructive)', outlineOffset: '2px' }, { outline: '2px solid transparent', outlineOffset: '2px' }], { duration: 1400, delay: 250 }); };
-    let pop = null, dateMode = 'day';
+    let pop = null, dateMode = 'day';   // «range» only with the `ranges` option
     const calWords = () => ({ mon: w.mon, weekdays: w.dayS.slice(1).concat(w.dayS[0]).map((x) => x.slice(0, 2).toLowerCase()), prevLabel: w.prevMonth, nextLabel: w.nextMonth, prevYear: w.prevYear, nextYear: w.nextYear, pickLabel: w.pickMonth });
     const dateUI = (host, done) => {
       const draw = () => {
-        host.innerHTML = `<div class="cx-tabs cx-ag-datemode" role="tablist" aria-label="${w.goTo}">${[['day', w.oneDay], ['range', w.someDays]].map(([k, l]) => `<button type="button" class="cn-button cn-button-variant-ghost cn-button-size-sm cx-tab" role="tab" aria-selected="${dateMode === k}" data-date-mode="${k}">${l}</button>`).join('')}</div><div class="cx-ag-datecal"></div>${dateMode === 'range' ? `<p class="cx-ag-datehint">${w.rangeHint}</p>` : ''}<div class="cx-ag-datefoot">${ui.button({ label: w.today, size: 'sm', variant: 'outline', attrs: 'data-date-today' })}</div>`;
+        host.innerHTML = `${ranges ? `<div class="cx-tabs cx-ag-datemode" role="tablist" aria-label="${w.goTo}">${[['day', w.oneDay], ['range', w.someDays]].map(([k, l]) => `<button type="button" class="cn-button cn-button-variant-ghost cn-button-size-sm cx-tab" role="tab" aria-selected="${dateMode === k}" data-date-mode="${k}">${l}</button>`).join('')}</div>` : ''}<div class="cx-ag-datecal"></div>${dateMode === 'range' ? `<p class="cx-ag-datehint">${w.rangeHint}</p>` : ''}<div class="cx-ag-datefoot">${ui.button({ label: w.today, size: 'sm', variant: 'outline', attrs: 'data-date-today' })}</div>`;
         $$('.cx-tabs', host).forEach(initTabs);
         const wide = dateMode === 'range' && innerWidth > 720;
         kit.calendar($('.cx-ag-datecal', host), { ...calWords(), mode: dateMode === 'range' ? 'range' : 'single', months: wide ? 2 : 1, value: dateMode === 'range' ? (rangeSel ? [new Date(rangeSel[0]), new Date(rangeSel[1])] : null) : new Date(day),
@@ -959,19 +993,45 @@ let wheelsNow = [];
       body.innerHTML = '<div class="cx-ag-datesheet"></div>';
       dateUI($('.cx-ag-datesheet', body), (r) => { closeModal(); applyDate(r); });
     };
+    // fit: the hours share the height the app gives the agenda (never under baseHour), as a day view on a monitor should.
+    // Measured after a paint and only when what decides it changed (view, hours, width, the agenda's height): reading
+    // the layout on every paint forced the whole page to lay out each time
+    let hourPx = baseHour, fitKey = '';
+    const fitSeen = new Map();   // each view's measured hour, so going back to a view paints once at its size
+    const refit = () => {
+      if (!fit) return false;
+      const key = `${eff()}|${from}|${to}|${narrow}`; if (key === fitKey) return false;
+      const sc = root.querySelector('.cx-ag-scroll'), ag = sc ? sc.querySelector('.cx-ag') : null, hours = sc ? sc.querySelector('.cx-ag-body') : null;
+      if (!sc || !sc.clientHeight || !ag || !hours) return false;
+      fitKey = key;
+      // everything in the scroll that is not the hours (the day heads, gaps, padding) keeps its height
+      const around = ag.offsetHeight - hours.offsetHeight;
+      const next = Math.max(baseHour, Math.floor((sc.clientHeight - around) / Math.max(1, to - from)));
+      fitSeen.set(key, next);
+      if (next === hourPx) return false;
+      hourPx = next; return true;
+    };
+    let blockDay = null;   // the one open day of the week, when the form had nothing to choose from
     const openBlock = () => { blockOpen = true; sheetOf('agBlock'); };
     CONTENT[K('agBlock')] = () => {
       $('#mdl-title').textContent = w.blockTitle; $('#mdl-desc').textContent = w.blockDesc;
       const sel = (id, label, v) => ui.field({ id, label, control: kit.timeButton(v, `id="${id}" data-blt="${label}" style="width:100%;justify-content:flex-start"`) });
-      body.innerHTML = `${resources.length > 1 && blockScope !== 'all' ? ui.field({ id: 'bl-r', label: w.for, control: `<button type="button" class="cn-button cn-button-variant-outline cn-button-size-default cx-sel-btn cx-fill" id="bl-r" data-v="${who === 'all' ? 'all' : who}"></button>` }) : ''}<div class="cx-frange">${sel('bl-f', w.from, '13:00')}${sel('bl-t', w.to, '14:00')}</div>${ui.field({ id: 'bl-why', label: w.reasonLabel, control: ui.input({ id: 'bl-why', value: w.reasonDefault }), description: w.onlyYou })}`;
+      // the week shows seven days, so the form says which one it blocks: only days that open, from today on, the shown day first
+      const open = eff() === 'week' ? weekDays().filter((d) => !isClosed(d)) : [];
+      const ahead = open.filter((d) => +d >= +today), days = ahead.length ? ahead : open;
+      const pickDay = days.find((d) => sameDay(d, day)) || days[0];
+      const dayField = days.length > 1 ? ui.field({ id: 'bl-d', label: w.day, control: `<button type="button" class="cn-button cn-button-variant-outline cn-button-size-default cx-sel-btn cx-fill" id="bl-d" data-v="${+pickDay}"></button>` }) : '';
+      body.innerHTML = `${dayField}${resources.length > 1 && blockScope !== 'all' ? ui.field({ id: 'bl-r', label: w.for, control: `<button type="button" class="cn-button cn-button-variant-outline cn-button-size-default cx-sel-btn cx-fill" id="bl-r" data-v="${who === 'all' ? 'all' : who}"></button>` }) : ''}<div class="cx-frange">${sel('bl-f', w.from, '13:00')}${sel('bl-t', w.to, '14:00')}</div>${ui.field({ id: 'bl-why', label: w.reasonLabel, control: ui.input({ id: 'bl-why', value: w.reasonDefault }), description: w.onlyYou })}`;
       foot.innerHTML = ui.button({ label: w.cancel, size: 'default', attrs: 'data-dismiss', cls: 'cx-exit' }) + ui.button({ label: `${ui.icon('i-lock')}${w.block}`, variant: 'default', size: 'default', attrs: 'data-bl-go', cls: 'cx-go' });
+      const bd = $('#bl-d', body); if (bd) kit.selectMenu(bd, { label: w.day, value: bd.dataset.v, options: days.map((d) => ({ value: String(+d), label: `${w.dayL[d.getDay()]} ${d.getDate()}` })), onChange: (v) => { bd.dataset.v = v; } });
+      blockDay = days.length === 1 ? days[0] : null;
       const br = $('#bl-r', body); if (br) kit.selectMenu(br, { label: w.for, value: br.dataset.v, options: [{ value: 'all', label: w.wholeShop }, ...resources.map((r) => ({ value: r.id, label: r.name }))], onChange: (v) => { br.dataset.v = v; } });
     };
     body.addEventListener('click', async (e) => { const b = e.target.closest('[data-blt]'); if (agOwner !== me || !b || !blockOpen) return; const v = await kit.pickTime({ value: b.querySelector('span').textContent, label: b.dataset.blt, from, to, step: 15 }); if (!v) return; b.querySelector('span').textContent = v; b.removeAttribute('aria-invalid'); const fb = $('#bl-f span', body), tb = $('#bl-t span', body); if (toMin(tb.textContent) <= toMin(fb.textContent)) tb.textContent = toHM(Math.min(toMin(fb.textContent) + 60, to * 60)); });
     document.addEventListener('click', (e) => {
       if (agOwner !== me || !e.target.closest('[data-bl-go]') || !blockOpen) return;
       const f = toMin($('#bl-f span', body).textContent), t2 = toMin($('#bl-t span', body).textContent); if (t2 <= f) { $('#bl-t', body).setAttribute('aria-invalid', 'true'); return; }
-      const b = { id: 'b' + Date.now(), resource: $('#bl-r', body)?.dataset.v || resources[0].id, day: new Date(day), start: toHM(f), dur: t2 - f, reason: $('#bl-why', body).value.trim() || w.blocked };
+      const b = { id: 'b' + Date.now(), resource: $('#bl-r', body)?.dataset.v || resources[0].id, day: $('#bl-d', body) ? new Date(+$('#bl-d', body).dataset.v) : new Date(blockDay || day), start: toHM(f), dur: t2 - f, reason: $('#bl-why', body).value.trim() || w.blocked };
       blockOpen = false; closeModal();
       if (onBlock) { onBlock(b); return; }
       blocks.push(b); paint(); onChange(events); island('done', w.blockedOk, 1800);
@@ -983,6 +1043,7 @@ let wheelsNow = [];
       if ('resources' in next) resources = next.resources; if ('events' in next) events = next.events; if ('blocks' in next) blocks = next.blocks;
       if ('availability' in next) availability = next.availability; if ('free' in next) freeList = next.free; if ('queue' in next) queue = next.queue;
       if ('closed' in next) closed = next.closed; if ('loading' in next) loading = next.loading;
+      if (Number(next.from) >= 0 && Number(next.to) > Number(next.from)) { from = Number(next.from); to = Number(next.to); }
       if ('overlap' in next) overlap = next.overlap; if ('placing' in next) placing = next.placing; if ('currency' in next) currency = next.currency; if ('locale' in next) locale = next.locale; if ('cents' in next) cents = next.cents;
       if ('lang' in next || 'words' in next) { lang = next.lang ?? lang; words = next.words ?? words; w = { ...(AG_WORDS[lang] || AG_WORDS.es), ...words }; }
       if (who !== 'all' && !(who.startsWith('kind:') ? resources.some((r) => kindOf(r) === who.slice(5)) : resources.some((r) => r.id === who))) who = 'all';

@@ -12,3 +12,19 @@ part NavButton(label: text = "", current: bool, onClick: action, variant: text =
   }
 }
 part NavBar(label: text = "Secciones", orientation: text = "horizontal") { Nav class("cx-navbar") data(orientation: $orientation) aria(label: $label) { slot } }
+
+# NavLink - a NavButton that goes to another page (a Link): the tabs between sibling pages (Terms · Privacy · Delete).
+# NavHere - the tab of the page you are on, which goes nowhere (aria-current="page", marked like a current NavButton).
+#   NavBar(label: "Documentos") { NavHere(label: "Términos", marker: "fill")  NavLink(label: "Privacidad", to: "/privacy", marker: "fill") }
+part NavLink(label: text, to: text, variant: text = "ghost", size: text = "default", marker: text = "dot") {
+  Link "" -> "{$to}" class("cn-button cn-button-variant-{$variant} cn-button-size-{$size} group/button cx-nav") data(slot: "button", marker: $marker) {
+    slot
+    Span "{$label}" class("cx-nav-label")
+  }
+}
+part NavHere(label: text, variant: text = "ghost", size: text = "default", marker: text = "dot") {
+  Stack class("cn-button cn-button-variant-{$variant} cn-button-size-{$size} group/button cx-nav") data(slot: "button", marker: $marker) aria(current: "page") {
+    slot
+    Span "{$label}" class("cx-nav-label")
+  }
+}

@@ -1,0 +1,30 @@
+# Heatmap - how much happens where two things cross: rows × columns (weekday × hour, week × day), each cell darker the
+# more it holds, a «less … more» scale under it. A cell says its count to a screen reader and on hover. With `empty`,
+# a calm note sits over the grid until there is something to show (emptyTitle on top of it). busy: true shows the grid
+# as a skeleton while it loads.
+#   Heatmap(rows: days, cols: hours, cells: heat, less: "Menos", more: "Más citas", label: "Citas por día y hora")
+# rows {id, label} · cols {label} (an empty label keeps the column unlabelled) · cells {row, level 0-6, tip}, row by row,
+# as many per row as there are cols. tone: the scale's colour (brand by default; coral | teal | amber | blue | pink).
+# shadcn-for-muten · part · no deps · kit.css (.cx-heat).
+part Heatmap(rows: list, cols: list, cells: list, label: text = "", less: text = "Menos", more: text = "Más", empty: text = "", emptyTitle: text = "", tone: text = "brand", busy: bool = false) {
+  Stack class("cx-heat") data(tone: $tone, busy: $busy) aria(busy: $busy) {
+    Stack class("cx-heat-grid") style(n: "{$cols.length}") aria(role: "img", label: $label) {
+      Span "" class("cx-heat-corner")
+      each $cols as col { Span "{col.label}" class("cx-heat-x") }
+      each $rows as row {
+        Span "{row.label}" class("cx-heat-y")
+        each $cells as cell where cell.row == row.id { Span "" class("cx-heat-c") data(level: cell.level, name: cell.tip) aria(label: cell.tip) }
+      }
+      when $empty != "" and not $busy { Stack class("cx-veil-note") { Stack class("cx-veil-box") { Span "{$emptyTitle}" class("cx-veil-t")  Span "{$empty}" class("cx-veil-s") } } }
+    }
+    Stack class("cx-heat-scale") aria(hidden: true) {
+      Span "{$less}"
+      Span "" class("cx-heat-c") data(level: 0)
+      Span "" class("cx-heat-c") data(level: 2)
+      Span "" class("cx-heat-c") data(level: 4)
+      Span "" class("cx-heat-c") data(level: 5)
+      Span "" class("cx-heat-c") data(level: 6)
+      Span "{$more}"
+    }
+  }
+}

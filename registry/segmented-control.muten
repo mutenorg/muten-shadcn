@@ -4,9 +4,10 @@
 #   SegmentedControl { SegmentedItem(value: "select", current: tool, label: "Select", onSelect: setTool) … }
 # SegmentedTabs fills its width; IconTab holds an Icon instead of a label.
 # shadcn-for-muten · part + Custom (TabsBehavior) · kit.css (.cx-tabs).
-part SegmentedControl() { Stack class("cx-tabs") data(slot: "segmented") aria(role: "group") { slot  TabsBehavior() } }
-part SegmentedItem(value: text, current: text, label: text, onSelect: action) {
-  Button "{$label}" -> $onSelect($value) class("cn-button cn-button-variant-ghost cn-button-size-sm cx-tab") aria(pressed: $value == $current)
+# label names the group for a screen reader; fill: "phone" stretches it to its row on a phone (to line up with a field).
+part SegmentedControl(label: text = "", fill: text = "") { Stack class("cx-tabs") data(slot: "segmented", fill: $fill) aria(role: "group", label: $label) { slot  TabsBehavior() } }
+part SegmentedItem(value: text, current: text, label: text, onSelect: action, size: text = "sm") {
+  Button "{$label}" -> $onSelect($value) class("cn-button cn-button-variant-ghost cn-button-size-{$size} cx-tab") aria(pressed: $value == $current)
 }
 part SegmentedTabs() { Stack class("cx-tabs cx-tabs-fill") data(slot: "segmented") { slot  TabsBehavior() } }
 part IconTab(value: text, current: text, onSelect: action) {

@@ -4,7 +4,7 @@
 #   DocHead(title: "Términos y condiciones") { Text "Última actualización: 7 de octubre de 2026" class("cx-doc-line") }
 #   DocBody {
 #     DocToc(label: "Contenido") { DocTocLink(label: "1. Quiénes somos", to: "#s1")  DocTocLink(label: "2. Tus datos", to: "#s2") }
-#     DocArticle { DocSection(anchor: "s1", title: "1. Quiénes somos") { Text "Storio es un producto de Candhrly LLC." class("cx-doc-p") } }
+#     DocArticle { DocSection(anchor: "s1", title: "1. Quiénes somos") { DocText(text: "Storio es un producto de Candhrly LLC.") } }
 #   }
 # shadcn-for-muten · parts · no deps · kit.css (.cx-doc-*).
 part DocHead(title: text) {
@@ -19,6 +19,8 @@ part DocTocLink(label: text, to: text) {
   Link "{$label}" -> "{$to}" class("cn-button cn-button-variant-ghost cn-button-size-sm group/button cx-nav cx-doc-toc-item") data(slot: "button", marker: "fill")
 }
 part DocArticle() { Stack class("cx-doc-article") { slot } }
+# DocText - one paragraph of a section, at reading width.
+part DocText(text: text) { Text "{$text}" class("cx-doc-p") }
 part DocSection(anchor: text, title: text) {
   Stack class("cx-doc-sec") id("{$anchor}") {
     Title "{$title}" h2 class("cx-doc-h2")

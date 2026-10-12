@@ -2,21 +2,33 @@
 # its line. The icon goes in the slot (or leave it empty). `tone` says if the change is good (ok) or bad (bad) -
 # for a cost or a wait, going down is the good one.
 #   StatCard(label: "Ventas", value: "$1.284.000", delta: "▲ 12 %", tone: "ok", compare: "vs. semana pasada", series: "3,5,4,6,5,8,9") { Icon "lucide:credit-card" }
+# A card that asks for something (what is owed, orders to confirm): `line` says what the number means and `to` + `cta`
+# is the one thing to do about it, written at the foot of the card.
+#   StatCard(label: "Por cobrar", value: "USD 305", line: "4 citas sin marcar como pagadas", to: "/close-day", cta: "Cerrar el día") { Icon "lucide:clock" }
+# busy: true keeps the card's shape with a skeleton while the number loads (the label stays).
 # Lay several in a StatGrid. Spark draws the series alone: Spark(series: "3,5,4", tone: "success").
 # shadcn-for-muten · part + Custom (Spark.js) · kit.css (.cx-stat).
-part StatCard(label: text, value: text, delta: text, tone: text = "ok", compare: text = "", series: text = "") {
-  Section class("cn-card cx-stat") data(slot: "card", size: "sm") {
+part StatCard(label: text, value: text = "", delta: text = "", tone: text = "ok", compare: text = "", series: text = "", line: text = "", to: text = "", cta: text = "", busy: bool = false) {
+  Section class("cn-card cx-stat") data(slot: "card", size: "sm", busy: $busy) {
     Stack class("cx-stat-body") {
       Stack class("cx-stat-row") {
         Span "{$label}" class("cx-text") data(slot: "text", variant: "muted")
         Stack class("cx-stat-ic") { slot }
       }
-      Span "{$value}" class("cx-text") data(slot: "text", variant: "title")
-      Stack class("cx-stat-row") {
-        Span "{$delta}" class("cn-badge cn-badge-variant-ghost group/badge") data(slot: "badge", variant: "status", tone: $tone)
-        Span "{$compare}" class("cx-text") data(slot: "text", variant: "caption")
+      when $busy {
+        Skeleton() class("cx-stat-sk-v")
+        Skeleton() class("cx-stat-sk-l")
       }
-      Spark(series: $series, tone: $tone)
+      when not $busy {
+        Span "{$value}" class("cx-text") data(slot: "text", variant: "title")
+        Span "{$line}" class("cx-text cx-stat-line") data(slot: "text", variant: "caption")
+        Stack class("cx-stat-row cx-stat-delta") {
+          Span "{$delta}" class("cn-badge cn-badge-variant-ghost group/badge") data(slot: "badge", variant: "status", tone: $tone)
+          Span "{$compare}" class("cx-text") data(slot: "text", variant: "caption")
+        }
+        Spark(series: $series, tone: $tone)
+        when $to != "" { Link "{$cta}" -> "{$to}" class("cx-stat-go") }
+      }
     }
   }
 }

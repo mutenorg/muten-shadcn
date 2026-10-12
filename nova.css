@@ -55,6 +55,10 @@
   }
 }
 
+/* NO `group-has-*` HERE: each one is written out as `:where(.group\/x):has(…) & { … }` in its block. Tailwind turns
+   `group-has-…` into `&:is(:where(.group\/x):has(…) *)`, and with that trailing `*` Chrome restyles the WHOLE page on
+   every change to it (one of these rules alone took a node insert from 2 ms to 125 ms in a real app). The written-out
+   form means the same and weighs the same, but ends in the component's own class. Keep new ones in this form. */
 /* Custom variants */
 @custom-variant data-open {
   &:where([data-state="open"]),
@@ -739,7 +743,7 @@
 .cn-command-input { @apply outline-hidden disabled:cursor-not-allowed disabled:opacity-50; }
 .cn-command-list { @apply overflow-x-hidden overflow-y-auto; }
 .cn-command-item { @apply data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0; }
-.cn-command-item-indicator { @apply ml-auto opacity-0 group-has-data-[slot=command-shortcut]/command-item:hidden group-data-[checked=true]/command-item:opacity-100; }
+.cn-command-item-indicator { @apply ml-auto opacity-0 group-data-[checked=true]/command-item:opacity-100; :where(.group\/command-item):has([data-slot="command-shortcut"]) & { @apply hidden; } }
 .cn-context-menu-trigger { @apply select-none; }
 .cn-context-menu-content { @apply z-50 max-h-(--radix-context-menu-content-available-height) origin-(--radix-context-menu-content-transform-origin) overflow-x-hidden overflow-y-auto; }
 .cn-context-menu-item { @apply relative flex cursor-default items-center outline-hidden select-none data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0; }
@@ -774,7 +778,7 @@
 .cn-field-content { @apply flex flex-1 flex-col leading-snug; }
 .cn-field-label { @apply flex w-fit has-[>[data-slot=field]]:w-full has-[>[data-slot=field]]:flex-col; }
 .cn-field-title { @apply flex w-fit items-center; }
-.cn-field-description { @apply leading-normal font-normal group-has-data-horizontal/field:text-balance last:mt-0 nth-last-2:-mt-1 [&>a]:underline [&>a]:underline-offset-4 [&>a:hover]:text-primary; }
+.cn-field-description { @apply leading-normal font-normal last:mt-0 nth-last-2:-mt-1 [&>a]:underline [&>a]:underline-offset-4 [&>a:hover]:text-primary; :where(.group\/field):has(:where([data-orientation="horizontal"])) & { @apply text-balance; } }
 .cn-field-separator { @apply relative; }
 .cn-field-error { @apply font-normal; }
 .cn-field-separator-content { @apply relative mx-auto block w-fit bg-background; }
@@ -946,21 +950,21 @@
 .style-nova .cn-alert { @apply grid gap-0.5 rounded-lg border px-2.5 py-2 text-left text-sm has-data-[slot=alert-action]:relative has-data-[slot=alert-action]:pr-18 has-[>svg]:grid-cols-[auto_1fr] has-[>svg]:gap-x-2 *:[svg]:row-span-2 *:[svg]:translate-y-0.5 *:[svg]:text-current *:[svg:not([class*='size-'])]:size-4; }
 .style-nova .cn-alert-variant-default { @apply bg-card text-card-foreground; }
 .style-nova .cn-alert-variant-destructive { @apply text-destructive bg-card *:data-[slot=alert-description]:text-destructive/90 *:[svg]:text-current; }
-.style-nova .cn-alert-title { @apply font-medium group-has-[>svg]/alert:col-start-2; }
+.style-nova .cn-alert-title { @apply font-medium; :where(.group\/alert):has(> svg) & { @apply col-start-2; } }
 .style-nova .cn-alert-description { @apply text-muted-foreground text-sm text-balance md:text-pretty [&_p:not(:last-child)]:mb-4; }
 .style-nova .cn-alert-action { @apply absolute top-2 right-2; }
 .style-nova .cn-alert-dialog-overlay { @apply data-open:animate-in data-closed:animate-out data-closed:fade-out-0 data-open:fade-in-0 bg-black/10 duration-100 supports-backdrop-filter:backdrop-blur-xs; }
 .style-nova .cn-alert-dialog-content { @apply data-open:animate-in data-closed:animate-out data-closed:fade-out-0 data-open:fade-in-0 data-closed:zoom-out-95 data-open:zoom-in-95 bg-popover text-popover-foreground ring-foreground/10 gap-4 rounded-xl p-4 ring-1 duration-100 data-[size=default]:max-w-xs data-[size=sm]:max-w-xs data-[size=default]:sm:max-w-sm; }
 .style-nova .cn-alert-dialog-header { @apply grid grid-rows-[auto_1fr] place-items-center gap-1.5 text-center has-data-[slot=alert-dialog-media]:grid-rows-[auto_auto_1fr] has-data-[slot=alert-dialog-media]:gap-x-4 sm:group-data-[size=default]/alert-dialog-content:place-items-start sm:group-data-[size=default]/alert-dialog-content:text-left sm:group-data-[size=default]/alert-dialog-content:has-data-[slot=alert-dialog-media]:grid-rows-[auto_1fr]; }
 .style-nova .cn-alert-dialog-media { @apply bg-muted mb-2 inline-flex size-10 items-center justify-center rounded-md sm:group-data-[size=default]/alert-dialog-content:row-span-2 *:[svg:not([class*='size-'])]:size-6; }
-.style-nova .cn-alert-dialog-title { @apply text-base font-medium sm:group-data-[size=default]/alert-dialog-content:group-has-data-[slot=alert-dialog-media]/alert-dialog-content:col-start-2; }
+.style-nova .cn-alert-dialog-title { @apply text-base font-medium; :where(.group\/alert-dialog-content)[data-size="default"]:has([data-slot="alert-dialog-media"]) & { @apply sm:col-start-2; } }
 .style-nova .cn-alert-dialog-description { @apply text-muted-foreground *:[a]:hover:text-foreground text-sm text-balance md:text-pretty *:[a]:underline *:[a]:underline-offset-3; }
 .style-nova .cn-alert-dialog-footer { @apply bg-muted/50 -mx-4 -mb-4 rounded-b-xl border-t p-4; }
 .style-nova .cn-avatar { @apply size-8 rounded-full after:rounded-full data-[size=lg]:size-10 data-[size=sm]:size-6; }
 .style-nova .cn-avatar-fallback { @apply bg-muted text-muted-foreground rounded-full; }
 .style-nova .cn-avatar-image { @apply rounded-full; }
 .style-nova .cn-avatar-badge { @apply bg-primary text-primary-foreground ring-background; }
-.style-nova .cn-avatar-group-count { @apply bg-muted text-muted-foreground size-8 rounded-full text-sm group-has-data-[size=lg]/avatar-group:size-10 group-has-data-[size=sm]/avatar-group:size-6 [&>svg]:size-4 group-has-data-[size=lg]/avatar-group:[&>svg]:size-5 group-has-data-[size=sm]/avatar-group:[&>svg]:size-3; }
+.style-nova .cn-avatar-group-count { @apply bg-muted text-muted-foreground size-8 rounded-full text-sm [&>svg]:size-4; :where(.group\/avatar-group):has([data-size="lg"]) & { @apply size-10 [&>svg]:size-5; } :where(.group\/avatar-group):has([data-size="sm"]) & { @apply size-6 [&>svg]:size-3; } }
 .style-nova .cn-badge { @apply h-5 gap-1 rounded-4xl border border-transparent px-2 py-0.5 text-xs font-medium transition-all has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&>svg]:size-3!; }
 .style-nova .cn-badge-variant-default { @apply bg-primary text-primary-foreground [a]:hover:bg-primary/80; }
 .style-nova .cn-badge-variant-secondary { @apply bg-secondary text-secondary-foreground [a]:hover:bg-secondary/80; }
@@ -1006,7 +1010,7 @@
 .style-nova .cn-carousel-previous { @apply rounded-full; }
 .style-nova .cn-carousel-next { @apply rounded-full; }
 .style-nova .cn-chart-tooltip { @apply border-border/50 bg-background gap-1.5 rounded-lg border px-2.5 py-1.5 text-xs shadow-xl; }
-.style-nova .cn-checkbox { @apply border-input dark:bg-input/30 data-checked:bg-primary data-checked:text-primary-foreground dark:data-checked:bg-primary data-checked:border-primary aria-invalid:aria-checked:border-primary aria-invalid:border-destructive dark:aria-invalid:border-destructive/50 focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 flex size-4 items-center justify-center rounded-[4px] border transition-colors group-has-disabled/field:opacity-50 focus-visible:ring-3 aria-invalid:ring-3 group-has-[:focus-visible]/field-label:ring-0 group-has-[:focus-visible]/field-label:not-data-checked:border-input group-has-[:focus-visible]/field-label:data-checked:border-primary; }
+.style-nova .cn-checkbox { @apply border-input dark:bg-input/30 data-checked:bg-primary data-checked:text-primary-foreground dark:data-checked:bg-primary data-checked:border-primary aria-invalid:aria-checked:border-primary aria-invalid:border-destructive dark:aria-invalid:border-destructive/50 focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 flex size-4 items-center justify-center rounded-[4px] border transition-colors focus-visible:ring-3 aria-invalid:ring-3; :where(.group\/field):has(:disabled) & { @apply opacity-50; } :where(.group\/field-label):has(:focus-visible) & { @apply ring-0 not-data-checked:border-input data-checked:border-primary; } }
 .style-nova .cn-checkbox-aria { @apply data-selected:bg-primary data-selected:text-primary-foreground dark:data-selected:bg-primary data-selected:border-primary data-focus-visible:border-ring data-focus-visible:ring-ring/50 data-focus-visible:ring-3 data-invalid:data-selected:border-primary data-invalid:border-destructive dark:data-invalid:border-destructive/50 data-invalid:ring-destructive/20 dark:data-invalid:ring-destructive/40 data-invalid:ring-3; }
 .style-nova .cn-checkbox-indicator { @apply [&>svg]:size-3.5; }
 .style-nova .cn-combobox-content { @apply bg-popover text-popover-foreground data-open:animate-in data-closed:animate-out data-closed:fade-out-0 data-open:fade-in-0 data-closed:zoom-out-95 data-open:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 ring-foreground/10 *:data-[slot=input-group]:bg-input/30 *:data-[slot=input-group]:border-input/30 max-h-72 min-w-36 overflow-hidden rounded-lg shadow-md ring-1 duration-100 *:data-[slot=input-group]:m-1 *:data-[slot=input-group]:mb-0 *:data-[slot=input-group]:h-8 *:data-[slot=input-group]:shadow-none; }
@@ -1115,7 +1119,7 @@
 .style-nova .cn-item-size-default { @apply gap-2.5 px-3 py-2.5; }
 .style-nova .cn-item-size-sm { @apply gap-2.5 px-3 py-2.5; }
 .style-nova .cn-item-size-xs { @apply gap-2 px-2.5 py-2 in-data-[slot=dropdown-menu-content]:p-0; }
-.style-nova .cn-item-media { @apply gap-2 group-has-data-[slot=item-description]/item:translate-y-0.5 group-has-data-[slot=item-description]/item:self-start; }
+.style-nova .cn-item-media { @apply gap-2; :where(.group\/item):has([data-slot="item-description"]) & { @apply translate-y-0.5 self-start; } }
 .style-nova .cn-item-media-variant-default { @apply bg-transparent; }
 .style-nova .cn-item-media-variant-icon { @apply [&_svg:not([class*='size-'])]:size-4; }
 .style-nova .cn-item-media-variant-image { @apply size-10 overflow-hidden rounded-sm group-data-[size=sm]/item:size-8 group-data-[size=xs]/item:size-6 [&_img]:size-full [&_img]:object-cover; }
@@ -1173,7 +1177,7 @@
 .style-nova .cn-progress-label { @apply text-sm font-medium; }
 .style-nova .cn-progress-value { @apply text-muted-foreground ml-auto text-sm tabular-nums; }
 .style-nova .cn-radio-group { @apply grid gap-2; }
-.style-nova .cn-radio-group-item { @apply border-input dark:bg-input/30 data-checked:bg-primary data-checked:text-primary-foreground dark:data-checked:bg-primary data-checked:border-primary aria-invalid:aria-checked:border-primary aria-invalid:border-destructive focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 dark:aria-invalid:border-destructive/50 flex size-4 rounded-full focus-visible:ring-3 aria-invalid:ring-3 group-has-[:focus-visible]/field-label:ring-0 group-has-[:focus-visible]/field-label:not-data-checked:border-input group-has-[:focus-visible]/field-label:data-checked:border-primary; }
+.style-nova .cn-radio-group-item { @apply border-input dark:bg-input/30 data-checked:bg-primary data-checked:text-primary-foreground dark:data-checked:bg-primary data-checked:border-primary aria-invalid:aria-checked:border-primary aria-invalid:border-destructive focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 dark:aria-invalid:border-destructive/50 flex size-4 rounded-full focus-visible:ring-3 aria-invalid:ring-3; :where(.group\/field-label):has(:focus-visible) & { @apply ring-0 not-data-checked:border-input data-checked:border-primary; } }
 .style-nova .cn-radio-group-item-aria { @apply data-selected:bg-primary data-selected:text-primary-foreground dark:data-selected:bg-primary data-selected:border-primary data-focus-visible:border-ring data-focus-visible:ring-ring/50 data-focus-visible:ring-3 data-invalid:data-selected:border-primary data-invalid:border-destructive data-invalid:ring-destructive/20 dark:data-invalid:ring-destructive/40 dark:data-invalid:border-destructive/50 data-invalid:ring-3; }
 .style-nova .cn-radio-group-indicator { @apply flex size-4 items-center justify-center; }
 .style-nova .cn-radio-group-indicator-icon { @apply bg-primary-foreground absolute top-1/2 left-1/2 size-2 -translate-x-1/2 -translate-y-1/2 rounded-full; }
@@ -1220,7 +1224,7 @@
 .style-nova .cn-sidebar-group-content { @apply text-sm; }
 .style-nova .cn-sidebar-group-label { @apply text-sidebar-foreground/70 ring-sidebar-ring h-8 rounded-md px-2 text-xs font-medium transition-[margin,opacity] duration-200 ease-linear group-data-[collapsible=icon]:-mt-8 group-data-[collapsible=icon]:opacity-0 focus-visible:ring-2 [&>svg]:size-4; }
 .style-nova .cn-sidebar-group-action { @apply text-sidebar-foreground ring-sidebar-ring hover:bg-sidebar-accent hover:text-sidebar-accent-foreground absolute top-3.5 right-3 w-5 rounded-md p-0 focus-visible:ring-2 [&>svg]:size-4; }
-.style-nova .cn-sidebar-menu-button { @apply ring-sidebar-ring hover:bg-sidebar-accent hover:text-sidebar-accent-foreground active:bg-sidebar-accent active:text-sidebar-accent-foreground data-active:bg-sidebar-accent data-active:text-sidebar-accent-foreground data-open:hover:bg-sidebar-accent data-open:hover:text-sidebar-accent-foreground gap-2 rounded-md p-2 text-left text-sm transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 data-active:font-medium; }
+.style-nova .cn-sidebar-menu-button { @apply ring-sidebar-ring hover:bg-sidebar-accent hover:text-sidebar-accent-foreground active:bg-sidebar-accent active:text-sidebar-accent-foreground data-active:bg-sidebar-accent data-active:text-sidebar-accent-foreground data-open:hover:bg-sidebar-accent data-open:hover:text-sidebar-accent-foreground gap-2 rounded-md p-2 text-left text-sm transition-[width,height,padding] group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 data-active:font-medium; :where(.group\/menu-item):has([data-sidebar="menu-action"]) & { @apply pr-8; } }
 .style-nova .cn-sidebar-menu-button-aria { @apply aria-expanded:hover:bg-sidebar-accent aria-expanded:hover:text-sidebar-accent-foreground; }
 .style-nova .cn-sidebar-menu-button-variant-default { @apply hover:bg-sidebar-accent hover:text-sidebar-accent-foreground; }
 .style-nova .cn-sidebar-menu-button-variant-outline { @apply bg-background hover:bg-sidebar-accent hover:text-sidebar-accent-foreground shadow-[0_0_0_1px_var(--sidebar-border)] hover:shadow-[0_0_0_1px_var(--sidebar-accent)]; }
@@ -1240,7 +1244,7 @@
 .style-nova .cn-slider-range { @apply bg-primary; }
 .style-nova .cn-slider-thumb { @apply border-ring ring-ring/50 relative size-3 rounded-full border bg-white transition-[color,box-shadow] after:absolute after:-inset-2 hover:ring-3 focus-visible:ring-3 focus-visible:outline-hidden active:ring-3; }
 .style-nova .cn-toast { @apply rounded-2xl; }
-.style-nova .cn-switch { @apply data-checked:bg-primary data-unchecked:bg-input focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:aria-invalid:border-destructive/50 dark:data-unchecked:bg-input/80 shrink-0 rounded-full border border-transparent focus-visible:ring-3 aria-invalid:ring-3 group-has-[:focus-visible]/field-label:ring-0 group-has-[:focus-visible]/field-label:border-transparent data-[size=default]:h-[18.4px] data-[size=default]:w-[32px] data-[size=sm]:h-[14px] data-[size=sm]:w-[24px]; }
+.style-nova .cn-switch { @apply data-checked:bg-primary data-unchecked:bg-input focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:aria-invalid:border-destructive/50 dark:data-unchecked:bg-input/80 shrink-0 rounded-full border border-transparent focus-visible:ring-3 aria-invalid:ring-3 data-[size=default]:h-[18.4px] data-[size=default]:w-[32px] data-[size=sm]:h-[14px] data-[size=sm]:w-[24px]; :where(.group\/field-label):has(:focus-visible) & { @apply ring-0 border-transparent; } }
 .style-nova .cn-switch-aria { @apply data-selected:bg-primary not-data-selected:bg-input data-focus-visible:border-ring data-focus-visible:ring-ring/50 dark:not-data-selected:bg-input/80 data-focus-visible:ring-3 data-invalid:ring-destructive/20 dark:data-invalid:ring-destructive/40 data-invalid:border-destructive dark:data-invalid:border-destructive/50 data-invalid:ring-3; }
 .style-nova .cn-switch-thumb { @apply bg-background dark:data-unchecked:bg-foreground dark:data-checked:bg-primary-foreground rounded-full group-data-[size=default]/switch:size-4 group-data-[size=sm]/switch:size-3 group-data-[size=default]/switch:data-checked:translate-x-[calc(100%-2px)] group-data-[size=sm]/switch:data-checked:translate-x-[calc(100%-2px)] group-data-[size=default]/switch:data-unchecked:translate-x-0 group-data-[size=sm]/switch:data-unchecked:translate-x-0; }
 .style-nova .cn-switch-thumb-aria { @apply dark:not-data-selected:bg-foreground dark:data-selected:bg-primary-foreground group-data-[size=default]/switch:data-selected:translate-x-[calc(100%-2px)] group-data-[size=sm]/switch:data-selected:translate-x-[calc(100%-2px)] group-data-[size=default]/switch:not-data-selected:translate-x-0 group-data-[size=sm]/switch:not-data-selected:translate-x-0; }
@@ -1279,8 +1283,8 @@
 .style-nova .cn-input-group-addon { @apply text-muted-foreground h-auto gap-2 py-1.5 text-sm font-medium group-data-[disabled=true]/input-group:opacity-50 [&>kbd]:rounded-[calc(var(--radius)-5px)] [&>svg:not([class*='size-'])]:size-4; }
 .style-nova .cn-input-group-addon-align-inline-start { @apply pl-2 has-[>button]:ml-[-0.3rem] has-[>kbd]:ml-[-0.15rem]; }
 .style-nova .cn-input-group-addon-align-inline-end { @apply pr-2 has-[>button]:mr-[-0.3rem] has-[>kbd]:mr-[-0.15rem]; }
-.style-nova .cn-input-group-addon-align-block-start { @apply px-2.5 pt-2 group-has-[>input]/input-group:pt-2 [.border-b]:pb-2; }
-.style-nova .cn-input-group-addon-align-block-end { @apply px-2.5 pb-2 group-has-[>input]/input-group:pb-2 [.border-t]:pt-2; }
+.style-nova .cn-input-group-addon-align-block-start { @apply px-2.5 pt-2 [.border-b]:pb-2; :where(.group\/input-group):has(> input) & { @apply pt-2; } }
+.style-nova .cn-input-group-addon-align-block-end { @apply px-2.5 pb-2 [.border-t]:pt-2; :where(.group\/input-group):has(> input) & { @apply pb-2; } }
 .style-nova .cn-input-group-button { @apply gap-2 text-sm; }
 .style-nova .cn-input-group-button-size-xs { @apply h-6 gap-1 rounded-[calc(var(--radius)-3px)] px-1.5 [&>svg:not([class*='size-'])]:size-3.5; }
 .style-nova .cn-input-group-button-size-icon-xs { @apply size-6 rounded-[calc(var(--radius)-3px)] p-0 has-[>svg]:p-0; }
@@ -1331,22 +1335,22 @@
 .style-nova .cn-questionnaire-description { @apply text-muted-foreground text-sm; }
 .style-nova .cn-questionnaire-choices { @apply gap-2; }
 .style-nova .cn-questionnaire-choice { @apply border-input dark:bg-input/20 hover:bg-muted/50 data-checked:border-primary/40 data-checked:bg-muted dark:data-checked:bg-muted data-invalid:border-destructive has-[>input:focus-visible]:border-ring has-[>input:focus-visible]:ring-ring/50 gap-2.5 rounded-lg border bg-transparent px-3 py-2.5 text-sm has-[>input:focus-visible]:ring-3; }
-.style-nova .cn-questionnaire-choice-indicator { @apply border-input dark:bg-input/30 group-data-checked/questionnaire-choice:bg-primary dark:group-data-checked/questionnaire-choice:bg-primary group-data-checked/questionnaire-choice:text-primary-foreground group-data-checked/questionnaire-choice:border-primary size-4 translate-y-[--spacing(0.45)] group-has-data-[slot=questionnaire-choice-description]/questionnaire-choice:translate-y-0.5 rounded-[4px]; }
+.style-nova .cn-questionnaire-choice-indicator { @apply border-input dark:bg-input/30 group-data-checked/questionnaire-choice:bg-primary dark:group-data-checked/questionnaire-choice:bg-primary group-data-checked/questionnaire-choice:text-primary-foreground group-data-checked/questionnaire-choice:border-primary size-4 translate-y-[--spacing(0.45)] rounded-[4px]; :where(.group\/questionnaire-choice):has([data-slot="questionnaire-choice-description"]) & { @apply translate-y-0.5; } }
 .style-nova .cn-questionnaire-choice-indicator-dot { @apply bg-primary-foreground size-2; }
 .style-nova .cn-questionnaire-choice-indicator-check { @apply size-3.5; }
 .style-nova .cn-questionnaire-choice-content { @apply gap-0.5; }
 .style-nova .cn-questionnaire-choice-description { @apply text-muted-foreground; }
-.style-nova .cn-questionnaire-shortcut { @apply border-input bg-background text-muted-foreground size-5 translate-y-[--spacing(0.45)] group-has-data-[slot=questionnaire-choice-description]/questionnaire-choice:translate-y-0.5 items-center justify-center rounded-md border font-mono text-[0.625rem] font-medium leading-none; }
+.style-nova .cn-questionnaire-shortcut { @apply border-input bg-background text-muted-foreground size-5 translate-y-[--spacing(0.45)] items-center justify-center rounded-md border font-mono text-[0.625rem] font-medium leading-none; :where(.group\/questionnaire-choice):has([data-slot="questionnaire-choice-description"]) & { @apply translate-y-0.5; } }
 .style-nova .cn-questionnaire-input-wrapper { @apply w-full; }
 .style-nova .cn-questionnaire-input { @apply dark:bg-input/30 border-input focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:aria-invalid:border-destructive/50 disabled:bg-input/50 dark:disabled:bg-input/80 h-8 rounded-lg border bg-transparent px-2.5 py-1 text-base focus-visible:ring-3 aria-invalid:ring-3 md:text-sm; }
 .style-nova .cn-questionnaire-error { @apply mt-2 text-sm; }
 .style-nova .cn-questionnaire-actions { @apply gap-2 sm:min-h-8; }
 .style-nova .cn-message-scroller-content { @apply gap-6; }
 .style-nova .cn-message { @apply text-sm gap-2; }
-.style-nova .cn-message-avatar { @apply min-w-8 group-has-data-[slot=message-footer]/message:-translate-y-8; }
+.style-nova .cn-message-avatar { @apply min-w-8; :where(.group\/message):has([data-slot="message-footer"]) & { @apply -translate-y-8; } }
 .style-nova .cn-message-content { @apply gap-2.5 group-data-[align=end]/message:*:data-slot:self-end; }
-.style-nova .cn-message-header { @apply text-xs font-medium text-muted-foreground px-3 group-has-data-[variant=ghost]/message:px-0; }
-.style-nova .cn-message-footer { @apply text-xs font-medium text-muted-foreground px-3 group-has-data-[variant=ghost]/message:px-0; }
+.style-nova .cn-message-header { @apply text-xs font-medium text-muted-foreground px-3; :where(.group\/message):has([data-variant="ghost"]) & { @apply px-0; } }
+.style-nova .cn-message-footer { @apply text-xs font-medium text-muted-foreground px-3; :where(.group\/message):has([data-variant="ghost"]) & { @apply px-0; } }
 .style-nova .cn-message-group { @apply gap-2; }
 .style-nova .cn-alert-dialog-overlay-aria { @apply data-entering:animate-in data-exiting:animate-out data-exiting:fade-out-0 data-entering:fade-in-0 bg-black/10 duration-100 supports-backdrop-filter:backdrop-blur-xs; }
 .style-nova .cn-alert-dialog-content-aria { @apply data-entering:animate-in data-exiting:animate-out data-exiting:fade-out-0 data-entering:fade-in-0 data-exiting:zoom-out-95 data-entering:zoom-in-95 bg-popover text-popover-foreground ring-foreground/10 gap-4 rounded-xl p-4 ring-1 duration-100 data-[size=default]:max-w-xs data-[size=sm]:max-w-xs data-[size=default]:sm:max-w-sm; }

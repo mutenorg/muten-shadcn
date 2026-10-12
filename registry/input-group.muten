@@ -6,12 +6,28 @@
 # align: inline-start | inline-end (beside the text) | block-start | block-end (a row above / below, for a GroupTextArea).
 #   InputGroup { GroupTextArea(value: msg, placeholder: "Escribe…")  InputAddon(align: "block-end") { InputGroupText(label: "0/160")  InputGroupButton(label: "Enviar", onClick: send) { Icon "lucide:send" } } }
 # InputGroup and SearchInput take size (default | xl | 2xl) and variant (default | filled) like Input.
+# variant "tile": the field as a tile, its icon on a soft tile, its label inside above the value, a helper at the end:
+#   InputGroup(variant: "tile") { InputAddon { Icon "lucide:store" }  InputAddon(align: "block-start") { InputGroupText(label: "Nombre del negocio") }
+#     GroupInput(value: name, placeholder: "Estudio Luna")  InputAddon(align: "inline-end") { StatusBadge(label: "Libre", tone: "ok") } }
+# A picker as a tile (it opens the page's Drawer): the value is an InputGroupText (class cx-placeholder while empty) and
+# the tile goes inside a Button with class cx-tile-btn:
+#   Button "" -> openCountry class("cx-tile-btn") { InputGroup(variant: "tile") { InputAddon { Icon "lucide:globe" }
+#     InputAddon(align: "block-start") { InputGroupText(label: "País") }  InputGroupText(label: countryName)
+#     InputAddon(align: "inline-end") { Icon "lucide:chevron-down" } } }
 # shadcn-for-muten · part · no deps · Nova (.cn-input-group).
 part InputGroup(size: text = "default", variant: text = "default") { Stack class("cn-input-group group/input-group") data(slot: "input-group", size: $size, variant: $variant) aria(role: "group") { slot } }
 part InputAddon(align: text = "inline-start") { Stack class("cn-input-group-addon cn-input-group-addon-align-{$align}") data(slot: "input-group-addon", align: $align) { slot } }
 # GroupInput - the field inside an InputGroup. `label` names it for a screen reader when the group shows no label of its own
 # (a literal: an interpolated arg cannot reach aria(); without it the placeholder names the field).
 part GroupInput(value: text, placeholder: text = "", label: text = "") { SearchField bind($value) "{$placeholder}" class("cn-input cn-input-group-input cx-num") data(slot: "input-group-control") aria(label: $label) }
+# GroupPassword - a password inside an InputGroup; `shown` (the page's bool) shows what was typed. Put the eye in an
+# InputAddon(align: "inline-end") with an InputGroupButton that flips that bool.
+#   InputGroup { InputAddon { Icon "lucide:lock" }  GroupPassword(value: pass, shown: showPass, placeholder: "Tu contraseña")
+#     InputAddon(align: "inline-end") { InputGroupButton(onClick: toggleShow, size: "icon-xs", label: "Mostrar contraseña") { Icon "lucide:eye" } } }
+part GroupPassword(value: text, shown: bool = false, placeholder: text = "", label: text = "") {
+  when $shown { SearchField bind($value) "{$placeholder}" class("cn-input cn-input-group-input") data(slot: "input-group-control") aria(label: $label) }
+  when not $shown { Password bind($value) "{$placeholder}" class("cn-input cn-input-group-input") data(slot: "input-group-control") aria(label: $label) }
+}
 part SearchInput(value: text, placeholder: text = "Buscar", onClear: action, size: text = "default", variant: text = "default") {
   Stack class("cn-input-group group/input-group") data(slot: "input-group", size: $size, variant: $variant) aria(role: "group") {
     Stack class("cn-input-group-addon cn-input-group-addon-align-inline-start") data(slot: "input-group-addon", align: "inline-start") { Icon "lucide:search" }

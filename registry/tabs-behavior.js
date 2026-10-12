@@ -12,6 +12,8 @@ export function mount(el) {
     ind.style.opacity = '';
     if (first) ind.style.transition = 'none';
     ind.style.left = t.offsetLeft + 'px'; ind.style.width = t.offsetWidth + 'px';
+    // the pill takes the tab's own height, so a large SegmentedControl (52px) is not left with a 28px pill at its top
+    if (!list.classList.contains('line')) { ind.style.top = t.offsetTop + 'px'; ind.style.height = t.offsetHeight + 'px'; }
     if (first) { void ind.offsetWidth; ind.style.transition = ''; first = false; }
     tabs().forEach((x) => { x.tabIndex = x === t ? 0 : -1; });
     if (list.scrollWidth > list.clientWidth) t.scrollIntoView({ block: 'nearest', inline: 'nearest', behavior: 'smooth' });

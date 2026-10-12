@@ -18,18 +18,22 @@
 # (Telegram draws them as its keyboard, two per row), and ChatPlayNote adds «Visto» or who answered. The header carries
 # the app's back arrow and call buttons, and the composer is that app's own. With a skin it is a phone screen (300 × 600,
 # a status bar with `clock`), and Instagram puts `photo` beside the client's last message of each turn.
+# face: "" (the kit's two-dot face) | host - an empty face slot (.cx-cp-face-host) for the page's own face, a brand
+#   mascot say: the kit sends it cx-cp:think before each of the assistant's messages, cx-cp:answer when one lands and
+#   cx-cp:rest when the play leaves the screen. bot: out (default) | in - which side the assistant writes from.
 # shadcn-for-muten · part · no deps · kit.css (.cx-cp).
-part ChatPlay(title: text, status: text = "", placeholder: text = "", label: text = "", skin: text = "", theme: text = "", photo: text = "", clock: text = "9:41") {
+part ChatPlay(title: text, status: text = "", placeholder: text = "", label: text = "", skin: text = "", theme: text = "", photo: text = "", clock: text = "9:41", face: text = "", bot: text = "out") {
   # With a skin, the chat is a phone screen inside the library's one phone (the same iPhone as DeviceFrame), drawn at
   # a real phone's 390 × 844 and scaled to the frame. Without one the wrappers do not count for layout.
   Stack class("cx-cp-phone") data(skin: $skin) {
   Stack class("cx-cp-frame") {
   Stack class("cx-cp-screen") {
-  Stack class("cx-cp cx-play") data(skin: $skin, theme: $theme) style(face: "url('{$photo}')") aria(role: "img", label: $label) {
+  Stack class("cx-cp cx-play") data(skin: $skin, theme: $theme, bot: $bot) style(face: "url('{$photo}')") aria(role: "img", label: $label) {
     Stack class("cx-cp-sb") aria(hidden: true) { Span "{$clock}"  Stack class("cx-cp-sbi") { Icon "lucide:signal"  Icon "lucide:wifi"  Icon "lucide:battery-full" } }
     Stack class("cx-cp-head") aria(hidden: true) {
       Stack class("cx-cp-back") { Icon "lucide:chevron-left" }
-      when $photo == "" { Stack class("cx-cp-face") { Span ""  Span "" } }
+      when $photo == "" and $face != "host" { Stack class("cx-cp-face") { Span ""  Span "" } }
+      when $photo == "" and $face == "host" { Stack class("cx-cp-face cx-cp-face-host") }
       when $photo != "" { Stack class("cx-cp-ring") { Image "{$photo}" alt("") class("cx-cp-photo") } }
       Stack class("cx-cp-name") { Span "{$title}" class("cx-cp-t")  Span "{$status}" class("cx-cp-s") }
       Stack class("cx-cp-acts") { Icon "lucide:video"  Icon "lucide:phone"  Icon "lucide:ellipsis-vertical" }

@@ -9,7 +9,7 @@ export function mount(el, inputs, on) {
   let from = -1, to = -1, step = 0, raf = 0, list = null, scroller = null, basePad = 0, wired = false;
   // the real height (plus gap, screen px) of every row already drawn, by its place in the list. Rows of very different
   // heights (a group of 2 next to one of 50) no longer move the scrollbar as they come and go: a row seen once keeps its
-  // own height, and only rows never drawn use the average. Only when each row is ONE element (else: the average alone)
+  // own height, and only rows never drawn use the average. A row is what muten marks as one (title + carousel too)
   let sizes = [];
   el.setAttribute('aria-hidden', 'true');
 
@@ -18,6 +18,19 @@ export function mount(el, inputs, on) {
   const gapOf = () => { if (gapNow < 0) gapNow = parseFloat(getComputedStyle(list).rowGap) || 0; return gapNow; };
   // the rows muten drew after the marker (anything else the app puts in the list is left alone)
   const rows = () => { const out = []; for (let n = el.nextElementSibling; n; n = n.nextElementSibling) out.push(n); return out; };
+  // THE ROWS AS ROWS. Every row of a muten `each` sits between two markers (<!--row--> … <!--/row-->), and a row may be
+  // several elements: a store's group is its title AND its carousel. Measured by element, a two-piece row never had its
+  // own height learnt (only the average), so a group leaving above the screen left a gap of the wrong size behind and
+  // the page jumped under the finger (CLS 3.8 scrolling a 28-group store). A row is measured from its first piece to its
+  // last; an element outside any markers is a row of its own.
+  const rowParts = () => {
+    const out = []; let cur = null;
+    for (let n = el.nextSibling; n; n = n.nextSibling) {
+      if (n.nodeType === 8) { if (n.data === 'row') cur = []; else if (n.data === '/row' && cur) { out.push(cur); cur = null; } continue; }
+      if (n.nodeType === 1) { if (cur) cur.push(n); else out.push([n]); }
+    }
+    return out;
+  };
   // the real height of one row plus its gap, from the rows on screen; the guess until there are some
   const learn = () => {
     const r = rows(); const gap = gapOf() * scale();
@@ -27,12 +40,22 @@ export function mount(el, inputs, on) {
     const n = to > from ? to - from : r.length;
     if (r.length && n > 0) { const a = r[0].getBoundingClientRect(), b = r[r.length - 1].getBoundingClientRect(); const span = b.bottom - a.top; if (span > 0) { const seen = (span + gap) / n; step = step ? step * 0.7 + seen * 0.3 : seen; } }
     if (!step) step = (guess + gapOf()) * scale();
-    if (r.length && to > from && r.length === to - from) for (let i = 0; i < r.length; i++) { const h = r[i].getBoundingClientRect().height; if (h > 0) sizes[from + i] = h + gap; }
+    const parts = rowParts();
+    if (to > from && parts.length === to - from) {
+      for (let i = 0; i < parts.length; i++) {
+        const shown = parts[i].filter((n) => n.getClientRects().length);
+        // a row with nothing shown (an empty group) takes no room and no gap: it is 0, not «unknown»
+        if (!shown.length) { sizes[from + i] = 0; continue; }
+        const h = shown[shown.length - 1].getBoundingClientRect().bottom - shown[0].getBoundingClientRect().top;
+        if (h > 0) sizes[from + i] = h + gap;
+      }
+    }
   };
   // where row i starts, from the top of row 0 (screen px): the measured rows, the average for the rest
-  const offset = (i) => { let y = 0; for (let j = 0; j < i; j++) y += sizes[j] || step; return y; };
+  const size = (j) => (sizes[j] === undefined ? step : sizes[j]);
+  const offset = (i) => { let y = 0; for (let j = 0; j < i; j++) y += size(j); return y; };
   // the row at a distance from the top of row 0
-  const indexAt = (y) => { let acc = 0; for (let j = 0; j < count; j++) { const h = sizes[j] || step; if (acc + h > y) return j; acc += h; } return count; };
+  const indexAt = (y) => { let acc = 0; for (let j = 0; j < count; j++) { const h = size(j); if (acc + h > y) return j; acc += h; } return count; };
   // what is on screen: the scroller's box, never past the window (a scroller taller than the screen grew with the rows)
   const view = () => { if (scroller) { const b = scroller.getBoundingClientRect(); return [Math.max(0, b.top), Math.min(innerHeight, b.bottom)]; } return [0, innerHeight]; };
   // a list inside a scaled box (a phone preview drawn at 80 %): what is measured comes in screen px, what is set goes in

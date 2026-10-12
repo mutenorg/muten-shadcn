@@ -76,6 +76,31 @@ const watchPlays = (root) => root.querySelectorAll?.('.cx-play:not([data-watched
 new MutationObserver((records) => records.forEach((r) => r.addedNodes.forEach((n) => { if (n.nodeType === 1) { if (n.matches('.cx-play')) watchPlays(n.parentElement || document); else watchPlays(n); } }))).observe(document.body, { subtree: true, childList: true });
 watchPlays(document);
 
+// ── ChatPlay(face: "host"): the page's own face in the header acts along with the chat. On the conversation's own 12s
+// clock (the steps' keyframes in kit.css: 8% 22% 36% 50% 59% 69%) the face slot gets cx-cp:think a moment before each of
+// the assistant's messages, cx-cp:answer when it lands, and cx-cp:rest when the play leaves the screen ──
+const CP_AT = [0, 0.96, 2.64, 4.32, 6, 7.08, 8.28];
+const cpFace = (play) => {
+  const face = play.querySelector(':scope .cx-cp-face-host');
+  if (!face || play.dataset.faced !== undefined) return;
+  play.dataset.faced = '';
+  const bot = play.dataset.bot || 'out';
+  const steps = [...new Set([...play.querySelectorAll('.cx-cp-msg')].filter((m) => (m.dataset.who || 'out') === bot).map((m) => +m.dataset.step))];
+  const send = (type) => face.dispatchEvent(new CustomEvent('cx-cp:' + type));
+  let timers = [];
+  const stop = () => { timers.forEach(clearTimeout); timers = []; };
+  const run = () => {
+    stop();
+    steps.forEach((s) => { const at = (CP_AT[s] || 0) * 1000; timers.push(setTimeout(() => send('think'), Math.max(0, at - 1300)), setTimeout(() => send('answer'), at)); });
+    timers.push(setTimeout(run, 12000));
+  };
+  new MutationObserver(() => { if (play.dataset.in !== undefined) run(); else { stop(); send('rest'); } }).observe(play, { attributes: true, attributeFilter: ['data-in'] });
+  if (play.dataset.in !== undefined) run();
+};
+const cpFaces = (root) => root.querySelectorAll?.('.cx-cp.cx-play').forEach(cpFace);
+new MutationObserver((records) => records.forEach((r) => r.addedNodes.forEach((n) => { if (n.nodeType === 1) cpFaces(n.parentElement || document); }))).observe(document.body, { subtree: true, childList: true });
+cpFaces(document);
+
 // ── reveal-blur: under a .reveal-blur root, each block of the marketing system comes in from a blur as it enters the
 // screen. What is on screen when it is found shows at once (never half-faded at the fold, never holding the first
 // paint); without this script, or with reduced motion, nothing is ever hidden. Siblings enter a beat apart. ──
@@ -160,6 +185,8 @@ watchReveal();
       const cur = tabs.find((t) => t.getAttribute('aria-selected') === 'true') || tabs[0];
       if (!animate) ind.style.transition = 'none';
       ind.style.left = cur.offsetLeft + 'px'; ind.style.width = cur.offsetWidth + 'px';
+      // the pill takes the tab's own height, so a large SegmentedControl (52px) is not left with a 28px pill at its top
+      if (!list.classList.contains('line')) { ind.style.top = cur.offsetTop + 'px'; ind.style.height = cur.offsetHeight + 'px'; }
       if (!animate) { ind.offsetWidth; ind.style.transition = ''; }
     };
     const pick = (tab, focus) => {
@@ -182,10 +209,37 @@ watchReveal();
   };
 
 // ── tooltip on any [data-name] ──
+// shadcn's: the foreground pill with its arrow, above the trigger (beside it in a rail, below when there is no room).
+// It holds while the pointer travels inside its trigger (icon to label is not leaving, so it never blinks), it goes on
+// a press, and in a sidebar it only speaks while the rail is folded to icons: open, the label is already on screen.
   const tip = document.createElement('div'); tip.className = 'cx-tip'; tip.setAttribute('role', 'tooltip'); tip.hidden = true; lib.appendChild(tip);
-  const tipOn = (e) => { const w = e.target.closest?.('[data-name]'); if (!w || !w.dataset.name) return; /* an empty name (no data yet) says nothing */ tip.textContent = w.dataset.name; tip.hidden = false; const r = w.getBoundingClientRect(); if (w.dataset.side === 'right' || w.closest('[data-slot="sidebar"]')) { tip.style.left = (r.right + 8) + 'px'; tip.style.top = (r.top + r.height / 2 - tip.offsetHeight / 2) + 'px'; } else { place(tip, w, 'center', 6); tip.style.top = (r.top - tip.offsetHeight - 6) + 'px'; } requestAnimationFrame(() => tip.dataset.state = 'open'); };
-  const tipOff = (e) => { if (e.target.closest?.('[data-name]')) { tip.dataset.state = 'closed'; tip.hidden = true; } };
+  let tipFor = null;
+  const tipHide = () => { tipFor = null; tip.dataset.state = 'closed'; tip.hidden = true; };
+  const tipOn = (e) => {
+    const w = e.target.closest?.('[data-name]');
+    if (!w || !w.dataset.name || w === tipFor) return;   /* an empty name (no data yet) says nothing */
+    const rail = w.closest('[data-slot="sidebar"]');
+    if (rail && rail.dataset.collapsed !== 'true' && w.dataset.slot !== 'tooltip-trigger') return;
+    tipFor = w; tip.textContent = w.dataset.name; tip.hidden = false; tip.dataset.state = 'closed';
+    const r = w.getBoundingClientRect();
+    if (w.dataset.side === 'right' || rail) {
+      tip.dataset.side = 'right'; tip.style.left = (r.right + 8) + 'px'; tip.style.top = (r.top + r.height / 2 - tip.offsetHeight / 2) + 'px';
+    } else {
+      place(tip, w, 'center', 8);
+      const above = r.top - tip.offsetHeight - 8 > 8;
+      tip.dataset.side = above ? 'top' : 'bottom';
+      tip.style.top = (above ? r.top - tip.offsetHeight - 8 : r.bottom + 8) + 'px';
+      tip.style.setProperty('--ax', (r.left + r.width / 2 - parseFloat(tip.style.left)) + 'px');
+    }
+    requestAnimationFrame(() => { if (tipFor === w) tip.dataset.state = 'open'; });
+  };
+  const tipOff = (e) => {
+    const w = e.target.closest?.('[data-name]');
+    if (!w || w !== tipFor || (e.relatedTarget && w.contains(e.relatedTarget))) return;
+    tipHide();
+  };
   ['pointerover', 'focusin'].forEach((t) => document.addEventListener(t, tipOn)); ['pointerout', 'focusout'].forEach((t) => document.addEventListener(t, tipOff));
+  document.addEventListener('pointerdown', () => { if (tipFor) tipHide(); }, true);
 
 // ── island: one floating notice for the whole app; never stacks, morphs its width to the next text ──
 const isl = document.createElement('div'); isl.className = 'cx-island cx-island-app'; isl.setAttribute('aria-live', 'polite'); isl.dataset.state = 'hidden';
@@ -1324,7 +1378,7 @@ let wheelsNow = [];
       if (periods) { const tl = $('.cx-tabs', root); initTabs(tl); tl.addEventListener('pick', (e) => { const d = periods[e.detail][1]; paint(d); const t2 = $$('.cx-tab', root); t2.forEach((x, i) => x.setAttribute('aria-selected', i === e.detail)); }); }
       $$('.cx-chart-bar', root).forEach((b, i) => b.animate([{ transform: 'scaleY(0)' }, { transform: 'scaleY(1)' }], { duration: 420, delay: i * 18, easing: 'cubic-bezier(.22,1,.36,1)', fill: 'backwards' }));
     };
-    root.addEventListener('pointerover', (e) => { const b = e.target.closest('.cx-chart-bar'); if (b) { tip.textContent = b.dataset.tipV; tip.hidden = false; const r = b.getBoundingClientRect(); tip.style.left = (r.left + r.width / 2 - tip.offsetWidth / 2) + 'px'; tip.style.top = (r.top + (1 - parseFloat(getComputedStyle(b).getPropertyValue('--v')) / 100) * r.height - tip.offsetHeight - 6) + 'px'; requestAnimationFrame(() => tip.dataset.state = 'open'); } });
+    root.addEventListener('pointerover', (e) => { const b = e.target.closest('.cx-chart-bar'); if (b) { tip.textContent = b.dataset.tipV; tip.hidden = false; tip.dataset.side = 'top'; tip.style.removeProperty('--ax'); const r = b.getBoundingClientRect(); tip.style.left = (r.left + r.width / 2 - tip.offsetWidth / 2) + 'px'; tip.style.top = (r.top + (1 - parseFloat(getComputedStyle(b).getPropertyValue('--v')) / 100) * r.height - tip.offsetHeight - 6) + 'px'; requestAnimationFrame(() => tip.dataset.state = 'open'); } });
     root.addEventListener('pointerout', (e) => { if (e.target.closest('.cx-chart-bar')) { tip.dataset.state = 'closed'; tip.hidden = true; } });
     root.addEventListener('focusin', (e) => e.target.closest('.cx-chart-bar')?.dispatchEvent(new PointerEvent('pointerover', { bubbles: true })));
     paint(data);

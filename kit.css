@@ -432,8 +432,19 @@ html.cx-locked { overflow: hidden; }
 .cx-who b { display: block; font-weight: 500; }
 .cx-who small { color: var(--muted-foreground); font-size: 13px; }
 .cx-online { background: var(--success) !important; box-shadow: 0 0 0 2px var(--background); }
-.cx-tip { position: fixed; z-index: var(--z-toast); padding: 6px 10px; border-radius: calc(var(--radius) * .8); background: var(--foreground); color: var(--background); font-size: 12px; font-weight: 500; white-space: nowrap; pointer-events: none; opacity: 0; transform: translateY(2px); transition: opacity 150ms ease, transform 150ms ease; }
+.cx-tip { position: fixed; z-index: var(--z-toast); padding: 6px 12px; border-radius: calc(var(--radius) - 2px); background: var(--foreground); color: var(--background); font-size: 12px; font-weight: 500; line-height: 1.35; white-space: nowrap; pointer-events: none; opacity: 0; transform: translateY(3px) scale(.96); transform-origin: var(--ax, 50%) 100%; transition: opacity 120ms ease-out, transform 160ms cubic-bezier(.23, 1, .32, 1); }
+/* its arrow, toward the trigger (shadcn's TooltipArrow: the pill's own colour, a softly rounded square half out) */
+.cx-tip::after { content: ""; position: absolute; left: calc(var(--ax, 50%) - 5px); bottom: -4px; width: 10px; height: 10px; border-radius: 2px; background: inherit; transform: rotate(45deg); }
+.cx-tip[data-side="bottom"] { transform: translateY(-3px) scale(.96); transform-origin: var(--ax, 50%) 0; }
+.cx-tip[data-side="bottom"]::after { bottom: auto; top: -4px; }
+.cx-tip[data-side="right"] { transform: translateX(-3px) scale(.96); transform-origin: 0 50%; }
+.cx-tip[data-side="right"]::after { left: -4px; top: calc(50% - 5px); bottom: auto; }
 .cx-tip[data-state="open"] { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) { .cx-tip { transition: opacity 120ms ease-out; transform: none; } }
+.cx-tip[data-side="right"] { transform: translateX(-4px); }
+.cx-tip[data-side="right"][data-state="open"] { transform: none; }
+/* after the first one, the names follow the pointer at once: no fade, no slide */
+.cx-tip[data-instant] { transition-duration: 0ms; }
 
 /* ── Fields ── */
 .cx-form { display: flex; flex-direction: column; gap: 18px; width: 100%; max-width: 380px; }
@@ -4941,6 +4952,15 @@ a.cx-bc-item:hover { color: var(--foreground); }
 .cx-sb-label { white-space: nowrap; overflow: hidden; }
 .cx-sidebar[data-collapsed="true"] .cx-sb-label, .cx-sidebar[data-collapsed="true"] .cx-sb-glabel { display: block; opacity: 0; pointer-events: none; }
 .cx-sidebar[data-collapsed="true"] .cx-sb-count:not(:empty) { display: inline-grid; opacity: 0; }
+/* FOLDED, A SECTION'S TITLE BECOMES A SHORT LINE between its icons and the ones above: its words fade where they are and
+   its height closes with the fold (200 ms), so the icon column has no holes where the titles were. A group with no
+   title (the first) takes no room at all. */
+.cx-sidebar .cx-sb-glabel { position: relative; transition: opacity .16s ease, height .2s cubic-bezier(.22, 1, .36, 1), padding .2s cubic-bezier(.22, 1, .36, 1); }
+.cx-sidebar[data-collapsed="true"] .cx-sb-glabel { height: 17px; padding-top: 0; padding-bottom: 0; overflow: hidden; color: transparent; opacity: 1; }
+.cx-sidebar[data-collapsed="true"] .cx-sb-glabel::after { content: ""; position: absolute; left: 50%; top: 8px; width: 20px; height: 1px; margin-left: -10px; background: var(--border); }
+.cx-sidebar[data-collapsed="true"] .cx-sb-glabel:empty { display: none; }
+.cx-sidebar .cx-sb-group { transition: padding .2s cubic-bezier(.22, 1, .36, 1); }
+.cx-sidebar[data-collapsed="true"] .cx-sb-group { padding-top: 2px; padding-bottom: 2px; }
 /* A SECTION THAT LOADS: while its page is on its way (the router marks the link with data-loading), the row's icon
    turns into a small ring that spins, and turns back when the page is there. */
 @keyframes cx-sb-spin { to { transform: rotate(360deg); } }
@@ -4948,7 +4968,7 @@ a.cx-bc-item:hover { color: var(--foreground); }
 .cx-sb-item[data-loading] > .mu-icon { opacity: 0; transform: scale(.4) rotate(-90deg); }
 .cx-sb-item[data-loading]::before { content: ""; position: absolute; left: var(--sb-pad, 8px); top: 50%; width: 16px; height: 16px; margin-top: -8px; box-sizing: border-box; border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%; animation: cx-sb-spin .7s linear infinite; }
 @media (prefers-reduced-motion: reduce) {
-  .cx-sidebar .cx-sb-item, .cx-sb-label, .cx-sb-glabel, .cx-sb-count, .cx-sb-item > .mu-icon { transition: none; }
+  .cx-sidebar .cx-sb-item, .cx-sb-label, .cx-sb-glabel, .cx-sidebar .cx-sb-glabel, .cx-sb-count, .cx-sb-item > .mu-icon, .cx-tip { transition: none; }
   .cx-sb-item[data-loading]::before { animation-duration: 1.6s; }
 }
 /* THE MONOGRAM: a soft tile in the name's own hue, the letters in a deep shade of the same hue, a hairline ring of it.
@@ -4992,6 +5012,7 @@ a.cx-bc-item:hover { color: var(--foreground); }
 .cx-cardform > .cx-msg svg { width: 14px; height: 14px; flex: none; }
 .cx-cardform > .cn-button { margin-top: 4px; }
 .cx-dp { width: 100%; max-width: 440px; }   /* a plan of the day has a width of its own: in a centred row it shrank to its narrowest word */
+.cx-mk-widget .cx-dp, .cx-bento-cell .cx-dp { max-width: none; }   /* …but inside a card it takes the card's width, so it never drops to its two-line narrow layout in a wide cell */
 /* An alert's action (Responder, Reintentar…) has its own column: the words wrap beside it, never under it */
 .cx-alert:has(> .cn-alert-action) { padding-right: 10px; grid-template-columns: 1fr auto; }
 .cx-alert:has(> svg):has(> .cn-alert-action) { grid-template-columns: 16px 1fr auto; }
@@ -5223,34 +5244,6 @@ a.cx-bc-item:hover { color: var(--foreground); }
 /* VirtualWindow: the marker that stands in for the rows above (its height is set by virtual-window.js) */
 .cx-vw { display: none; flex: none; pointer-events: none; margin: 0; padding: 0; }
 
-/* ── ASSISTANT (registry/assistant-orb.muten, assistant-play.muten) ──────────────────────────────────────────────────
-   The orb: a sphere of light with eyes. Its box is --orb; the sphere is the middle 69% of it, the halo the rest. The JS
-   moves it with --orb-x/--orb-y (lean and float) and --orb-sx/--orb-sy (breath and squash). */
-.cx-orb { position: relative; display: block; flex: none; width: var(--orb, 240px); height: var(--orb, 240px); transform: translate(var(--orb-x, 0), var(--orb-y, 0)) scale(var(--orb-sx, 1), var(--orb-sy, 1)); will-change: transform; }
-.cx-orb-base { position: absolute; inset: 15.6%; border-radius: 50%; background: radial-gradient(circle at 34% 28%, #C9B8FF 0%, #8E6BFF 30%, #6B46F2 62%, #4A27D0 100%); box-shadow: 0 0 calc(var(--orb, 240px) * .19) calc(var(--orb, 240px) * .03) rgb(107 70 242 / .45), inset 0 0 0 2px rgb(255 255 255 / .25); }
-.cx-orb[data-gl="on"] .cx-orb-base { opacity: 0; transition: opacity .4s ease; }
-.cx-orb-canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
-.cx-orb-eyes { position: absolute; left: 31.25%; top: 35%; width: 37.5%; height: 25%; overflow: visible; }
-.cx-orb-eyes path { fill: #fff; }
-.cx-orb-cheeks ellipse { fill: #FF9AD5; }
-/* The play: it takes the rest of its panel (a flex column with padding); the card in the flow at the top, the orb past
-   the panel's bottom-right corner (the panel clips it), the bubble beside the orb. */
-.cx-ap { position: relative; flex: 1 1 auto; min-height: 340px; display: flex; flex-direction: column; }
-.cx-ap .cx-ap-card { width: min(430px, 100%); color: var(--foreground); box-shadow: 0 30px 60px -30px rgb(0 0 0 / .7); pointer-events: auto; }
-.cx-ap-count { position: relative; display: block; width: 150px; height: 18px; text-align: right; font-size: 13px; color: var(--muted-foreground); }
-.cx-ap-count > span { position: absolute; right: 0; top: 0; white-space: nowrap; }
-.cx-ap-count-a { opacity: var(--k, 1); }
-.cx-ap-count-b { opacity: var(--k, 0); color: var(--success); transform: translateY(calc((1 - var(--k, 0)) * 6px)); }
-.cx-ap-card .cn-item-group { flex-direction: column; }
-.cx-ap-new { display: block; overflow: hidden; opacity: var(--k, 0); max-height: calc(var(--k, 0) * 64px); transform: translateY(calc((1 - var(--k, 0)) * -10px)); }
-.cx-ap-flash { border-radius: 10px; background: rgb(18 185 129 / calc(var(--f, 0) * .12)); }
-.cx-ap-typing, .cx-ap-said { position: absolute; right: 194px; bottom: 112px; transform-origin: 100% 100%; border-radius: 22px 22px 6px 22px; background: #fff; }
-.cx-ap-typing { height: 44px; padding: 0 16px; display: flex; flex-direction: row; align-items: center; gap: 5px; opacity: var(--k, 0); transform: translateY(calc((1 - var(--k, 0)) * 8px)) scale(calc(.92 + var(--k, 0) * .08)); }
-.cx-ap-dot { width: 7px; height: 7px; border-radius: 4px; background: #6B46F2; opacity: calc(.45 + var(--b, 0) * .55); transform: translateY(calc(var(--b, 0) * -3px)); }
-.cx-ap-said { max-width: 280px; padding: 14px 18px; color: #0B0B0D; font-size: 15px; line-height: 1.4; font-weight: 600; box-shadow: 0 20px 40px -20px rgb(0 0 0 / .6); opacity: var(--k, 0); transform: translateY(calc((1 - var(--k, 0)) * 10px)) scale(calc(.94 + var(--k, 0) * .06)); }
-.cx-ap .cx-ap-orb { position: absolute; right: -80px; bottom: -96px; }
-.cx-ap-run { display: none; }
-@media (max-width: 760px) { .cx-ap .cx-ap-orb { --orb: 220px !important; right: -60px; bottom: -70px; } .cx-ap-typing, .cx-ap-said { right: 110px; bottom: 90px; } }
 /* A Field whose label lives elsewhere (a FieldHead above the control, with its action beside it): no empty label row. */
 .cn-field > .cn-label:empty { display: none; }
 
@@ -5301,29 +5294,6 @@ a.cx-bc-item:hover { color: var(--foreground); }
    light surfaces). Other skins keep Nova's look. */
 [data-skin="storio"] .cn-toggle:is([aria-pressed="true"], [data-state="on"]) { background: var(--selected-soft); color: var(--selected); border-color: color-mix(in srgb, var(--selected) 45%, transparent); }
 
-/* ══ MASCOT: the brand's mascot (an AssistantOrb that acts). The box is --m square; the sphere fills 2/3 of it (its
-   radius is 33% of the box), so the body squashes from its bottom (83%) and the shadow sits just under it. */
-.cx-mascot { position: relative; width: var(--m, 240px); height: var(--m, 240px); flex: none; }
-.cx-mascot-rig, .cx-mascot-squash { position: absolute; inset: 0; will-change: transform; }
-.cx-mascot-rig { transform-origin: 50% 50%; }
-.cx-mascot-squash { transform-origin: 50% 83%; }
-.cx-mascot .cx-orb { transform: none !important; }
-.cx-orb[data-face="surface"] .cx-orb-eyes { display: none; }
-.cx-mascot-floor { position: absolute; left: 22%; right: 22%; top: 85%; height: 8%; border-radius: 50%; background: radial-gradient(closest-side, rgb(16 8 40 / .5), transparent); pointer-events: none; }
-.cx-mascot-fx { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
-.cx-mascot-run { display: none; }
-/* how it speaks: a «paper» bubble (white, its name on top in violet, a drawn tail) placed by mascot.js up and to the
-   left of the sphere, the tail's tip on its rim; it lives beside the box (not scaled with it) and pops in from the tail */
-.cx-mascot-say { position: absolute; left: 0; top: 0; z-index: 3; display: none; box-sizing: border-box; width: max-content; max-width: min(270px, calc(100vw - 48px)); padding: 11px 15px 12px; border-radius: 20px; background: #fff; color: #18122b; box-shadow: 0 1px 0 rgb(255 255 255 / .6) inset, 0 18px 40px -20px rgb(10 4 40 / .7); pointer-events: none; }
-.cx-mascot-say.on { display: block; }
-.cx-mascot-who { display: block; font-size: 11.5px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; margin-bottom: 3px; color: var(--selected, var(--primary, #6B46F2)); }
-.cx-mascot-who:empty { display: none; }
-.cx-mascot-line { display: block; font-size: 15px; line-height: 1.42; font-weight: 500; overflow-wrap: anywhere; }
-.cx-mascot-tail { position: absolute; left: var(--tail, 50%); bottom: -15px; width: 24px; height: 16px; overflow: visible; }
-.cx-mascot-tail path { fill: #fff; }
-.cx-mascot-say[data-side="right"] .cx-mascot-tail { transform: scaleX(-1); }
-.cx-mascot-tail-side { position: absolute; display: none; top: var(--tail, 40%); right: -15px; width: 16px; height: 24px; overflow: visible; }
-.cx-mascot-tail-side path { fill: #fff; }
-.cx-mascot-say[data-at="low"] .cx-mascot-tail { display: none; }
-.cx-mascot-say[data-at="low"] .cx-mascot-tail-side { display: block; }
-.cx-mascot-say[data-at="low"][data-side="right"] .cx-mascot-tail-side { right: auto; left: -15px; transform: scaleX(-1); }
+/* ChatPlay(face: "host"): an empty face slot the page fills with its own face (a brand mascot, say). The kit sends
+   cx-cp:think / cx-cp:answer / cx-cp:rest on it on the play's clock, so that face can act along with the chat. */
+.cx-cp-face.cx-cp-face-host { position: relative; background: none; overflow: visible; }

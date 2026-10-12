@@ -41,22 +41,6 @@
       "description": "AppShell(brand, user, nav, pages, rows, commands, narrow, onNavigate, onOpen, onAction): Sidebar, page header, detail Sheet, ⌘K Command."
     },
     {
-      "name": "assistant-orb",
-      "deps": [],
-      "part": "AssistantOrb",
-      "file": "registry/assistant-orb.muten",
-      "component": "AssistantOrb",
-      "description": "AssistantOrb - the assistant, as a living sphere of light with eyes: light flows inside it (a WebGL shader), it"
-    },
-    {
-      "name": "assistant-play",
-      "deps": [],
-      "part": "AssistantPlay",
-      "file": "registry/assistant-play.muten",
-      "component": "AssistantPlay",
-      "description": "AssistantPlay - the assistant at work, shown (not used): a card with the day, the assistant typing, saying what it did"
-    },
-    {
       "name": "attachment",
       "deps": [],
       "part": "Attachment",
@@ -572,12 +556,12 @@
       "description": "Marketing - the pieces a site's pages are built from (the cx-mk-* system in kit.css): a section with its title, the"
     },
     {
-      "name": "mascot",
+      "name": "media-query",
       "deps": [],
-      "part": "Mascot",
-      "file": "registry/mascot.muten",
-      "component": "Mascot",
-      "description": "Mascot - the brand's mascot (in Storio, Storio): an AssistantOrb that acts. Its gestures are hand-set keyframes that"
+      "part": "MediaQuery",
+      "file": "registry/media-query.muten",
+      "component": "MediaQuery",
+      "description": "MediaQuery(query, onChange): says \"yes\"/\"no\" for a CSS media query at mount and on every change, so a page draws one version (phone or desktop) instead of both."
     },
     {
       "name": "member-list",
@@ -1197,14 +1181,6 @@
       "file": "registry/virtual-list.muten",
       "component": "VirtualList",
       "description": "VirtualList(rows, total, rowHeight, label, jump): only visible rows in the DOM."
-    },
-    {
-      "name": "media-query",
-      "deps": [],
-      "part": "MediaQuery",
-      "file": "registry/media-query.muten",
-      "component": "MediaQuery",
-      "description": "MediaQuery(query, onChange): says \"yes\"/\"no\" for a CSS media query at mount and on every change, so a page draws one version (phone or desktop) instead of both."
     },
     {
       "name": "virtual-window",

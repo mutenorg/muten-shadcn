@@ -1,13 +1,13 @@
 # Item - a row: media, content (title + description), actions, an optional footer. Lists are Items in an ItemGroup
 # with ItemSeparator between them.
 #   ItemGroup {
-#     Item { ItemMedia { Avatar(name: "Ana") }  ItemContent { ItemTitle(label: "Ana")  ItemDescription(label: "Corte · 9:00") }  ItemActions { Txt(value: "$25.000", variant: "strong") } }
+#     Item { ItemMedia { Avatar(name: "Ana") }  ItemContent { ItemTitle(label: "Ana")  ItemDescription(label: "Haircut · 9:00") }  ItemActions { Txt(value: "$25.000", variant: "strong") } }
 #     ItemSeparator()
 #   }
 # Item variant: default | outline | muted · size: default | sm | xs   ·   ItemMedia variant: default | icon | image
 # shadcn-for-muten · part · no deps · Nova (.cn-item).
 part Item(variant: text = "default", size: text = "default") { Stack class("cn-item cn-item-variant-{$variant} cn-item-size-{$size} group/item") data(slot: "item", size: $size) { slot } }
-part ItemGroup() { Stack class("cn-item-group group/item-group") data(slot: "item-group") aria(role: "list") { slot } }
+part ItemGroup() { Stack class("cn-item-group group/item-group") data(slot: "item-group") aria(role: "list") { slot  ListMotion() } }
 part ItemSeparator() { Stack class("cn-separator cn-separator-horizontal cn-item-separator") data(slot: "item-separator", orientation: "horizontal") aria(role: "separator") }
 part ItemMedia(variant: text = "default") { Stack class("cn-item-media cn-item-media-variant-{$variant}") data(slot: "item-media", variant: $variant) { slot } }
 part ItemContent() { Stack class("cn-item-content") data(slot: "item-content") { slot } }

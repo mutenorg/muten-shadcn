@@ -1,6 +1,6 @@
 # Sheet - a panel that slides from a side and keeps the page behind it in view: a detail, filters, a cart. Full
 # height from the right (default) or left, full width from the top or bottom. The page owns open.
-#   Sheet(open: showing, onClose: done, title: "Pedido #1042", side: "right") { … ModalFooter { … } }
+#   Sheet(open: showing, onClose: done, title: "Order #1042", side: "right") { … ModalFooter { … } }
 # shadcn-for-muten · part over Modal (mode sheet).
 part Sheet(open: bool, onClose: action, title: text, description: text = "", side: text = "right") {
   Modal(open: $open, onClose: $onClose, title: $title, description: $description, mode: "sheet", side: $side) { slot }

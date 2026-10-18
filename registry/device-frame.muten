@@ -3,11 +3,11 @@
 # dots and, when given, the address). Put an Image, or any content, in the slot; an Image fills the screen from the top.
 # height crops it (the whole device fades out at the bottom), so a tall screenshot can sit beside a short text. Every
 # measure of the phone follows its width, so it keeps the same proportions at any size. ChatPlay wears this same phone.
-#   DeviceFrame { Image "~/shots/store.png" alt("Tu tienda en un teléfono") }
+#   DeviceFrame { Image "~/shots/store.png" alt("Your shop on a phone") }
 #   DeviceFrame(island: "on", width: "300px") { Image "~/shots/app.png" alt("La app") }
 #   DeviceFrame(kind: "browser", url: "storio.ink/elroble", height: "420px") { Image "~/shots/panel.png" alt("Tu panel") }
-#   DeviceFrame(href: "/aurora", label: "Estudio Aurora, una tienda de muestra", shot: "/stores/aurora.webp")
-# width: empty (a phone is 280 px, a browser fills its column) or a width like «320px» or «100%». island: "on" draws the
+#   DeviceFrame(href: "/aurora", label: "Estudio Aurora, a sample shop", shot: "/stores/aurora.webp")
+# width: empty (a phone is 280 px, a browser fills its column) or a width like “320px” or “100%”. island: "on" draws the
 # island (leave it off over a page that has its own top bar). kind: phone | browser.
 # href: the whole device is a link there (it lifts on hover); label says where, for a screen reader.
 # shot: a picture of the screen (390 × 844 at twice the pixels) laid as its background. Unlike an Image it is not

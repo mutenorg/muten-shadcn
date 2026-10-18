@@ -1,5 +1,5 @@
 // CommandBehavior (muten Custom) - the Command's list: as you type it keeps the items whose label (or keywords)
-// holds what you wrote, accent-insensitive; a group with nothing left hides, and «empty» shows when nothing matches.
+// holds what you wrote, accent-insensitive; a group with nothing left hides, and “empty” shows when nothing matches.
 // The arrows move the highlight, Enter picks it, the pointer highlights what it rests on.
 export function mount(el) {
   const root = el.parentElement;

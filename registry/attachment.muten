@@ -1,4 +1,4 @@
-# Attachment - a file in a message or a form: its kind as an icon, the name (cut with «…» when long) and the size;
+# Attachment - a file in a message or a form: its kind as an icon, the name (cut with “…” when long) and the size;
 # tapping it opens the file. kind: file | pdf | image | audio | sheet.
 #   Attachment(name: "comprobante-1042.pdf", size: "182 KB", kind: "pdf", to: "/…")
 # shadcn-for-muten · part · no deps · kit.css (.cx-attach).

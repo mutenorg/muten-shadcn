@@ -1,7 +1,7 @@
-# Toggle - a button that stays pressed (bold, favourite, «solo hoy»). The page owns the bool and the action.
+# Toggle - a button that stays pressed (bold, favourite, “today only”). The page owns the bool and the action.
 #   state { bold = false : bool }   action toggleBold() mutates bold { bold.toggle() }
-#   Toggle(on: bold, onToggle: toggleBold, label: "Negrita") { Icon "lucide:bold" }
-#   Toggle(on: today, onToggle: toggleToday, variant: "outline") { Icon "lucide:calendar"  Span "Solo hoy" }
+#   Toggle(on: bold, onToggle: toggleBold, label: "Bold") { Icon "lucide:bold" }
+#   Toggle(on: today, onToggle: toggleToday, variant: "outline") { Icon "lucide:calendar"  Span "Today only" }
 # variant: default | outline · size: sm | default | lg · label: the name of an icon-only toggle.
 # shadcn-for-muten · part · no deps · Nova (.cn-toggle, pressed = aria-pressed).
 part Toggle(on: bool, onToggle: action, variant: text = "default", size: text = "default", label: text = "") {

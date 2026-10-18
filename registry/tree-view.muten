@@ -4,6 +4,6 @@
 #   flat: a list of rows grouped by a key - groupKey makes the folders, labelKey the text, valueKey what a file emits.
 #     TreeView(data: @tiles, labelKey: "name", valueKey: "url", groupKey: "folder", selected: tileUrl, onSelect: pick)
 # selected highlights that file and opens the folders above it. shadcn-for-muten · Custom · kit.css (.cx-tree) · tree-view.js.
-part TreeView(data: list, labelKey: text = "", valueKey: text = "", groupKey: text = "", selected: text = "", label: text = "Archivos", onSelect: action) {
+part TreeView(data: list, labelKey: text = "", valueKey: text = "", groupKey: text = "", selected: text = "", label: text = "Files", onSelect: action) {
   Custom TreeView inputs(data: $data, labelKey: $labelKey, valueKey: $valueKey, groupKey: $groupKey, selected: $selected, label: $label) on(select: $onSelect) class("cx-tree-host")
 }

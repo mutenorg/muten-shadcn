@@ -1,6 +1,6 @@
-# LogoCloud - the «they use it» strip: a wrapping row of logos, muted until the pointer rests on one. A
+# LogoCloud - the “they use it” strip: a wrapping row of logos, muted until the pointer rests on one. A
 # LogoCloudItem holds any logo: an Image, an Icon or a word in a Span; all take the same height.
-#   LogoCloud(label: "Lo usan") { LogoCloudItem { Image "~/logos/roble.svg" alt("El Roble") }  LogoCloudItem { Span "Pelos & Co" } }
+#   LogoCloud(label: "Used by") { LogoCloudItem { Image "~/logos/roble.svg" alt("El Roble") }  LogoCloudItem { Span "Pelos & Co" } }
 # shadcn-for-muten · parts · no deps · kit.css (.cx-logos).
 part LogoCloud(label: text = "") { Stack class("cx-logos") aria(label: $label) { slot } }
 part LogoCloudItem() { Stack class("cx-logo") { slot } }

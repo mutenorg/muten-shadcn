@@ -807,6 +807,7 @@
   /* hover-lift - a card floats up + deepens its shadow on hover (the classic interactive-card feel) */
   .hover-lift { transition: translate 300ms var(--mu-ease), box-shadow 300ms var(--mu-ease); }
   .hover-lift:hover { @apply -translate-y-1 shadow-xl; }
+  .hover-lift:hover::after { content: ""; position: absolute; left: 0; right: 0; top: calc(100% - 2px); height: 10px; }   /* fills the gap it lifts from: no blinking hover on its bottom edge */
 
   /* ── Micro-interactions (drop the class on any node) ── */
   /* link-underline - an underline that grows from the left on hover; perfect for nav links */

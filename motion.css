@@ -70,6 +70,9 @@
 /* Hover affordances. */
 .hover-lift { transition: transform var(--mu-motion, 200ms) var(--mu-ease, cubic-bezier(0.16,1,0.3,1)), box-shadow var(--mu-motion, 200ms) ease; }
 .hover-lift:hover { transform: translateY(-4px); box-shadow: var(--shadow-soft, 0 12px 32px -12px rgb(0 0 0 / 0.25)); }
+/* lifted, an invisible strip fills the 4 px it left below, so a pointer resting on the bottom edge stays «on» it:
+   without it the card rose off the pointer, dropped back under it and rose again, a hover that blinked forever */
+.hover-lift:hover::after { content: ""; position: absolute; left: 0; right: 0; top: calc(100% - 2px); height: 10px; }
 .hover-zoom img { transition: transform 0.5s var(--mu-ease, cubic-bezier(0.16,1,0.3,1)); }
 .hover-zoom:hover img { transform: scale(1.05); }
 

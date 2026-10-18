@@ -1,8 +1,8 @@
 # Collapsible - one block that opens and closes: a trigger line and the content under it, folding to its exact
 # height (200 ms) while the chevron turns. The page owns the bool. For several stacked questions use Accordion.
 #   state { more = false : bool }   action toggleMore() mutates more { more.toggle() }
-#   Collapsible(label: "Más opciones", open: more, onToggle: toggleMore) { … }
-#   Collapsible(label: "3 pedidos entregados", hint: "Ver", open: done, onToggle: toggleDone) { … }
+#   Collapsible(label: "More options", open: more, onToggle: toggleMore) { … }
+#   Collapsible(label: "3 orders delivered", hint: "View", open: done, onToggle: toggleDone) { … }
 # shadcn-for-muten · part · no deps · kit.css (.cx-coll, the same fold as Accordion).
 part Collapsible(label: text, open: bool, onToggle: action, hint: text = "") {
   Stack class("cx-coll") data(slot: "collapsible", open: $open) {

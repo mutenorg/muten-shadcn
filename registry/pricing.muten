@@ -1,15 +1,15 @@
 # Pricing - the plans of a landing page side by side: name, the line under it, the price and its period, what it
 # includes (PricingFeature) and its button. featured "on" raises the recommended one, with its badge.
 #   Pricing {
-#     PricingTier(name: "Gratis", price: "$0", period: "/mes", description: "Para empezar") { PricingFeature(label: "Tu tienda")  LinkBtn(to: "/signup", variant: "outline") { Span "Empezar" } }
-#     PricingTier(name: "Pro", price: "$12", period: "/mes", description: "Para crecer", featured: "on") { … }
+#     PricingTier(name: "Free", price: "$0", period: "/mes", description: "To start") { PricingFeature(label: "Your shop")  LinkBtn(to: "/signup", variant: "outline") { Span "Start" } }
+#     PricingTier(name: "Pro", price: "$12", period: "/mes", description: "To grow", featured: "on") { … }
 #   }
 # was: the old price, struck (a yearly discount) · note: how it is billed · lead: the line over the features.
 # For the plans inside the app (monthly/yearly, current plan) use Plans. shadcn-for-muten · parts · no deps · kit.css (.cx-pricing).
 part Pricing() { Stack class("cx-pricing") { slot } }
-part PricingTier(name: text, price: text, period: text = "", description: text = "", featured: text = "", badge: text = "Recomendado", was: text = "", note: text = "", lead: text = "") {
+part PricingTier(name: text, price: text, period: text = "", description: text = "", featured: text = "", badge: text = "Recommended", was: text = "", note: text = "", lead: text = "") {
   Stack class("cx-tier") data(featured: $featured) {
-    when $featured != "" { Span "{$badge}" class("cx-tier-badge") }
+    when $featured != "" { Span "{$badge}" class("cx-tier-badge") data(tr: $badge) }
     Stack class("cx-tier-head") { Span "{$name}" class("cx-tier-name")  Text "{$description}" class("cx-tier-desc") }
     Stack class("cx-tier-price") {
       Span "{$price}" class("cx-tier-amount")  Span "{$period}" class("cx-tier-period")

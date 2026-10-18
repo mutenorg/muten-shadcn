@@ -1,10 +1,10 @@
-# Progress - a determinate bar, value 0-100; it eases between values.  Progress(value: done, label: "Pasos hechos")
+# Progress - a determinate bar, value 0-100; it eases between values.  Progress(value: done, label: "Steps done")
 # tone: the bar's colour from the series palette: brand (the skin's accent) | coral | teal | amber | blue | pink. Empty: the
 # primary colour. A row of channels or a ranking is a Progress per row, each in its tone.
 #   Progress(value: 46, tone: "coral", label: "Instagram")
 # shadcn-for-muten · part · no deps · Nova (.cn-progress) + kit.css (the value rides --w).
-part Progress(value: number, label: text = "Progreso", tone: text = "") {
-  Stack class("cn-progress") data(slot: "progress", tone: $tone) aria(role: "progressbar", label: $label, valuemin: 0, valuemax: 100, valuenow: $value) {
+part Progress(value: number, label: text = "Progress", tone: text = "") {
+  Stack class("cn-progress") data(slot: "progress", tone: $tone, trl: $label) aria(role: "progressbar", label: $label, valuemin: 0, valuemax: 100, valuenow: $value) {
     Stack class("cn-progress-indicator") data(slot: "progress-indicator") style(w: "{$value}%")
   }
 }

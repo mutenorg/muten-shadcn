@@ -1,5 +1,5 @@
 // NumberField (muten Custom) - a number with − and + inside one Nova InputGroup. inputs: value, min, max, step,
-// prefix (a short label inside, like «X»), unit (after the number, like «min»), label (accessible name).
+// prefix (a short label inside, like “X”), unit (after the number, like “min”), label (accessible name).
 // handlers: input(value). Clamps to [min, max]; buttons, arrow keys and the wheel (while focused) step; holding a
 // button repeats. The buttons switch off at the ends.
 const ICON = { minus: '<path d="M5 12h14"/>', plus: '<path d="M5 12h14"/><path d="M12 5v14"/>' };
@@ -8,13 +8,15 @@ export function mount(el, inputs, on) {
   const num = (v, d) => { const n = Number(v); return Number.isFinite(n) ? n : d; };
   let min = num(inputs.min, -Infinity), max = num(inputs.max, Infinity), step = num(inputs.step, 1) || 1;
   const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
-  const btn = (k, name) => `<button type="button" data-slot="button" class="cn-button cn-button-variant-ghost cn-button-size-icon-xs group/button cx-nf-btn" data-step="${k}" aria-label="${name}">${svg(k)}</button>`;
+  const btn = (k, name) => `<button type="button" data-slot="button" class="cn-button cn-button-variant-ghost cn-button-size-icon-xs group/button cx-nf-btn" data-step="${k}" aria-label="${name}" data-trl="${name}">${svg(k)}</button>`;
   el.innerHTML = `<div data-slot="input-group" role="group" class="cn-input-group group/input-group cx-nf">
     ${inputs.prefix ? `<div data-slot="input-group-addon" class="cn-input-group-addon cn-input-group-addon-align-inline-start cx-nf-prefix">${esc(inputs.prefix)}</div>` : ''}
-    <input data-slot="input-group-control" class="cn-input cn-input-group-input cx-num cx-nf-input" inputmode="decimal" aria-label="${esc(inputs.label || inputs.prefix || 'Número')}" role="spinbutton">
+    <input data-slot="input-group-control" class="cn-input cn-input-group-input cx-num cx-nf-input" inputmode="decimal" aria-label="${esc(inputs.label || inputs.prefix || 'Number')}" data-trl="${esc(inputs.label || inputs.prefix || 'Number')}" role="spinbutton">
     ${inputs.unit ? `<div data-slot="input-group-addon" class="cn-input-group-addon cn-input-group-addon-align-inline-end cx-nf-unit">${esc(inputs.unit)}</div>` : ''}
-    <div data-slot="input-group-addon" class="cn-input-group-addon cn-input-group-addon-align-inline-end cx-nf-steps">${btn('minus', 'Menos')}${btn('plus', 'Más')}</div>
+    <div data-slot="input-group-addon" class="cn-input-group-addon cn-input-group-addon-align-inline-end cx-nf-steps">${btn('minus', 'Less')}${btn('plus', 'More')}</div>
   </div>`;
+  if (inputs.lang) el.setAttribute('lang', inputs.lang);
+  import('@muten/shadcn/registry/kit/i18n.js').then((m) => m.localizeTree(el));
   const input = el.querySelector('input'), dec = el.querySelector('[data-step="minus"]'), inc = el.querySelector('[data-step="plus"]');
   const clamp = (v) => Math.min(max, Math.max(min, v));
   const decimals = (String(step).split('.')[1] || '').length;

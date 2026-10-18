@@ -1,22 +1,22 @@
-// ColorPicker (muten Custom) - Storio's one colour picker (solid; gradients and animations when allowed), as the
+// ColorPicker (muten Custom) - Storio's one color picker (solid; gradients and animations when allowed), as the
 // reference artifact mounts it. The value is paint text (a hex, or e.g. "linear 150 | #1a0f0a 0 | #c2410c 100 ~flow 14").
-// THE APP'S ONE COLOUR PICKER. Every place where somebody picks a colour uses this component (through the
+// THE APP'S ONE COLOUR PICKER. Every place where somebody picks a color uses this component (through the
 // ColorPick / PaintPick parts), so it looks and behaves the same everywhere and a fix lands everywhere.
 //
-// Closed it is a small swatch showing the real colour or gradient (plus a dot when it is animated). Open it
+// Closed it is a small swatch showing the real color or gradient (plus a dot when it is animated). Open it
 // is a popover (a bottom sheet on a phone) with:
-//   · a hue × lightness map where every colour is a draggable point, and a SATURATION slider for the
+//   · a hue × lightness map where every color is a draggable point, and a SATURATION slider for the
 //     selected point only (it is not opacity: the slider says which point it acts on);
 //   · the hex code, an eyedropper where the browser has one, and a trash can to delete a gradient stop;
 //   · OPTIONALLY, gradients: a bar of up to 4 stops (tap the bar to add one, drag a stop along it, drag it
 //     off the bar / press Delete / use the trash can to remove it), linear · radial · conic with an angle
 //     dial, and animations (flow, breathe, spin, hue) with a speed.
 //
-// Gradients are OPT-IN: not every colour in the app can be a gradient. `modes: "solid"` (the default) is a
-// plain colour picker and only ever emits a hex; `modes: "solid gradient"` adds the gradient controls, and
+// Gradients are OPT-IN: not every color in the app can be a gradient. `modes: "solid"` (the default) is a
+// plain color picker and only ever emits a hex; `modes: "solid gradient"` adds the gradient controls, and
 // `anims: "flow breathe spin hue"` lists which animations that place allows (none by default).
 //
-// The value is text, read and written by lib/paint.ts: a plain hex is a solid colour, a gradient is e.g.
+// The value is text, read and written by lib/paint.ts: a plain hex is a solid color, a gradient is e.g.
 // "linear 150 | #1a0f0a 0 | #c2410c 100 ~flow 14". Hosts paint with paintCss() from that same lib.
 //
 // DRAG IS LOCAL, RELEASE COMMITS. While a point or stop is dragged only this popover repaints (and an
@@ -27,7 +27,8 @@
 // The popover lives on <body> with fixed coordinates, so a scrolling or clipping panel never hides it, and
 // it opens from anywhere in the swatch's row (the swatch and the hex label next to it).
 export function mount(el, inputs, handlers) {
-  const en = String((inputs && inputs.lang) || document.documentElement.lang || 'es') === 'en';
+  // the language passed, else the nearest lang (the page's); English unless it is Spanish
+  const en = String((inputs && inputs.lang) || (el.closest && el.closest('[lang]')?.getAttribute('lang')) || document.documentElement.lang || 'en').slice(0, 2) !== 'es';
   const say = (es, english) => (en ? english : es);
   const modes = String((inputs && inputs.modes) || 'solid').split(/\s+/);
   const allowGradient = modes.includes('gradient');
@@ -53,7 +54,7 @@ export function mount(el, inputs, handlers) {
   const well = document.createElement('button');
   well.type = 'button';
   well.className = 'cp-well pk-well';
-  well.setAttribute('aria-label', (inputs && inputs.label) || say('Elegir un color', 'Pick a colour'));
+  well.setAttribute('aria-label', (inputs && inputs.label) || say('Elegir un color', 'Pick a color'));
   el.appendChild(well);
 
   let lib = null;          // lib/paint.ts, loaded on mount (a Custom cannot import at the top)
@@ -119,7 +120,7 @@ export function mount(el, inputs, handlers) {
     pop = document.createElement('div');
     pop.className = 'pk-pop';
     pop.setAttribute('role', 'dialog');
-    pop.setAttribute('aria-label', (inputs && inputs.label) || say('Color', 'Colour'));
+    pop.setAttribute('aria-label', (inputs && inputs.label) || say('Color', 'Color'));
     pop.addEventListener('click', onClick);
     pop.addEventListener('keydown', (event) => { if (event.key === 'Escape') close(); });
     (document.getElementById('lib') || document.body).append(scrim, pop); // inside the skinned area, so it wears the skin's tokens
@@ -144,7 +145,7 @@ export function mount(el, inputs, handlers) {
   // ── the popover ──
   // Lightness 95 (top) to 5 (bottom); pure black or white sit on the edge instead of past it.
   const Y = (light, height) => Math.max(0, Math.min(height, ((95 - light) / 90) * height));
-  // The INTENDED saturation of the selected colour lives on the slider, not in the hex: black at saturation 75
+  // The INTENDED saturation of the selected color lives on the slider, not in the hex: black at saturation 75
   // is still #000000, so reading it back from the hex would drop it to 0 and the map would stay grey.
   const intensity = () => {
     const slider = pop && pop.querySelector('[data-sat]');
@@ -161,15 +162,15 @@ export function mount(el, inputs, handlers) {
       html.push(`<div class="pk-seg" role="tablist"><button type="button" data-mode="solid" class="${gradient ? '' : 'on'}">${say('Sólido', 'Solid')}</button><button type="button" data-mode="gradient" class="${gradient ? 'on' : ''}">${say('Degradado', 'Gradient')}</button></div>`);
     }
     if (gradient) {
-      html.push(`<div class="pk-bar" style="background:${lib.barCss(v)}" aria-label="${say('Colores del degradado', 'Gradient colours')}">${v.stops.map((stop, i) => `<span class="pk-stop ${i === sel ? 'on' : ''}" data-stop="${i}" style="left:${stop.p}%;background:${stop.c}" tabindex="0" role="slider" aria-label="${say('Color', 'Colour')} ${i + 1}" aria-valuenow="${Math.round(stop.p)}"></span>`).join('')}</div>`);
+      html.push(`<div class="pk-bar" style="background:${lib.barCss(v)}" aria-label="${say('Colores del degradado', 'Gradient colors')}">${v.stops.map((stop, i) => `<span class="pk-stop ${i === sel ? 'on' : ''}" data-stop="${i}" style="left:${stop.p}%;background:${stop.c}" tabindex="0" role="slider" aria-label="${say('Color', 'Color')} ${i + 1}" aria-valuenow="${Math.round(stop.p)}"></span>`).join('')}</div>`);
     }
-    html.push(`<div class="pk-map" aria-label="${say('Mapa de tonos', 'Colour map')}"><canvas></canvas><svg>${gradient ? '<polyline class="pk-ln" fill="none" stroke="#fff" stroke-width="1.6" stroke-dasharray="3 4" opacity=".9"/>' : ''}</svg>${points.map((_, i) => `<span class="pk-pt ${i === sel ? 'on' : ''}">${gradient ? i + 1 : ''}</span>`).join('')}</div>`);
+    html.push(`<div class="pk-map" aria-label="${say('Mapa de tonos', 'Color map')}"><canvas></canvas><svg>${gradient ? '<polyline class="pk-ln" fill="none" stroke="#fff" stroke-width="1.6" stroke-dasharray="3 4" opacity=".9"/>' : ''}</svg>${points.map((_, i) => `<span class="pk-pt ${i === sel ? 'on' : ''}">${gradient ? i + 1 : ''}</span>`).join('')}</div>`);
     // Saturation of the SELECTED point, and it says so: in a gradient the label carries that point's number and
-    // colour, so nobody takes it for opacity or for the whole gradient.
+    // color, so nobody takes it for opacity or for the whole gradient.
     const satName = say('Saturación', 'Saturation');
     const satOf = gradient ? `${satName} ${sel + 1}` : satName;
     html.push(`<div class="pk-row"><span class="pk-lbl pk-satlbl">${gradient ? `<i class="pk-satdot" style="background:${current.c}">${sel + 1}</i>` : ''}${satName}</span><input class="pk-range" type="range" min="0" max="100" value="${hsl.s}" data-sat aria-label="${satOf}"></div>`);
-    html.push(`<div class="pk-row"><label class="pk-hex"><i style="background:${current.c}"></i><input value="${current.c}" maxlength="7" spellcheck="false" data-hex data-clear="on" aria-label="${say('Código del color', 'Colour code')}"></label>${'EyeDropper' in window ? `<button type="button" class="pk-ic" data-drop aria-label="${say('Tomar un color de la pantalla', 'Pick a colour from the screen')}">${ICON.drop}</button>` : ''}${gradient ? `<button type="button" class="pk-ic" data-del aria-label="${say('Quitar este color', 'Remove this colour')}" ${v.stops.length <= 2 ? 'disabled' : ''}>${ICON.trash}</button>` : ''}</div>`);
+    html.push(`<div class="pk-row"><label class="pk-hex"><i style="background:${current.c}"></i><input value="${current.c}" maxlength="7" spellcheck="false" data-hex data-clear="on" aria-label="${say('Código del color', 'Color code')}"></label>${'EyeDropper' in window ? `<button type="button" class="pk-ic" data-drop aria-label="${say('Tomar un color de la pantalla', 'Pick a color from the screen')}">${ICON.drop}</button>` : ''}${gradient ? `<button type="button" class="pk-ic" data-del aria-label="${say('Quitar este color', 'Remove this color')}" ${v.stops.length <= 2 ? 'disabled' : ''}>${ICON.trash}</button>` : ''}</div>`);
     if (gradient) {
       html.push(`<div class="pk-row">${['linear', 'radial', 'conic'].map((type) => `<button type="button" class="pk-ic ${v.type === type ? 'on' : ''}" data-type="${type}" aria-label="${TYPE_LABEL[type]}" aria-pressed="${v.type === type}">${ICON[type]}</button>`).join('')}<span class="pk-grow"></span>${v.type !== 'radial' ? `<span class="pk-dial" data-dial tabindex="0" role="slider" aria-label="${say('Ángulo', 'Angle')}" aria-valuenow="${Math.round(v.angle)}"><i style="transform:rotate(${v.angle + 180}deg)"></i></span><span class="pk-deg">${Math.round(v.angle)}°</span>` : ''}</div>`);
       if (allowedAnims.length > 1) {
@@ -179,12 +180,12 @@ export function mount(el, inputs, handlers) {
         }
       }
     }
-    // Ready-made gradients in a grid (all visible, nothing to scroll), and the recent colours in a row of their own.
+    // Ready-made gradients in a grid (all visible, nothing to scroll), and the recent colors in a row of their own.
     if (gradient) {
-      html.push(`<div class="pk-sep"></div><div class="pk-sw">${lib.PAIRS.map((pair) => { const name = en ? pair.name.en : pair.name.es; return `<button type="button" data-pair="${pair.colours.join(',')}" style="background:linear-gradient(135deg,${pair.colours.join(',')})" title="${name}" aria-label="${name}"></button>`; }).join('')}</div>`);
+      html.push(`<div class="pk-sep"></div><div class="pk-sw">${lib.PAIRS.map((pair) => { const name = en ? pair.name.en : pair.name.es; return `<button type="button" data-pair="${pair.colors.join(',')}" style="background:linear-gradient(135deg,${pair.colors.join(',')})" title="${name}" aria-label="${name}"></button>`; }).join('')}</div>`);
     }
     if (recent.length > 0) {
-      html.push(`${gradient ? '' : '<div class="pk-sep"></div>'}<div class="pk-recent"><span class="pk-lbl">${say('Recientes', 'Recent')}</span>${recent.map((colour) => `<button type="button" data-swatch="${colour}" style="background:${colour}" title="${colour}" aria-label="${colour}"></button>`).join('')}</div>`);
+      html.push(`${gradient ? '' : '<div class="pk-sep"></div>'}<div class="pk-recent"><span class="pk-lbl">${say('Recientes', 'Recent')}</span>${recent.map((color) => `<button type="button" data-swatch="${color}" style="background:${color}" title="${color}" aria-label="${color}"></button>`).join('')}</div>`);
     }
     pop.innerHTML = html.join('');
     pop.querySelector('[data-sat]').style.background = `linear-gradient(90deg, hsl(${hsl.h} 0% ${hsl.l}%), hsl(${hsl.h} 100% ${hsl.l}%))`;
@@ -212,7 +213,7 @@ export function mount(el, inputs, handlers) {
     canvas.height = height * dpr;
     const ctx = canvas.getContext('2d');
     ctx.scale(dpr, dpr);
-    // A grey shows the map in colour anyway: that is what touching it will give (see the pointerdown).
+    // A grey shows the map in color anyway: that is what touching it will give (see the pointerdown).
     const sat = intensity() < GREY ? COLOURFUL : intensity();
     for (let x = 0; x < width; x += 1) {
       const hue = (x / width) * 360;
@@ -264,9 +265,9 @@ export function mount(el, inputs, handlers) {
     paintPreviews();
     emit('input');
   }
-  function setColour(i, colour) {
-    v.stops[i].c = colour;
-    if (v.type === 'solid') v.stops.forEach((stop) => { stop.c = colour; });
+  function setColor(i, color) {
+    v.stops[i].c = color;
+    if (v.type === 'solid') v.stops.forEach((stop) => { stop.c = color; });
   }
   function selectStop(i) {
     sel = i;
@@ -277,7 +278,7 @@ export function mount(el, inputs, handlers) {
     live();
   }
   let recent = [];
-  function remember(colour) { recent = [colour, ...recent.filter((each) => each !== colour)].slice(0, 8); }
+  function remember(color) { recent = [color, ...recent.filter((each) => each !== color)].slice(0, 8); }
   function commit() { remember(v.stops[sel].c); emit('pick'); }
 
   function wire() {
@@ -291,23 +292,23 @@ export function mount(el, inputs, handlers) {
       if (dragging === null) return;
       const p = at(event);
       const sat = intensity();
-      setColour(dragging, lib.hslToHex(Math.round((p.x / p.w) * 360) % 360, sat, Math.round(95 - (p.y / p.h) * 90)));
+      setColor(dragging, lib.hslToHex(Math.round((p.x / p.w) * 360) % 360, sat, Math.round(95 - (p.y / p.h) * 90)));
       live();
     };
     map.addEventListener('pointerdown', (event) => {
       const p = at(event);
       const stops = v.type !== 'solid' ? v.stops : [v.stops[0]];
-      // Grab the point under the finger; on a tie (two stops of the same colour sit on the same spot) the
-      // one already selected wins, so a drag never jumps to a colour you did not choose.
+      // Grab the point under the finger; on a tie (two stops of the same color sit on the same spot) the
+      // one already selected wins, so a drag never jumps to a color you did not choose.
       const far = (i) => { const hsl = lib.hexToHsl(stops[i].c); return Math.hypot((hsl.h / 360) * p.w - p.x, Y(hsl.l, p.h) - p.y); };
       let nearest = sel;
       stops.forEach((_, i) => { if (far(i) < far(nearest) - 2) nearest = i; });
       if (far(nearest) < GRAB && nearest !== sel) selectStop(nearest);
       // A grey (black, white) has no saturation, so the map is drawn grey and dragging would only give greys.
-      // Touching the map means «I want a colour»: bring the saturation up first. The slider can take it back.
+      // Touching the map means “I want a color”: bring the saturation up first. The slider can take it back.
       const hsl = lib.hexToHsl(v.stops[sel].c);
       if (hsl.s < GREY) {
-        setColour(sel, lib.hslToHex(hsl.h, COLOURFUL, hsl.l));
+        setColor(sel, lib.hslToHex(hsl.h, COLOURFUL, hsl.l));
         pop.querySelector('[data-sat]').value = COLOURFUL;
         drawMap();
       }
@@ -334,7 +335,7 @@ export function mount(el, inputs, handlers) {
           moving = stop ? Number(stop.dataset.stop) : near;
           if (moving !== sel) selectStop(moving);
         } else if (v.stops.length < lib.MAX_STOPS) {
-          // The new stop takes the colour the gradient already has at that spot, so adding one never
+          // The new stop takes the color the gradient already has at that spot, so adding one never
           // changes how it looks until you move it, and its point does not sit on top of another one.
           const p = Math.round(((event.clientX - r.left) / r.width) * 100);
           const sorted = [...v.stops].sort((a, b) => a.p - b.p);
@@ -409,7 +410,7 @@ export function mount(el, inputs, handlers) {
     const sat = pop.querySelector('[data-sat]');
     sat.addEventListener('input', () => {
       const hsl = lib.hexToHsl(v.stops[sel].c);
-      setColour(sel, lib.hslToHex(hsl.h, Number(sat.value), hsl.l));
+      setColor(sel, lib.hslToHex(hsl.h, Number(sat.value), hsl.l));
       drawMap();
       live();
     });
@@ -418,7 +419,7 @@ export function mount(el, inputs, handlers) {
       const typed = event.target.value.trim();
       const hex = typed.startsWith('#') ? typed : `#${typed}`;
       if (!lib.isHex(hex)) return;
-      setColour(sel, hex.toLowerCase());
+      setColor(sel, hex.toLowerCase());
       drawMap();
       live();
       commit();
@@ -431,8 +432,8 @@ export function mount(el, inputs, handlers) {
     const data = button.dataset;
     if (data.mode) {
       if (data.mode === 'solid') {
-        const colour = v.stops[sel].c;
-        v = lib.parsePaint(colour);
+        const color = v.stops[sel].c;
+        v = lib.parsePaint(color);
       } else if (v.type === 'solid') {
         const hsl = lib.hexToHsl(v.stops[0].c);
         v = { ...v, type: 'linear', stops: [{ c: lib.hslToHex(hsl.h, hsl.s, Math.max(6, hsl.l - 28)), p: 0 }, { c: v.stops[0].c, p: 100 }] };
@@ -441,11 +442,11 @@ export function mount(el, inputs, handlers) {
     } else if (data.type) v.type = data.type;
     else if (data.anim) v.anim = data.anim;
     else if (data.speed) v.speed = Number(data.speed);
-    else if (data.pair) { const colours = data.pair.split(','); v.stops = colours.map((c, i) => ({ c, p: Math.round((i / (colours.length - 1)) * 100) })); sel = 0; }
-    else if (data.swatch) setColour(sel, data.swatch);
+    else if (data.pair) { const colors = data.pair.split(','); v.stops = colors.map((c, i) => ({ c, p: Math.round((i / (colors.length - 1)) * 100) })); sel = 0; }
+    else if (data.swatch) setColor(sel, data.swatch);
     else if ('del' in data) { if (v.stops.length <= 2) return; v.stops.splice(sel, 1); sel = 0; }
     else if ('drop' in data) {
-      try { const picked = await new window.EyeDropper().open(); setColour(sel, picked.sRGBHex.toLowerCase()); } catch { return; }
+      try { const picked = await new window.EyeDropper().open(); setColor(sel, picked.sRGBHex.toLowerCase()); } catch { return; }
     } else return;
     render();
     place();

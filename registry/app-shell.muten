@@ -2,7 +2,7 @@
 # the person at the bottom. It folds to icons (the name shows on hover) and, in a narrow box, becomes a menu that
 # slides from the left. The page header has breadcrumbs, title, description and actions. Tapping a row opens the
 # detail Sheet on the right without leaving the list. Ctrl/⌘ K (or the search button) opens the Command.
-#   AppShell(brand: "Barbería El Roble", short: "El Roble", plan: "Plan Pro", user: "Julián Restrepo", email: "julian@elroble.co", page: "Pedidos", nav: @nav, pages: @pages, rows: @rows, commands: @commands, width: width, onNavigate: go, onOpen: openRow, onAction: act)
+#   AppShell(brand: "El Roble Barbershop", short: "El Roble", plan: "Plan Pro", user: "Julián Restrepo", email: "julian@elroble.co", page: "Orders", nav: @nav, pages: @pages, rows: @rows, commands: @commands, width: width, onNavigate: go, onOpen: openRow, onAction: act)
 # nav {group, icon, label, count} · pages {name, title, description, actions [{label, variant, icon}]} · rows {page, id,
 # title, description, badge, tone, amount, command, sheetTitle, sheetDescription, sheet [{icon, title, description,
 # badge, tone, amount}], timeline [{label, when}], primary, secondary} · commands {icon, label, page}.

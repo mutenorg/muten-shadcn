@@ -1,6 +1,6 @@
 # Skeletons / Loading - while there is NOTHING to show, the shape of the content: built from the same atoms (Item,
 # Card, Stat, bubbles) with Skeleton in place of the text, so when the data lands only the pixels change, with a fade
-# and no jump in height. A refresh keeps the content: gate on «nothing yet», never on «fetching again».
+# and no jump in height. A refresh keeps the content: gate on “nothing yet”, never on “fetching again”.
 #   Loading(busy: orders.loading, kind: "list", count: 4) { each orders as o { … } }
 #   Skeletons(kind: "messaging")
 # kind: list · item · stat · stats · card · products · bubbles · table · messaging · agenda. media: avatar · icon · none.

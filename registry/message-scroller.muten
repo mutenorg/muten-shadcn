@@ -1,8 +1,8 @@
 # MessageScroller - the column of a conversation: it scrolls inside itself and opens at the latest message; a new
 # message keeps it at the bottom only if you were already there (reading back is never interrupted).
-#   MessageScroller(label: "Chat con Valentina", height: "22rem") { Marker(label: "Hoy")  Message(…) { … } }
+#   MessageScroller(label: "Chat with Valentina", height: "22rem") { Marker(label: "Today")  Message(…) { … } }
 # shadcn-for-muten · part + Custom (stick to the bottom) · kit.css (.cx-chat).
-part MessageScroller(label: text = "Conversación", height: text = "22rem") {
-  Stack class("cx-chat cx-scroll cx-msg-scroller") data(slot: "message-scroller") style(h: "{$height}") aria(role: "log", label: $label) { slot  MessageScrollerBehavior() }
+part MessageScroller(label: text = "Conversation", height: text = "22rem") {
+  Stack class("cx-chat cx-scroll cx-msg-scroller") data(slot: "message-scroller") style(h: "{$height}") data(trl: $label) aria(role: "log", label: $label) { slot  MessageScrollerBehavior() }
 }
 part MessageScrollerBehavior() { Custom MessageScrollerBehavior class("cx-msg-behavior") }

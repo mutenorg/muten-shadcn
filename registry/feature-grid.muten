@@ -1,6 +1,6 @@
 # FeatureGrid - what a product does, as cards in a grid that wraps (three, two or one per row by the width). Each
 # FeatureCard has its icon in the slot, a title and a line.
-#   FeatureGrid { FeatureCard(title: "Agenda", description: "Citas por persona y recordatorios.") { Icon "lucide:calendar" } … }
+#   FeatureGrid { FeatureCard(title: "Schedule", description: "Appointments per person and reminders.") { Icon "lucide:calendar" } … }
 # shadcn-for-muten · parts · no deps · kit.css (.cx-features).
 part FeatureGrid(columns: number = 3) { Stack class("cx-features") style(cols: "{$columns}") { slot } }
 part FeatureCard(title: text, description: text) {

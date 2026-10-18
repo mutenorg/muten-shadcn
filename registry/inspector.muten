@@ -3,11 +3,11 @@
 # whether each section is open.
 #   Inspector {
 #     InspectorSection(label: "Transform", open: tOpen, onToggle: toggleT) {
-#       InspectorRow(label: "Posición") { VectorField(…) }  InspectorRow(label: "Rotación") { NumberField(…) }
+#       InspectorRow(label: "Position") { VectorField(…) }  InspectorRow(label: "Rotation") { NumberField(…) }
 #     }
 #   }
 # shadcn-for-muten · parts · no deps · kit.css (.cx-insp, the Accordion's fold).
-part Inspector(label: text = "Propiedades") { Stack class("cx-insp") data(slot: "inspector") aria(label: $label) { slot } }
+part Inspector(label: text = "Properties") { Stack class("cx-insp") data(slot: "inspector", trl: $label) aria(label: $label) { slot } }
 part InspectorSection(label: text, open: bool, onToggle: action) {
   Stack class("cx-insp-sec") data(open: $open) {
     Button -> $onToggle class("cx-insp-head") aria(expanded: $open) { Span "{$label}"  Icon "lucide:chevron-down" class("cx-acc-chev") }

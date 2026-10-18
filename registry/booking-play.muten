@@ -1,15 +1,15 @@
 # BookingPlay - a booking shown, not used: one service, a few days and hours, and a booking that plays itself in a
-# loop (a day is picked, then an hour, «Reservar» is pressed and the confirmation comes up with its pass). For a
+# loop (a day is picked, then an hour, “Book” is pressed and the confirmation comes up with its pass). For a
 # landing or a bento cell, where the real Booking would be a form nobody fills. Taken hours are struck through.
-#   BookingPlay(service: "Corte clásico", place: "Bruma Barbería · 30 min", price: "USD 15", cta: "Reservar",
-#               doneTitle: "¡Listo, Carla!", doneText: "Corte clásico · hoy · 4:30 PM", code: "STO-4F2K", label: "Así reserva tu cliente") {
-#     BookingPlayDays { BookingPlayDay(weekday: "lun", day: "5", state: "off") … BookingPlayDay(weekday: "hoy", day: "9", state: "pick") }
+#   BookingPlay(service: "Classic cut", place: "Bruma Barbershop · 30 min", price: "USD 15", cta: "Book",
+#               doneTitle: "Done, Carla!", doneText: "Classic cut · today · 4:30 PM", code: "STO-4F2K", label: "This is how your customer books") {
+#     BookingPlayDays { BookingPlayDay(weekday: "mon", day: "5", state: "off") … BookingPlayDay(weekday: "today", day: "9", state: "pick") }
 #     BookingPlayHours { BookingPlayHour(time: "10:00", state: "taken") … BookingPlayHour(time: "4:30", state: "pick", picked: "4:30 PM") }
 #   }
 # photo: the owner's face in the circle (empty = the service's initial).
 # state: "" | off (closed day) | taken (hour) | pick (the one the loop chooses; one day and one hour).
 # Reduced motion: the pick is shown, the confirmation is not. shadcn-for-muten · part · no deps · kit.css (.cx-bkp).
-part BookingPlay(service: text, photo: text = "", place: text = "", price: text = "", cta: text = "Reservar", doneTitle: text = "", doneText: text = "", code: text = "", label: text = "") {
+part BookingPlay(service: text, photo: text = "", place: text = "", price: text = "", cta: text = "Book", doneTitle: text = "", doneText: text = "", code: text = "", label: text = "") {
   Stack class("cx-bkp cx-play") aria(role: "img", label: $label) {
     Stack class("cx-bkp-who") aria(hidden: true) {
       when $photo != "" { Image "{$photo}" alt("") class("cx-bkp-av cx-play-face") }

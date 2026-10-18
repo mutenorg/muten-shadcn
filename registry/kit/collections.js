@@ -2,19 +2,19 @@
 // Carousel's behaviour, generic. Data and labels come in; nothing about a product is inside.
 
 // Tags: chips animate in and out, the field's height eases; suggestions; a cap with its count. i {label, tags
-// "Barba,Corte clásico", suggestions "Fade,Navaja", max, hint} → on.change("Barba,Corte clásico,Fade")
+// "Beard,Classic cut", suggestions "Fade,Razor", max, hint} → on.change("Beard,Classic cut,Fade")
 export function tagInput(root, i, core, on) {
-  const { $, $$, fold, easeHeight } = core;
+  const { $, $$, fold, easeHeight } = core, T = (k, ...a) => core.t(core.langOf(root), k, ...a);
   const split = (s) => String(s || '').split(',').map((x) => x.trim()).filter(Boolean);
   const MAXT = Number(i.max) || 8, SUG = split(i.suggestions), id = 'tg' + Math.random().toString(36).slice(2, 7);
   let tags = split(i.tags);
-  root.innerHTML = `<div data-slot="field" class="cn-field cn-field-orientation-vertical group/field"><label data-slot="label" class="cn-label" for="${id}">${i.label || 'Etiquetas'}</label><div class="cx-taginput"><input id="${id}" class="cx-tag-field" placeholder="${i.placeholder || 'Agrega y presiona Enter'}" autocomplete="off"></div><p data-slot="field-description" class="cn-field-description cx-count-line"><span>${i.hint || ''}</span><span data-tg-n></span></p></div>${SUG.length ? '<div class="cx-suggest"><span>Sugerencias</span><div class="cx-line" style="justify-content:flex-start" data-tg-sug></div></div>' : ''}`;
+  root.innerHTML = `<div data-slot="field" class="cn-field cn-field-orientation-vertical group/field"><label data-slot="label" class="cn-label" for="${id}">${T(i.label || 'Tags')}</label><div class="cx-taginput"><input id="${id}" class="cx-tag-field" placeholder="${i.placeholder || 'Agrega y presiona Enter'}" autocomplete="off"></div><p data-slot="field-description" class="cn-field-description cx-count-line"><span>${i.hint || ''}</span><span data-tg-n></span></p></div>${SUG.length ? `<div class="cx-suggest"><span>${T('Suggestions')}</span><div class="cx-line" style="justify-content:flex-start" data-tg-sug></div></div>` : ''}`;
   const tgBox = $('.cx-taginput', root), tgIn = $('input', root), tgN = $('[data-tg-n]', root), tgSug = $('[data-tg-sug]', root);
-  const chipHtml = (t) => `<span data-slot="badge" class="cn-badge cn-badge-variant-secondary cx-chip" data-tag="${t}">${t}<button class="cn-button cn-button-variant-ghost cn-button-size-icon-xs cx-chip-x" aria-label="Quitar ${t}" title="Quitar" tabindex="-1"><svg style="width:12px;height:12px"><use href="#x"/></svg></button></span>`;
+  const chipHtml = (t) => `<span data-slot="badge" class="cn-badge cn-badge-variant-secondary cx-chip" data-tag="${t}">${t}<button class="cn-button cn-button-variant-ghost cn-button-size-icon-xs cx-chip-x" aria-label="${T('Remove {0}', t)}" title="Quitar" tabindex="-1"><svg style="width:12px;height:12px"><use href="#x"/></svg></button></span>`;
   const emit = () => on?.change?.(tags.join(','));
   const tgMeta = () => {
     tgN.textContent = `${tags.length}/${MAXT}`; tgN.parentElement.toggleAttribute('data-near', tags.length >= MAXT);
-    tgIn.placeholder = tags.length >= MAXT ? `Llegaste al tope de ${MAXT}` : tags.length ? '' : (i.placeholder || 'Agrega y presiona Enter');
+    tgIn.placeholder = tags.length >= MAXT ? T('You reached the limit of {0}', MAXT) : tags.length ? '' : (i.placeholder || T('Add and press Enter'));
     if (tgSug) $$('.cx-sug', tgSug).forEach((b) => { b.disabled = tags.some((t) => fold(t) === fold(b.textContent)) || tags.length >= MAXT; });
   };
   const tgAdd = (raw) => {
@@ -40,19 +40,19 @@ export function tagInput(root, i, core, on) {
 }
 
 // Pagination nav for server pages: always 7 slots once there are more than 7 pages (the buttons never slide),
-// «Página n de N» on a phone, and the range line. i {total, per, page, noun} → on.page(n)
+// “Page n of N” on a phone, and the range line. i {total, per, page, noun} → on.page(n)
 export function paginationNav(root, i, core, on) {
-  const { $ } = core;
-  root.innerHTML = '<div class="cx-pg-foot"><nav class="cn-pagination cx-pagination" aria-label="Páginas"><ul class="cn-pagination-content" style="list-style:none;margin:0;padding:0"></ul></nav><span class="cx-num" aria-live="polite" data-pg-range></span></div>';
+  const { $ } = core, L = core.langOf(root), T = (k, ...a) => core.t(L, k, ...a);
+  root.innerHTML = `<div class="cx-pg-foot"><nav class="cn-pagination cx-pagination" aria-label="${T('Pages')}"><ul class="cn-pagination-content" style="list-style:none;margin:0;padding:0"></ul></nav><span class="cx-num" aria-live="polite" data-pg-range></span></div>`;
   const pgNav = $('ul', root), pgRange = $('[data-pg-range]', root);
-  let total = Number(i.total) || 0, per = Number(i.per) || 10, page = Number(i.page) || 1, noun = i.noun || 'resultados';
+  let total = Number(i.total) || 0, per = Number(i.per) || 10, page = Number(i.page) || 1, noun = T(i.noun || 'results');
   const pages = () => Math.max(1, Math.ceil(total / per));
   const nums = () => { const P = pages(); if (P <= 7) return Array.from({ length: P }, (_, k) => k + 1); if (page <= 4) return [1, 2, 3, 4, 5, '…', P]; if (page >= P - 3) return [1, '…', P - 4, P - 3, P - 2, P - 1, P]; return [1, '…', page - 1, page, page + 1, '…', P]; };
   const paint = (focus) => {
     const P = pages();
-    const nav = (dir, p, off) => `<li><button data-slot="button" class="cn-button cn-button-variant-ghost cn-button-size-default cn-pagination-${dir === -1 ? 'previous' : 'next'} group/button" data-page="${p}" ${off ? 'disabled' : ''} aria-label="Página ${dir === -1 ? 'anterior' : 'siguiente'}">${dir === -1 ? '<svg><use href="#left"/></svg><span>Anterior</span>' : '<span>Siguiente</span><svg><use href="#right"/></svg>'}</button></li>`;
-    pgNav.innerHTML = nav(-1, page - 1, page === 1) + nums().map((p) => (p === '…' ? '<li class="cx-pg-num"><span class="cn-pagination-ellipsis cx-pg-gap" aria-hidden="true"><svg><use href="#more"/></svg></span></li>' : `<li class="cx-pg-num"><button data-slot="button" class="cn-button ${p === page ? 'cn-button-variant-outline' : 'cn-button-variant-ghost'} cn-button-size-icon group/button cx-num" data-page="${p}" ${p === page ? 'aria-current="page"' : ''} aria-label="Página ${p}">${p}</button></li>`)).join('') + `<li class="cx-pg-compact">Página ${page} de ${P}</li>` + nav(1, page + 1, page === P);
-    pgRange.textContent = `${(page - 1) * per + 1}–${Math.min(total, page * per)} de ${total} ${noun}`;
+    const nav = (dir, p, off) => `<li><button data-slot="button" class="cn-button cn-button-variant-ghost cn-button-size-default cn-pagination-${dir === -1 ? 'previous' : 'next'} group/button" data-page="${p}" ${off ? 'disabled' : ''} aria-label="${dir === -1 ? T('Previous page') : T('Next page')}">${dir === -1 ? `<svg><use href="#left"/></svg><span>${T('Previous')}</span>` : `<span>${T('Next')}</span><svg><use href="#right"/></svg>`}</button></li>`;
+    pgNav.innerHTML = nav(-1, page - 1, page === 1) + nums().map((p) => (p === '…' ? '<li class="cx-pg-num"><span class="cn-pagination-ellipsis cx-pg-gap" aria-hidden="true"><svg><use href="#more"/></svg></span></li>' : `<li class="cx-pg-num"><button data-slot="button" class="cn-button ${p === page ? 'cn-button-variant-outline' : 'cn-button-variant-ghost'} cn-button-size-icon group/button cx-num" data-page="${p}" ${p === page ? 'aria-current="page"' : ''} aria-label="${T('Page {0}', p)}">${p}</button></li>`)).join('') + `<li class="cx-pg-compact">${T('Page {0} of {1}', page, P)}</li>` + nav(1, page + 1, page === P);
+    pgRange.textContent = T('{0}–{1} of {2} {3}', (page - 1) * per + 1, Math.min(total, page * per), total, noun);
     if (focus) pgNav.querySelector('[aria-current]')?.focus({ preventScroll: true });
   };
   pgNav.addEventListener('click', (e) => { const b = e.target.closest('[data-page]'); if (!b || b.disabled) return; page = +b.dataset.page; paint(true); on?.page?.(page); });
@@ -61,12 +61,12 @@ export function paginationNav(root, i, core, on) {
 }
 
 // Virtual list: only the visible rows (+ a margin) exist in the DOM. i {rows [{title, subtitle, value}], total
-// (rows repeat up to it, for a long demo), rowHeight, label} → on.jump not needed: «Ir al n» via inputs.jump.
+// (rows repeat up to it, for a long demo), rowHeight, label} → on.jump not needed: “Go to n” via inputs.jump.
 export function virtualList(root, i, core) {
-  const { $ } = core;
+  const { $ } = core, L = core.langOf(root), T = (k, ...a) => core.t(L, k, ...a), loc = L === 'es' ? 'es-CO' : 'en-US';
   const rows = Array.isArray(i.rows) ? i.rows : [];
   const VTOTAL = Math.max(Number(i.total) || 0, rows.length), VROW = Number(i.rowHeight) || 52, VOVER = 6;
-  root.innerHTML = `<div class="cx-pages-wrap"><div class="cx-vlist cx-scroll" tabindex="0" role="list" aria-label="${i.label || 'Lista'}"><div class="cx-vspace"><div class="cx-vwin"></div></div></div><div class="cx-pg-foot"><span class="cx-num" data-vl-info></span>${i.jump ? `<button data-slot="button" class="cn-button cn-button-variant-outline cn-button-size-sm group/button" data-vl-jump>Ir al ${Number(i.jump).toLocaleString('es-CO')}</button>` : ''}</div></div>`;
+  root.innerHTML = `<div class="cx-pages-wrap"><div class="cx-vlist cx-scroll" tabindex="0" role="list" aria-label="${T(i.label || 'List')}"><div class="cx-vspace"><div class="cx-vwin"></div></div></div><div class="cx-pg-foot"><span class="cx-num" data-vl-info></span>${i.jump ? `<button data-slot="button" class="cn-button cn-button-variant-outline cn-button-size-sm group/button" data-vl-jump>${T('Go to {0}', Number(i.jump).toLocaleString(loc))}</button>` : ''}</div></div>`;
   const vBox = $('.cx-vlist', root), vSpace = $('.cx-vspace', root), vWin = $('.cx-vwin', root), vInfo = $('[data-vl-info]', root);
   vSpace.style.height = VTOTAL * VROW + 'px';
   let vFirst = -1, vRaf = 0;
@@ -80,7 +80,7 @@ export function virtualList(root, i, core) {
       vWin.innerHTML = html;
     }
     const a = Math.floor(top / VROW) + 1, b = Math.min(VTOTAL, Math.ceil((top + h) / VROW));
-    vInfo.textContent = `${a.toLocaleString('es-CO')}–${b.toLocaleString('es-CO')} de ${VTOTAL.toLocaleString('es-CO')} · ${vWin.childElementCount} filas en el DOM`;
+    vInfo.textContent = T('{0}–{1} of {2} · {3} rows in the DOM', a.toLocaleString(loc), b.toLocaleString(loc), VTOTAL.toLocaleString(loc), vWin.childElementCount);
   };
   vBox.addEventListener('scroll', () => { cancelAnimationFrame(vRaf); vRaf = requestAnimationFrame(vPaint); }, { passive: true });
   vBox.addEventListener('keydown', (e) => { const d = { ArrowDown: VROW, ArrowUp: -VROW, PageDown: vBox.clientHeight, PageUp: -vBox.clientHeight }[e.key]; if (d) { e.preventDefault(); vBox.scrollTop += d; } if (e.key === 'Home') { e.preventDefault(); vBox.scrollTop = 0; } if (e.key === 'End') { e.preventDefault(); vBox.scrollTop = vBox.scrollHeight; } });
@@ -91,16 +91,16 @@ export function virtualList(root, i, core) {
 // Carousel behaviour over the slides muten rendered inside a `.cx-car` (the Carousel part): pages, indicator
 // (dots · progress · count · thumbs), loop, autoplay with its own pause, arrows (bar | overlay), keys and mouse drag.
 export function carouselBehavior(root, i, core) {
-  const { $, $$, ui } = core;
+  const { $, $$, ui } = core, T = (k, ...a) => core.t(core.langOf(root), k, ...a);
   const perView = String(i.perView || '1').split(',').map(Number), [perSm, perLg] = perView.length > 1 ? perView : [Math.min(perView[0], 2), perView[0]];
   const center = i.center === 'on', loop = i.loop === 'on', autoplay = Number(i.autoplay) || 0, indicator = i.indicator || 'dots', arrows = i.arrows || 'bar';
   root.style.setProperty('--per', perLg); root.style.setProperty('--per-sm', perSm);
   if (center) root.dataset.center = '';
   const view = $('.cx-car-view', root); view.dataset.arrows = arrows;
-  const prevB = ui.button({ icon: 'left', size: 'icon-sm', attrs: 'data-car="prev" aria-label="Anterior" title="Anterior"', cls: 'cx-car-arrow' });
-  const nextB = ui.button({ icon: 'right', size: 'icon-sm', attrs: 'data-car="next" aria-label="Siguiente" title="Siguiente"', cls: 'cx-car-arrow' });
+  const prevB = ui.button({ icon: 'left', size: 'icon-sm', attrs: `data-car="prev" aria-label="${T('Previous')}" title="${T('Previous')}"`, cls: 'cx-car-arrow' });
+  const nextB = ui.button({ icon: 'right', size: 'icon-sm', attrs: `data-car="next" aria-label="${T('Next')}" title="${T('Next')}"`, cls: 'cx-car-arrow' });
   if (arrows === 'overlay') view.insertAdjacentHTML('beforeend', prevB + nextB);
-  root.insertAdjacentHTML('beforeend', `<div class="cx-car-bar"><div class="cx-car-ind" data-ind="${indicator}"></div><div class="cx-hstack" style="gap:6px">${autoplay ? ui.button({ icon: 'pause', size: 'icon-sm', variant: 'ghost', attrs: 'data-car="play" aria-label="Pausar" title="Pausar"' }) : ''}${arrows === 'bar' ? prevB + nextB : ''}</div></div>`);
+  root.insertAdjacentHTML('beforeend', `<div class="cx-car-bar"><div class="cx-car-ind" data-ind="${indicator}"></div><div class="cx-hstack" style="gap:6px">${autoplay ? ui.button({ icon: 'pause', size: 'icon-sm', variant: 'ghost', attrs: `data-car="play" aria-label="${T('Pause')}" title="${T('Pause')}"` }) : ''}${arrows === 'bar' ? prevB + nextB : ''}</div></div>`);
   const track = $('.cx-car-track', root), ind = $('.cx-car-ind', root), cards = $$('.cx-car-slide', track);
   cards.forEach((c, k) => { c.setAttribute('role', 'group'); c.setAttribute('aria-roledescription', 'diapositiva'); c.setAttribute('aria-label', `${k + 1} de ${cards.length}`); });
   const step = () => (cards[1] ? cards[1].offsetLeft - cards[0].offsetLeft : track.clientWidth);
@@ -116,10 +116,10 @@ export function carouselBehavior(root, i, core) {
   const paint = () => {
     const n = pages(), cur = current();
     // the dots are tabs, so their holder is the tablist (a tab without one fails the a11y check)
-    if (indicator === 'dots') { ind.setAttribute('role', 'tablist'); ind.setAttribute('aria-label', 'Diapositivas'); if (ind.childElementCount !== n) ind.innerHTML = Array.from({ length: n }, (_, k) => ui.button({ variant: 'ghost', size: 'icon-xs', cls: 'cx-dotb', attrs: `role="tab" data-go="${k}" aria-label="Ir a ${k + 1} de ${n}"`, label: '<span class="cx-dot-mark"></span>' })).join(''); $$('[data-go]', ind).forEach((d, k) => d.setAttribute('aria-selected', k === cur)); }
+    if (indicator === 'dots') { ind.setAttribute('role', 'tablist'); ind.setAttribute('aria-label', T('Slides')); if (ind.childElementCount !== n) ind.innerHTML = Array.from({ length: n }, (_, k) => ui.button({ variant: 'ghost', size: 'icon-xs', cls: 'cx-dotb', attrs: `role="tab" data-go="${k}" aria-label="${T('Go to {0} of {1}', k + 1, n)}"`, label: '<span class="cx-dot-mark"></span>' })).join(''); $$('[data-go]', ind).forEach((d, k) => d.setAttribute('aria-selected', k === cur)); }
     if (indicator === 'progress') ind.innerHTML = `<div class="cx-hstack" style="gap:10px;flex-wrap:nowrap">${ui.progress(((cur + 1) / n) * 100, `Diapositiva ${cur + 1} de ${n}`)}${ui.text(`${cur + 1} / ${n}`, 'caption')}</div>`;
     if (indicator === 'count') ind.innerHTML = ui.text(`${cur + 1} de ${n}`, 'caption');
-    if (indicator === 'thumbs') { if (!ind.childElementCount) ind.innerHTML = `<div class="cx-hstack" role="tablist" aria-label="Miniaturas">${cards.map((_, k) => ui.button({ variant: 'ghost', size: 'icon-lg', cls: 'cx-thumb', attrs: `role="tab" data-go="${k}" aria-label="Foto ${k + 1}"`, label: thumbOf(k) })).join('')}</div>`; $$('[data-go]', ind).forEach((d, k) => { d.setAttribute('aria-selected', k === cur); d.setAttribute('aria-pressed', k === cur); }); }
+    if (indicator === 'thumbs') { if (!ind.childElementCount) ind.innerHTML = `<div class="cx-hstack" role="tablist" aria-label="${T('Thumbnails')}">${cards.map((_, k) => ui.button({ variant: 'ghost', size: 'icon-lg', cls: 'cx-thumb', attrs: `role="tab" data-go="${k}" aria-label="${T('Photo {0}', k + 1)}"`, label: thumbOf(k) })).join('')}</div>`; $$('[data-go]', ind).forEach((d, k) => { d.setAttribute('aria-selected', k === cur); d.setAttribute('aria-pressed', k === cur); }); }
     if (center) cards.forEach((c, k) => c.toggleAttribute('data-active', k === cur));
     if (!loop) { $$('[data-car="prev"]', root).forEach((b) => { b.disabled = cur === 0; }); $$('[data-car="next"]', root).forEach((b) => { b.disabled = cur >= n - 1; }); }
   };
@@ -129,7 +129,7 @@ export function carouselBehavior(root, i, core) {
     const a = e.target.closest('[data-car]'); if (!a) return;
     if (a.dataset.car === 'prev') go(current() - 1);
     if (a.dataset.car === 'next') go(current() + 1);
-    if (a.dataset.car === 'play') { playing = !playing; a.innerHTML = ui.icon(playing ? 'pause' : 'play'); a.setAttribute('aria-label', playing ? 'Pausar' : 'Reproducir'); a.title = a.getAttribute('aria-label'); }
+    if (a.dataset.car === 'play') { playing = !playing; a.innerHTML = ui.icon(playing ? 'pause' : 'play'); a.setAttribute('aria-label', playing ? T('Pause') : T('Play')); a.title = a.getAttribute('aria-label'); }
   });
   track.tabIndex = 0;
   track.addEventListener('keydown', (e) => { if (e.key === 'ArrowRight') { e.preventDefault(); go(current() + 1); } if (e.key === 'ArrowLeft') { e.preventDefault(); go(current() - 1); } });
@@ -146,7 +146,7 @@ export function carouselBehavior(root, i, core) {
   addEventListener('pointerup', () => { if (!drag) return; const moved = drag.moved; drag = null; track.classList.remove('dragging'); if (moved) { go(nearest()); track.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); }, { capture: true, once: true }); } });
   let playing = !!autoplay && !matchMedia('(prefers-reduced-motion: reduce)').matches, hold = false;
   if (autoplay) {
-    if (!playing) { const b = $('[data-car="play"]', root); b.innerHTML = ui.icon('play'); b.setAttribute('aria-label', 'Reproducir'); }
+    if (!playing) { const b = $('[data-car="play"]', root); b.innerHTML = ui.icon('play'); b.setAttribute('aria-label', T('Play')); }
     ['pointerenter', 'focusin', 'touchstart'].forEach((t) => root.addEventListener(t, () => { hold = true; }, { passive: true }));
     ['pointerleave', 'focusout'].forEach((t) => root.addEventListener(t, () => { hold = false; }));
     setInterval(() => { if (playing && !hold && !document.hidden) go(loop || current() < pages() - 1 ? current() + 1 : 0); }, autoplay);

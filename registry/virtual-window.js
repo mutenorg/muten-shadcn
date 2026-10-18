@@ -5,7 +5,7 @@
 // average from the rows on screen. Plain DOM, no kit.
 export function mount(el, inputs, on) {
   let count = Math.max(0, Number(inputs.count) || 0), guess = Number(inputs.item) || 72, over = Math.max(0, Number(inputs.over ?? 6));
-  // -1: the first range is always said, even «0,0» (nothing on screen yet), or the page keeps its own default
+  // -1: the first range is always said, even “0,0” (nothing on screen yet), or the page keeps its own default
   let from = -1, to = -1, step = 0, raf = 0, list = null, scroller = null, basePad = 0, wired = false;
   // the real height (plus gap, screen px) of every row already drawn, by its place in the list. Rows of very different
   // heights (a group of 2 next to one of 50) no longer move the scrollbar as they come and go: a row seen once keeps its
@@ -44,7 +44,7 @@ export function mount(el, inputs, on) {
     if (to > from && parts.length === to - from) {
       for (let i = 0; i < parts.length; i++) {
         const shown = parts[i].filter((n) => n.getClientRects().length);
-        // a row with nothing shown (an empty group) takes no room and no gap: it is 0, not «unknown»
+        // a row with nothing shown (an empty group) takes no room and no gap: it is 0, not “unknown”
         if (!shown.length) { sizes[from + i] = 0; continue; }
         const h = shown[shown.length - 1].getBoundingClientRect().bottom - shown[0].getBoundingClientRect().top;
         if (h > 0) sizes[from + i] = h + gap;
@@ -71,7 +71,7 @@ export function mount(el, inputs, on) {
     raf = 0; if (!list) return;
     gapNow = -1;
     // a list that is not on the page right now (a hidden panel, a closed tab: no box at all) keeps the rows it has. Its
-    // scroller measures 0 × 0, which read as «scrolled to the end» and drew EVERY row into a panel nobody could see
+    // scroller measures 0 × 0, which read as “scrolled to the end” and drew EVERY row into a panel nobody could see
     if (!list.getClientRects().length || (scroller && !scroller.clientHeight)) return;
     learn();
     const [top, bottom] = view();
@@ -100,7 +100,7 @@ export function mount(el, inputs, on) {
     list = el.parentElement; if (!list || wired) return; wired = true;
     for (let n = list.parentElement; n && n !== document.body && n !== document.documentElement; n = n.parentElement) { const o = getComputedStyle(n).overflowY; if (o === 'auto' || o === 'scroll') { scroller = n; break; } }
     basePad = parseFloat(getComputedStyle(list).paddingBottom) || 0;
-    // the browser must not «hold» a row in place while rows above it come and go: that fights the window
+    // the browser must not “hold” a row in place while rows above it come and go: that fights the window
     list.style.overflowAnchor = 'none';
     // and a flex parent must not shrink the list to fit: its length IS the scrollbar's (the space for the rows not drawn)
     list.style.flexShrink = '0';

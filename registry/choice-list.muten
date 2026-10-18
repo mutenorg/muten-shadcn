@@ -1,9 +1,9 @@
 # ChoiceList - Items you choose one of: a real radio group (arrows move and pick). The page owns the current value.
-#   ChoiceList(label: "Servicio") {
-#     ChoiceItem(value: "cut", current: service, onPick: pick, title: "Corte clásico", description: "30 min", price: "$25.000")
+#   ChoiceList(label: "Service") {
+#     ChoiceItem(value: "cut", current: service, onPick: pick, title: "Classic cut", description: "30 min", price: "$25.000")
 #   }
 # A picture before the text: put an ItemMedia in its slot and the radio moves to the end of the row.
-#   ChoiceItem(value: "shop", current: role, onPick: pickRole, title: "Tengo un local", description: "La gente viene a ti") {
+#   ChoiceItem(value: "shop", current: role, onPick: pickRole, title: "I have a venue", description: "People come to you") {
 #     ItemMedia(variant: "icon") { Icon "lucide:store" }
 #   }
 # shadcn-for-muten · part + Custom (RovingBehavior) · kit.css (.cx-radiogroup, .cx-radio).

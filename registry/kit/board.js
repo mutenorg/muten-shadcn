@@ -1,4 +1,4 @@
-// kit/board.js - the order Board and its card (the reference artifact's «Tablero» and «Tarjeta: mínimo y máximo"),
+// kit/board.js - the order Board and its card (the reference artifact's “Board” and “Card: minimum and maximum”),
 // composed only from atoms. Lanes and cards are data; the card groups its information by what it is about and
 // orders it by what needs the owner first. Drag with the mouse, hold on touch, Space/arrows with the keyboard.
 //   lanes [{id, title, next}]  next = the label of the step that moves a card INTO the following lane
@@ -9,6 +9,8 @@
 // on.change(json [{id, lane}]) after a card moves; on.action(json {id, action}) for every card button.
 export function orderBoard(root, i, core, on) {
   const { ui, $, $$, lib, openModal: open, closeModal, CONTENT, body, foot, easeHeight, money0, hue, ini } = core;
+  // its language: the nearest lang (the page's), English by default; the card data the page passes is said as is
+  const L = core.langOf(root), T = (k, ...a) => core.t(L, k, ...a);
   const list = (v) => (Array.isArray(v) ? v : []);
   const copy = (x) => JSON.parse(JSON.stringify(x));
   const CARDS = Object.fromEntries(list(i.cards).map((c) => [c.id, { actions: [], ...copy(c) }]));
@@ -43,7 +45,7 @@ export function orderBoard(root, i, core, on) {
       footer: `<div class="cx-vstack"><div class="cx-hstack">${o.photos.slice(0, 5).map((x) => ui.avatar(x, { shape: 'square', size: 'lg', bg: x })).join('')}${o.photos.length > 5 ? `<span data-slot="avatar" data-size="lg" data-shape="square" class="cn-avatar group/avatar"><span class="cn-avatar-fallback">+${o.photos.length - 5}</span></span>` : ''}</div>${o.extras?.length ? `<div class="cx-hstack">${o.extras.map((e) => ui.badge(e, { variant: 'outline' })).join('')}</div>` : ''}</div>`,
     }),
     pay: (p, c) => {
-      const action = p.method === 'transfer' && p.tone === 'new' ? ['receipt', 'Revisar comprobante', 'image'] : p.method === 'card' ? ['stripe', 'Ver recibo de Stripe', 'card'] : null;
+      const action = p.method === 'transfer' && p.tone === 'new' ? ['receipt', T('Review receipt'), 'image'] : p.method === 'card' ? ['stripe', T('See Stripe receipt'), 'card'] : null;
       return ui.item({
         media: ui.itemMedia(ui.icon('card')),
         title: `<span>Pago · ${money0(c.total)}</span>`,
@@ -54,7 +56,7 @@ export function orderBoard(root, i, core, on) {
     },
     delivery: (d) => {
       const info = d.track ? `<b>${d.track.steps[d.track.at]}</b> · ${d.track.courier.split(' ')[0]}, ${d.track.eta}` : d.map ? d.map.address : '';
-      const more = (d.track || d.map) ? ui.button({ label: d.track ? 'Ver entrega' : 'Ver mapa', size: 'xs', attrs: 'data-bact="delivery"' }) : '';
+      const more = (d.track || d.map) ? ui.button({ label: d.track ? T('See delivery') : T('See map'), size: 'xs', attrs: 'data-bact="delivery"' }) : '';
       return ui.item({
         media: ui.itemMedia(ui.icon(d.mode === 'pickup' ? 'store' : 'truck')),
         title: `${d.label}${d.when ? ` · ${d.when}` : ''}`,
@@ -69,18 +71,18 @@ export function orderBoard(root, i, core, on) {
   const signals = (c) => {
     const list = c.request ? (Array.isArray(c.request) ? c.request : [c.request]) : [];
     const items = list.map((r, i) => ui.button({ icon: r.icon, size: 'icon-sm', variant: 'ghost', tone: SIGNAL_TONE[r.tone] || 'info', cls: 'cx-has-indicator', attrs: `data-bact="request" data-i="${i}" data-name="${r.title}" aria-haspopup="dialog" aria-label="${r.title}${r.text ? ': ' + r.text : ''}"` }).replace('</button>', `${ui.indicator(SIGNAL_TONE[r.tone] || 'info')}</button>`));
-    if (c.note) items.push(ui.button({ icon: 'quote', size: 'icon-sm', variant: 'ghost', tone: 'note', cls: 'cx-has-indicator', attrs: `data-bact="note" data-name="Nota del cliente" aria-haspopup="dialog" aria-label="Nota de ${c.who.split(' ')[0]}: ${c.note}"` }).replace('</button>', `${ui.indicator('note')}</button>`));
-    return items.length ? `<div class="cx-hstack" role="group" aria-label="Pendientes">${items.join('')}</div>` : '';
+    if (c.note) items.push(ui.button({ icon: 'quote', size: 'icon-sm', variant: 'ghost', tone: 'note', cls: 'cx-has-indicator', attrs: `data-bact="note" data-name="${T('Client note')}" aria-haspopup="dialog" aria-label="${T('{0}\'s note: {1}', c.who.split(' ')[0], c.note)}"` }).replace('</button>', `${ui.indicator('note')}</button>`));
+    return items.length ? `<div class="cx-hstack" role="group" aria-label="${T('Pending')}">${items.join('')}</div>` : '';
   };
   const CONTACT = {
     whatsapp: { icon: 'b-whatsapp', color: '#25D366', name: 'WhatsApp' },
     telegram: { icon: 'b-telegram', color: '#26A5E4', name: 'Telegram' },
     instagram: { icon: 'b-instagram', color: '#E4405F', name: 'Instagram' },
-    phone: { icon: 'call', color: 'var(--foreground)', name: 'una llamada' },
+    phone: { icon: 'call', color: 'var(--foreground)', name: T('a call') },
   };
   const cardInner = (id) => {
     const c = CARDS[id], via = CONTACT[c.contact];
-    const contact = via ? ui.button({ icon: via.icon, size: 'icon-sm', variant: 'ghost', tone: 'brand', attrs: `style="--brand:${via.color}" data-bact="contact" aria-label="Contactar a ${c.who} por ${via.name}, como lo pidió" title="Prefiere ${via.name}"` }) : '';
+    const contact = via ? ui.button({ icon: via.icon, size: 'icon-sm', variant: 'ghost', tone: 'brand', attrs: `style="--brand:${via.color}" data-bact="contact" aria-label="${T('Contact {0} on {1}, as they asked', c.who, via.name)}" title="${T('Prefers {0}', via.name)}"` }) : '';
     const person = ui.item({
       media: ui.itemMedia(ui.avatar(c.who), 'default'),
       title: `<span class="cx-ellipsis" title="${c.who}">${c.who}</span>`,
@@ -102,13 +104,13 @@ export function orderBoard(root, i, core, on) {
     const list = $('.cx-lane-list', l), n = $$('.cx-bcard', list).length;
     $('.cx-count', l).textContent = n;
     const empty = $('.cx-lane-empty-b', list);
-    if (!n && !$('.cx-bph', list) && !empty) list.insertAdjacentHTML('beforeend', '<div class="cx-lane-empty-b">Suelta aquí un pedido</div>');
+    if (!n && !$('.cx-bph', list) && !empty) list.insertAdjacentHTML('beforeend', `<div class="cx-lane-empty-b">${T('Drop an order here')}</div>`);
     if ((n || $('.cx-bph', list)) && empty) empty.remove();
   });
   const sayCard = (card) => { const lane = card.closest('.cx-blane'), list = $$('.cx-bcard', lane); brdLive.textContent = `Pedido ${card.dataset.card}: ${lane.getAttribute('aria-label')}, posición ${list.indexOf(card) + 1} de ${list.length}`; };
   const flip = (els, change) => { // animate siblings from their old place to the new one
     const before = new Map(els.map((x) => [x, x.getBoundingClientRect()])); change();
-    before.forEach((r, x) => { const n = x.getBoundingClientRect(); const dx = r.left - n.left, dy = r.top - n.top; if (dx || dy) x.animate([{ transform: `translate(${dx}px, ${dy}px)` }, { transform: 'none' }], { duration: 200, easing: 'cubic-bezier(.22, 1, .36, 1)' }); });
+    before.forEach((r, x) => { const n = x.getBoundingClientRect(); const dx = r.left - n.left, dy = r.top - n.top; if (dx || dy) x.animate([{ transform: `translate(${dx}px, ${dy}px)` }, { transform: 'none' }], { duration: 200, easing: 'cubic-bezier(.23, 1, .32, 1)' }); });
   };
   let bDrag = null;
   brd.addEventListener('pointerdown', (e) => {
@@ -148,7 +150,7 @@ export function orderBoard(root, i, core, on) {
     const to = d.ph.getBoundingClientRect(), from = d.card.getBoundingClientRect();
     d.card.classList.remove('cx-dragging'); d.card.style.cssText = '';
     d.ph.replaceWith(d.card); syncLanes();
-    d.card.animate([{ transform: `translate(${from.left - to.left}px, ${from.top - to.top}px) rotate(1.5deg)` }, { transform: 'none' }], { duration: 220, easing: 'cubic-bezier(.22, 1, .36, 1)' });
+    d.card.animate([{ transform: `translate(${from.left - to.left}px, ${from.top - to.top}px) rotate(1.5deg)` }, { transform: 'none' }], { duration: 220, easing: 'cubic-bezier(.23, 1, .32, 1)' });
     sayCard(d.card); emit();
   };
   addEventListener('pointerup', bEnd); addEventListener('pointercancel', bEnd);
@@ -201,10 +203,10 @@ export function orderBoard(root, i, core, on) {
   let receiptFor = null, replyFor = null, deliveryFor = null, requestFor = null, requestIdx = 0;
   KINDS.request = () => {
     const c = CARDS[requestFor], list = Array.isArray(c.request) ? c.request : [c.request], r = list[requestIdx] || list[0];
-    $('#mdl-title').textContent = r.title; $('#mdl-desc').textContent = `${c.who} · pedido ${requestFor}${r.when ? ' · ' + r.when : ''}`;
-    body.innerHTML = `${r.text ? `<blockquote class="cx-req-full" data-tone="${r.tone}">${r.text}</blockquote>` : '<p class="cx-note" style="text-align:left">Sin mensaje del cliente.</p>'}${r.photo ? `<span class="cx-bc-ph" style="width:96px;background:${r.photo}"></span>` : ''}${list.length > 1 ? `<div class="cx-req-next"><b>También por resolver</b>${list.filter((x) => x !== r).map((x) => `<span><svg><use href="#${x.icon}"/></svg>${x.title}</span>`).join('')}</div>` : ''}`;
+    $('#mdl-title').textContent = r.title; $('#mdl-desc').textContent = `${T('{0} · order {1}', c.who, requestFor)}${r.when ? ' · ' + r.when : ''}`;
+    body.innerHTML = `${r.text ? `<blockquote class="cx-req-full" data-tone="${r.tone}">${r.text}</blockquote>` : `<p class="cx-note" style="text-align:left">${T('No message from the client.')}</p>`}${r.photo ? `<span class="cx-bc-ph" style="width:96px;background:${r.photo}"></span>` : ''}${list.length > 1 ? `<div class="cx-req-next"><b>${T('Also to solve')}</b>${list.filter((x) => x !== r).map((x) => `<span><svg><use href="#${x.icon}"/></svg>${x.title}</span>`).join('')}</div>` : ''}`;
     const [yes, no] = r.actions;
-    foot.innerHTML = (no ? btn('outline', no[1], `data-req-act="${no[0]}"`) : btn('outline', 'Cerrar', 'data-dismiss')) + (yes ? btn('default', yes[1], `data-req-act="${yes[0]}"`) : '');
+    foot.innerHTML = (no ? btn('outline', no[1], `data-req-act="${no[0]}"`) : btn('outline', T('Close'), 'data-dismiss')) + (yes ? btn('default', yes[1], `data-req-act="${yes[0]}"`) : '');
     foot.firstElementChild.classList.add('cx-exit'); foot.lastElementChild.classList.add('cx-go');
   };
   document.addEventListener('click', (e) => {
@@ -216,30 +218,30 @@ export function orderBoard(root, i, core, on) {
   let noteFor = null, stripeFor = null;
   KINDS.note = () => {
     const c = CARDS[noteFor];
-    $('#mdl-title').textContent = `Nota de ${c.who.split(' ')[0]}`; $('#mdl-desc').textContent = `${c.who} · pedido ${noteFor}`;
+    $('#mdl-title').textContent = T('{0}\'s note', c.who.split(' ')[0]); $('#mdl-desc').textContent = T('{0} · order {1}', c.who, noteFor);
     body.innerHTML = `<blockquote class="cx-req-full" data-tone="note">${c.note}</blockquote>`;
-    foot.innerHTML = btn('outline', 'Cerrar', 'data-dismiss') + btn('default', 'Copiar nota', 'data-note-copy');
+    foot.innerHTML = btn('outline', T('Close'), 'data-dismiss') + btn('default', T('Copy note'), 'data-note-copy');
     foot.firstElementChild.classList.add('cx-exit'); foot.lastElementChild.classList.add('cx-go');
   };
   KINDS.stripe = () => {
     const c = CARDS[stripeFor], p = c.pay;
-    $('#mdl-title').textContent = 'Recibo de pago'; $('#mdl-desc').textContent = `${c.who} · pedido ${stripeFor}`;
-    body.innerHTML = `<div class="cx-stripe"><div class="cx-stripe-top"><span class="cx-stripe-amt cx-num">${money0(c.total)}</span><span data-slot="badge" class="cn-badge group/badge cx-tone-ok"><span class="cx-dot"></span>Pagado</span></div><dl><dt>Medio</dt><dd>${p.detail.split(' · ')[0]}</dd><dt>Procesado por</dt><dd>Stripe</dd><dt>Fecha</dt><dd>8 oct 2026 · 09:14</dd><dt>ID del pago</dt><dd class="cx-num">pi_3Q${stripeFor.slice(1)}xK8aR2</dd><dt>Comisión</dt><dd class="cx-num">${money0(Math.round(c.total * 0.039))}</dd><dt>Recibes</dt><dd class="cx-num"><b>${money0(c.total - Math.round(c.total * 0.039))}</b></dd></dl></div>`;
-    foot.innerHTML = btn('outline', 'Cerrar', 'data-dismiss') + `<a data-slot="button" class="cn-button cn-button-variant-default cn-button-size-default group/button cx-go" href="https://dashboard.stripe.com/test/payments" target="_blank" rel="noopener">Abrir en Stripe</a>`;
+    $('#mdl-title').textContent = T('Payment receipt'); $('#mdl-desc').textContent = T('{0} · order {1}', c.who, stripeFor);
+    body.innerHTML = `<div class="cx-stripe"><div class="cx-stripe-top"><span class="cx-stripe-amt cx-num">${money0(c.total)}</span><span data-slot="badge" class="cn-badge group/badge cx-tone-ok"><span class="cx-dot"></span>${T('Paid')}</span></div><dl><dt>${T('Method')}</dt><dd>${p.detail.split(' · ')[0]}</dd><dt>${T('Processed by')}</dt><dd>Stripe</dd><dt>${T('Date')}</dt><dd>${T('Oct 8, 2026')} · 09:14</dd><dt>${T('Payment ID')}</dt><dd class="cx-num">pi_3Q${stripeFor.slice(1)}xK8aR2</dd><dt>${T('Fee')}</dt><dd class="cx-num">${money0(Math.round(c.total * 0.039))}</dd><dt>${T('You get')}</dt><dd class="cx-num"><b>${money0(c.total - Math.round(c.total * 0.039))}</b></dd></dl></div>`;
+    foot.innerHTML = btn('outline', T('Close'), 'data-dismiss') + `<a data-slot="button" class="cn-button cn-button-variant-default cn-button-size-default group/button cx-go" href="https://dashboard.stripe.com/test/payments" target="_blank" rel="noopener">${T('Open in Stripe')}</a>`;
     foot.firstElementChild.classList.add('cx-exit');
   };
   document.addEventListener('click', (e) => {
     if (!e.target.closest('[data-note-copy]') || !noteFor) return;
     const t = e.target.closest('[data-note-copy]'), text = CARDS[noteFor].note;
-    try { navigator.clipboard.writeText(text).then(() => { t.textContent = 'Copiada'; }, () => { getSelection().selectAllChildren($('.cx-req-full', body)); }); } catch { getSelection().selectAllChildren($('.cx-req-full', body)); }
+    try { navigator.clipboard.writeText(text).then(() => { t.innerHTML = `<span class="cx-swap-in">${T('Copied')}</span>`; }, () => { getSelection().selectAllChildren($('.cx-req-full', body)); }); } catch { getSelection().selectAllChildren($('.cx-req-full', body)); }
   });
   KINDS.delivery = () => {
     const c = CARDS[deliveryFor], d = c.delivery;
-    $('#mdl-title').textContent = d.label; $('#mdl-desc').textContent = `${c.who} · pedido ${deliveryFor}${d.when ? ' · ' + d.when : ''}`;
+    $('#mdl-title').textContent = d.label; $('#mdl-desc').textContent = `${T('{0} · order {1}', c.who, deliveryFor)}${d.when ? ' · ' + d.when : ''}`;
     const steps = d.track ? `<div class="cx-dl-steps" style="--n:${d.track.steps.length}">${d.track.steps.map((st, i) => `<div ${i < d.track.at ? 'data-done' : i === d.track.at ? 'data-now aria-current="step"' : ''}><i></i><span>${st}</span></div>`).join('')}</div>` : '';
-    const courier = d.track ? `<div class="cx-dl-courier"><span data-slot="avatar" data-size="default" class="cn-avatar cx-av" style="--h:${hue(d.track.courier)}"><span class="cn-avatar-fallback">${ini(d.track.courier)}</span></span><div><b>${d.track.courier}</b><small>Domiciliario · ${d.track.vehicle}</small></div><div class="cx-dl-eta"><small>Llega en</small><b>${d.track.eta}</b></div></div>` : '';
+    const courier = d.track ? `<div class="cx-dl-courier"><span data-slot="avatar" data-size="default" class="cn-avatar cx-av" style="--h:${hue(d.track.courier)}"><span class="cn-avatar-fallback">${ini(d.track.courier)}</span></span><div><b>${d.track.courier}</b><small>Domiciliario · ${d.track.vehicle}</small></div><div class="cx-dl-eta"><small>${T('Arrives in')}</small><b>${d.track.eta}</b></div></div>` : '';
     body.innerHTML = `<div class="cx-dl">${d.map ? `<div class="cx-dl-map">${miniMap(d.map)}</div><div class="cx-dl-addr"><svg><use href="#mappin"/></svg><div><b>${d.map.address}</b><small>${d.map.detail}</small></div></div>` : ''}${steps}${courier}</div>`;
-    foot.innerHTML = btn('outline', 'Cerrar', 'data-dismiss') + (d.map ? `<a data-slot="button" class="cn-button cn-button-variant-default cn-button-size-default group/button cx-go" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(d.map.address)}" target="_blank" rel="noopener"><svg><use href="#mappin"/></svg>Abrir en Maps</a>` : '');
+    foot.innerHTML = btn('outline', T('Close'), 'data-dismiss') + (d.map ? `<a data-slot="button" class="cn-button cn-button-variant-default cn-button-size-default group/button cx-go" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(d.map.address)}" target="_blank" rel="noopener"><svg><use href="#mappin"/></svg>${T('Open in Maps')}</a>` : '');
     foot.firstElementChild.classList.add('cx-exit');
   };
   const redraw = (id) => { const card = $(`.cx-bcard[data-card="${id}"]`, root); easeHeight(card, () => { card.innerHTML = cardInner(id); }); card.animate([{ boxShadow: '0 0 0 2px var(--selected)' }, { boxShadow: '0 0 0 1px var(--border)' }], { duration: 700, easing: 'ease-out' }); };
@@ -251,7 +253,7 @@ export function orderBoard(root, i, core, on) {
       const ls = lanesEls().filter((l) => l.dataset.lane !== 'cancel'), li = ls.indexOf(card.closest('.cx-blane')); if (li < 0 || li >= ls.length - 1) return;
       const NEXT = Object.fromEntries(LANES_B.map((l) => [l.id, l.next ? [['advance', l.next, 'secondary']] : []]));
       const to = ls[li + 1]; c.actions = NEXT[to.dataset.lane] ?? c.actions;
-      if (to.dataset.lane === 'done') { if (c.delivery) delete c.delivery.track; c.status = ['ok', 'Entregado']; }
+      if (to.dataset.lane === 'done') { if (c.delivery) delete c.delivery.track; c.status = ['ok', T('Delivered')]; }
       flip($$('.cx-bcard', brd), () => { $('.cx-lane-list', to).prepend(card); card.innerHTML = cardInner(id); syncLanes(); });
       card.focus({ preventScroll: true }); sayCard(card); emit();
     }
@@ -262,8 +264,8 @@ export function orderBoard(root, i, core, on) {
     if (act === 'stripe') { stripeFor = id; openModal('stripe', 'auto'); }
     if (act === 'contact') brdLive.textContent = `Abriendo ${CONTACT[c.contact].name} con ${c.who}`;
     if (act === 'reply') { replyFor = id; openModal('reply', 'auto'); }
-    if (act === 'cancel-yes') { delete c.request; c.status = ['bad', 'Cancelado']; c.pay = { ...c.pay, tone: 'muted', label: `Devuelto ${money0(c.total)}` }; delete c.delivery; c.actions = []; if (!card.closest('.cx-board')) { redraw(id); return; } const to = $('[data-lane=cancel] .cx-lane-list', brd); flip($$('.cx-bcard', brd), () => { to.prepend(card); card.innerHTML = cardInner(id); syncLanes(); }); to.closest('.cx-blane').scrollIntoView({ block: 'nearest', inline: 'nearest', behavior: 'smooth' }); brdLive.textContent = `Pedido ${id} cancelado y devuelto`; emit(); }
-    if (act === 'cancel-no') { const rest = Array.isArray(c.request) ? c.request.filter((_, i) => i !== +(b.dataset.i || 0)) : []; if (rest.length) c.request = rest.length === 1 ? rest[0] : rest; else delete c.request; c.actions = [['advance', 'Preparar', 'secondary']]; redraw(id); }
+    if (act === 'cancel-yes') { delete c.request; c.status = ['bad', T('Canceled')]; c.pay = { ...c.pay, tone: 'muted', label: T('Refunded {0}', money0(c.total)) }; delete c.delivery; c.actions = []; if (!card.closest('.cx-board')) { redraw(id); return; } const to = $('[data-lane=cancel] .cx-lane-list', brd); flip($$('.cx-bcard', brd), () => { to.prepend(card); card.innerHTML = cardInner(id); syncLanes(); }); to.closest('.cx-blane').scrollIntoView({ block: 'nearest', inline: 'nearest', behavior: 'smooth' }); brdLive.textContent = `Pedido ${id} cancelado y devuelto`; emit(); }
+    if (act === 'cancel-no') { const rest = Array.isArray(c.request) ? c.request.filter((_, i) => i !== +(b.dataset.i || 0)) : []; if (rest.length) c.request = rest.length === 1 ? rest[0] : rest; else delete c.request; c.actions = [['advance', T('Prepare'), 'secondary']]; redraw(id); }
     if (act === 'refund') { if (Array.isArray(c.request)) { c.request = c.request.filter((_, i) => i !== +(b.dataset.i || 0)); if (c.request.length === 1) c.request = c.request[0]; } else delete c.request; c.pay = { ...c.pay, tone: 'info', label: `Reembolsado ${money0(c.total)}` }; redraw(id); }
   };
   root.addEventListener('click', onCardButton);
@@ -271,29 +273,29 @@ export function orderBoard(root, i, core, on) {
   const sizes = $('.cx-card-sizes', root); if (sizes) sizes.innerHTML = SIZES.map(([t, d, id]) => `<div class="cx-cs-col"><div class="cx-cs-h"><b>${t}</b><span>${d}</span></div><div data-slot="card" data-size="sm" class="cn-card group/card cx-bcard cx-bcard-static" data-card="${id}" aria-label="${t}">${cardInner(id)}</div></div>`).join('');
   KINDS.receipt = () => {
     const c = CARDS[receiptFor];
-    $('#mdl-title').textContent = 'Comprobante de pago'; $('#mdl-desc').textContent = `${c.who} · pedido ${receiptFor}`;
-    body.innerHTML = `<div class="cx-rcpt"><div class="cx-rcpt-shot" role="img" aria-label="Captura de la transferencia"><span class="cx-rcpt-ok"><svg><use href="#check"/></svg></span><b>Transferencia exitosa</b><span class="cx-rcpt-amt">${money0(c.total)}</span><dl><dt>Para</dt><dd>Barbería El Roble</dd><dt>Desde</dt><dd>${c.who}</dd><dt>Referencia</dt><dd class="cx-num">M${receiptFor.slice(1)}7731</dd><dt>Fecha</dt><dd>8 oct 2026 · 10:42</dd></dl></div><div class="cx-rcpt-check"><span>Monto del pedido</span><b class="cx-num">${money0(c.total)}</b><span data-slot="badge" class="cn-badge group/badge cx-tone-ok"><span class="cx-dot"></span>Coincide</span></div></div>`;
-    foot.innerHTML = btn('outline', 'Rechazar', 'data-rcpt="no"') + btn('default', 'Aprobar pago', 'data-rcpt="yes"');
+    $('#mdl-title').textContent = T('Payment proof'); $('#mdl-desc').textContent = T('{0} · order {1}', c.who, receiptFor);
+    body.innerHTML = `<div class="cx-rcpt"><div class="cx-rcpt-shot" role="img" aria-label="${T('Screenshot of the transfer')}"><span class="cx-rcpt-ok"><svg><use href="#check"/></svg></span><b>${T('Transfer successful')}</b><span class="cx-rcpt-amt">${money0(c.total)}</span><dl><dt>${T('To')}</dt><dd>Barbería El Roble</dd><dt>${T('From')}</dt><dd>${c.who}</dd><dt>${T('Reference')}</dt><dd class="cx-num">M${receiptFor.slice(1)}7731</dd><dt>${T('Date')}</dt><dd>${T('Oct 8, 2026')} · 10:42</dd></dl></div><div class="cx-rcpt-check"><span>${T('Order amount')}</span><b class="cx-num">${money0(c.total)}</b><span data-slot="badge" class="cn-badge group/badge cx-tone-ok"><span class="cx-dot"></span>${T('Matches')}</span></div></div>`;
+    foot.innerHTML = btn('outline', T('Reject'), 'data-rcpt="no"') + btn('default', T('Approve payment'), 'data-rcpt="yes"');
     foot.firstElementChild.classList.add('cx-exit'); foot.lastElementChild.classList.add('cx-go');
   };
   KINDS.reply = () => {
     const c = CARDS[replyFor];
-    $('#mdl-title').textContent = `Responder a ${c.who}`; $('#mdl-desc').textContent = `Queja del pedido ${replyFor}`;
-    body.innerHTML = `<div class="cx-bc-req" data-tone="bad" style="margin:0"><div class="cx-bc-req-h"><svg><use href="#info"/></svg><b>Queja</b><small>${(c.request.when ?? c.request[0]?.when)}</small></div><p>«${(c.request.text ?? c.request[0]?.text)}»</p></div><div data-slot="field" class="cn-field cn-field-orientation-vertical group/field"><label data-slot="label" class="cn-label" for="rp-t">Tu respuesta</label><textarea data-slot="textarea" class="cn-textarea" id="rp-t" rows="4">Hola ${c.who.split(' ')[0]}, lo siento mucho. Te enviamos una nueva hoy sin costo.</textarea><p data-slot="field-description" class="cn-field-description">Le llega por WhatsApp.</p></div>`;
-    foot.innerHTML = btn('outline', 'Cancelar', 'data-dismiss') + btn('default', 'Enviar respuesta', 'data-reply-send');
+    $('#mdl-title').textContent = T('Answer {0}', c.who); $('#mdl-desc').textContent = T('Complaint about order {0}', replyFor);
+    body.innerHTML = `<div class="cx-bc-req" data-tone="bad" style="margin:0"><div class="cx-bc-req-h"><svg><use href="#info"/></svg><b>${T('Complaint')}</b><small>${(c.request.when ?? c.request[0]?.when)}</small></div><p>«${(c.request.text ?? c.request[0]?.text)}»</p></div><div data-slot="field" class="cn-field cn-field-orientation-vertical group/field"><label data-slot="label" class="cn-label" for="rp-t">${T('Your answer')}</label><textarea data-slot="textarea" class="cn-textarea" id="rp-t" rows="4">${T('Hi {0}, I am so sorry. We are sending you a new one today at no cost.', c.who.split(' ')[0])}</textarea><p data-slot="field-description" class="cn-field-description">${T('It reaches them on WhatsApp.')}</p></div>`;
+    foot.innerHTML = btn('outline', T('Cancel'), 'data-dismiss') + btn('default', T('Send answer'), 'data-reply-send');
     foot.firstElementChild.classList.add('cx-exit'); foot.lastElementChild.classList.add('cx-go');
   };
   document.addEventListener('click', (e) => {
     const r = e.target.closest('[data-rcpt]');
     if (r && receiptFor) {
       const c = CARDS[receiptFor], ok = r.dataset.rcpt === 'yes';
-      c.pay = ok ? { method: 'transfer', tone: 'ok', label: 'Pagado', detail: c.pay?.detail } : { method: 'transfer', tone: 'bad', label: 'Rechazado', detail: c.pay?.detail };
-      c.actions = ok ? [['advance', 'Preparar', 'secondary']] : [];
+      c.pay = ok ? { method: 'transfer', tone: 'ok', label: T('Paid'), detail: c.pay?.detail } : { method: 'transfer', tone: 'bad', label: T('Rejected'), detail: c.pay?.detail };
+      c.actions = ok ? [['advance', T('Prepare'), 'secondary']] : [];
       redraw(receiptFor); brdLive.textContent = ok ? `Pago de ${c.who} aprobado` : `Comprobante de ${c.who} rechazado`;
       receiptFor = null; closeModal();
     }
     if (e.target.closest('[data-reply-send]') && replyFor) {
-      const c = CARDS[replyFor]; c.request = { ...(Array.isArray(c.request) ? c.request[0] : c.request), tone: 'info', icon: 'check', title: 'Queja respondida', when: 'ahora', text: c.request.text, actions: [['refund', 'Reembolsar', 'ghost']] };
+      const c = CARDS[replyFor]; c.request = { ...(Array.isArray(c.request) ? c.request[0] : c.request), tone: 'info', icon: 'check', title: T('Complaint answered'), when: T('now'), text: c.request.text, actions: [['refund', T('Refund'), 'ghost']] };
       redraw(replyFor); replyFor = null; closeModal();
     }
   });

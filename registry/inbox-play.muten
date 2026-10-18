@@ -1,12 +1,12 @@
 # InboxPlay - a messages list shown, not used: the shop's inbox as the channel's app draws it (skin: instagram |
-# whatsapp), with the unread ones in bold and their dot. For a landing, beside «nobody answered them»; the real inbox
+# whatsapp), with the unread ones in bold and their dot. For a landing, beside “nobody answered them”; the real inbox
 # is Messaging. The rows are a picture (aria-hidden); `label` says what it shows.
-#   InboxPlay(title: "brumabarberia", tabs: "Principal", requests: "Solicitudes (12)", label: "…") {
-#     InboxPlayRow(name: "lau.mtz", text: "precio??", time: "2 h", unread: "yes")
-#     InboxPlayRow(name: "carlos.r", text: "Visto", time: "1 d", photo: "/face.webp")
+#   InboxPlay(title: "brumabarberia", tabs: "Primary", requests: "Requests (12)", label: "…") {
+#     InboxPlayRow(name: "lau.mtz", text: "price??", time: "2 h", unread: "yes")
+#     InboxPlayRow(name: "carlos.r", text: "Seen", time: "1 d", photo: "/face.webp")
 #   }
 # search (a placeholder) draws the app's search bar; InboxPlayNotes, InboxPlayTabs and InboxPlayFilters go in the list
-# in that order. A row takes ring (yes: a story ring), badge (WhatsApp's unread count), tag (who answered: «Asistente»);
+# in that order. A row takes ring (yes: a story ring), badge (WhatsApp's unread count), tag (who answered: “Asistente”);
 # and Instagram rows show the camera at the end.
 # shadcn-for-muten · part · no deps · kit.css (.cx-ip).
 part InboxPlay(title: text, tabs: text = "", requests: text = "", skin: text = "instagram", label: text = "", search: text = "") {

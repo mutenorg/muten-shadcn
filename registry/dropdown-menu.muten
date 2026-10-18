@@ -1,13 +1,13 @@
 # DropdownMenu - a list of actions that opens from a button (shadcn Nova). Arrows, Home/End and the first letter move;
 # Enter picks; a picked action closes it, a check or radio item stays open. Trigger and content go inside:
 #   DropdownMenu {
-#     DropdownTrigger { TriggerBtn { Span "Opciones"  Icon "lucide:chevron-down" } }
+#     DropdownTrigger { TriggerBtn { Span "Options"  Icon "lucide:chevron-down" } }
 #     DropdownContent(align: "start") {
-#       DropdownLabel(label: "Pedido")
-#       DropdownItem(label: "Editar", shortcut: "⌘E", onSelect: edit) { Icon "lucide:pencil" }
+#       DropdownLabel(label: "Order")
+#       DropdownItem(label: "Edit", shortcut: "⌘E", onSelect: edit) { Icon "lucide:pencil" }
 #       DropdownSeparator()
 #       DropdownCheckItem(label: "Avisarme", on: notify, onToggle: toggleNotify)
-#       DropdownItem(label: "Eliminar", tone: "destructive", onSelect: remove) { Icon "lucide:trash-2" }
+#       DropdownItem(label: "Delete", tone: "destructive", onSelect: remove) { Icon "lucide:trash-2" }
 #     }
 #   }
 # The same items and content serve ContextMenu and Menubar. shadcn-for-muten · parts + Custom (OverlayBehavior) · Nova.

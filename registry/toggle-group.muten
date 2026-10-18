@@ -1,7 +1,7 @@
 # ToggleGroup - toggles in a row (shadcn Nova). One choice: ToggleGroupItem with the page's text state. Several
 # choices: put Toggle parts inside, each with its own bool. spacing "0" joins them into one control; "2" separates.
 #   state { align = "left" : text }   action setAlign(v: text) mutates align { align.set(v) }
-#   ToggleGroup(label: "Alineación") { ToggleGroupItem(value: "left", current: align, onSelect: setAlign, label: "Izquierda") { Icon "lucide:align-left" } … }
+#   ToggleGroup(label: "Alignment") { ToggleGroupItem(value: "left", current: align, onSelect: setAlign, label: "Left") { Icon "lucide:align-left" } … }
 #   ToggleGroup(variant: "outline", spacing: "2") { Toggle(on: bold, onToggle: b, variant: "outline") { Icon "lucide:bold" } … }
 # variant: default | outline · size: sm | default | lg · spacing: 0 | 1 | 2 · orientation: horizontal | vertical
 # shadcn-for-muten · part · no deps · Nova (.cn-toggle-group) + kit.css (joined/vertical).

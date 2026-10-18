@@ -1,10 +1,10 @@
 # OrderPlay - an order shown, not used: who ordered, the products with their photos, how it is paid and delivered,
 # and the one next step. In a loop the step is pressed and the order moves on (its badge and the button change).
 # BookingPlay's twin, for a landing's bento: the same sheet, the same rhythm. The real board is OrderBoard.
-#   OrderPlay(who: "Diego Paredes", sub: "#1046 · hace 2 min", status: "Nuevo", statusNext: "Preparando",
-#             pay: "Efectivo al retirar", total: "USD 32", delivery: "Retira hoy · 6:00 PM", cta: "Preparar",
-#             ctaNext: "Avisar que está listo", label: "Un pedido como te llega") {
-#     OrderPlayItem(name: "Pomada mate", detail: "1 × USD 14", price: "USD 14", photo: "/img/pomada.webp")
+#   OrderPlay(who: "Diego Paredes", sub: "#1046 · hace 2 min", status: "New", statusNext: "Preparing",
+#             pay: "Cash on pickup", total: "USD 32", delivery: "Pickup today · 6:00 PM", cta: "Prepare",
+#             ctaNext: "Let them know it is ready", label: "An order as it reaches you") {
+#     OrderPlayItem(name: "Matte pomade", detail: "1 × USD 14", price: "USD 14", photo: "/img/pomada.webp")
 #   }
 # photo: the client's face (empty = their initial).
 # Reduced motion: the order as it arrives. shadcn-for-muten · part · no deps · kit.css (.cx-odp).

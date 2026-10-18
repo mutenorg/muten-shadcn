@@ -1,5 +1,7 @@
-# CountUp - a number that counts up from 0 the first time it comes into view, keeping its exact format («2.4M»,
-# «94 %», «12,400», «$1.2M»). It takes the size of what holds it. Off with reduced motion.
-#   Stat(label: "citas al mes") { CountUp(to: "12,400") }
+# CountUp - a number whose digits roll to their value, keeping its exact format (“2.4M”, “94 %”, “12,400”, “$1.2M”).
+# roll "view" (default): rolls up from zeros the first time it comes into view (a landing). roll "change": still on the
+# first paint, rolls whenever `to` changes (a dashboard; StatCard uses it for its value). It takes the size of what
+# holds it; instant with reduced motion.
+#   Stat(label: "appointments a month") { CountUp(to: "12,400") }      StatCard(…, value: total)  → rolls when total changes
 # shadcn-for-muten · Custom · host JS count-up.js.
-part CountUp(to: text) { Custom CountUp inputs(to: $to) class("cx-countup") }
+part CountUp(to: text, roll: text = "view") { Custom CountUp inputs(to: $to, roll: $roll) class("cx-countup") }

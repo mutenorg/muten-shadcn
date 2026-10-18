@@ -1,0 +1,4 @@
+# ListMotion - rows that open and close their place. Put inside a list container, after its rows; ItemGroup already
+# carries it, so any `each` inside an ItemGroup moves without the page doing anything.
+# shadcn-for-muten · Custom · host JS is list-motion.js.
+part ListMotion() { Custom ListMotion class("cx-list-motion") }

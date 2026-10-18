@@ -1,9 +1,9 @@
-# FixedCard - a card that never grows with the data: at most three rows and a «Ver todas» that opens the full list
+# FixedCard - a card that never grows with the data: at most three rows and a “See all” that opens the full list
 # (in the adaptive Modal). Empty, it keeps the same shape. Rows are Row3 (time · who and what · its state).
-#   FixedCard(title: "Citas de hoy", description: "Jueves · 14 en total") {
-#     Row3(time: "09:00", title: "Andrés Rojas", subtitle: "Corte clásico") { ToneBadge(label: "Confirmada", tone: "ok") }
+#   FixedCard(title: "Today's appointments", description: "Thursday · 14 in total") {
+#     Row3(time: "09:00", title: "Andrés Rojas", subtitle: "Classic cut") { ToneBadge(label: "Confirmed", tone: "ok") }
 #   }
-#   …then its CardFooter { Btn(variant: "outline", size: "sm", onClick: openAll) class("cx-fill") { Span "Ver todas (14)" } }
+#   …then its CardFooter { Btn(variant: "outline", size: "sm", onClick: openAll) class("cx-fill") { Span "See all (14)" } }
 # EmptyMini - the empty line inside it: EmptyMini(text: "Entregaste todo.") { Icon "lucide:circle-check" }
 # shadcn-for-muten · part · no deps · kit.css (.cx-fixed-card, .cx-row3, .cx-empty-mini).
 part FixedCard(title: text, description: text = "") {

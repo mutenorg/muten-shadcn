@@ -1,8 +1,8 @@
 # AlertDialog - asks before something that cannot be undone (delete, cancel and refund). It cannot be dismissed by
 # tapping outside: the person answers with one of its two buttons (Esc counts as the safe one). Put them in a
 # ModalFooter: the safe way out (cx-exit) and the action (cx-go, destructive when it destroys).
-#   AlertDialog(open: asking, onClose: keep, title: "¿Eliminar el servicio?", description: "Desaparece de tu tienda…") {
-#     ModalFooter { Btn(variant: "outline", onClick: keep) class("cx-exit") { Span "Cancelar" }  Btn(variant: "destructive", onClick: remove) class("cx-go") { Span "Eliminar" } }
+#   AlertDialog(open: asking, onClose: keep, title: "Delete the service?", description: "It disappears from your shop…") {
+#     ModalFooter { Btn(variant: "outline", onClick: keep) class("cx-exit") { Span "Cancel" }  Btn(variant: "destructive", onClick: remove) class("cx-go") { Span "Delete" } }
 #   }
 # shadcn-for-muten · part over Modal (role alertdialog, dismiss off).
 part AlertDialog(open: bool, onClose: action, title: text, description: text = "") {

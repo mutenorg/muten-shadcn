@@ -1,0 +1,5 @@
+# LangScope - everything inside speaks this language (es | en …): the library's words, its dates and its Customs follow
+# it. Without it they follow the page's <html lang>, English when there is none. A store in the shop's language:
+#   LangScope(lang: shopLang) { … the store's parts … }
+# shadcn-for-muten · Custom · host JS is lang-scope.js.
+part LangScope(lang: text) { Stack class("cx-lang-scope") { Custom LangScope inputs(lang: $lang) class("cx-lang-host")  slot } }

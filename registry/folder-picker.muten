@@ -1,5 +1,5 @@
 # FolderPicker - connects a folder of the computer (Chrome and Edge): a button that shows the folder's name once it
 # is chosen; where the browser cannot, it says so under the button instead of failing.
-#   FolderPicker(label: "Conectar carpeta", onPick: setFolder)
+#   FolderPicker(label: "Connect folder", onPick: setFolder)
 # shadcn-for-muten · Custom · host JS folder-picker.js.
-part FolderPicker(label: text = "Conectar carpeta", onPick: action) { Custom FolderPicker inputs(label: $label) on(pick: $onPick) class("cx-folder-host") }
+part FolderPicker(label: text = "Connect a folder", onPick: action) { Custom FolderPicker inputs(label: $label) on(pick: $onPick) class("cx-folder-host") }

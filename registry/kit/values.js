@@ -2,18 +2,22 @@
 // CodePicker (a searchable list under a trigger), MoneyField (a currency = code + locale, Intl does the rest),
 // PhoneField (a country = dial code + digits + mask) and the 6-slot verification code. Generic: data and labels in.
 export const CURRENCIES = [
-  { id: 'COP', label: 'Peso colombiano', locale: 'es-CO', minor: 2, shown: 0 }, { id: 'USD', label: 'Dólar estadounidense', locale: 'en-US' },
-  { id: 'MXN', label: 'Peso mexicano', locale: 'es-MX' }, { id: 'ARS', label: 'Peso argentino', locale: 'es-AR' }, { id: 'VES', label: 'Bolívar', locale: 'es-VE' },
-  { id: 'CLP', label: 'Peso chileno', locale: 'es-CL' }, { id: 'PEN', label: 'Sol peruano', locale: 'es-PE' }, { id: 'BRL', label: 'Real brasileño', locale: 'pt-BR' },
-  { id: 'EUR', label: 'Euro', locale: 'es-ES' }, { id: 'CAD', label: 'Dólar canadiense', locale: 'en-CA' }, { id: 'AUD', label: 'Dólar australiano', locale: 'en-AU' }, { id: 'JPY', label: 'Yen', locale: 'ja-JP' },
+  { id: 'COP', label: 'Colombian peso', locale: 'es-CO', minor: 2, shown: 0 }, { id: 'USD', label: 'US dollar', locale: 'en-US' },
+  { id: 'MXN', label: 'Mexican peso', locale: 'es-MX' }, { id: 'ARS', label: 'Argentine peso', locale: 'es-AR' }, { id: 'VES', label: 'Bolívar', locale: 'es-VE' },
+  { id: 'CLP', label: 'Chilean peso', locale: 'es-CL' }, { id: 'PEN', label: 'Peruvian sol', locale: 'es-PE' }, { id: 'BRL', label: 'Brazilian real', locale: 'pt-BR' },
+  { id: 'EUR', label: 'Euro', locale: 'es-ES' }, { id: 'CAD', label: 'Canadian dollar', locale: 'en-CA' }, { id: 'AUD', label: 'Australian dollar', locale: 'en-AU' }, { id: 'JPY', label: 'Yen', locale: 'ja-JP' },
 ];
 export const COUNTRIES = [
   { id: 'AR', label: 'Argentina', dial: '+54 9', e164: '549', len: 10, mask: '## ####-####' }, { id: 'CO', label: 'Colombia', dial: '+57', e164: '57', len: 10, mask: '### ### ####' },
-  { id: 'MX', label: 'México', dial: '+52', e164: '52', len: 10, mask: '## #### ####' }, { id: 'US', label: 'Estados Unidos', dial: '+1', e164: '1', len: 10, mask: '(###) ###-####' },
-  { id: 'VE', label: 'Venezuela', dial: '+58', e164: '58', len: 10, mask: '### ### ####' }, { id: 'BR', label: 'Brasil', dial: '+55', e164: '55', len: 11, mask: '(##) #####-####' },
-  { id: 'CL', label: 'Chile', dial: '+56', e164: '56', len: 9, mask: '# #### ####' }, { id: 'PE', label: 'Perú', dial: '+51', e164: '51', len: 9, mask: '### ### ###' },
-  { id: 'ES', label: 'España', dial: '+34', e164: '34', len: 9, mask: '### ## ## ##' }, { id: 'CA', label: 'Canadá', dial: '+1', e164: '1', len: 10, mask: '(###) ###-####' },
+  { id: 'MX', label: 'Mexico', dial: '+52', e164: '52', len: 10, mask: '## #### ####' }, { id: 'US', label: 'United States', dial: '+1', e164: '1', len: 10, mask: '(###) ###-####' },
+  { id: 'VE', label: 'Venezuela', dial: '+58', e164: '58', len: 10, mask: '### ### ####' }, { id: 'BR', label: 'Brazil', dial: '+55', e164: '55', len: 11, mask: '(##) #####-####' },
+  { id: 'CL', label: 'Chile', dial: '+56', e164: '56', len: 9, mask: '# #### ####' }, { id: 'PE', label: 'Peru', dial: '+51', e164: '51', len: 9, mask: '### ### ###' },
+  { id: 'ES', label: 'Spain', dial: '+34', e164: '34', len: 9, mask: '### ## ## ##' }, { id: 'CA', label: 'Canada', dial: '+1', e164: '1', len: 10, mask: '(###) ###-####' },
 ];
+
+// a currency's or a country's name in a language (Intl knows them all); the table's English label when it cannot
+const nameIn = (lang, type, id, fallback) => { try { return new Intl.DisplayNames([lang], { type }).of(id) || fallback; } catch { return fallback; } };
+const cap = (x) => x.charAt(0).toUpperCase() + x.slice(1);
 
 export function codePicker(core, { trigger, anchor, items, current, onPick, placeholder }) {
   const { $, $$, lib, place, show, hide, fold } = core;
@@ -52,13 +56,13 @@ export function codePicker(core, { trigger, anchor, items, current, onPick, plac
 // ScaleSlider: one or two thumbs, the value rides on each thumb, two bubbles that would touch merge into one.
 // i: {label, min, max, step, values "24" | "20000,80000", gap, format: hours|money|percent|"" , suffix}
 export function scaleSlider(root, i, core, on) {
-  const { $, $$, money0 } = core;
+  const { $, $$, money0, t, langOf } = core, T = (k, ...a) => t(langOf(root), k, ...a);
   const min = Number(i.min) || 0, max = Number(i.max) || 100, step = Number(i.step) || 1, gap = Number(i.gap) || 0;
   const FMT = { hours: (v) => `${v} h`, money: money0, percent: (v) => `${v} %` };
   const fmt = FMT[i.format] || ((v) => `${v}${i.suffix || ''}`);
   const vals = String(i.values ?? min).split(',').map(Number), two = vals.length > 1, TW = 21;
   const id = 'sl' + Math.random().toString(36).slice(2, 7);
-  root.innerHTML = `<div class="cx-sl-field"><div class="cx-sl-head"><span class="cn-label" id="${id}-l">${i.label || ''}</span></div><div data-slot="slider" class="cn-slider cx-slider" data-orientation="horizontal" data-horizontal><div data-slot="slider-track" class="cn-slider-track" data-orientation="horizontal"><div data-slot="slider-range" class="cn-slider-range" data-orientation="horizontal"></div></div>${vals.map((_, k) => `<span data-slot="slider-thumb" class="cn-slider-thumb" tabindex="0" role="slider" ${two ? `aria-label="${i.label || ''} ${k ? 'máximo' : 'mínimo'}"` : `aria-labelledby="${id}-l"`}></span>`).join('')}</div><div class="cx-sl-scale"><span>${fmt(min)}</span><span>${fmt(max)}</span></div></div>`;
+  root.innerHTML = `<div class="cx-sl-field"><div class="cx-sl-head"><span class="cn-label" id="${id}-l">${i.label || ''}</span></div><div data-slot="slider" class="cn-slider cx-slider" data-orientation="horizontal" data-horizontal><div data-slot="slider-track" class="cn-slider-track" data-orientation="horizontal"><div data-slot="slider-range" class="cn-slider-range" data-orientation="horizontal"></div></div>${vals.map((_, k) => `<span data-slot="slider-thumb" class="cn-slider-thumb" tabindex="0" role="slider" ${two ? `aria-label="${i.label || ''} ${k ? T('maximum') : T('minimum')}"` : `aria-labelledby="${id}-l"`}></span>`).join('')}</div><div class="cx-sl-scale"><span>${fmt(min)}</span><span>${fmt(max)}</span></div></div>`;
   const sl = $('.cx-slider', root), thumbs = $$('.cn-slider-thumb', sl), range = $('.cn-slider-range', sl);
   const bubbles = thumbs.map(() => { const b = document.createElement('span'); b.className = 'cx-sl-bubble'; b.setAttribute('aria-hidden', 'true'); sl.appendChild(b); return b; });
   const bounds = (k) => [two && k === 1 ? vals[0] + gap : min, two && k === 0 ? vals[1] - gap : max];
@@ -98,9 +102,9 @@ export function scaleSlider(root, i, core, on) {
 
 // MoneyField: i {label, value (a number), currency "COP", hint "on"} → on.change(json {amount, minor, currency})
 export function moneyField(root, i, core, on) {
-  const { $, ui, reformat, groupThousands } = core;
+  const { $, ui, reformat, groupThousands, t, langOf } = core, L = langOf(root), T = (k, ...a) => t(L, k, ...a);
   const id = 'mf' + Math.random().toString(36).slice(2, 7);
-  root.innerHTML = `<div data-slot="field" class="cn-field cn-field-orientation-vertical group/field"><label data-slot="label" class="cn-label" for="${id}">${i.label || 'Precio'}</label><div data-slot="input-group" class="cn-input-group group/input-group" data-mf-group><div data-slot="input-group-addon" class="cn-input-group-addon cn-input-group-addon-align-inline-start cx-num" data-mf-sym>$</div><input data-slot="input-group-control" class="cn-input cn-input-group-input cx-num" id="${id}" inputmode="decimal" autocomplete="off"><div data-slot="input-group-addon" class="cn-input-group-addon cn-input-group-addon-align-inline-end" style="padding-right:2px"><button data-slot="button" class="cn-button cn-button-variant-ghost cn-button-size-xs group/button cx-cc" data-mf-cur aria-haspopup="dialog" aria-expanded="false" aria-label="Moneda"><span class="cx-cc-code" data-mf-code>COP</span><svg><use href="#chev"/></svg></button></div></div><p data-slot="field-description" class="cn-field-description cx-num" data-mf-out></p></div>`;
+  root.innerHTML = `<div data-slot="field" class="cn-field cn-field-orientation-vertical group/field"><label data-slot="label" class="cn-label" for="${id}">${T(i.label || 'Price')}</label><div data-slot="input-group" class="cn-input-group group/input-group" data-mf-group><div data-slot="input-group-addon" class="cn-input-group-addon cn-input-group-addon-align-inline-start cx-num" data-mf-sym>$</div><input data-slot="input-group-control" class="cn-input cn-input-group-input cx-num" id="${id}" inputmode="decimal" autocomplete="off"><div data-slot="input-group-addon" class="cn-input-group-addon cn-input-group-addon-align-inline-end" style="padding-right:2px"><button data-slot="button" class="cn-button cn-button-variant-ghost cn-button-size-xs group/button cx-cc" data-mf-cur aria-haspopup="dialog" aria-expanded="false" aria-label="${T('Currency')}"><span class="cx-cc-code" data-mf-code>COP</span><svg><use href="#chev"/></svg></button></div></div><p data-slot="field-description" class="cn-field-description cx-num" data-mf-out></p></div>`;
   const currencySpec = (c) => {
     const nf = new Intl.NumberFormat(c.locale, { style: 'currency', currency: c.id, currencyDisplay: 'narrowSymbol' });
     const parts = nf.formatToParts(1234567.89), part = (t, d) => parts.find((p) => p.type === t)?.value ?? d;
@@ -114,42 +118,46 @@ export function moneyField(root, i, core, on) {
   const sigFor = () => new RegExp(`[\\d${escRe(cur.dec)}]`);
   const fmtMoney = (v) => { const k = cur.places ? v.indexOf(cur.dec) : -1; const int = (k < 0 ? v : v.slice(0, k)).replace(/\D/g, '').slice(0, 12); const frac = k < 0 ? '' : v.slice(k + 1).replace(/\D/g, '').slice(0, cur.places); return (groupThousands(int, cur.group) || (k >= 0 ? '0' : '')) + (k >= 0 ? cur.dec + frac : ''); };
   const amount = () => { if (!mf.value) return 0; const [a, f = ''] = mf.value.split(cur.dec); return Number(a.split(cur.group).join('') + '.' + (f || '0')); };
-  const unitName = () => (cur.minor === 0 ? `${curRow.id} (no tiene unidad menor)` : `centavos de ${curRow.id}`);
-  const showMinor = () => { mfOut.textContent = mf.value ? `Se guarda: ${Math.round(amount() * 10 ** cur.minor)} ${unitName()}` : 'Escribe un precio'; };
+  const unitName = () => (cur.minor === 0 ? T('{0} (it has no minor unit)', curRow.id) : T('cents of {0}', curRow.id));
+  const showMinor = () => { mfOut.textContent = mf.value ? T('Saved as: {0} {1}', Math.round(amount() * 10 ** cur.minor), unitName()) : T('Type a price'); };
   const toText = (n) => { const [a, f] = n.toFixed(cur.places).split('.'); return groupThousands(a, cur.group) + (cur.places && /[1-9]/.test(f) ? cur.dec + f : ''); };
   const emit = () => on?.change?.(JSON.stringify({ amount: amount(), minor: Math.round(amount() * 10 ** cur.minor), currency: curRow.id }));
   mf.addEventListener('input', () => { reformat(mf, fmtMoney, sigFor()); showMinor(); emit(); });
-  mf.addEventListener('keydown', (e) => { if (!cur.places || (e.key !== '.' && e.key !== ',') || e.key === cur.dec) return; e.preventDefault(); if (!mf.value.includes(cur.dec)) { mf.setRangeText(cur.dec, mf.selectionStart, mf.selectionEnd, 'end'); mf.dispatchEvent(new Event('input')); } });
-  const setCurrency = (row) => { const n = amount(); curRow = row; cur = currencySpec(row); $('[data-mf-sym]', root).textContent = cur.sym; $('[data-mf-code]', root).textContent = row.id; mf.value = n ? toText(n) : ''; showMinor(); };
-  codePicker(core, { trigger: $('[data-mf-cur]', root), anchor: $('[data-mf-group]', root), placeholder: 'Buscar moneda', current: () => curRow.id, items: () => CURRENCIES.map((c) => ({ id: c.id, label: c.label, hint: currencySpec(c).sym })), onPick: (it) => { setCurrency(CURRENCIES.find((c) => c.id === it.id)); mf.focus({ preventScroll: true }); emit(); } });
+  // a decimal key: in a currency with no decimals it is not written (it used to drop the comma and glue the digits after
+  // it to the whole part, ten times the amount); in one with decimals either key writes that currency's separator
+  mf.addEventListener('keydown', (e) => { if (e.key !== '.' && e.key !== ',') return; if (!cur.places) { e.preventDefault(); return; } if (e.key === cur.dec) return; e.preventDefault(); if (!mf.value.includes(cur.dec)) { mf.setRangeText(cur.dec, mf.selectionStart, mf.selectionEnd, 'end'); mf.dispatchEvent(new Event('input')); } });
+  // the currency's own shape as the empty field's hint: “0” or “0,00” / “0.00”
+  const setCurrency = (row) => { const n = amount(); curRow = row; cur = currencySpec(row); $('[data-mf-sym]', root).textContent = cur.sym; $('[data-mf-code]', root).textContent = row.id; mf.placeholder = cur.places ? `0${cur.dec}${'0'.repeat(cur.places)}` : '0'; mf.value = n ? toText(n) : ''; showMinor(); };
+  codePicker(core, { trigger: $('[data-mf-cur]', root), anchor: $('[data-mf-group]', root), placeholder: T('Search currency'), current: () => curRow.id, items: () => CURRENCIES.map((c) => ({ id: c.id, label: cap(nameIn(L, 'currency', c.id, c.label)), hint: currencySpec(c).sym })), onPick: (it) => { setCurrency(CURRENCIES.find((c) => c.id === it.id)); mf.focus({ preventScroll: true }); emit(); } });
   mf.value = fmtMoney(String(i.value ?? '')); setCurrency(curRow);
   void ui;
 }
 
 // PhoneField: i {label, value (digits), country "CO"} → on.change(json {e164, valid, country})
 export function phoneField(root, i, core, on) {
+  const L = core.langOf(root), T = (k, ...a) => core.t(L, k, ...a);
   const { $, reformat } = core;
   const id = 'ph' + Math.random().toString(36).slice(2, 7);
-  root.innerHTML = `<div data-slot="field" class="cn-field cn-field-orientation-vertical group/field" data-ph-f><label data-slot="label" class="cn-label" for="${id}">${i.label || 'Teléfono'}</label><div data-slot="input-group" class="cn-input-group group/input-group cx-phone" data-ph-group><div data-slot="input-group-addon" class="cn-input-group-addon cn-input-group-addon-align-inline-start" style="padding-left:2px"><button data-slot="button" class="cn-button cn-button-variant-ghost cn-button-size-xs group/button cx-cc" data-ph-cc aria-haspopup="dialog" aria-expanded="false" aria-label="País"><span class="cx-cc-code" data-ph-flag></span><span class="cx-num cx-cc-dial" data-ph-dial></span><svg><use href="#chev"/></svg></button></div><input data-slot="input-group-control" class="cn-input cn-input-group-input cx-num" id="${id}" type="tel" inputmode="tel" autocomplete="tel-national" aria-describedby="${id}-msg"></div><p data-slot="field-description" class="cn-field-description cx-msg cx-num" id="${id}-msg"></p></div>`;
+  root.innerHTML = `<div data-slot="field" class="cn-field cn-field-orientation-vertical group/field" data-ph-f><label data-slot="label" class="cn-label" for="${id}">${T(i.label || 'Phone')}</label><div data-slot="input-group" class="cn-input-group group/input-group cx-phone" data-ph-group><div data-slot="input-group-addon" class="cn-input-group-addon cn-input-group-addon-align-inline-start" style="padding-left:2px"><button data-slot="button" class="cn-button cn-button-variant-ghost cn-button-size-xs group/button cx-cc" data-ph-cc aria-haspopup="dialog" aria-expanded="false" aria-label="${T('Country')}"><span class="cx-cc-code" data-ph-flag></span><span class="cx-num cx-cc-dial" data-ph-dial></span><svg><use href="#chev"/></svg></button></div><input data-slot="input-group-control" class="cn-input cn-input-group-input cx-num" id="${id}" type="tel" inputmode="tel" autocomplete="tel-national" aria-describedby="${id}-msg"></div><p data-slot="field-description" class="cn-field-description cx-msg cx-num" id="${id}-msg"></p></div>`;
   const ph = $('input', root), phMsg = $(`#${id}-msg`, root), phF = $('[data-ph-f]', root);
   let country = COUNTRIES.find((c) => c.id === i.country) || COUNTRIES[1];
   const phDigits = (v) => { let d = v.replace(/\D/g, ''); if (d.length > country.len && d.startsWith(country.e164)) d = d.slice(country.e164.length); return d.slice(0, country.len); };
   const fmtPhone = (v) => { const d = phDigits(v); let out = '', k = 0; for (const ch of country.mask) { if (k >= d.length) break; out += ch === '#' ? d[k++] : ch; } return out; };
   const emit = () => { const d = phDigits(ph.value); on?.change?.(JSON.stringify({ e164: `+${country.e164}${d}`, valid: d.length === country.len, country: country.id })); };
-  const phCheck = (final) => { const d = phDigits(ph.value), ok = d.length === country.len, bad = final && d.length > 0 && !ok; phF.toggleAttribute('data-invalid', bad); ph.setAttribute('aria-invalid', bad); phMsg.textContent = ok ? `Se guarda como +${country.e164}${d}` : bad ? `Faltan ${country.len - d.length} dígitos para un número de ${country.label}` : `${country.len} dígitos, sin el ${country.dial}`; };
+  const phCheck = (final) => { const d = phDigits(ph.value), ok = d.length === country.len, bad = final && d.length > 0 && !ok; phF.toggleAttribute('data-invalid', bad); ph.setAttribute('aria-invalid', bad); phMsg.textContent = ok ? T('Saved as +{0}', `${country.e164}${d}`) : bad ? T('{0} digits short for a number from {1}', country.len - d.length, nameIn(L, 'region', country.id, country.label)) : T('{0} digits, without the {1}', country.len, country.dial); };
   const setCountry = (c) => { country = c; $('[data-ph-flag]', root).textContent = c.id; $('[data-ph-dial]', root).textContent = c.dial; ph.placeholder = c.mask.replace(/#/g, '0'); ph.value = fmtPhone(ph.value); phCheck(false); };
   ph.addEventListener('input', () => { reformat(ph, fmtPhone, /\d/); phCheck(phF.hasAttribute('data-invalid')); emit(); });
   ph.addEventListener('blur', () => phCheck(true));
-  codePicker(core, { trigger: $('[data-ph-cc]', root), anchor: $('[data-ph-group]', root), placeholder: 'Buscar país', current: () => country.id, items: () => COUNTRIES.map((c) => ({ id: c.id, label: c.label, hint: c.dial })), onPick: (it) => { setCountry(COUNTRIES.find((c) => c.id === it.id)); ph.focus({ preventScroll: true }); emit(); } });
+  codePicker(core, { trigger: $('[data-ph-cc]', root), anchor: $('[data-ph-group]', root), placeholder: T('Search country'), current: () => country.id, items: () => COUNTRIES.map((c) => ({ id: c.id, label: nameIn(L, 'region', c.id, c.label), hint: c.dial })), onPick: (it) => { setCountry(COUNTRIES.find((c) => c.id === it.id)); ph.focus({ preventScroll: true }); emit(); } });
   setCountry(country); ph.value = fmtPhone(String(i.value ?? '')); phCheck(false);
 }
 
 // OtpField: 6 slots in two groups of 3. i {length, hint, state: ""|checking|ok|bad, message, resendIn} →
 // on.complete(code) when full, on.resend(). The page checks the code and answers with state + message.
 export function otpField(root, i, core, on) {
-  const { $ } = core;
+  const { $ } = core, T = (k, ...a) => core.t(core.langOf(root), k, ...a);
   const len = Number(i.length) || 6, half = Math.ceil(len / 2);
-  root.innerHTML = `<div class="cx-vline cx-otp-stack"><div class="cx-otp"><input class="cx-otp-input" inputmode="numeric" autocomplete="one-time-code" maxlength="${len}" aria-label="Código de ${len} dígitos"><div data-slot="input-otp" class="cn-input-otp" aria-hidden="true"><div data-slot="input-otp-group" class="cn-input-otp-group"></div><div data-slot="input-otp-separator" class="cn-input-otp-separator cx-otp-sep"><span></span></div><div data-slot="input-otp-group" class="cn-input-otp-group"></div></div></div><p class="cx-note" data-otp-msg></p><button data-slot="button" class="cn-button cn-button-variant-link cn-button-size-sm group/button" data-otp-resend disabled></button></div>`;
+  root.innerHTML = `<div class="cx-vline cx-otp-stack"><div class="cx-otp"><input class="cx-otp-input" inputmode="numeric" autocomplete="one-time-code" maxlength="${len}" aria-label="${T('{0}-digit code', len)}"><div data-slot="input-otp" class="cn-input-otp" aria-hidden="true"><div data-slot="input-otp-group" class="cn-input-otp-group"></div><div data-slot="input-otp-separator" class="cn-input-otp-separator cx-otp-sep"><span></span></div><div data-slot="input-otp-group" class="cn-input-otp-group"></div></div></div><p class="cx-note" data-otp-msg></p><button data-slot="button" class="cn-button cn-button-variant-link cn-button-size-sm group/button" data-otp-resend disabled></button></div>`;
   const otpIn = $('.cx-otp-input', root), otpBox = $('.cx-otp', root), otpMsg = $('[data-otp-msg]', root), resend = $('[data-otp-resend]', root);
   const slots = [];
   root.querySelectorAll('.cn-input-otp-group').forEach((g, gi) => { const n = gi ? len - half : half; for (let k = 0; k < n; k++) { const s = document.createElement('div'); s.className = 'cn-input-otp-slot'; s.dataset.slot = 'input-otp-slot'; g.appendChild(s); slots.push(s); } });
@@ -159,20 +167,20 @@ export function otpField(root, i, core, on) {
   const toEnd = () => { const n = otpIn.value.length; otpIn.setSelectionRange(n, n); };
   otpIn.addEventListener('input', () => {
     otpIn.value = otpIn.value.replace(/\D/g, '').slice(0, len); delete otpBox.dataset.state; otpMsg.removeAttribute('data-tone'); otpMsg.textContent = hint; paint();
-    if (otpIn.value.length === len) { busy = true; otpIn.readOnly = true; otpMsg.textContent = 'Verificando…'; paint(); on?.complete?.(otpIn.value); }
+    if (otpIn.value.length === len) { busy = true; otpIn.readOnly = true; otpMsg.textContent = T('Checking…'); paint(); on?.complete?.(otpIn.value); }
   });
   ['focus', 'blur', 'click', 'keyup'].forEach((t) => otpIn.addEventListener(t, () => { toEnd(); paint(); }));
   otpIn.addEventListener('select', toEnd);
   let left = Number(i.resendIn ?? 30), rt = 0;
-  const tick = () => { left--; resend.disabled = left > 0; resend.textContent = left > 0 ? `Reenviar en 0:${String(left).padStart(2, '0')}` : 'Reenviar código'; if (left > 0) rt = setTimeout(tick, 1000); };
-  resend.textContent = `Reenviar en 0:${String(left).padStart(2, '0')}`;
-  resend.onclick = () => { left = Number(i.resendIn ?? 30) + 1; clearTimeout(rt); tick(); otpMsg.removeAttribute('data-tone'); otpMsg.textContent = 'Te enviamos un código nuevo'; otpIn.value = ''; delete otpBox.dataset.state; otpIn.focus(); on?.resend?.(); };
+  const tick = () => { left--; resend.disabled = left > 0; resend.textContent = left > 0 ? T('Resend in 0:{0}', String(left).padStart(2, '0')) : T('Resend code'); if (left > 0) rt = setTimeout(tick, 1000); };
+  resend.textContent = T('Resend in 0:{0}', String(left).padStart(2, '0'));
+  resend.onclick = () => { left = Number(i.resendIn ?? 30) + 1; clearTimeout(rt); tick(); otpMsg.removeAttribute('data-tone'); otpMsg.textContent = T('We sent you a new code'); otpIn.value = ''; delete otpBox.dataset.state; otpIn.focus(); on?.resend?.(); };
   rt = setTimeout(tick, 1000); paint();
   const answer = (st, msg) => {
     if (!st || st === 'checking') return;
     busy = false; otpIn.readOnly = false;
-    if (st === 'ok') { otpBox.dataset.state = 'ok'; otpMsg.dataset.tone = 'ok'; otpMsg.textContent = msg || 'Listo, quedó verificado'; otpIn.blur(); }
-    if (st === 'bad') { otpBox.dataset.state = 'bad'; otpMsg.dataset.tone = 'bad'; otpMsg.textContent = msg || 'Ese código no es'; const wrong = otpIn.value; setTimeout(() => { if (otpIn.value === wrong) { otpIn.value = ''; paint(); } }, 450); }
+    if (st === 'ok') { otpBox.dataset.state = 'ok'; otpMsg.dataset.tone = 'ok'; otpMsg.textContent = msg || T('Done, it is verified'); otpIn.blur(); }
+    if (st === 'bad') { otpBox.dataset.state = 'bad'; otpMsg.dataset.tone = 'bad'; otpMsg.textContent = msg || T('That is not the code'); const wrong = otpIn.value; setTimeout(() => { if (otpIn.value === wrong) { otpIn.value = ''; paint(); } }, 450); }
     paint();
   };
   return (next) => answer(next.state, next.message);

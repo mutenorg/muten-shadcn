@@ -4,20 +4,20 @@
 # theme, so it sits on any skin, light or dark.
 #   SiteFooter {
 #     FooterHead {
-#       FooterBrand(tag: "Vende y agenda por ti.") { Link "" -> "/" aria(label: "Inicio") { Image "/logo.svg" alt("Storio") } }
-#       FooterActions { LinkBtn(to: "/login", variant: "outline") { Span "Entrar" }  LinkBtn(to: "/signup") { Span "Crear mi tienda" } }
+#       FooterBrand(tag: "Sells and books for you.") { Link "" -> "/" aria(label: "Home") { Image "/logo.svg" alt("Storio") } }
+#       FooterActions { LinkBtn(to: "/login", variant: "outline") { Span "Sign in" }  LinkBtn(to: "/signup") { Span "Create my shop" } }
 #     }
 #     FooterLinks {
-#       FooterCol(title: "Producto") { Link "Qué es" -> "/product"  Link "Precios" -> "/pricing" }
-#       FooterCol(title: "Legal") { Link "Términos" -> "/terms"  Link "Privacidad" -> "/privacy" }
+#       FooterCol(title: "Product") { Link "What it is" -> "/product"  Link "Prices" -> "/pricing" }
+#       FooterCol(title: "Legal") { Link "Terms" -> "/terms"  Link "Privacy" -> "/privacy" }
 #     }
 #     FooterBar { Span "© 2026 Candhrly LLC"  Link "hello@storio.ink" -> "mailto:hello@storio.ink" }
 #   }
 # FooterCol(wide: "on") takes two columns of links on a phone and one long column on a desk (a long list, like trades).
 # The bar puts its first child on the left and the rest on the right.
 # shadcn-for-muten · part · no deps · kit.css (.cx-foot).
-part SiteFooter(label: text = "Pie de página") {
-  Footer class("cx-foot") aria(label: $label) { Stack class("cx-foot-in") { slot } }
+part SiteFooter(label: text = "Footer") {
+  Footer class("cx-foot") data(trl: $label) aria(label: $label) { Stack class("cx-foot-in") { slot } }
 }
 part FooterHead() { Stack class("cx-foot-head") { slot } }
 part FooterBrand(tag: text = "") {

@@ -2,7 +2,7 @@
 # onSelect gets "yyyy-mm-dd" (single) or "from/to" (range).
 #   Calendar(selected: "today", min: "today", caption: "on", onSelect: pickDay)
 #   Calendar(selected: "-6/0", mode: "range", months: 2, presets: "reports", caption: "on", onSelect: pickRange)
-# selected/min take dates or days from today ("today", "-6/0"). presets "reports" adds Hoy · Últimos 7 días · Este
+# selected/min take dates or days from today ("today", "-6/0"). presets "reports" adds Today · Last 7 days · This
 # mes · Mes pasado beside a range; caption "on" writes what was chosen under it.
 # shadcn-for-muten · Custom (kit core) · host JS is calendar.js.
 part Calendar(selected: text = "", mode: text = "single", months: number = 1, min: text = "", presets: text = "", caption: text = "", onSelect: action) {

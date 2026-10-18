@@ -1,6 +1,6 @@
 # FeatureRows - a list of numbered rows split by hairlines: the number, a title and its explanation in three
-# columns on a wide screen, one under the other on a phone. For steps, a schedule, a «how it works».
-#   FeatureRows { FeatureRow(index: "01", title: "Crea tu tienda", description: "Nombre, rubro y ciudad en un minuto.") … }
+# columns on a wide screen, one under the other on a phone. For steps, a schedule, a “how it works”.
+#   FeatureRows { FeatureRow(index: "01", title: "Create your shop", description: "Nombre, rubro y ciudad en un minuto.") … }
 # shadcn-for-muten · parts · no deps · kit.css (.cx-frows).
 part FeatureRows() { Stack class("cx-frows") aria(role: "list") { slot } }
 part FeatureRow(index: text, title: text, description: text = "") {

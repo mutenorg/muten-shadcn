@@ -1,6 +1,6 @@
 # Dialog - a window in the middle of the screen for one task (edit, confirm a detail), on every width. It is the
 # adaptive Modal forced to dialog; on a phone prefer Modal (it becomes a Drawer). The page owns open.
-#   Dialog(open: editing, onClose: done, title: "Editar servicio", description: "…") { … ModalFooter { … } }
+#   Dialog(open: editing, onClose: done, title: "Edit service", description: "…") { … ModalFooter { … } }
 # shadcn-for-muten · part over Modal.
 part Dialog(open: bool, onClose: action, title: text, description: text = "", size: text = "") {
   Modal(open: $open, onClose: $onClose, title: $title, description: $description, mode: "dialog", size: $size) { slot }

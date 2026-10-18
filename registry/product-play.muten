@@ -1,7 +1,7 @@
 # ProductPlay - a product sheet shown, not used: the photo, the shop, the name with its price, a line about it, its
-# options (one picked) and the quantity beside «Agregar». For a landing; a picture (aria-hidden), `label` says what.
-#   ProductPlay(photo: "/pomade.webp", shop: "Bruma Barbería", name: "Pomada mate", price: "USD 14",
-#               text: "Fijación media.", cta: "Agregar · USD 14", label: "…") {
+# options (one picked) and the quantity beside “Add”. For a landing; a picture (aria-hidden), `label` says what.
+#   ProductPlay(photo: "/pomade.webp", shop: "Bruma Barbershop", name: "Matte pomade", price: "USD 14",
+#               text: "Medium hold.", cta: "Add · USD 14", label: "…") {
 #     ProductPlayOption(label: "50 g")  ProductPlayOption(label: "100 g", on: "yes")
 #   }
 # shadcn-for-muten · part · no deps · kit.css (.cx-pdp).

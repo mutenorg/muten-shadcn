@@ -2,8 +2,8 @@
 # hovering the pile fans them out and pauses them; each one leaves on its own (duration) or with its ×, and can carry
 # one action (Deshacer). The page bumps a counter to show one, with the title it has at that moment:
 #   state { toasts = 0 : number  toastTitle = "" : text }
-#   action saved() mutates toasts, toastTitle { toastTitle.set("Cita creada")  toasts.set(toasts + 1) }
-#   Toaster(trigger: toasts, title: toastTitle, description: "Jueves 9 a las 10:30", action: "Deshacer", onAction: undo)
+#   action saved() mutates toasts, toastTitle { toastTitle.set("Appointment created")  toasts.set(toasts + 1) }
+#   Toaster(trigger: toasts, title: toastTitle, description: "Thursday 9 at 10:30", action: "Undo", onAction: undo)
 # For what the person just did on this screen (saving, saved) the Island is lighter; a toast is for news that can wait.
 # shadcn-for-muten · Custom · kit.css (.pg-toasts, .pg-toast) · host JS toaster.js.
 part Toaster(trigger: number, title: text, description: text = "", action: text = "", duration: number = 5000, onAction: action) {

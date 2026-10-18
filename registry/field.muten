@@ -1,13 +1,13 @@
 # Field - a labelled control: the label, the control (slot), a description under it, an error when there is one.
-#   Field(label: "Nombre") { Input(value: name, placeholder: "Corte clásico") }
-#   Field(label: "Descripción", description: "Se ve en tu tienda.") { TextArea(value: desc) }
+#   Field(label: "Name") { Input(value: name, placeholder: "Classic cut") }
+#   Field(label: "Description", description: "Shows in your shop.") { TextArea(value: desc) }
 # Two short fields side by side: FieldRow { Field(…) { … }  Field(…) { … } } (one column on a phone).
 # error: a message that replaces the description in the same place (nothing jumps) and marks the field invalid.
 # orientation: vertical | horizontal.
 # FieldSet - sets the size and the look of every field inside it, the kit's own too (PasswordField, PhoneField…):
-#   FieldSet(size: "2xl", variant: "filled") { Field(label: "Correo") { … }  PasswordField(label: "Contraseña") }
-# FieldSeparator - a line with a word in the middle, between two ways in:   FieldSeparator(label: "o con tu correo")
-# FieldHead - a label with an action beside it:   FieldHead(label: "Contraseña") { LinkBtn(to: "/recover", variant: "link", size: "sm") { Span "¿La olvidaste?" } }
+#   FieldSet(size: "2xl", variant: "filled") { Field(label: "Email") { … }  PasswordField(label: "Password") }
+# FieldSeparator - a line with a word in the middle, between two ways in:   FieldSeparator(label: "or with your email")
+# FieldHead - a label with an action beside it:   FieldHead(label: "Password") { LinkBtn(to: "/recover", variant: "link", size: "sm") { Span "Forgot it?" } }
 # shadcn-for-muten · part · no deps · Nova (.cn-field) + kit.css.
 part Field(label: text = "", description: text = "", error: text = "", orientation: text = "vertical") {
   Stack class("cn-field cn-field-orientation-{$orientation} group/field") data(slot: "field", orientation: $orientation, invalid: $error != "") {

@@ -6,9 +6,17 @@ export function mount(el) {
   const ind = document.createElement('span'); ind.className = 'cx-tab-ind'; ind.setAttribute('aria-hidden', 'true'); list.prepend(ind);
   const tabs = () => [...list.querySelectorAll(':scope > .cx-tab')];
   const chosen = () => tabs().find((t) => t.getAttribute('aria-selected') === 'true' || t.getAttribute('aria-pressed') === 'true');
-  let first = true;
+  let first = true, lastIdx = -1;
+  // once the person switches (never on the first paint), the panels' container learns it and which way they went, so
+  // the new panel comes in from that side (kit.css “Tab panels”)
+  const mark = (t) => {
+    const k = tabs().indexOf(t); const box = list.parentElement;
+    if (lastIdx >= 0 && k !== lastIdx && box) { box.setAttribute('data-tabs-moved', ''); box.setAttribute('data-tabs-dir', k < lastIdx ? 'back' : 'forward'); }
+    lastIdx = k;
+  };
   const place = () => {
     const t = chosen(); if (!t) { ind.style.opacity = '0'; return; }
+    mark(t);
     ind.style.opacity = '';
     if (first) ind.style.transition = 'none';
     ind.style.left = t.offsetLeft + 'px'; ind.style.width = t.offsetWidth + 'px';

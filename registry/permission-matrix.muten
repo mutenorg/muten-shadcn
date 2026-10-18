@@ -2,16 +2,16 @@
 # role locked (always allowed). A real table (muten's Table / Row / Cell): the header names line up over their column and
 # every checkbox sits in the middle of its cell. On a phone the columns narrow; the table scrolls sideways if it must.
 # The grants are a list of "permission:role" keys, so the page flips one with `toggle`:
-#   state  { granted = ["Ver:Editor", "Ver:Lector", "Editar:Editor"] : list<text> }
+#   state  { granted = ["View:Editor", "View:Viewer", "Edit:Editor"] : list<text> }
 #   action flip(key: text) mutates granted { granted.toggle(key) }
-#   PermissionMatrix(roles: @roles, rows: @permissions, granted: granted, locked: "Propietario", onToggle: flip)
+#   PermissionMatrix(roles: @roles, rows: @permissions, granted: granted, locked: "Owner", onToggle: flip)
 # roles {name} · rows {name, description}. label names the first column.
 # shadcn-for-muten · part · no deps · kit.css (.cx-perm).
-part PermissionMatrix(roles: list, rows: list, granted: list, locked: text = "", label: text = "Permiso", onToggle: action) {
+part PermissionMatrix(roles: list, rows: list, granted: list, locked: text = "", label: text = "Permission", onToggle: action) {
   Stack class("cx-dt-scroll cx-scroll cx-perms") {
     Table class("cx-dt cx-perm") {
       Row head {
-        Cell "{$label}"
+        Cell "{$label}" data(tr: $label)
         each $roles as role { Cell "{role.name}" class("cx-perm-c") }
       }
       each $rows as perm {

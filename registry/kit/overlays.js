@@ -39,7 +39,11 @@ export function overlay(host, kind, core) {
   const position = () => { if (open) place(panel, anchor(), at ? 'start' : align(), Number(panel.dataset.gap) || (kind === 'navmenu' ? 8 : 4)); };
   const show = (focusFirst) => {
     if (open) return; open = true;
-    if (bar) { const other = openBars.get(bar); if (other && other !== api) other.close(false); openBars.set(bar, api); }
+    // moving from one menu of a bar to the next: the panel swaps in place (no close + open, which crossed two
+    // animations); the old one goes at once and the new one only fades its content in (kit.css [data-swap])
+    let swap = false;
+    if (bar) { const other = openBars.get(bar); if (other && other !== api) { swap = true; other.close(false, true); } openBars.set(bar, api); }
+    panel.toggleAttribute('data-swap', swap);
     try { panel.showPopover(); } catch { /* already in the top layer */ }
     panel.removeAttribute('data-closed'); panel.setAttribute('data-open', ''); panel.dataset.state = 'open';
     position();
@@ -48,8 +52,9 @@ export function overlay(host, kind, core) {
     if (isMenu && focusFirst) items()[0]?.focus({ preventScroll: true });
     else if (kind === 'popover') panel.querySelector('input, textarea, button, [tabindex]:not([tabindex="-1"])')?.focus({ preventScroll: true });
   };
-  const close = (refocus) => {
+  const close = (refocus, swapped = false) => {
     if (!open) return; open = false; at = null;
+    panel.toggleAttribute('data-swap', swapped);
     if (bar && openBars.get(bar) === api) openBars.delete(bar);
     panel.removeAttribute('data-open'); panel.setAttribute('data-closed', ''); panel.dataset.state = 'closed';
     if (kind !== 'context') btn.setAttribute('aria-expanded', 'false');

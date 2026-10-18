@@ -2,14 +2,14 @@
 # appointment to move it (the ghost turns red where it is not free), drag its edge to resize, tap it for its sheet:
 # lifecycle, payment and receipt, write, change the time, cancel with a reason. Block time; create from a free slot.
 # Everything is data (see agenda.js for the shapes); pass lists with @: Agenda(resources: @team, hours: @hours, events: @appointments, blocks: @blocks, onCreate: newAppointment, onChange: saveAgenda)
-# actions: the toolbar's buttons as data, [{id, label, icon, primary}] (default: Bloquear and Nueva cita); an id other
+# actions: the toolbar's buttons as data, [{id, label, icon, primary}] (default: Bloquear and Nueva appointment); an id other
 # than block or new fires onAction with it:  Agenda(…, actions: @agendaActions, onAction: agendaAction)
 # view: how it opens, day (default) | week | list.
 # shadcn-for-muten · Custom (kit core) · host JS is agenda.js.
 part Agenda(resources: list, hours: list, events: list, blocks: list, actions: list, from: number = 9, to: number = 19, slot: number = 30, view: text = "day", onCreate: action, onChange: action, onAction: action) {
   Custom Agenda inputs(resources: $resources, hours: $hours, events: $events, blocks: $blocks, actions: $actions, from: $from, to: $to, slot: $slot, view: $view) on(create: $onCreate, change: $onChange, action: $onAction) class("cx-agenda")
 }
-# AgendaDemo - the same agenda for a showcase with no app behind it: «Nueva cita» and a tap on a free hour open a short
+# AgendaDemo - the same agenda for a showcase with no app behind it: “New appointment” and a tap on a free hour open a short
 # built-in form (the service from `services` [{name, dur}], the client, the time) and the appointment lands on the
 # agenda at once, with its notice. Block, move and the appointment sheet work as in Agenda. Nothing is saved anywhere.
 part AgendaDemo(resources: list, hours: list, events: list, blocks: list, actions: list, services: list, from: number = 9, to: number = 19, slot: number = 30, view: text = "day", onChange: action, onAction: action) {
@@ -21,20 +21,20 @@ part AgendaDemo(resources: list, hours: list, events: list, blocks: list, action
 #   queue    who waits for a free hour [{day, name, photo}] · closed  days the shop is shut ["yyyy-mm-dd"]
 #   events   carry status (awaiting_payment | confirmed | started | done | noshow | cancelled) and tint/ink (the service's colours)
 #   lang es | en · currency + locale (prices written with Intl) · cents "yes" · drag "off" · loading "yes" · start "yyyy-mm-dd"
-#   onOpen(json {id, …}) a cita tapped (open your sheet) · onCreate(json {resource, day, start}) a free hour tapped
+#   onOpen(json {id, …}) a appointment tapped (open your sheet) · onCreate(json {resource, day, start}) a free hour tapped
 #   onBlock(json {resource, day, start, dur, reason}) · onMove(json {id, resource, day, start, dur}) dragged (answer with
 #   the data: it stays where it landed, or goes back if you send it unchanged) · onRange(json {from, to, view}) days shown
 #   fit "yes" the hours stretch to the height the app gives the agenda (a flex parent that grows), never under 56px
-#   ranges "yes" the date under the title also offers «Varios días» (a range, listed day by day); off by default
-#   actions [{id, label, icon, primary}] the toolbar's buttons (default: Bloquear and Nueva cita; [{id: "block", …}] alone
-#   leaves «Nueva cita» to the app's own button) · an id other than block or new fires onAction(id)
-#   phone "nav": on a phone its actions (Bloquear, Nueva cita, yours) and the arrows leave the toolbar for the app's
+#   ranges "yes" the date under the title also offers “Several days” (a range, listed day by day); off by default
+#   actions [{id, label, icon, primary}] the toolbar's buttons (default: Bloquear and Nueva appointment; [{id: "block", …}] alone
+#   leaves “New appointment” to the app's own button) · an id other than block or new fires onAction(id)
+#   phone "nav": on a phone its actions (Bloquear, Nueva appointment, yours) and the arrows leave the toolbar for the app's
 #   phone bar (PhoneBar), which sends them back through `command` ("new", "block", "prev", "next", "today", "view:list",
 #   an action id; repeat one with a suffix after #: "new#2"). Nothing runs while loading.
 #   several agendas: resources carry kind (business | person | a room…) and capacity (1 never overlaps, 0 no limit);
-#   a cita takes its resource plus every id in `with`. overlap "never" | "allow" overrides all capacities.
-#   resize "off" · moveAcross "off" (a backend that only moves day and time) · hour12 "yes" (3:00 PM) · timeZone (the shop's today and now) · phoneView "list" · phoneStrip "dots" (the phone's week: a dot per cita in its colour) · blockScope "all" · placing [{…}]
-#   (the dashed cita while the app's new-cita sheet is open) · events take tags [words] and photo; resources role, hideEmpty
+#   a appointment takes its resource plus every id in `with`. overlap "never" | "allow" overrides all capacities.
+#   resize "off" · moveAcross "off" (a backend that only moves day and time) · hour12 "yes" (3:00 PM) · timeZone (the shop's today and now) · phoneView "list" · phoneStrip "dots" (the phone's week: a dot per appointment in its colour) · blockScope "all" · placing [{…}]
+#   (the dashed appointment while the app's new-cita sheet is open) · events take tags [words] and photo; resources role, hideEmpty
 #   AgendaLive(resources: @team, hours: @hours, events: @citas, blocks: @blocks, free: @free, queue: @queue, closed: @closed,
 #              lang: ui.lang, currency: "USD", onOpen: openCita, onCreate: newCita, onBlock: block, onMove: moveCita, onRange: loadDays)
 part AgendaLive(resources: list, hours: list, events: list, blocks: list, actions: list, free: list, queue: list, closed: list, lang: text = "es", currency: text = "", locale: text = "", cents: text = "", from: number = 9, to: number = 19, slot: number = 30, view: text = "day", loading: text = "", start: text = "", drag: text = "", phone: text = "", command: text = "", overlap: text = "", hour12: text = "", timeZone: text = "", phoneView: text = "", phoneStrip: text = "", fit: text = "", ranges: text = "", blockScope: text = "", resize: text = "", moveAcross: text = "", placing: list, onOpen: action, onCreate: action, onBlock: action, onMove: action, onRange: action, onAction: action) {

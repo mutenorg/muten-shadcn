@@ -3,14 +3,20 @@
 # whether it is folded. (AppShell is the whole frame - sidebar, header, sheet, ⌘K - built from data.)
 #   AppSidebar(collapsed: folded) {
 #     SidebarHeader { … }
-#     SidebarGroup(label: "Principal") { SidebarItem(label: "Agenda", value: "agenda", current: place, count: "14", onSelect: go) { Icon "lucide:calendar" } }
+#     SidebarGroup(label: "Primary") { SidebarItem(label: "Schedule", value: "agenda", current: place, count: "14", onSelect: go) { Icon "lucide:calendar" } }
 #     SidebarFooter { … }
 #   }
-# SidebarLink is the same item as a link to a route: the app marks where you are by itself (no `current` to keep).
-#   SidebarLink(label: "Citas", to: "/schedule", count: "6") { Icon "lucide:calendar-days" }
+# SidebarLink is the same item as a link to a route: the app marks where you are by itself (no `current` to keep), also
+# below it (on /schedule/42 the “Appointments” link stays marked). `match` lists other pages it stands for ("/a /b").
+#   SidebarLink(label: "Appointments", to: "/schedule", count: "6") { Icon "lucide:calendar-days" }
 # The name AppSidebar avoids muten's own Sidebar primitive. shadcn-for-muten · parts · no deps · Nova (.cn-sidebar-*) + kit.css.
-part AppSidebar(collapsed: bool, label: text = "Menú") {
+part AppSidebar(collapsed: bool, label: text = "Menu") {
   Nav class("cx-sidebar") data(slot: "sidebar", collapsed: $collapsed) aria(label: $label) { Stack class("cn-sidebar-inner cx-sb-inner") data(slot: "sidebar-inner") { slot } }
+}
+# SidebarTrigger - the fold toggle (shadcn's SidebarTrigger): an icon button that lives in the icon column, so it is
+# there folded or open. The page owns the state. SidebarHeader { SidebarTrigger(collapsed: folded, onToggle: toggleFold) }
+part SidebarTrigger(collapsed: bool, onToggle: action) {
+  Button -> $onToggle class("cn-button cn-button-variant-ghost cn-button-size-icon-sm group/button cx-sb-trigger") data(slot: "sidebar-trigger", name: "Show or hide the menu", trl: "Show or hide the menu", trn: "Show or hide the menu") aria(label: "Show or hide the menu", expanded: not $collapsed) { Icon "lucide:panel-left" }
 }
 part SidebarHeader() { Stack class("cn-sidebar-header cx-sb-head") data(slot: "sidebar-header") { slot } }
 part SidebarFooter() { Stack class("cn-sidebar-footer cx-sb-foot") data(slot: "sidebar-footer") { slot } }
@@ -27,8 +33,8 @@ part SidebarItem(label: text, value: text, current: text, onSelect: action, coun
     Span "{$count}" class("cn-sidebar-menu-badge cx-sb-count") data(slot: "sidebar-menu-badge")
   }
 }
-part SidebarLink(label: text, to: text, count: text = "") {
-  Link -> "{$to}" class("cn-sidebar-menu-button cn-sidebar-menu-button-variant-default cn-sidebar-menu-button-size-default cx-sb-item") data(slot: "sidebar-menu-button", name: $label) {
+part SidebarLink(label: text, to: text, count: text = "", match: text = "") {
+  Link -> "{$to}" class("cn-sidebar-menu-button cn-sidebar-menu-button-variant-default cn-sidebar-menu-button-size-default cx-sb-item") data(slot: "sidebar-menu-button", name: $label, match: $match) {
     slot
     Span "{$label}" class("cx-sb-label")
     Span "{$count}" class("cn-sidebar-menu-badge cx-sb-count") data(slot: "sidebar-menu-badge")

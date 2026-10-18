@@ -5,7 +5,7 @@
 part ZoomControl(value: number, onOut: action, onIn: action, onReset: action) {
   Stack class("cx-zoom") data(slot: "zoom-control") aria(role: "group", label: "Zoom") {
     Btn(variant: "ghost", size: "icon-sm", label: "Alejar", onClick: $onOut) { Icon "lucide:minus" }
-    Button "{$value} %" -> $onReset class("cn-button cn-button-variant-ghost cn-button-size-sm group/button cx-zoom-value") data(name: "Volver a 100 %") aria(label: "Zoom {$value} %, volver a 100")   # its words carry $value: a part arg cannot interpolate an outer param, so it stays a Button
+    Button "{$value} %" -> $onReset class("cn-button cn-button-variant-ghost cn-button-size-sm group/button cx-zoom-value") data(name: "Back to 100 %", trn: "Back to 100 %", trl: "Zoom {0} %, back to 100", tra: $value) aria(label: "Zoom {$value} %, back to 100")   # its words carry $value: a part arg cannot interpolate an outer param, so it stays a Button
     Btn(variant: "ghost", size: "icon-sm", label: "Acercar", onClick: $onIn) { Icon "lucide:plus" }
   }
 }

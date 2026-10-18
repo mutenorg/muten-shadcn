@@ -1,8 +1,8 @@
 # NavButton - a place in the app (a tab bar, a sidebar, a segmented header). Where you are is a STATE, not a
 # variant: it rides aria-pressed and is marked by `marker`; everything else is a Btn (variant, size, any content in
 # the slot: an icon, a count). Lay them in a NavBar, across or down.
-#   NavBar(label: "Secciones") { NavButton(label: "Mi tienda", current: atShop, onClick: goShop) … }
-#   NavBar(label: "Menú", orientation: "vertical") { NavButton(label: "Agenda", current: atAgenda, onClick: goAgenda, marker: "fill") { Icon "lucide:calendar" } }
+#   NavBar(label: "Sections") { NavButton(label: "My shop", current: atShop, onClick: goShop) … }
+#   NavBar(label: "Menu", orientation: "vertical") { NavButton(label: "Schedule", current: atAgenda, onClick: goAgenda, marker: "fill") { Icon "lucide:calendar" } }
 # marker: dot (soft fill + a dot, the default) | fill (soft fill) | line (an underline) | none (only the text firms up)
 # variant / size: as Btn. shadcn-for-muten · part · no deps · kit.css (.cx-nav, .cx-navbar).
 part NavButton(label: text = "", current: bool, onClick: action, variant: text = "ghost", size: text = "default", marker: text = "dot") {
@@ -11,11 +11,11 @@ part NavButton(label: text = "", current: bool, onClick: action, variant: text =
     Span "{$label}" class("cx-nav-label")
   }
 }
-part NavBar(label: text = "Secciones", orientation: text = "horizontal") { Nav class("cx-navbar") data(orientation: $orientation) aria(label: $label) { slot } }
+part NavBar(label: text = "Sections", orientation: text = "horizontal") { Nav class("cx-navbar") data(orientation: $orientation, trl: $label) aria(label: $label) { slot } }
 
 # NavLink - a NavButton that goes to another page (a Link): the tabs between sibling pages (Terms · Privacy · Delete).
 # NavHere - the tab of the page you are on, which goes nowhere (aria-current="page", marked like a current NavButton).
-#   NavBar(label: "Documentos") { NavHere(label: "Términos", marker: "fill")  NavLink(label: "Privacidad", to: "/privacy", marker: "fill") }
+#   NavBar(label: "Documents") { NavHere(label: "Terms", marker: "fill")  NavLink(label: "Privacy", to: "/privacy", marker: "fill") }
 part NavLink(label: text, to: text, variant: text = "ghost", size: text = "default", marker: text = "dot") {
   Link "" -> "{$to}" class("cn-button cn-button-variant-{$variant} cn-button-size-{$size} group/button cx-nav") data(slot: "button", marker: $marker) {
     slot

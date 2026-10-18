@@ -1,7 +1,7 @@
 # LinkBtn - a link to a route that looks like a Button: same variants and sizes as Btn, but it navigates (a real
 # <a>, so it opens in a new tab with a middle click and reads as a link). Label and icon go in the slot.
 #   LinkBtn(to: "/signup") { Span "Crear cuenta" }
-#   LinkBtn(to: "/docs", variant: "outline", size: "sm") { Span "Ver la guía"  Icon "lucide:arrow-right" }
+#   LinkBtn(to: "/docs", variant: "outline", size: "sm") { Span "See the guide"  Icon "lucide:arrow-right" }
 # variant: default | outline | secondary | ghost | destructive | link · size: xs | sm | default | lg | xl (44) | 2xl (52)
 # shape: "" | pill - fully rounded ends, like Btn(shape: "pill").
 # shadcn-for-muten · part · no deps · Nova classes (nova.css).

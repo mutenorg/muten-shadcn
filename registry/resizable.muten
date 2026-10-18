@@ -10,7 +10,7 @@ part ResizablePanelGroup(orientation: text = "horizontal", label: text = "") {
 }
 part ResizablePanel(size: number = 50, min: number = 15) { Stack class("cx-rz-panel") data(slot: "resizable-panel", size: $size, min: $min) { slot } }
 part ResizableHandle(grip: text = "") {
-  Stack class("cn-resizable-handle cx-rz-handle") data(slot: "resizable-handle", grip: $grip) aria(role: "separator", label: "Cambiar el tamaño") {
+  Stack class("cn-resizable-handle cx-rz-handle") data(slot: "resizable-handle", grip: $grip, trl: "Resize") aria(role: "separator", label: "Resize") {
     when $grip != "" { Span "" class("cn-resizable-handle-icon") }
   }
 }

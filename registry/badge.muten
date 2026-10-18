@@ -1,13 +1,24 @@
 # Badge - a short label. `StatusBadge` is the system's state: a dot and the word, never a tinted pill.
-#   Badge(label: "Nuevo")                         Badge(label: "PRO", variant: "default")
-#   StatusBadge(label: "Confirmada", tone: "ok")  StatusBadge(label: "Por revisar", tone: "wait")
+#   Badge(label: "New")                         Badge(label: "PRO", variant: "default")
+#   StatusBadge(label: "Confirmed", tone: "ok")  StatusBadge(label: "To review", tone: "wait")
 # Badge variant: default | secondary | destructive | outline | ghost | link   (default: secondary)
 # StatusBadge tone: ok | wait | info | bad | "" (neutral)
 # shadcn-for-muten · part · no deps · Nova (.cn-badge) + kit.css (status).
 part Badge(label: text, variant: text = "secondary") { Span "{$label}" class("cn-badge cn-badge-variant-{$variant} group/badge") data(slot: "badge") }
+# IconBadge - a Badge with an Icon or a Spinner inside (its children); end: true puts it after the word.
+#   IconBadge(label: "Verified") { Icon "lucide:badge-check" }   IconBadge(label: "Saving", variant: "outline") { Spinner }
+part IconBadge(label: text, variant: text = "secondary", end: bool = false) {
+  Stack class("cn-badge cn-badge-variant-{$variant} group/badge cx-badge-icon") class("cx-badge-end" when $end) data(slot: "badge") { slot  Span "{$label}" }
+}
+# LinkBadge - a badge that goes somewhere, with the arrow at its end.
+#   LinkBadge(label: "See plan", to: "/billing")
+part LinkBadge(label: text, to: text, variant: text = "secondary") {
+  Link -> "{$to}" class("cn-badge cn-badge-variant-{$variant} group/badge cx-badge-icon cx-badge-end cx-badge-link") data(slot: "badge") { Icon "lucide:arrow-up-right"  Span "{$label}" }
+}
 part StatusBadge(label: text, tone: text = "") { Span "{$label}" class("cn-badge cn-badge-variant-ghost group/badge") data(slot: "badge", variant: "status", tone: $tone) }
 # ToneBadge - a state with its tone, tinted, with or without a dot: new | ok | wait | bad | pro (PRO uses --selected).
-#   ToneBadge(label: "Confirmado", tone: "ok")    ToneBadge(label: "Pendiente", tone: "wait", dot: "dot")
+#   The word is the tone mixed toward the ink, so it reads on its tint in light and dark.
+#   ToneBadge(label: "Confirmed", tone: "ok")    ToneBadge(label: "Pending", tone: "wait", dot: "dot")
 part ToneBadge(label: text, tone: text, dot: text = "") {
   Stack class("cn-badge group/badge cx-tone-{$tone}") data(slot: "badge") {
     when $dot != "" { Span "" class("cx-dot") }

@@ -1,18 +1,18 @@
 # InputGroup - a field with things inside its border: a prefix ($, an icon), a suffix (COP), a clear button.
 #   InputGroup { InputAddon { Span "$" }  GroupInput(value: price)  InputAddon(align: "inline-end") { Span "COP" } }
 # SearchInput - the search with a magnifier and a × that shows only with text (Esc also clears).
-#   SearchInput(value: q, placeholder: "Nombre o teléfono", onClear: clearQ)
-# Anything goes in an addon: an Icon, InputGroupText («https://», «COP», «@»), an InputGroupButton, a Kbd, a Spinner.
+#   SearchInput(value: q, placeholder: "Name or phone", onClear: clearQ)
+# Anything goes in an addon: an Icon, InputGroupText (“https://”, “COP”, “@”), an InputGroupButton, a Kbd, a Spinner.
 # align: inline-start | inline-end (beside the text) | block-start | block-end (a row above / below, for a GroupTextArea).
-#   InputGroup { GroupTextArea(value: msg, placeholder: "Escribe…")  InputAddon(align: "block-end") { InputGroupText(label: "0/160")  InputGroupButton(label: "Enviar", onClick: send) { Icon "lucide:send" } } }
+#   InputGroup { GroupTextArea(value: msg, placeholder: "Escribe…")  InputAddon(align: "block-end") { InputGroupText(label: "0/160")  InputGroupButton(label: "Send", onClick: send) { Icon "lucide:send" } } }
 # InputGroup and SearchInput take size (default | xl | 2xl) and variant (default | filled) like Input.
 # variant "tile": the field as a tile, its icon on a soft tile, its label inside above the value, a helper at the end:
-#   InputGroup(variant: "tile") { InputAddon { Icon "lucide:store" }  InputAddon(align: "block-start") { InputGroupText(label: "Nombre del negocio") }
-#     GroupInput(value: name, placeholder: "Estudio Luna")  InputAddon(align: "inline-end") { StatusBadge(label: "Libre", tone: "ok") } }
+#   InputGroup(variant: "tile") { InputAddon { Icon "lucide:store" }  InputAddon(align: "block-start") { InputGroupText(label: "Business name") }
+#     GroupInput(value: name, placeholder: "Estudio Luna")  InputAddon(align: "inline-end") { StatusBadge(label: "Free", tone: "ok") } }
 # A picker as a tile (it opens the page's Drawer): the value is an InputGroupText (class cx-placeholder while empty) and
 # the tile goes inside a Button with class cx-tile-btn:
 #   Button "" -> openCountry class("cx-tile-btn") { InputGroup(variant: "tile") { InputAddon { Icon "lucide:globe" }
-#     InputAddon(align: "block-start") { InputGroupText(label: "País") }  InputGroupText(label: countryName)
+#     InputAddon(align: "block-start") { InputGroupText(label: "Country") }  InputGroupText(label: countryName)
 #     InputAddon(align: "inline-end") { Icon "lucide:chevron-down" } } }
 # shadcn-for-muten · part · no deps · Nova (.cn-input-group).
 part InputGroup(size: text = "default", variant: text = "default") { Stack class("cn-input-group group/input-group") data(slot: "input-group", size: $size, variant: $variant) aria(role: "group") { slot } }
@@ -22,18 +22,18 @@ part InputAddon(align: text = "inline-start") { Stack class("cn-input-group-addo
 part GroupInput(value: text, placeholder: text = "", label: text = "") { SearchField bind($value) "{$placeholder}" class("cn-input cn-input-group-input cx-num") data(slot: "input-group-control") aria(label: $label) }
 # GroupPassword - a password inside an InputGroup; `shown` (the page's bool) shows what was typed. Put the eye in an
 # InputAddon(align: "inline-end") with an InputGroupButton that flips that bool.
-#   InputGroup { InputAddon { Icon "lucide:lock" }  GroupPassword(value: pass, shown: showPass, placeholder: "Tu contraseña")
-#     InputAddon(align: "inline-end") { InputGroupButton(onClick: toggleShow, size: "icon-xs", label: "Mostrar contraseña") { Icon "lucide:eye" } } }
+#   InputGroup { InputAddon { Icon "lucide:lock" }  GroupPassword(value: pass, shown: showPass, placeholder: "Your password")
+#     InputAddon(align: "inline-end") { InputGroupButton(onClick: toggleShow, size: "icon-xs", label: "Show password") { Icon "lucide:eye" } } }
 part GroupPassword(value: text, shown: bool = false, placeholder: text = "", label: text = "") {
   when $shown { SearchField bind($value) "{$placeholder}" class("cn-input cn-input-group-input") data(slot: "input-group-control") aria(label: $label) }
   when not $shown { Password bind($value) "{$placeholder}" class("cn-input cn-input-group-input") data(slot: "input-group-control") aria(label: $label) }
 }
-part SearchInput(value: text, placeholder: text = "Buscar", onClear: action, size: text = "default", variant: text = "default") {
+part SearchInput(value: text, placeholder: text = "Search", onClear: action, size: text = "default", variant: text = "default") {
   Stack class("cn-input-group group/input-group") data(slot: "input-group", size: $size, variant: $variant) aria(role: "group") {
     Stack class("cn-input-group-addon cn-input-group-addon-align-inline-start") data(slot: "input-group-addon", align: "inline-start") { Icon "lucide:search" }
-    SearchField bind($value) "{$placeholder}" class("cn-input cn-input-group-input") data(slot: "input-group-control")
+    SearchField bind($value) "{$placeholder}" class("cn-input cn-input-group-input") data(slot: "input-group-control", trp: $placeholder)
     Stack class("cn-input-group-addon cn-input-group-addon-align-inline-end") data(slot: "input-group-addon", align: "inline-end") {
-      when $value != "" { Button -> $onClear class("cn-button cn-button-variant-ghost cn-button-size-icon-xs group/button cx-clear") aria(label: "Limpiar búsqueda") { Icon "lucide:x" } }
+      Button -> $onClear class("cn-button cn-button-variant-ghost cn-button-size-icon-xs group/button cx-clear") class("cx-off" when $value == "") data(trl: "Clear search") aria(label: "Clear search") { Icon "lucide:x" }
     }
     FieldBehavior(kind: "search", message: "")
   }

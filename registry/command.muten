@@ -1,21 +1,21 @@
 # Command - a list you search and pick from with the keyboard (shadcn's cmdk). Typing keeps what matches, accent-
-# insensitive; arrows move, Enter picks; groups with nothing left hide; «empty» says when nothing matches. The page
+# insensitive; arrows move, Enter picks; groups with nothing left hide; “empty” says when nothing matches. The page
 # owns the query text (read it to search the server too); each item runs its own action.
-#   Command(query: q, placeholder: "Cliente, pedido o acción…") {
-#     CommandGroup(label: "Acciones") { CommandItem(label: "Nueva cita", shortcut: "N", onSelect: create) { Icon "lucide:plus" } }
+#   Command(query: q, placeholder: "Customer, order or action…") {
+#     CommandGroup(label: "Actions") { CommandItem(label: "New appointment", shortcut: "N", onSelect: create) { Icon "lucide:plus" } }
 #     CommandSeparator()
-#     CommandGroup(label: "Clientes") { CommandItem(label: "Laura Méndez", keywords: "300 112 4410", onSelect: openLaura) { Icon "lucide:user" } }
+#     CommandGroup(label: "Customers") { CommandItem(label: "Laura Méndez", keywords: "300 112 4410", onSelect: openLaura) { Icon "lucide:user" } }
 #   }
 # Inside a Modal it is the ⌘K palette: CommandPalette. shadcn-for-muten · parts + Custom (CommandBehavior) · Nova (.cn-command*).
-part Command(query: text, placeholder: text = "Busca…", empty: text = "Nada coincide.") {
+part Command(query: text, placeholder: text = "Search…", empty: text = "Nothing matches.") {
   Stack class("cn-command cx-command") data(slot: "command") {
     Stack class("cn-command-input-wrapper cx-command-input") data(slot: "command-input-wrapper") {
       Icon "lucide:search" class("cn-command-input-icon")
-      SearchField bind($query) "{$placeholder}" class("cn-command-input") data(slot: "command-input")
+      SearchField bind($query) "{$placeholder}" class("cn-command-input") data(slot: "command-input", trp: $placeholder)
     }
     Stack class("cn-command-list cx-command-list") data(slot: "command-list") aria(role: "listbox") {
       slot
-      Span "{$empty}" class("cn-command-empty cx-command-empty") data(slot: "command-empty")
+      Span "{$empty}" class("cn-command-empty cx-command-empty") data(slot: "command-empty", tr: $empty)
     }
     CommandBehavior()
   }

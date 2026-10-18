@@ -2,7 +2,7 @@
 # content is anything: a small form, a filter, a detail. Trigger and content go inside, as in shadcn:
 #   Popover {
 #     PopoverTrigger { TriggerBtn { Span "Filtrar" } }
-#     PopoverContent(align: "start") { PopoverHeader(title: "Filtrar", description: "Lo que ves en la lista.")  … }
+#     PopoverContent(align: "start") { PopoverHeader(title: "Filtrar", description: "What you see in the list.")  … }
 #   }
 # PopoverClose is a button inside the content that closes it. align: start | center | end.
 # shadcn-for-muten · parts + Custom (OverlayBehavior) · Nova (.cn-popover-*) + kit.css (.cx-ov).
@@ -15,4 +15,4 @@ part PopoverHeader(title: text, description: text = "") {
     Text "{$description}" class("cn-popover-description") data(slot: "popover-description")
   }
 }
-part PopoverClose(label: text = "Listo", variant: text = "default") { Button "{$label}" class("cn-button cn-button-variant-{$variant} cn-button-size-sm group/button") data(ovclose: "true") }
+part PopoverClose(label: text = "Done", variant: text = "default") { Button "{$label}" class("cn-button cn-button-variant-{$variant} cn-button-size-sm group/button") data(ovclose: "true", tr: $label) }

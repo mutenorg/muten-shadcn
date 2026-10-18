@@ -1,4 +1,4 @@
-// NewAppointment (muten Custom) - the kit's 4-step «Nueva cita» (kit/structure.js) in the adaptive modal. It opens
+// NewAppointment (muten Custom) - the kit's 4-step “New appointment” (kit/structure.js) in the adaptive modal. It opens
 // when `open` turns true; closing it in any way fires close, creating fires create(json {client, service, day, hour}).
 export function mount(el, inputs, on) {
   let wiz = null, was = false;

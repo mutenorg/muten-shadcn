@@ -1,9 +1,9 @@
 # CommandPalette - the ⌘K search: a Command inside the adaptive modal. Open it with a Hotkey and a search button; an
 # item's action does its thing and closes the palette (the page sets open back to false).
 #   Hotkey(keys: "k", onPress: openPalette)
-#   CommandPalette(open: palette, onClose: closePalette, query: q) { CommandGroup(label: "Ir a") { CommandItem(label: "Agenda", onSelect: goAgenda) { Icon "lucide:calendar" } } }
+#   CommandPalette(open: palette, onClose: closePalette, query: q) { CommandGroup(label: "Go to") { CommandItem(label: "Schedule", onSelect: goAgenda) { Icon "lucide:calendar" } } }
 # shadcn-for-muten · part over Modal + Command.
-part CommandPalette(open: bool, onClose: action, query: text, placeholder: text = "Busca o salta a…", title: text = "Buscar") {
+part CommandPalette(open: bool, onClose: action, query: text, placeholder: text = "Search or jump to…", title: text = "Search") {
   Modal(open: $open, onClose: $onClose, title: $title, mode: "dialog") class("cx-palette") {
     Command(query: $query, placeholder: $placeholder) { slot }
   }

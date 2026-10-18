@@ -1,7 +1,7 @@
 # TagInput - tags as chips: Enter or a comma adds, Backspace marks then removes the last, a repeated tag flashes the
 # one already there, suggestions to tap, a cap with its count. The value is comma-joined text.
-#   TagInput(value: tags, label: "Etiquetas del servicio", suggestions: "Fade,Navaja,Niños", max: 8, hint: "Ayudan a que te encuentren.", onChange: setTags)
+#   TagInput(value: tags, label: "Service tags", suggestions: "Fade,Razor,Kids", max: 8, hint: "They help people find you.", onChange: setTags)
 # shadcn-for-muten · Custom (kit collections) · host JS tag-input.js.
-part TagInput(value: text, placeholder: text = "", label: text = "Etiquetas", suggestions: text = "", max: number = 8, hint: text = "", onChange: action) {
+part TagInput(value: text, placeholder: text = "", label: text = "Tags", suggestions: text = "", max: number = 8, hint: text = "", onChange: action) {
   Custom TagInput inputs(value: $value, placeholder: $placeholder, label: $label, suggestions: $suggestions, max: $max, hint: $hint) on(change: $onChange) class("cx-tags-host")
 }

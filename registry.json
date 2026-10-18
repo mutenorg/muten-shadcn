@@ -483,7 +483,9 @@
     },
     {
       "name": "item",
-      "deps": [],
+      "deps": [
+        "list-motion"
+      ],
       "part": "Item",
       "file": "registry/item.muten",
       "description": "Item(variant, size) row with ItemMedia / ItemContent / ItemTitle / ItemDescription / ItemActions / ItemFooter; lists = ItemGroup + ItemSeparator."
@@ -520,6 +522,14 @@
       "description": "Host of the system kit widgets (Custom, kit core). Use the named parts."
     },
     {
+      "name": "lang-scope",
+      "deps": [],
+      "part": "LangScope",
+      "file": "registry/lang-scope.muten",
+      "component": "LangScope",
+      "description": "LangScope - everything inside speaks this language (es | en …): the library's words, its dates and its Customs follow"
+    },
+    {
       "name": "legal-doc",
       "deps": [],
       "part": "DocHead",
@@ -532,6 +542,14 @@
       "part": "LinkBtn",
       "file": "registry/link-btn.muten",
       "description": "A navigation link styled as a button. `LinkBtn(to: \"/signup\", variant: \"default\") { Span \"Get started\" }`."
+    },
+    {
+      "name": "list-motion",
+      "deps": [],
+      "part": "ListMotion",
+      "file": "registry/list-motion.muten",
+      "component": "ListMotion",
+      "description": "Rows that open and close their place (Custom); ItemGroup carries it."
     },
     {
       "name": "live-stack",
@@ -1109,7 +1127,9 @@
     },
     {
       "name": "timeline",
-      "deps": [],
+      "deps": [
+        "list-motion"
+      ],
       "part": "Timeline",
       "file": "registry/timeline.muten",
       "description": "Vertical event timeline: a dot on a connector line + title/time/description per item (parts: Timeline, TimelineItem)."

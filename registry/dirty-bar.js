@@ -1,5 +1,5 @@
-// DirtyBar (muten Custom) - the kit's «unsaved changes» bar over the form it sits in (kit/core.js kit.dirtyBar).
-// «Descartar» restores what muten owns: inputs get their saved value (and an input event, so muten's bind follows),
+// DirtyBar (muten Custom) - the kit's “unsaved changes” bar over the form it sits in (kit/core.js kit.dirtyBar).
+// “Descartar” restores what muten owns: inputs get their saved value (and an input event, so muten's bind follows),
 // switches that moved are toggled back by a click (so the page's action runs). The weekly hours restore themselves.
 export function mount(el, inputs, on) {
   import('@muten/shadcn/registry/kit/core.js').then(({ kit }) => {

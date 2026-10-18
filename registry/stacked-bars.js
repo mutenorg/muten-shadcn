@@ -1,4 +1,4 @@
-// StackedBars (muten Custom) - bars over time with one or more series stacked in each (citas + pedidos by month), an
+// StackedBars (muten Custom) - bars over time with one or more series stacked in each (appointments + pedidos by month), an
 // axis in the page's unit (USD 8K), a bar you can pick (it says so with aria-pressed and sends its id), a note over the
 // plot while there is nothing to show, and a skeleton while it loads. The data changes in place: the bars slide to their
 // new height, nothing blinks. inputs: rows [{id, label, <key>: number, …}], series [{key, label, tone}], selected,
@@ -29,7 +29,7 @@ export function mount(el, inputs, on) {
   };
 
   const paint = () => {
-    const rows = list(state.rows), series = list(state.series), unit = state.unit || '', locale = state.locale || 'es';
+    const rows = list(state.rows), series = list(state.series), unit = state.unit || '', locale = state.locale || (el.closest('[lang]')?.getAttribute('lang')) || 'en';
     const totals = rows.map((r) => series.reduce((sum, s) => sum + (Number(r[s.key]) || 0), 0));
     const top = niceTop(Math.max(0, ...totals)), busy = !!state.busy, none = !busy && totals.every((t) => t === 0);
     const legend = series.length > 1 ? `<ul class="${NS}-legend">${series.map((s) => `<li data-tone="${esc(s.tone || 'brand')}">${esc(s.label)}</li>`).join('')}</ul>` : '';
@@ -46,7 +46,7 @@ export function mount(el, inputs, on) {
     const n = busy ? Math.max(rows.length, 7) : rows.length;
     el.innerHTML = `${legend}<div class="${NS}-body"><div class="${NS}-y" aria-hidden="true">${ticks}</div><div class="${NS}-plot"><div class="${NS}-grid" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div><div class="${NS}-bars" role="group" aria-label="${esc(state.label || '')}" style="--n:${n}"${busy ? ' aria-busy="true"' : ''}>${bars}</div>${none && state.empty ? `<div class="cx-veil-note"><div class="cx-veil-box">${state.emptyTitle ? `<span class="cx-veil-t">${esc(state.emptyTitle)}</span>` : ''}<span class="cx-veil-s">${esc(state.empty)}</span></div></div>` : ''}</div><span></span><div class="${NS}-x" aria-hidden="true" style="--n:${n}">${xs}</div></div>`;
     if (!drawn && !busy && rows.length && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      el.querySelectorAll(`.${NS}-stack`).forEach((s, i) => s.animate([{ transform: 'scaleY(0)' }, { transform: 'scaleY(1)' }], { duration: 480, delay: i * 24, easing: 'cubic-bezier(.22,1,.36,1)', fill: 'backwards' }));
+      el.querySelectorAll(`.${NS}-stack`).forEach((s, i) => s.animate([{ transform: 'scaleY(0)' }, { transform: 'scaleY(1)' }], { duration: 480, delay: i * 24, easing: 'cubic-bezier(.23, 1, .32, 1)', fill: 'backwards' }));
       drawn = true;
     }
   };

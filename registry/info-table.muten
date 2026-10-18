@@ -3,7 +3,7 @@
 # softer, stacked with their column's name on a phone); a cell's tone picks "strong" or "soft" inside it.
 #   InfoTable(variant: "compare") {
 #     InfoHeadRow { InfoHead(label: "")  InfoHead(label: "Storio")  InfoHead(label: "Linktree") }
-#     InfoRow { InfoCell(label: "Agenda", tone: "strong")  InfoCell(label: "Incluida")  InfoCell(label: "No", tone: "soft") }
+#     InfoRow { InfoCell(label: "Schedule", tone: "strong")  InfoCell(label: "Included")  InfoCell(label: "No", tone: "soft") }
 #   }
 # shadcn-for-muten · parts · no deps · Nova (.cn-table) + kit.css (.cx-mk-vs-table).
 part InfoTable(variant: text = "default") {

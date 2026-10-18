@@ -2,12 +2,12 @@
 # hero's pill and two-line headline, the address field with its button, a list of checks, numbered steps, cards,
 # columns of facts, a path of steps, a checked list with explanations and the closing call. Every argument is text,
 # so the words can come from a translation function: MkCheck(label: "{t(lang, "x")}").
-#   MkSection(anchor: "how", title: "Así funciona") {
-#     MkChecks { MkCheck(label: "Sin app para tu cliente")  MkCheck(label: "Confirma solo") }
+#   MkSection(anchor: "how", title: "How it works") {
+#     MkChecks { MkCheck(label: "No app for your customer")  MkCheck(label: "Confirma solo") }
 #   }
-#   MkHero { MkHeroCopy { MkPill(label: "Para músicos") { Icon "lucide:music" }  MkHeadline(first: "Tu música,", second: "en un link.")
-#     MkClaim(value: handle, to: joinUrl, cta: "Crear mi tienda") class("animate-rise") }  … }
-#   MkCta(title: "Tu negocio,", soft: "vende y agenda solo.") { MkClaim(value: handle, to: joinUrl, cta: "Crear mi tienda") }
+#   MkHero { MkHeroCopy { MkPill(label: "For musicians") { Icon "lucide:music" }  MkHeadline(first: "Your music,", second: "in one link.")
+#     MkClaim(value: handle, to: joinUrl, cta: "Create my shop") class("animate-rise") }  … }
+#   MkCta(title: "Your business,", soft: "sells and books by itself.") { MkClaim(value: handle, to: joinUrl, cta: "Create my shop") }
 # shadcn-for-muten · parts · no deps · kit.css (.cx-mk-*), uses InputGroup and LinkBtn.
 
 # MkSection - a page section at reading width with its h2. anchor is its id (a link can go to #anchor).
@@ -50,7 +50,7 @@ part MkHeadline(first: text, second: text, fit: bool = true) {
 part MkTitle(text: text, size: text = "") {
   Title "{$text}" h1 class("cx-mk-h1 words", "cx-mk-h1-fit" when $size == "fit", "cx-mk-h1-wrap" when $size == "wrap")
 }
-# MkClaim - the address field and its button: «storio.ink/ [your-name] [Create]». value is the page's text state.
+# MkClaim - the address field and its button: “storio.ink/ [your-name] [Create]”. value is the page's text state.
 part MkClaim(value: text, to: text, cta: text, placeholder: text = "", prefix: text = "storio.ink/") {
   Stack class("cx-mk-claim") {
     InputGroup(size: "2xl", variant: "filled") {
@@ -147,7 +147,7 @@ part VsRow(what: text, us: text, them: text, usName: text, themName: text) {
 # MkRows / MkRow - zigzag rows: the words on one side and a picture on the other (MkStage); reverse puts the words on
 # the right. MkRowCopy is the words: its title (an h2, or h3 under a section that already has one), a line and, in the
 # slot, anything after it (MkChecks).
-#   MkRows { MkRow { MkRowCopy(title: "Tu agenda", text: "Se llena sola.") { MkChecks { … } }  MkStage { … } } }
+#   MkRows { MkRow { MkRowCopy(title: "Your schedule", text: "Se llena sola.") { MkChecks { … } }  MkStage { … } } }
 part MkRows() { Stack class("cx-mk-rows") { slot } }
 part MkRow(reverse: bool = false) { Stack class("cx-mk-row", "cx-mk-rev" when $reverse) { slot } }
 part MkRowCopy(title: text, text: text, level: text = "h2") {

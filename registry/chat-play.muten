@@ -1,13 +1,13 @@
 # ChatPlay - a conversation shown, not used: the messages come in one by one (in `step` order, 1-6) and the
 # assistant closes with a confirmation card, then it starts over. Its height is the conversation's: no empty chat.
 # For a landing; the real assistant is Chatbot. The suggestions and the composer are a picture (not focusable).
-#   ChatPlay(title: "Bruma Barbería", status: "Asistente · en línea", placeholder: "Escribe un mensaje", label: "…") {
+#   ChatPlay(title: "Bruma Barbershop", status: "Assistant · online", placeholder: "Write a message", label: "…") {
 #     ChatPlayLog {
-#       ChatPlayMsg(text: "Hola, ¿tienes hora hoy?", who: "in", step: 1)
+#       ChatPlayMsg(text: "Hi, do you have a slot today?", who: "in", step: 1)
 #       ChatPlayMsg(text: "Hoy quedan 4:30 PM y 6:00 PM.", step: 2)
-#       ChatPlayCard(title: "Corte clásico", text: "Hoy · 4:30 PM", step: 5)
+#       ChatPlayCard(title: "Classic cut", text: "Today · 4:30 PM", step: 5)
 #     }
-#     ChatPlayChips { ChatPlayChip(label: "¿Cuánto cuesta?") … }
+#     ChatPlayChips { ChatPlayChip(label: "How much is it?") … }
 #   }
 # who: out (the shop and its assistant: right, dark, the default) | in (the client: left). Seen from the shop, as
 # its inbox shows it. The confirmation card is the shop's, so it sits right too. Reduced motion: the whole conversation, still.
@@ -15,7 +15,7 @@
 # (its wallpaper, bubbles with their tail, the hour and the ticks inside, its composer); theme: "" | dark (WhatsApp at night).
 # With a skin, `photo` puts the person in the header instead of the assistant's face, ChatPlayDay sets a day chip,
 # ChatPlayMsg takes a `time`, ChatPlayButtons + ChatPlayButton hang reply buttons under the message before them
-# (Telegram draws them as its keyboard, two per row), and ChatPlayNote adds «Visto» or who answered. The header carries
+# (Telegram draws them as its keyboard, two per row), and ChatPlayNote adds “Seen” or who answered. The header carries
 # the app's back arrow and call buttons, and the composer is that app's own. With a skin it is a phone screen (300 × 600,
 # a status bar with `clock`), and Instagram puts `photo` beside the client's last message of each turn.
 # face: "" (the kit's two-dot face) | host - an empty face slot (.cx-cp-face-host) for the page's own face, a brand
@@ -47,7 +47,7 @@ part ChatPlay(title: text, status: text = "", placeholder: text = "", label: tex
       Span "{$placeholder}" class("cx-cp-ph")
       Stack class("cx-cp-tools") { Icon "lucide:paperclip"  Icon "lucide:camera" }
       Stack class("cx-cp-igtools") { Icon "lucide:mic"  Icon "lucide:image"  Icon "lucide:sticker" }
-      Stack class("cx-cp-menu") { Icon "lucide:menu"  Span "Menú" }
+      Stack class("cx-cp-menu") { Icon "lucide:menu"  Span "Menu" data(tr: "Menu") }
       Stack class("cx-cp-send") { Icon "lucide:send-horizontal" }
       Stack class("cx-cp-mic") { Icon "lucide:mic" }
     }
@@ -65,9 +65,9 @@ part ChatPlayMsg(text: text, who: text = "out", step: number = 1, time: text = "
   }
 }
 part ChatPlayDay(label: text) { Span "{$label}" class("cx-cp-day") }
-# The start of a conversation as Instagram shows it: the person's photo (ChatPlay's `photo`), name, handle and «Ver perfil».
+# The start of a conversation as Instagram shows it: the person's photo (ChatPlay's `photo`), name, handle and “See profile”.
 part ChatPlayProfile(name: text, sub: text = "", action: text = "") { Stack class("cx-cp-prof") { Span "" class("cx-cp-prof-ph")  Span "{$name}" class("cx-cp-prof-n")  Span "{$sub}" class("cx-cp-prof-s")  Span "{$action}" class("cx-cp-prof-a") } }
-# A small line under a message: Instagram's «Visto», or who answered («Respondió el asistente de Bruma»).
+# A small line under a message: Instagram's “Seen”, or who answered (“Bruma's assistant answered”).
 part ChatPlayNote(label: text, step: number = 1) { Span "{$label}" class("cx-cp-note") data(step: $step) }
 part ChatPlayButtons(step: number = 1) { Stack class("cx-cp-btns") data(step: $step) { slot } }
 part ChatPlayButton(label: text) { Stack class("cx-cp-btn") { Icon "lucide:reply"  Span "{$label}" } }

@@ -35,7 +35,7 @@
 .cn-alert[data-tone="info"] > .mu-icon { color: var(--info); } .cn-alert[data-tone="ok"] > .mu-icon { color: var(--success); } .cn-alert[data-tone="wait"] > .mu-icon { color: var(--warning); }
 .cn-alert[data-tone="wait"] { background: color-mix(in srgb, var(--warning) 6%, var(--card)); }
 /* Progress: the value rides --w (muten's style(w: …)); Nova's flex-1 would stretch it to full. */
-.cn-progress > .cn-progress-indicator:not([style*="transform"]) { flex: none; width: var(--w, 0%); transition: width 260ms cubic-bezier(.22, 1, .36, 1); }
+.cn-progress > .cn-progress-indicator:not([style*="transform"]) { flex: none; width: var(--w, 0%); transition: width var(--t-move) var(--ease-out); }
 /* Skeleton: the shimmer on Nova's block (the kit's own .cx-sk keeps working for Customs). */
 .cn-skeleton { background: linear-gradient(90deg, var(--sk-a) 0%, var(--sk-b) 50%, var(--sk-a) 100%); background-size: 200% 100%; animation: cx-sk 1.3s linear infinite; }
 .cn-skeleton[data-shape="circle"], .cn-skeleton[data-shape="pill"] { border-radius: 99px; }
@@ -58,6 +58,9 @@
 .cx-switch-row > .cx-switch-why { grid-column: 1; margin: 0; font-size: 13px; color: var(--muted-foreground); line-height: 1.45; }
 .cx-switch-row > .cx-switch-why:empty { display: none; }
 .cx-switch-row > .cn-switch { margin-top: 1px; }
+/* Switch(disabled): the native attribute, dimmed like Nova's data-disabled; its row's words dim with it */
+.cn-switch:disabled { cursor: not-allowed; opacity: .5; }
+.cx-switch-row[data-disabled="true"] > :is(.cn-label, .cx-switch-why) { opacity: .55; }
 /* Tokens swatches from muten (the artifact paints them with <i style>): the color rides --c. */
 .cx-sw > .cx-sw-i { width: 22px; height: 22px; border-radius: 6px; box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--foreground) 15%, transparent); flex: none; background: var(--c); }
 .cx-z > .cx-z-code { font: 12px var(--font-mono); color: var(--muted-foreground); }
@@ -83,20 +86,13 @@ button.cn-item { width: 100%; font: inherit; text-align: left; cursor: pointer; 
 .cx-row3 .cx-row3-s:empty { display: none; }
 .cx-empty-mini > .mu-icon { font-size: 22px; color: var(--success); }
 /* Text atom from a part: data-variant comes from data(), same rules as the kit's .cx-text below. */
-/* Button icon motion, for span.mu-icon (the kit's rules below key on svg). */
-@media (hover: hover) and (prefers-reduced-motion: no-preference) {
-  .cn-button > .mu-icon { transition: transform 180ms cubic-bezier(.22, 1, .36, 1); }
-  .cn-button:not(:disabled):hover > .mu-icon:last-child:not(:first-child) { transform: translateX(2px); }
-  .cn-button:not(:disabled):hover > .mu-icon:first-child:not(:last-child) { transform: scale(1.12); }
-  .cn-button:not(:disabled):hover > .mu-icon:only-child { transform: scale(1.12); }
-}
 
 
 /* ═════════════════════════ 1b. the artifact page's library rules (floating panels, drawer, svg size, checkbox, toasts) ═════════════════════════ */
 .pg-pop { position: fixed; top: 0; left: 0; z-index: 60; }
-.pg-drw-o { position: fixed; inset: 0; z-index: 50; background: rgb(0 0 0 / .3); backdrop-filter: blur(8px); opacity: 0; transition: opacity 450ms cubic-bezier(0.22, 1, 0.36, 1); }
+.pg-drw-o { position: fixed; inset: 0; z-index: 50; background: rgb(0 0 0 / .3); backdrop-filter: blur(8px); opacity: 0; transition: opacity 450ms var(--ease-out); }
 .pg-drw-o[data-state="open"] { opacity: 1; }
-.pg-drw { position: fixed; z-index: 50; margin: 8px; display: flex; flex-direction: column; border-radius: 24px; border: 1px solid var(--popover); background: var(--popover); color: var(--popover-foreground); font-size: 14px; box-shadow: 0 20px 25px -5px rgb(0 0 0 / .1), 0 8px 10px -6px rgb(0 0 0 / .1); transition: transform 450ms cubic-bezier(0.22, 1, 0.36, 1); will-change: transform; outline: none; }
+.pg-drw { position: fixed; z-index: 50; margin: 8px; display: flex; flex-direction: column; border-radius: 24px; border: 1px solid var(--popover); background: var(--popover); color: var(--popover-foreground); font-size: 14px; box-shadow: 0 20px 25px -5px rgb(0 0 0 / .1), 0 8px 10px -6px rgb(0 0 0 / .1); transition: transform 450ms var(--ease-out); will-change: transform; outline: none; }
 :root[data-theme="dark"] .pg-drw { border-color: var(--border); }
 .pg-drw[data-dir="right"] { top: 0; right: 0; bottom: 0; width: calc(75% - 16px); max-width: 24rem; transform: translateX(calc(100% + 8px)); }
 .pg-drw[data-dir="bottom"] { left: 0; right: 0; bottom: 0; max-height: calc(100dvh - 6rem); transform: translateY(calc(100% + 8px)); }
@@ -115,7 +111,7 @@ button.cn-item { width: 100%; font: inherit; text-align: left; cursor: pointer; 
 .cb-mark { width: 14px; height: 14px; }
 [data-state="unchecked"] > .cn-checkbox-indicator { visibility: hidden; }
 .style-nova .cb-mark path { stroke-dasharray: 24; stroke-dashoffset: 24; }
-.style-nova [data-state="checked"] .cb-mark path { stroke-dashoffset: 0; transition: stroke-dashoffset 200ms cubic-bezier(0.22, 1, 0.36, 1) 40ms; }
+.style-nova [data-state="checked"] .cb-mark path { stroke-dashoffset: 0; transition: stroke-dashoffset 200ms var(--ease-out) 40ms; }
 .style-nova [data-state="checked"] > .cn-checkbox-indicator { visibility: visible; }
 .style-nova .cn-checkbox { transition: background-color 150ms, border-color 150ms, color 150ms; }
 .style-nova .cn-checkbox:active { scale: .92; transition: scale 100ms; }
@@ -125,12 +121,12 @@ button.cn-item { width: 100%; font: inherit; text-align: left; cursor: pointer; 
   --gap: .75rem; --peek: .75rem; --scale: max(0, 1 - var(--i) * 0.1); --shrink: calc(1 - var(--scale));
   height: var(--front-h); z-index: calc(1000 - var(--i));
   transform: translateY(calc(0px - var(--i) * var(--peek) - var(--shrink) * var(--front-h))) scale(var(--scale));
-  transition: transform 500ms cubic-bezier(0.22, 1, 0.36, 1), opacity 500ms, height 150ms; will-change: transform; }
+  transition: transform 500ms var(--ease-out), opacity 500ms, height 150ms; will-change: transform; }
 .pg-toast::after { content: ""; position: absolute; top: 100%; left: 0; width: 100%; height: calc(var(--gap) + 1px); }
 .pg-toasts[data-expanded] .pg-toast { height: var(--h); transform: translateY(calc(0px - var(--off) - var(--i) * var(--gap))); }
 .pg-toast[data-start], .pg-toast[data-end] { transform: translateY(150%) !important; }
 .pg-toast[data-limited] { opacity: 0; }
-.pg-toast-c { display: flex; height: 100%; align-items: center; gap: 12px; overflow: hidden; padding: 16px; transition: opacity 250ms cubic-bezier(0.22, 1, 0.36, 1); }
+.pg-toast-c { display: flex; height: 100%; align-items: center; gap: 12px; overflow: hidden; padding: 16px; transition: opacity 250ms var(--ease-out); }
 .pg-toast[data-behind] .pg-toast-c { opacity: 0; }
 .pg-toasts[data-expanded] .pg-toast-c { opacity: 1; }
 .pg-toast-t { font-size: 14px; font-weight: 500; } .pg-toast-d { font-size: 14px; color: var(--muted-foreground); }
@@ -151,7 +147,7 @@ button.cn-item { width: 100%; font: inherit; text-align: left; cursor: pointer; 
 /* spinner (shadcn's animate-spin) */
 @keyframes pg-spin { to { transform: rotate(360deg); } }
 .animate-spin { animation: pg-spin 1s linear infinite; }
-.cn-progress-indicator { transition: transform 450ms ease; }
+.cn-progress-indicator { transition: transform var(--t-move) var(--ease-out); }
 /* native select: options readable in both themes */
 .pg-opt-native { background: var(--popover); color: var(--popover-foreground); }
 /* textarea counter (our extra) */
@@ -195,7 +191,14 @@ button.cn-item { width: 100%; font: inherit; text-align: left; cursor: pointer; 
   --overlay: rgb(0 0 0 / 0.1);
   --on-destructive: oklch(1 0 0);
   --z-content: 0; --z-sticky: 20; --z-fab: 30; --z-popover: 40; --z-sheet: 50; --z-modal: 60; --z-toast: 70;
+  /* MOTION: the library's one rhythm (docs: AGENTS.md «Motion», bench /motion). Three curves, six durations; a
+     component never writes its own. Entering or appearing: --ease-out. Moving on screen: --ease-in-out. A panel that
+     slides in: --ease-drawer. Leaving takes about 0.7 of entering. A hover never animates (0 ms). */
+  --ease-out: cubic-bezier(.23, 1, .32, 1); --ease-in-out: cubic-bezier(.77, 0, .175, 1); --ease-drawer: cubic-bezier(.32, .72, 0, 1);
+  --t-press: 100ms; --t-micro: 150ms; --t-pop: 180ms; --t-move: 240ms; --t-modal: 240ms; --t-sheet: 380ms;
 }
+/* reduce motion, in one place: every duration token drops to nearly nothing and everything still works */
+@media (prefers-reduced-motion: reduce) { :root { --t-press: 1ms; --t-micro: 1ms; --t-pop: 1ms; --t-move: 1ms; --t-modal: 1ms; --t-sheet: 1ms; } }
 
 /* ── pieles de ejemplo: lo único que cambia entre apps y tiendas ── */
 [data-skin="storio"] {
@@ -233,16 +236,25 @@ button.cn-item { width: 100%; font: inherit; text-align: left; cursor: pointer; 
 .cx-create { background: var(--primary); color: var(--primary-foreground); }
 .cx-save { width: 9.25rem; justify-content: center; }
 .cx-save[data-status="saving"] { pointer-events: none; opacity: .85; }
-.cx-save[data-status="saved"] { background: var(--success); color: #fff; animation: cx-pop 260ms cubic-bezier(.22, 1, .36, 1); }
+.cx-save[data-status="saved"] { background: var(--success); color: #fff; animation: cx-pop 260ms var(--ease-out); }
 @keyframes cx-pop { 50% { transform: scale(1.04); } }
 .cx-btn-label { display: inline-flex; align-items: center; gap: 6px; }
 
 /* ── Badge tones + dot + removable chip ── */
-.cx-tone-new { background: var(--info-soft); color: var(--info); }
-.cx-tone-ok { background: var(--success-soft); color: var(--success); }
-.cx-tone-wait { background: var(--warning-soft); color: var(--warning); }
-.cx-tone-bad { background: color-mix(in srgb, var(--destructive) 14%, transparent); color: var(--destructive); }
-.cx-tone-pro { background: var(--selected); color: var(--selected-foreground); letter-spacing: .04em; }
+/* shadcn's custom colours: a light tint and the word pulled toward the ink, so it reads in light and dark alike */
+.cn-badge[class*="cx-tone-"] { background: color-mix(in oklch, var(--tone, var(--muted-foreground)) 14%, transparent); color: color-mix(in oklch, var(--tone, var(--muted-foreground)) 72%, var(--foreground)); }
+.cx-tone-new { --tone: var(--info); }
+.cx-tone-ok { --tone: var(--success); }
+.cx-tone-wait { --tone: var(--warning); }
+.cx-tone-bad { --tone: var(--destructive); }
+.cn-badge.cx-tone-pro { background: var(--selected); color: var(--selected-foreground); letter-spacing: .04em; }
+.cn-badge[class*="cx-tone-"] .cx-dot { background: var(--tone, currentColor); }
+/* IconBadge / LinkBadge: shadcn's data-icon padding (the side with the icon is tighter), icon 12 px */
+.cn-badge.cx-badge-icon { padding-left: 6px; }
+.cn-badge.cx-badge-icon.cx-badge-end { padding-left: 8px; padding-right: 6px; }
+.cn-badge.cx-badge-icon > svg, .cn-badge.cx-badge-icon > .cn-spinner { width: 12px; height: 12px; flex: none; }
+.cn-badge.cx-badge-end > :first-child { order: 2; }
+.cn-badge.cx-badge-link { text-decoration: none; }
 .cx-dot { width: 6px; height: 6px; border-radius: 99px; background: currentColor; flex: none; }
 
 
@@ -260,8 +272,16 @@ button.cn-item { width: 100%; font: inherit; text-align: left; cursor: pointer; 
 [aria-checked="true"] > .cx-radio { border-color: var(--selected); }
 [aria-checked="true"] > .cx-radio::after { content: ""; width: 8px; height: 8px; border-radius: 99px; background: var(--selected); }
 
-.cx-sortable .cx-item { transition: transform 180ms cubic-bezier(.22, 1, .36, 1); background: var(--background); }
-.cx-sortable .cx-item.lifting { transition: none; z-index: 2; box-shadow: 0 8px 24px -8px rgb(0 0 0 / .25); position: relative; }
+/* Sortable (sortable-behavior.js): the others slide apart, the row taken lifts and follows the pointer, a ghost of it
+   glides to where it will land; on release it settles onto the ghost */
+.cx-sortable { position: relative; }
+.cx-sortable .cx-item { position: relative; transition: translate var(--t-move) var(--ease-out); background: var(--background); }
+.cx-sortable .cx-item.lifting { z-index: 3; scale: 1.02; cursor: grabbing; border-color: color-mix(in srgb, var(--foreground) 22%, transparent); box-shadow: 0 1px 2px rgb(0 0 0 / .06), 0 14px 32px -12px rgb(0 0 0 / .32); transition: scale var(--t-micro) var(--ease-out), box-shadow var(--t-micro) var(--ease-out), border-color var(--t-micro) var(--ease-out); }   /* the border reads where the shadow does not (dark) */
+.cx-sortable .cx-item.settling { z-index: 3; transition: translate 200ms var(--ease-out), scale 200ms var(--ease-out), box-shadow 200ms var(--ease-out); }
+.cx-sortable .cx-item.cx-sort-ghost { position: absolute; top: 0; margin: 0; z-index: 1; pointer-events: none; opacity: 0; border-style: dashed; border-color: color-mix(in srgb, var(--selected) 55%, transparent); background: color-mix(in srgb, var(--selected) 6%, var(--background)); box-shadow: none; scale: 1; transition: translate var(--t-move) var(--ease-out), opacity var(--t-micro) var(--ease-out); }
+.cx-sortable .cx-item.cx-sort-ghost.on { opacity: 1; }
+.cx-sortable .cx-item.cx-sort-ghost > * { opacity: .45; }
+:root.cx-sorting, :root.cx-sorting * { cursor: grabbing !important; user-select: none; }
 
 /* ── Card de forma fija ── */
 .cx-fixed-card { width: 100%; max-width: 380px; }
@@ -285,7 +305,7 @@ button.cn-item { width: 100%; font: inherit; text-align: left; cursor: pointer; 
 
 
 
-.cx-tab-ind { position: absolute; z-index: 0; top: 3px; height: 26px; border-radius: calc(var(--radius) * .8); background: var(--background); box-shadow: 0 1px 3px 0 rgb(0 0 0 / .1), 0 1px 2px -1px rgb(0 0 0 / .1); transition: left 260ms cubic-bezier(.22, 1, .36, 1), width 260ms cubic-bezier(.22, 1, .36, 1); }
+.cx-tab-ind { position: absolute; z-index: 0; top: 3px; height: 26px; border-radius: calc(var(--radius) * .8); background: var(--background); box-shadow: 0 1px 3px 0 rgb(0 0 0 / .1), 0 1px 2px -1px rgb(0 0 0 / .1); transition: left var(--t-move) var(--ease-out), width var(--t-move) var(--ease-out); }
 .cx-tabs.line { background: transparent; border-bottom: 1px solid var(--border); border-radius: 0; padding: 0; }
 
 .cx-tabs.line .cx-tab-ind { top: auto; bottom: -1px; height: 2px; border-radius: 2px; background: var(--selected); box-shadow: none; }
@@ -320,7 +340,8 @@ button.cn-item { width: 100%; font: inherit; text-align: left; cursor: pointer; 
 .cx-book-sum b { color: var(--foreground); font-weight: 600; }
 
 /* ── Modal adaptable: Dialog en escritorio, Drawer en el teléfono (o forzado con data-mode) ── */
-.cx-overlay { position: fixed; inset: 0; z-index: var(--z-modal); background: var(--overlay); backdrop-filter: blur(4px); opacity: 0; transition: opacity 160ms ease; }
+.cx-overlay { position: fixed; inset: 0; z-index: var(--z-modal); background: var(--overlay); backdrop-filter: blur(4px); opacity: 0; transition: opacity calc(var(--t-modal) * .62) ease; }
+.cx-modal-root[data-open="true"] > .cx-overlay { transition-duration: calc(var(--t-modal) * .84); }
 .cx-overlay[data-state="open"] { opacity: 1; }
 .cx-modal { position: fixed; z-index: var(--z-modal); display: flex; flex-direction: column; background: var(--popover); color: var(--popover-foreground); box-shadow: 0 0 0 1px color-mix(in srgb, var(--foreground) 10%, transparent), 0 20px 25px -5px rgb(0 0 0 / .1); outline: none; font-size: 14px;
 /* one height for every control in a modal's form: a select, a time and a text field side by side read as one form */
@@ -341,11 +362,13 @@ button.cn-item { width: 100%; font: inherit; text-align: left; cursor: pointer; 
 .cx-handle { display: none; width: 96px; height: 4px; margin: 10px auto 0; border-radius: 99px; background: var(--muted); flex: none; }
 /* escritorio = Dialog */
 .cx-modal[data-mode="dialog"] { top: 50%; left: 50%; width: min(28rem, calc(100% - 2rem)); max-height: min(36rem, calc(100dvh - 4rem)); border-radius: calc(var(--radius) * 1.4); overflow: hidden;
-  transform: translate(-50%, -50%) scale(.95); opacity: 0; transition: transform 160ms cubic-bezier(.22, 1, .36, 1), opacity 160ms ease; }
+  transform: translate(-50%, calc(-50% + 6px)) scale(.97); opacity: 0; transition: transform calc(var(--t-modal) * .62) ease, opacity calc(var(--t-modal) * .5) ease; }
+/* entering is slower than leaving: it comes up from 6 px lower at 97 %, and goes in about 0.6 of the time */
+.cx-modal[data-mode="dialog"][data-state="open"], .cx-modal-root[data-open="true"] > .cx-modal[data-mode="dialog"] { transition: transform var(--t-modal) var(--ease-out), opacity calc(var(--t-modal) * .75) var(--ease-out); }
 .cx-modal[data-mode="dialog"][data-state="open"] { transform: translate(-50%, -50%); opacity: 1; }
 /* teléfono = Drawer desde abajo, arrastrable */
 .cx-modal[data-mode="drawer"] { left: 0; right: 0; bottom: 0; margin-inline: auto; width: min(100%, 34rem); max-height: calc(100dvh - 3rem); border-radius: calc(var(--radius) * 1.8) calc(var(--radius) * 1.8) 0 0; overflow: hidden;
-  transform: translateY(100%); transition: transform 450ms cubic-bezier(.32, .72, 0, 1); touch-action: none; }
+  transform: translateY(100%); transition: transform 450ms var(--ease-drawer); touch-action: none; }
 .cx-modal[data-mode="drawer"][data-state="open"] { transform: translateY(0); }
 .cx-modal[data-mode="drawer"] .cx-handle { display: block; }
 .cx-modal[data-mode="drawer"] .cx-modal-body { touch-action: pan-y; }
@@ -432,7 +455,7 @@ html.cx-locked { overflow: hidden; }
 .cx-who b { display: block; font-weight: 500; }
 .cx-who small { color: var(--muted-foreground); font-size: 13px; }
 .cx-online { background: var(--success) !important; box-shadow: 0 0 0 2px var(--background); }
-.cx-tip { position: fixed; z-index: var(--z-toast); padding: 6px 12px; border-radius: calc(var(--radius) - 2px); background: var(--foreground); color: var(--background); font-size: 12px; font-weight: 500; line-height: 1.35; white-space: nowrap; pointer-events: none; opacity: 0; transform: translateY(3px) scale(.96); transform-origin: var(--ax, 50%) 100%; transition: opacity 120ms ease-out, transform 160ms cubic-bezier(.23, 1, .32, 1); }
+.cx-tip { position: fixed; z-index: var(--z-toast); padding: 6px 12px; border-radius: calc(var(--radius) - 2px); background: var(--foreground); color: var(--background); font-size: 12px; font-weight: 500; line-height: 1.35; white-space: nowrap; pointer-events: none; opacity: 0; transform: translateY(3px) scale(.96); transform-origin: var(--ax, 50%) 100%; transition: opacity calc(var(--t-micro) * .8) ease-out, transform var(--t-micro) var(--ease-out); }
 /* its arrow, toward the trigger (shadcn's TooltipArrow: the pill's own colour, a softly rounded square half out) */
 .cx-tip::after { content: ""; position: absolute; left: calc(var(--ax, 50%) - 5px); bottom: -4px; width: 10px; height: 10px; border-radius: 2px; background: inherit; transform: rotate(45deg); }
 .cx-tip[data-side="bottom"] { transform: translateY(-3px) scale(.96); transform-origin: var(--ax, 50%) 0; }
@@ -449,7 +472,13 @@ html.cx-locked { overflow: hidden; }
 /* ── Fields ── */
 .cx-form { display: flex; flex-direction: column; gap: 18px; width: 100%; max-width: 380px; }
 .cx-num { font-variant-numeric: tabular-nums; }
-.cx-clear { opacity: 1; transition: opacity 120ms ease; }
+/* the browser's own clear X never shows: SearchInput draws its own (.cx-clear) in its end addon, where it keeps its
+   place empty or not, so nothing beside it moves */
+/* on EVERY search field of an app with the kit, not only .cn-input: muten writes each SearchField as type=search, and
+   Chrome drew its own X behind whatever sits at the field's end (Storio's «Ask Storio» send button) */
+input[type="search"]::-webkit-search-cancel-button, input[type="search"]::-webkit-search-decoration { -webkit-appearance: none; appearance: none; display: none; }
+.cx-clear { opacity: 1; transition: opacity 120ms ease, visibility 120ms; }
+.cx-clear.cx-off { opacity: 0; visibility: hidden; }
 .cx-clear[hidden] { display: inline-flex !important; opacity: 0; pointer-events: none; }
 .cx-count-line { display: flex; justify-content: space-between; gap: 12px; }
 .cx-count-line span:last-child { font-variant-numeric: tabular-nums; flex: none; }
@@ -461,8 +490,8 @@ html.cx-locked { overflow: hidden; }
 
 /* ── Combobox list: under the field, its width, Nova's popover look ── */
 .cx-combo-list { max-height: 248px; overflow-y: auto; padding: 4px; border-radius: calc(var(--radius) * 1); background: var(--popover); color: var(--popover-foreground); box-shadow: 0 0 0 1px color-mix(in srgb, var(--foreground) 10%, transparent), 0 4px 6px -1px rgb(0 0 0 / .1), 0 2px 4px -2px rgb(0 0 0 / .1); font-size: 14px; overscroll-behavior: contain;
-  opacity: 0; transform: scale(.96); transition: opacity 100ms ease, transform 100ms ease !important; transition-property: opacity, transform !important; }
-.cx-combo-list[data-state="open"] { opacity: 1; transform: none; }
+  opacity: 0; transform: scale(.96); transition: opacity calc(var(--t-pop) * .67) ease, transform calc(var(--t-pop) * .67) ease !important; transition-property: opacity, transform !important; }
+.cx-combo-list[data-state="open"] { opacity: 1; transform: none; transition-duration: var(--t-pop) !important; transition-timing-function: var(--ease-out) !important; }
 .cx-opt { display: flex; align-items: center; gap: 8px; min-height: 32px; padding: 6px 8px; border-radius: calc(var(--radius) * .6); cursor: default; user-select: none; }
 .cx-opt[data-hl] { background: var(--accent); color: var(--accent-foreground); }
 .cx-opt mark { background: none; color: inherit; font-weight: 600; }
@@ -490,7 +519,7 @@ html.cx-locked { overflow: hidden; }
 .cx-fake i { display: block; height: 34px; border-radius: calc(var(--radius) * .8); background: var(--muted); }
 .cx-fake i:nth-child(2n) { width: 80%; }
 /* Band: grows its own height in, pushes content (never covers it), one at a time */
-.cx-band-slot { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 260ms cubic-bezier(.22, 1, .36, 1); flex: none; }
+.cx-band-slot { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 260ms var(--ease-out); flex: none; }
 .cx-band-slot[data-open] { grid-template-rows: 1fr; }
 .cx-band-slot > div { overflow: hidden; min-height: 0; }
 .cx-band { display: flex; align-items: center; gap: 10px; padding: 9px 14px 9px 18px; font-size: 13px; line-height: 1.35; border-bottom: 1px solid var(--border); }
@@ -506,16 +535,16 @@ html.cx-locked { overflow: hidden; }
 .cx-band-slot:not([data-open]) > div > .cx-band { opacity: 0; }
 /* Island: one pill that changes shape and text in place */
 .cx-island { position: absolute; top: 10px; left: 50%; z-index: 3; display: flex; align-items: center; gap: 8px; height: 34px; padding: 0 14px 0 10px; border-radius: 99px; background: oklch(0.16 0 0); color: #fff; font-size: 13px; font-weight: 500; white-space: nowrap; overflow: hidden;
-  transform: translateX(-50%); transition: width 380ms cubic-bezier(.22, 1, .36, 1), opacity 200ms ease, transform 380ms cubic-bezier(.22, 1, .36, 1); }
+  transform: translateX(-50%); transition: width 380ms var(--ease-out), opacity 200ms ease, transform 380ms var(--ease-out); }
 .cx-island[data-state="hidden"] { opacity: 0; transform: translateX(-50%) scale(.7); }
 .cx-island-icon { width: 18px; height: 18px; display: grid; place-items: center; flex: none; }
 .cx-island-icon svg { width: 16px; height: 16px; }
 .cx-island[data-tone="done"] .cx-island-icon { color: oklch(0.8 0.17 150); }
 .cx-island[data-tone="error"] .cx-island-icon { color: oklch(0.72 0.19 25); }
-.cx-island[data-tone="error"] { animation: cx-shake 320ms ease; }
+.cx-island[data-tone="error"] { animation: cx-shake calc(var(--t-move) * 1.35) var(--ease-out); }
 .cx-island-text { transition: opacity 140ms ease; }
 .cx-island-text.swap { opacity: 0; }
-@keyframes cx-shake { 25% { margin-left: -4px; } 75% { margin-left: 4px; } }
+@keyframes cx-shake { 25% { translate: -4px 0; } 75% { translate: 4px 0; } }   /* translate, not margin: a shake never moves the layout around it */
 
 /* ── Accordion chevron rotates ── */
 .cx-acc-chev { margin-left: auto; width: 16px; height: 16px; flex: none; color: var(--muted-foreground); transition: transform 200ms ease; pointer-events: none; }
@@ -565,7 +594,7 @@ html.cx-locked { overflow: hidden; }
 .cx-otp-sep span { width: 8px; height: 2px; border-radius: 2px; background: var(--muted-foreground); }
 .cx-otp .cn-input-otp { display: flex; align-items: center; }
 .cx-otp[data-state="bad"] .cn-input-otp-slot { border-color: var(--destructive); }
-.cx-otp[data-state="bad"] { animation: cx-shake 320ms ease; }
+.cx-otp[data-state="bad"] { animation: cx-shake calc(var(--t-move) * 1.35) var(--ease-out); }
 .cx-otp[data-state="ok"] .cn-input-otp-slot { border-color: var(--success); color: var(--success); }
 #otp-msg[data-tone="bad"] { color: var(--destructive); }
 #otp-msg[data-tone="ok"] { color: var(--success); }
@@ -698,9 +727,9 @@ html.cx-locked { overflow: hidden; }
 .cx-check { width: 16px; }
 
 /* ── DataTable: a table while its box is wide, a list of Items when the box is narrow ── */
-.cx-dt-host { container-type: inline-size; width: 100%; max-width: 920px; margin: 0 auto; display: flex; flex-direction: column; transition: max-width 320ms cubic-bezier(.22, 1, .36, 1); }
+.cx-dt-host { container-type: inline-size; width: 100%; max-width: 920px; margin: 0 auto; display: flex; flex-direction: column; transition: max-width 320ms var(--ease-out); }
 .cx-dt-host[data-narrow] { max-width: 380px; }
-.cx-dt-bulk { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 220ms cubic-bezier(.22, 1, .36, 1); }
+.cx-dt-bulk { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 220ms var(--ease-out); }
 .cx-dt-bulk[data-open] { grid-template-rows: 1fr; }
 .cx-dt-bulk > div { overflow: hidden; min-height: 0; display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 13px; font-weight: 500; }
 .cx-dt-bulk[data-open] > div { padding: 0 4px 10px; }
@@ -709,7 +738,6 @@ html.cx-locked { overflow: hidden; }
 .cx-dt th { position: sticky; top: 0; z-index: 1; background: var(--muted); text-align: left; font-weight: 500; color: var(--muted-foreground); height: 40px; padding: 0 12px; border-bottom: 1px solid var(--border); white-space: nowrap; }
 .cx-dt td { height: 52px; padding: 0 12px; border-bottom: 1px solid var(--border); vertical-align: middle; }
 .cx-dt tbody tr:last-child td { border-bottom: 0; }
-.cx-dt tbody tr { transition: background-color 120ms; }
 .cx-dt tbody tr:hover { background: color-mix(in srgb, var(--muted) 50%, transparent); }
 .cx-dt tbody tr[data-selected] { background: var(--selected-soft); }
 .cx-dt .cx-dt-check { width: 40px; padding-right: 0; }
@@ -1282,7 +1310,7 @@ html.cx-locked { overflow: hidden; }
 .cn-item-description .cx-ellipsis, .cn-item-description { overflow: hidden; text-overflow: ellipsis; }
 
 /* ═════ board behaviour only (the look is the Card atom) ═════ */
-.cx-bcard { cursor: grab; touch-action: none; user-select: none; transition: transform 200ms cubic-bezier(.22, 1, .36, 1), box-shadow 150ms; }
+.cx-bcard { cursor: grab; touch-action: none; user-select: none; transition: transform 200ms var(--ease-out), box-shadow 150ms; }
 .cx-bcard-static { cursor: default; touch-action: auto; user-select: auto; }
 .cx-bcard:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
 .cx-bcard[data-lifted], .cx-bcard[data-held] { box-shadow: 0 0 0 2px var(--selected), 0 12px 28px -10px rgb(0 0 0 / .3); }
@@ -1310,6 +1338,11 @@ html.cx-locked { overflow: hidden; }
 .cx-tab { position: relative; z-index: 1; color: color-mix(in srgb, var(--foreground) 62%, transparent); }
 .cx-tab:hover { background: transparent; color: var(--foreground); }
 .cx-tab[aria-selected="true"] { color: var(--foreground); }
+/* only the pill moves: a tab never paints its own fill (hover, press, focus, chosen), or the clicked tab shows a second
+   box under the pill while it slides; the word changes colour on the pill's own 260 ms curve */
+.cx-tabs > .cn-button.cx-tab, .cx-tabs > .cn-button.cx-tab:is(:hover, :active, :focus-visible, [aria-selected="true"], [aria-expanded="true"]) { background: transparent; border-color: transparent; box-shadow: none; transform: none; }
+.cx-tabs > .cn-button.cx-tab:focus-visible { outline: 2px solid var(--ring); outline-offset: -2px; }
+.cx-tabs > .cn-button.cx-tab { transition: color var(--t-move) var(--ease-out); }
 /* a segment picks with the sliding pill, not with a filled button: beats the generic «pressed = selected» fill above */
 .cx-tabs > .cn-button.cx-tab[aria-pressed="true"][aria-pressed][aria-pressed],
 .cx-tabs > .cn-button.cx-tab[aria-pressed="true"][aria-pressed][aria-pressed]:hover { background: transparent; border-color: transparent; color: var(--foreground); }
@@ -1338,7 +1371,7 @@ th[aria-sort="ascending"] .cx-th svg, th[aria-sort="descending"] .cx-th svg { op
 .cx-ph-tab[aria-current] { color: var(--selected); background: transparent; }
 .cx-ph-tab[aria-current]::after { content: ""; position: absolute; bottom: 4px; width: 4px; height: 4px; border-radius: 99px; background: var(--selected); }
 /* carousel dots: a real button (24 px) with a small mark */
-.cx-dotb .cx-dot-mark { width: 8px; height: 8px; border-radius: 99px; background: color-mix(in srgb, var(--foreground) 22%, transparent); transition: width 240ms cubic-bezier(.22, 1, .36, 1), background-color 200ms; }
+.cx-dotb .cx-dot-mark { width: 8px; height: 8px; border-radius: 99px; background: color-mix(in srgb, var(--foreground) 22%, transparent); transition: width 240ms var(--ease-out), background-color 200ms; }
 .cx-dotb[aria-selected="true"] { width: 34px; }
 .cx-dotb[aria-selected="true"] .cx-dot-mark { width: 22px; background: var(--selected); }
 .cx-car-dots { display: flex; gap: 0; }
@@ -1361,6 +1394,9 @@ th[aria-sort="ascending"] .cx-th svg, th[aria-sort="descending"] .cx-th svg { op
 .cn-card[data-size="sm"] { gap: 0; padding-block: 0; }
 .cn-card[data-size="sm"] > .cn-card-header { padding: 12px 12px 4px; }
 .cn-card[data-size="sm"] > .cn-card-content { padding: 0 12px; }
+/* a content with nothing above or below it keeps the card's 12 px there too (it was glued to the edge) */
+.cn-card[data-size="sm"] > .cn-card-content:first-child { padding-top: 12px; }
+.cn-card[data-size="sm"] > .cn-card-content:last-child { padding-bottom: 12px; }
 .cn-card[data-size="sm"] > .cn-card-footer { margin-top: 8px; padding: 10px 12px; }
 .cn-card[data-size="sm"] .cn-item-group { gap: 0; }
 .cn-card[data-size="sm"] .cn-item-separator { margin-block: 0; }
@@ -1423,10 +1459,15 @@ p.cx-text { margin: 0; }
 .cx-car-track.dragging { scroll-snap-type: none; scroll-behavior: auto; cursor: grabbing; user-select: none; }
 .cx-car-track:focus-visible { outline: 2px solid var(--ring); outline-offset: 4px; }
 .cx-car-slide { scroll-snap-align: start; min-width: 0; }
+/* a scrolling track clips both axes: 6 px of room above and below keeps a card's ring and shadow whole (it was cut at
+   the top), taken back with a negative margin so the carousel does not grow */
+.cx-car-track { padding-block: 6px; margin-block: -6px; }
 /* while the mouse drags the track it follows the hand; on release kit core settles it on the nearest page */
 .cx-car-track.dragging { scroll-snap-type: none; scroll-behavior: auto; cursor: grabbing; user-select: none; }
-.cx-car[data-center] .cx-car-track { grid-auto-columns: 72%; padding-inline: 14%; }
-.cx-car[data-center] .cx-car-slide { scroll-snap-align: center; transition: transform 260ms cubic-bezier(.22, 1, .36, 1), opacity 260ms; transform: scale(.92); opacity: .55; }
+/* centred like Embla's containScroll: the first slide sits at the start and the last at the end (no empty strip
+   beside them), the ones between snap to the centre */
+.cx-car[data-center] .cx-car-track { grid-auto-columns: 72%; }
+.cx-car[data-center] .cx-car-slide { scroll-snap-align: center; transition: transform 260ms var(--ease-out), opacity 260ms; transform: scale(.92); opacity: .55; }
 .cx-car[data-center] .cx-car-slide[data-active] { transform: none; opacity: 1; }
 .cx-car-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 28px; }
 .cx-car-ind { flex: 1; min-width: 0; }
@@ -1473,9 +1514,9 @@ p.cx-text { margin: 0; }
 .cn-sidebar-menu-badge { background: color-mix(in srgb, var(--foreground) 8%, transparent); }
 
 /* ═════ App frame (the shell is a molecule of Sidebar + Inset + Sheet) ═════ */
-.cx-app { position: relative; display: flex; height: 600px; width: 100%; max-width: 1180px; margin: 0 auto; border-radius: calc(var(--radius) * 1.6); overflow: hidden; background: var(--background); box-shadow: 0 0 0 1px var(--border), 0 24px 60px -30px rgb(0 0 0 / .35); transition: max-width 320ms cubic-bezier(.22, 1, .36, 1); }
+.cx-app { position: relative; display: flex; height: 600px; width: 100%; max-width: 1180px; margin: 0 auto; border-radius: calc(var(--radius) * 1.6); overflow: hidden; background: var(--background); box-shadow: 0 0 0 1px var(--border), 0 24px 60px -30px rgb(0 0 0 / .35); transition: max-width 320ms var(--ease-out); }
 .cx-app[data-narrow] { max-width: 390px; }
-.cx-app-sb { flex: none; width: var(--sidebar-width); border-right: 1px solid var(--sidebar-border); transition: width 220ms cubic-bezier(.22, 1, .36, 1); overflow: hidden; }
+.cx-app-sb { flex: none; width: var(--sidebar-width); border-right: 1px solid var(--sidebar-border); transition: width 220ms var(--ease-out); overflow: hidden; }
 .cx-app-sb[data-collapsible="icon"] { width: var(--sidebar-width-icon); }
 .cx-app-sb .cn-sidebar-inner { height: 100%; display: flex; flex-direction: column; padding: 8px; gap: 8px; }
 .cx-app-sb .cn-sidebar-content { gap: 6px; }
@@ -1492,12 +1533,12 @@ p.cx-text { margin: 0; }
 .cx-app-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px; }
 .cx-app-head h1.cx-text { margin: 0; font-size: 22px; }
 .cx-app-list { gap: 8px; }
-.cx-app-row { width: 100%; text-align: left; font: inherit; color: inherit; background: var(--background); cursor: pointer; transition: background-color 150ms, border-color 150ms; }
+.cx-app-row { width: 100%; text-align: left; font: inherit; color: inherit; background: var(--background); cursor: pointer; }
 .cx-app-row:hover { background: color-mix(in srgb, var(--foreground) 3%, var(--background)); }
 .cx-app-row[data-active] { border-color: var(--selected); background: var(--selected-soft); }
 .cx-app-row .cn-item-actions { gap: 14px; }
 /* detail Sheet: inside the frame, slides from the right */
-.cx-app .cn-sheet-content.cx-app-sheet[data-side] { position: absolute; top: 0; bottom: 0; right: 0; left: auto; height: auto; max-width: none; width: min(380px, 100%); border-left: 1px solid var(--border); box-shadow: -18px 0 40px -24px rgb(0 0 0 / .3); gap: 0; z-index: 3; transform: translateX(100%); transition: transform 240ms cubic-bezier(.22, 1, .36, 1); }
+.cx-app .cn-sheet-content.cx-app-sheet[data-side] { position: absolute; top: 0; bottom: 0; right: 0; left: auto; height: auto; max-width: none; width: min(380px, 100%); border-left: 1px solid var(--border); box-shadow: -18px 0 40px -24px rgb(0 0 0 / .3); gap: 0; z-index: 3; transform: translateX(100%); transition: transform 240ms var(--ease-out); }
 .cx-app .cn-sheet-content.cx-app-sheet[data-side][data-state="open"] { transform: none; }
 .cx-app-sheet .cn-sheet-header { padding: 16px 16px 8px; }
 .cx-app-sheet-body { flex: 1; overflow-y: auto; padding: 0 12px; scrollbar-width: thin; }
@@ -1514,7 +1555,7 @@ p.cx-text { margin: 0; }
 .cx-timeline li:not(:last-child)::after { content: ""; position: absolute; left: 3.5px; top: 18px; bottom: -10px; width: 1px; background: var(--border); }
 .cx-timeline li[data-now]::before { background: var(--selected); box-shadow: 0 0 0 4px var(--selected-soft); }
 /* the shell on a narrow box: sidebar becomes an off-canvas menu */
-.cx-app[data-mobile] .cx-app-sb { position: absolute; z-index: 4; top: 0; bottom: 0; left: 0; width: min(270px, 85%); transform: translateX(-102%); transition: transform 240ms cubic-bezier(.22, 1, .36, 1); box-shadow: 18px 0 40px -24px rgb(0 0 0 / .35); }
+.cx-app[data-mobile] .cx-app-sb { position: absolute; z-index: 4; top: 0; bottom: 0; left: 0; width: min(270px, 85%); transform: translateX(-102%); transition: transform 240ms var(--ease-out); box-shadow: 18px 0 40px -24px rgb(0 0 0 / .35); }
 .cx-app[data-mobile][data-sb-open] .cx-app-sb { transform: none; }
 .cx-app[data-mobile] [data-app-scrim]:not([hidden]) { opacity: 1; z-index: 3; }
 .cx-app[data-mobile] .cx-app-search { width: 36px; padding: 0; justify-content: center; }
@@ -1533,21 +1574,6 @@ p.cx-text { margin: 0; }
 
 
 /* ═════════════════════════ 3. sys ═════════════════════════ */
-/* ═════ Button · icon motion on hover (atom-level, every button with an icon) ═════ */
-.cn-button svg { transition: transform 180ms cubic-bezier(.22, 1, .36, 1); }
-@media (hover: hover) and (prefers-reduced-motion: no-preference) {
-  .cn-button:not(:disabled):hover > svg:last-child:not(:first-child) { transform: translateX(2px); }       /* trailing arrow moves on */
-  .cn-button:not(:disabled):hover > svg:first-child:not(:last-child) { transform: scale(1.12); }          /* leading icon lifts */
-  .cn-button:not(:disabled):hover > svg:first-child:not(:last-child):has(use[href="#plus"]) { transform: rotate(90deg); }
-  .cn-button:not(:disabled):hover > svg:only-child { transform: scale(1.12); }
-  .cn-button:not(:disabled):hover > svg:only-child:has(use[href="#left"]) { transform: translateX(-2px); }
-  .cn-button:not(:disabled):hover > svg:only-child:has(use[href="#right"]) { transform: translateX(2px); }
-  .cn-button:not(:disabled):hover > svg:only-child:has(use[href="#x"]) { transform: rotate(90deg); }
-  .cn-button:not(:disabled):hover > svg:only-child:has(use[href="#i-send"]) { transform: translate(2px, -2px); }
-  .cn-button:not(:disabled):hover > svg:only-child:has(use[href="#i-bell"]) { animation: cx-ring 600ms ease; }
-  .cn-button:not(:disabled):active > svg { transform: scale(.92); }
-}
-@keyframes cx-ring { 20% { transform: rotate(14deg); } 40% { transform: rotate(-12deg); } 60% { transform: rotate(8deg); } 80% { transform: rotate(-4deg); } }
 
 /* ═════ Calendar ═════ */
 .cx-cal { position: relative; display: inline-flex; flex-direction: column; gap: 8px; padding: 12px; border-radius: calc(var(--radius) * 1.2); box-shadow: 0 0 0 1px var(--border); background: var(--background); }
@@ -1577,22 +1603,24 @@ p.cx-text { margin: 0; }
 .cx-ag-colhead { display: grid; place-items: center; font-size: 13px; font-weight: 600; border-left: 1px solid var(--border); }
 .cx-ag-body { position: relative; display: grid; grid-template-columns: 56px repeat(var(--cols), 1fr); background-image: repeating-linear-gradient(to bottom, var(--border) 0 1px, transparent 1px var(--h)); }
 .cx-ag-times { position: relative; }
-.cx-ag-times span { position: absolute; right: 8px; transform: translateY(-50%); white-space: nowrap; }
-.cx-ag-times span:first-child { transform: none; }
+/* only the hour's own box (a direct child) sits on its line, centred on it; the text inside it is not a second
+   absolute box (it was: the box collapsed to 0 high and the hour hung below its line) */
+.cx-ag-times > span { position: absolute; right: 8px; transform: translateY(-50%); white-space: nowrap; line-height: 1; }
+.cx-ag-times > span:first-child { transform: none; }
 .cx-ag-col { position: relative; border-left: 1px solid var(--border); }
 .cx-ag-slot { position: absolute; left: 0; right: 0; border: 0; background: transparent; cursor: pointer; }
 .cx-ag-slot:hover { background: color-mix(in srgb, var(--selected) 6%, transparent); }
-.cx-ag-ev { --tone: var(--info); position: absolute; left: 4px; right: 4px; z-index: 1; display: flex; flex-direction: column; align-items: flex-start; gap: 0; overflow: hidden; padding: 4px 8px; border: 0; border-radius: calc(var(--radius) * .7); background: color-mix(in srgb, var(--tone) 20%, var(--background)); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--tone) 28%, transparent); color: var(--foreground); font: inherit; text-align: left; cursor: grab; touch-action: none; transition: box-shadow 150ms, top 160ms cubic-bezier(.22, 1, .36, 1); }
+.cx-ag-ev { --tone: var(--info); position: absolute; left: 4px; right: 4px; z-index: 1; display: flex; flex-direction: column; align-items: flex-start; gap: 0; overflow: hidden; padding: 4px 8px; border: 0; border-radius: calc(var(--radius) * .7); background: color-mix(in srgb, var(--tone) 20%, var(--background)); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--tone) 28%, transparent); color: var(--foreground); font: inherit; text-align: left; cursor: grab; touch-action: none; transition: box-shadow 150ms, top 160ms var(--ease-out); }
 .cx-ag-ev[data-tone="ok"] { --tone: var(--success); } .cx-ag-ev[data-tone="wait"] { --tone: var(--warning); } .cx-ag-ev[data-tone="info"] { --tone: var(--info); } .cx-ag-ev[data-tone="bad"] { --tone: var(--destructive); }
 .cx-ag-ev:hover { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--tone) 40%, transparent), 0 4px 12px -6px rgb(0 0 0 / .35); }
 .cx-ag-ev[data-dragging] { transition: none; cursor: grabbing; z-index: 2; box-shadow: 0 10px 24px -10px rgb(0 0 0 / .4); }
 .cx-ag-ev:focus-visible { outline: 2px solid var(--ring); outline-offset: 1px; }
 .cx-ag-ev .cx-text { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
-.cx-ag-now { position: absolute; left: 56px; right: 0; height: 0; border-top: 2px solid var(--destructive); z-index: 2; pointer-events: none; }
+.cx-ag-now { position: absolute; left: 56px; right: 0; height: 0; margin-top: -1px; border-top: 2px solid var(--destructive); z-index: 2; pointer-events: none; } /* the 2px border centred ON the hour, like the pill and its tail */
 .cx-ag-now i { position: absolute; left: -5px; top: -6px; width: 10px; height: 10px; border-radius: 99px; background: var(--destructive); }
 
 /* ═════ Chat (inbox + chatbot) ═════ */
-.cx-inbox { display: grid; grid-template-columns: 300px 1fr; height: 560px; width: 100%; max-width: 980px; margin: 0 auto; border-radius: calc(var(--radius) * 1.6); overflow: hidden; box-shadow: 0 0 0 1px var(--border); background: var(--background); transition: max-width 320ms cubic-bezier(.22, 1, .36, 1); }
+.cx-inbox { display: grid; grid-template-columns: 300px 1fr; height: 560px; width: 100%; max-width: 980px; margin: 0 auto; border-radius: calc(var(--radius) * 1.6); overflow: hidden; box-shadow: 0 0 0 1px var(--border); background: var(--background); transition: max-width 320ms var(--ease-out); }
 .cx-inbox[data-force-narrow] { max-width: 390px; }
 .cx-ib-list { display: flex; flex-direction: column; min-height: 0; border-right: 1px solid var(--border); }
 .cx-ib-items { flex: 1; overflow-y: auto; padding: 0 8px 8px; display: flex; flex-direction: column; gap: 2px; }
@@ -1633,6 +1661,7 @@ p.cx-text { margin: 0; }
 @keyframes cx-typing { 0%, 60%, 100% { opacity: .3; transform: none; } 30% { opacity: 1; transform: translateY(-3px); } }
 .cx-bot { display: flex; flex-direction: column; width: 100%; max-width: 440px; height: 520px; margin: 0 auto; border-radius: calc(var(--radius) * 1.6); overflow: hidden; box-shadow: 0 0 0 1px var(--border); background: var(--background); }
 .cx-bot-face { display: flex; align-items: center; justify-content: center; gap: 7px; width: 36px; height: 36px; flex: none; border-radius: 12px; background: var(--selected); }
+.cx-bot-logo { width: 36px; height: 36px; flex: none; border-radius: 12px; object-fit: contain; background: var(--muted); }
 .cx-bot-face i { display: block; width: 5px; height: 9px; border-radius: 99px; background: var(--selected-foreground); animation: cx-blink-eye 4s infinite; }
 @keyframes cx-blink-eye { 0%, 92%, 100% { transform: none; } 95% { transform: scaleY(.15); } }
 .cx-bot-sugs { padding: 8px 12px; gap: 6px; border-top: 1px solid var(--border); }
@@ -1657,7 +1686,7 @@ p.cx-text { margin: 0; }
 .cx-chart-x { display: grid; grid-template-columns: repeat(var(--n), 1fr); }
 .cx-chart-x span { overflow: visible; white-space: nowrap; }
 .cx-check-dot { display: grid; place-items: center; width: 24px; height: 24px; border-radius: 99px; box-shadow: inset 0 0 0 1.5px var(--border); font-size: 12px; font-weight: 600; color: var(--muted-foreground); }
-.cx-check-dot[data-done] { background: var(--success); box-shadow: none; color: #fff; animation: cx-pop 300ms cubic-bezier(.22, 1, .36, 1); }
+.cx-check-dot[data-done] { background: var(--success); box-shadow: none; color: #fff; animation: cx-pop 300ms var(--ease-out); }
 .cx-check-dot svg { width: 13px; height: 13px; }
 
 /* ═════ Settings ═════ */
@@ -1669,8 +1698,8 @@ p.cx-text { margin: 0; }
 .cx-settings { container-type: inline-size; }
 /* floats over the form: it never takes or gives back space, it only fades and slides */
 .cx-dirty { position: sticky; bottom: 0; z-index: 5; height: 88px; box-sizing: border-box; padding: 24px 0 16px; display: flex; justify-content: flex-end; align-items: flex-end; pointer-events: none; }
-.cx-dirty > .cx-dirty-in { position: relative; max-width: 100%; height: 48px; box-sizing: border-box; display: flex; align-items: center; gap: 16px; padding: 0 8px 0 18px; white-space: nowrap; border-radius: 99px; background: var(--foreground); color: var(--background); box-shadow: 0 16px 36px -14px rgb(0 0 0 / .45); opacity: 0; transform: translateY(10px) scale(.98); visibility: hidden; transition: opacity 180ms ease, transform 240ms cubic-bezier(.22, 1, .36, 1), visibility 0s linear 240ms; }
-.cx-dirty[data-open] > .cx-dirty-in { opacity: 1; transform: none; visibility: visible; pointer-events: auto; transition: opacity 180ms ease, transform 240ms cubic-bezier(.22, 1, .36, 1), visibility 0s; }
+.cx-dirty > .cx-dirty-in { position: relative; max-width: 100%; height: 48px; box-sizing: border-box; display: flex; align-items: center; gap: 16px; padding: 0 8px 0 18px; white-space: nowrap; border-radius: 99px; background: var(--foreground); color: var(--background); box-shadow: 0 16px 36px -14px rgb(0 0 0 / .45); opacity: 0; transform: translateY(10px) scale(.98); visibility: hidden; transition: opacity 180ms ease, transform 240ms var(--ease-out), visibility 0s linear 240ms; }
+.cx-dirty[data-open] > .cx-dirty-in { opacity: 1; transform: none; visibility: visible; pointer-events: auto; transition: opacity 180ms ease, transform 240ms var(--ease-out), visibility 0s; }
 @media (prefers-reduced-motion: reduce) { .cx-dirty > .cx-dirty-in { transform: none; } }
 .cx-dirty .cx-text { color: inherit; }
 .cx-dirty .cn-button-variant-ghost { color: inherit; }
@@ -1688,6 +1717,8 @@ p.cx-text { margin: 0; }
 .cx-plans { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: 14px; width: 100%; max-width: 920px; }
 .cx-plan { display: flex; flex-direction: column; gap: 12px; padding: 0; cursor: pointer; transition: box-shadow 160ms, transform 160ms; }
 .cx-plan:hover { transform: translateY(-2px); }
+.style-nova .cn-card.cx-plan, .cn-card.cx-plan { overflow: visible; }   /* nothing in a plan needs clipping, and a clipped card would also clip the strip below */
+.cx-plan:hover::after { content: ""; position: absolute; left: 0; right: 0; top: calc(100% - 2px); height: 8px; }   /* fills the gap it lifts from: no blinking hover on its bottom edge */
 .cx-plan[aria-checked="true"] { box-shadow: 0 0 0 2px var(--selected); }
 .cx-plan:focus-visible { outline: 2px solid var(--ring); outline-offset: 3px; }
 .cx-plan-price { display: flex; align-items: baseline; gap: 6px; }
@@ -1737,7 +1768,7 @@ p.cx-text { margin: 0; }
 .cx-pw-meter { display: flex; flex-direction: column; gap: 8px; }
 .cx-pw-bars { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
 .cx-pw-bars .cn-progress { height: 4px; }
-.cx-pw-bars .cn-progress .cn-progress-indicator { transition: transform 260ms cubic-bezier(.22, 1, .36, 1), background-color 200ms; }
+.cx-pw-bars .cn-progress .cn-progress-indicator { transition: transform var(--t-move) var(--ease-out), background-color var(--t-move); }
 .cx-pw-bars .cn-progress[data-tone="bad"] .cn-progress-indicator { background: var(--destructive); }
 .cx-pw-bars .cn-progress[data-tone="wait"] .cn-progress-indicator { background: var(--warning); }
 .cx-pw-bars .cn-progress[data-tone="ok"] .cn-progress-indicator { background: var(--success); }
@@ -1788,6 +1819,8 @@ p.cx-text { margin: 0; }
 .cx-ag-strip { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
 .cx-ag-day small { font-size: 11px; color: var(--muted-foreground); text-transform: uppercase; letter-spacing: .04em; }
 .cx-ag-day b { font-size: 16px; font-weight: 600; font-variant-numeric: tabular-nums; }
+/* a day with nothing booked has no count line: its name and number sit in the middle of the pill, not at its top */
+.cx-ag-day .cx-ag-count:empty { display: none; }
 .cx-ag-day .cx-ag-count { min-width: 18px; height: 16px; border-radius: 99px; font-size: 11px; font-weight: 600; color: var(--muted-foreground); font-variant-numeric: tabular-nums; }
 .cx-ag-day[data-today] b { color: var(--selected); }
 .cx-ag-day[aria-pressed="true"] small, .cx-ag-day[aria-pressed="true"] .cx-ag-count, .cx-ag-day[aria-pressed="true"] b { color: inherit; }
@@ -1851,7 +1884,7 @@ p.cx-text { margin: 0; }
 .cx-chat-sys svg { width: 14px; height: 14px; flex: none; }
 
 /* ── Messaging: 3 panes (wide) · thread + sheet (mid) · one pane (narrow) ── */
-.cx-mx { display: grid; grid-template-columns: 320px minmax(0, 1fr) 288px; height: 640px; width: 100%; margin: 0 auto; border-radius: calc(var(--radius) * 1.6); border: 1px solid var(--border); background: var(--background); overflow: hidden; transition: max-width 260ms cubic-bezier(.22, 1, .36, 1); }
+.cx-mx { display: grid; grid-template-columns: 320px minmax(0, 1fr) 288px; height: 640px; width: 100%; margin: 0 auto; border-radius: calc(var(--radius) * 1.6); border: 1px solid var(--border); background: var(--background); overflow: hidden; transition: max-width 260ms var(--ease-out); }
 .cx-mx[data-layout="mid"] { grid-template-columns: 300px minmax(0, 1fr); }
 .cx-mx[data-layout="narrow"] { grid-template-columns: minmax(0, 1fr); }
 .cx-mx:not([data-layout="wide"]) .cx-mx-ctx:not(.cx-mx-ctx-sheet) { display: none; }
@@ -2013,7 +2046,7 @@ p.cx-text { margin: 0; }
 @container (max-width: 700px) {
   .cx-ag-scroll { scroll-snap-type: x mandatory; scroll-padding-left: 48px; }
   .cx-ag-col { scroll-snap-align: start; }
-  .cx-ag-times span { right: 5px; }
+  .cx-ag-times > span { right: 5px; }
   .cx-ag-times .cx-text { font-size: 11px; letter-spacing: -.01em; }   /* «09:00» fits its 48px column, never cut at the edge */
 }
 
@@ -2041,12 +2074,12 @@ p.cx-text { margin: 0; }
 .pk-scrim{ position:fixed; inset:0; z-index:var(--z-modal); background:transparent; }
 .pk-pop{ color:var(--popover-foreground); overflow-y:auto; overscroll-behavior:contain; scrollbar-width:thin; position:fixed; z-index:calc(var(--z-modal) + 1); width:292px; box-sizing:border-box; background:var(--popover); border-radius:20px;
   box-shadow:0 24px 60px -18px rgba(31,22,60,.38), 0 0 0 1px var(--border); padding:12px;
-  display:flex; flex-direction:column; gap:11px; animation:pk-in .18s cubic-bezier(.2,.8,.3,1); }
+  display:flex; flex-direction:column; gap:11px; animation:pk-in .18s var(--ease-out); }
 @keyframes pk-in{ from{ opacity:0; transform:translateY(6px) scale(.98); } to{ opacity:1; transform:none; } }
 @media (max-width:35rem){
   .pk-scrim{ background:rgba(16,16,20,.28); }
   .pk-pop{ left:0 !important; right:0; top:auto !important; bottom:0 !important; max-height:88dvh !important; width:auto; border-radius:22px 22px 0 0;
-    padding:10px 16px calc(16px + env(safe-area-inset-bottom,0px)); animation:pk-up .24s cubic-bezier(.2,.8,.3,1); }
+    padding:10px 16px calc(16px + env(safe-area-inset-bottom,0px)); animation:pk-up .24s var(--ease-out); }
   .pk-pop::before{ content:""; width:38px; height:5px; border-radius:5px; background:var(--muted); margin:0 auto 2px; }
 }
 @keyframes pk-up{ from{ transform:translateY(100%); } to{ transform:none; } }
@@ -2182,9 +2215,12 @@ p.cx-text { margin: 0; }
 .cx-band[data-tone="warn"] > .mu-icon { color: var(--warning); }
 .cx-band > .cx-band-text { flex: 1; }
 /* Accordion from muten: the panel folds with grid rows (exact height, no measuring) and its text fades. */
-.cn-accordion-content.cx-acc-fold { display: grid; grid-template-rows: 1fr; transition: grid-template-rows 200ms ease; animation: none; }
+.cn-accordion-content.cx-acc-fold { display: grid; grid-template-rows: 1fr; transition: grid-template-rows var(--t-move) var(--ease-out); animation: none; }
 .cn-accordion-content.cx-acc-fold[data-open="false"] { grid-template-rows: 0fr; }
-.cn-accordion-content.cx-acc-fold > .cn-accordion-content-inner { overflow: hidden; min-height: 0; transition: opacity 160ms ease; }
+/* the fold clips (it closes to 0 high) but 4 px past its box, so the first row's top edge and focus ring are not cut;
+   folded, its opacity is 0, so those 4 px show nothing */
+.cn-accordion-content.cx-acc-fold > .cn-accordion-content-inner { overflow: clip; overflow-clip-margin: 4px; min-height: 0; transition: opacity var(--t-micro) ease, translate var(--t-move) var(--ease-out); }
+.cn-accordion-content.cx-acc-fold[data-open="false"] > .cn-accordion-content-inner { translate: 0 -4px; }
 .cn-accordion-content.cx-acc-fold[data-open="false"] > .cn-accordion-content-inner { opacity: 0; padding-bottom: 0; }
 .cn-accordion-trigger > .cx-acc-chev { margin-left: auto; font-size: 16px; color: var(--muted-foreground); transition: transform 200ms ease; }
 .cn-accordion-trigger[aria-expanded="true"] > .cx-acc-chev { transform: rotate(180deg); }
@@ -2205,9 +2241,9 @@ p.cx-text { margin: 0; }
 
 /* ── Loading: the content fades in where its skeleton was (kit-skeleton.muten) ── */
 :where(.style-nova) .cx-loading, :where(.style-nova) .cx-loaded, :where(.style-nova) .cx-sk-host { display: block; }
-.cx-loaded { animation: cx-loaded-in 180ms ease-out; }
-@keyframes cx-loaded-in { from { opacity: 0.001; } to { opacity: 1; } }
-@media (prefers-reduced-motion: reduce) { .cx-loaded { animation: none; } }
+/* the content lands where its skeleton was, out of a short blur: the shape does not change, only the pixels */
+.cx-loaded { animation: cx-loaded-in var(--t-move) var(--ease-out); }
+@keyframes cx-loaded-in { from { opacity: 0.001; filter: blur(3px); } to { opacity: 1; filter: none; } }
 /* a skeleton line inside an Item title takes the title's width (the title shrinks to its text otherwise) */
 .cn-item-title:has(> .cx-sk) { width: 100%; }
 .cx-sk-tr > .cx-sk { flex: 0 1 auto; min-width: 0; }
@@ -2237,7 +2273,7 @@ p.cx-text { margin: 0; }
 .cx-rg-row:focus-visible .cx-rg-dot { border-color: var(--ring); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 50%, transparent); }
 .cx-rg-dot { position: relative; display: block; width: 16px; height: 16px; margin-top: 2px; border-radius: 99px; border: 1px solid var(--input); background: transparent; transition: background-color 150ms, border-color 150ms; }
 .cx-rg-dot[data-state="true"] { background: var(--primary); border-color: var(--primary); }
-.cx-rg-dot::after { content: ""; position: absolute; top: 50%; left: 50%; width: 8px; height: 8px; border-radius: 99px; background: var(--primary-foreground); transform: translate(-50%, -50%) scale(0); transition: transform 150ms cubic-bezier(.22, 1, .36, 1); }
+.cx-rg-dot::after { content: ""; position: absolute; top: 50%; left: 50%; width: 8px; height: 8px; border-radius: 99px; background: var(--primary-foreground); transform: translate(-50%, -50%) scale(0); transition: transform 150ms var(--ease-out); }
 .cx-rg-dot[data-state="true"]::after { transform: translate(-50%, -50%) scale(1); }
 .cx-rg-row:active .cx-rg-dot { scale: .92; }
 .cx-rg-text { display: flex; flex-direction: column; gap: 2px; }
@@ -2259,16 +2295,15 @@ p.cx-text { margin: 0; }
 
 /* ── NumberField / VectorField (number-field.js, vector-field.muten) ── */
 .cx-nf-host { display: block; }
-.cx-nf { width: fit-content; max-width: 100%; }
-.cx-nf-input { text-align: left; font-variant-numeric: tabular-nums; field-sizing: content; min-width: 3ch; width: auto; flex: 0 1 auto; padding-right: 2px; }
+.cx-nf { width: 100%; }
+.cx-nf-input { text-align: left; font-variant-numeric: tabular-nums; min-width: 3ch; flex: 1 1 auto; padding-right: 2px; }
 .cx-nf-prefix { font-size: 12px; font-weight: 600; color: var(--muted-foreground); min-width: 14px; }
 .cx-nf-unit { font-size: 13px; color: var(--muted-foreground); padding-right: 2px; }
 .cx-nf-steps { gap: 0; padding-right: 4px; }
 .cx-nf-btn:disabled { opacity: .35; }
-.cx-vector { display: flex; flex-wrap: wrap; gap: 8px; width: fit-content; max-width: 100%; }
-.cx-vector .cx-nf { max-width: none; }
+.cx-vector { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px; width: 100%; }
 /* ── FileInput (file-input.js) ── */
-.cx-file-host { display: flex; flex-direction: column; gap: 8px; width: 100%; max-width: 360px; }
+.cx-file-host { display: flex; flex-direction: column; gap: 8px; width: 100%; }
 .cx-file-drop { aspect-ratio: auto; min-height: 132px; }
 .cx-file-drop[data-over] { border-color: var(--primary); background: color-mix(in srgb, var(--primary) 6%, transparent); }
 .cx-file-msg { text-align: left; margin: 0; color: var(--destructive); }
@@ -2326,7 +2361,7 @@ p.cx-text { margin: 0; }
 .cx-stp { display: grid; grid-template-columns: repeat(var(--n, 3), minmax(0, 1fr)); gap: 6px; width: 100%; max-width: 480px; }
 .cx-stp-step { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
 .cx-stp-bar { height: 4px; }
-.cx-stp-bar > .cn-progress-indicator { width: 0; transition: width 260ms cubic-bezier(.22, 1, .36, 1); }
+.cx-stp-bar > .cn-progress-indicator { width: 0; transition: width var(--t-move) var(--ease-out); }
 .cx-stp-step[data-state="done"] .cx-stp-bar > .cn-progress-indicator, .cx-stp-step[data-state="now"] .cx-stp-bar > .cn-progress-indicator { width: 100%; }
 .cx-stp-dot, .cx-stp-desc { display: none; }
 .cx-stp-label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -2425,6 +2460,9 @@ p.cx-text { margin: 0; }
 .cx-ov-trigger { display: inline-flex; }
 .cx-ov-zone > .cx-ov-trigger { display: flex; width: 100%; }
 .cx-ov-behavior { display: none; }
+/* a panel place() lifted to the top layer: the browser's popover look goes (zero specificity, so the panel's own
+   padding, border and background still win) */
+:where(.cx-floated[popover]) { position: fixed; inset: auto; margin: 0; border: 0; padding: 0; overflow: visible; background: transparent; color: inherit; }
 .cx-ov-content[popover] { position: fixed; inset: auto; margin: 0; border: 0; overflow: visible; width: var(--w, auto); max-width: calc(100vw - 16px); color: var(--popover-foreground); }
 .cx-ov-content:not([popover]) { display: none; }
 .cx-ov-content[popover]:popover-open { display: flex; flex-direction: column; }
@@ -2460,21 +2498,22 @@ p.cx-text { margin: 0; }
 .cx-navmenu-trigger .cn-navigation-menu-trigger-icon { width: 12px; height: 12px; transition: rotate 200ms ease; }
 .cx-ov-trigger[data-open] .cn-navigation-menu-trigger-icon { rotate: 180deg; }
 .cx-navmenu-panel[popover]:popover-open { display: grid; grid-template-columns: repeat(var(--cols, 2), minmax(0, 1fr)); gap: 4px; padding: 8px; border-radius: calc(var(--radius) * 1.2); background: var(--popover); box-shadow: 0 0 0 1px color-mix(in srgb, var(--foreground) 10%, transparent), 0 10px 30px -10px rgb(0 0 0 / .25); }
-.cx-navmenu-link { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; padding: 10px; border-radius: calc(var(--radius) * .8); color: inherit; text-decoration: none; }
+.cx-navmenu-link.cn-navigation-menu-link { display: flex; flex-direction: column; align-items: flex-start; text-align: start; gap: 2px; padding: 10px; border-radius: calc(var(--radius) * .8); color: inherit; text-decoration: none; }
 .cx-navmenu-link:hover, .cx-navmenu-link:focus-visible { background: var(--muted); outline: none; }
 .cx-navmenu-title { font-size: 14px; font-weight: 500; }
 .cx-navmenu-desc { font-size: 13px; line-height: 1.4; color: var(--muted-foreground); }
 .cx-navmenu-desc:empty { display: none; }
 /* the panels' enter / exit (Nova's animate-in reads data-open / data-closed, which the kit sets) */
-.cx-ov-content[data-open] { animation: cx-ov-in 120ms cubic-bezier(.22, 1, .36, 1); }
-.cx-ov-content[data-closed] { animation: cx-ov-out 100ms ease forwards; }
+.cx-ov-content[data-open] { animation: cx-ov-in var(--t-pop) var(--ease-out); }
+.cx-ov-content[data-closed] { animation: cx-ov-out calc(var(--t-pop) * .67) ease forwards; }
 @keyframes cx-ov-in { from { opacity: 0; transform: scale(.96) translateY(var(--ov-dy, -4px)); } }
 @keyframes cx-ov-out { to { opacity: 0; transform: scale(.97); } }
 .cx-ov-content[data-side="top"] { --ov-dy: 4px; }
 @media (prefers-reduced-motion: reduce) { .cx-ov-content[data-open], .cx-ov-content[data-closed] { animation-duration: 1ms; } }
 
 /* ── Modal mode sheet (sheet.muten): a full-height panel from a side, or full-width from the top/bottom ── */
-.cx-modal[data-mode="sheet"] { top: 0; bottom: 0; right: 0; width: min(26rem, calc(100% - 2rem)); max-height: none; border-radius: 0; overflow: hidden; transition: transform 300ms cubic-bezier(.32, .72, 0, 1); transform: translateX(100%); }
+.cx-modal[data-mode="sheet"] { top: 0; bottom: 0; right: 0; width: min(26rem, calc(100% - 2rem)); max-height: none; border-radius: 0; overflow: hidden; transition: transform calc(var(--t-sheet) * .68) var(--ease-in-out); transform: translateX(100%); }
+.cx-modal-root[data-open="true"] > .cx-modal[data-mode="sheet"] { transition: transform var(--t-sheet) var(--ease-drawer); }
 .cx-modal[data-mode="sheet"][data-side="left"] { right: auto; left: 0; transform: translateX(-100%); }
 .cx-modal[data-mode="sheet"]:is([data-side="top"], [data-side="bottom"]) { left: 0; right: 0; width: 100%; height: auto; max-height: min(80dvh, 40rem); }
 .cx-modal[data-mode="sheet"][data-side="top"] { bottom: auto; transform: translateY(-100%); }
@@ -2520,7 +2559,7 @@ a.cx-bc-item:hover { color: var(--foreground); }
 .cx-pl-row { display: flex; flex-direction: row; align-items: center; gap: 4px; }
 .cx-pl-more { display: inline-grid; place-items: center; width: 32px; height: 32px; color: var(--muted-foreground); }
 /* ── AppSidebar ── */
-.cx-sidebar { display: flex; width: 248px; flex: none; border-right: 1px solid var(--border); background: color-mix(in srgb, var(--muted) 35%, var(--background)); transition: width 200ms cubic-bezier(.22, 1, .36, 1); overflow: hidden; }
+.cx-sidebar { display: flex; width: 248px; flex: none; border-right: 1px solid var(--border); background: color-mix(in srgb, var(--muted) 35%, var(--background)); transition: width 200ms var(--ease-out); overflow: hidden; }
 .cx-sidebar[data-collapsed="true"] { width: 56px; }
 .cx-sb-inner { display: flex; flex-direction: column; width: 100%; gap: 4px; padding: 8px; }
 .cx-sb-head, .cx-sb-foot { display: flex; flex-direction: column; gap: 4px; }
@@ -2531,7 +2570,7 @@ a.cx-bc-item:hover { color: var(--foreground); }
 .cx-sb-menu { display: flex; flex-direction: column; gap: 2px; }
 .cx-sb-item { display: flex; align-items: center; gap: 8px; width: 100%; height: 32px; padding: 0 8px; border: 0; border-radius: calc(var(--radius) * .7); background: none; color: inherit; font: inherit; font-size: 14px; text-align: left; cursor: pointer; white-space: nowrap; }
 .cx-sb-item:hover { background: var(--accent); }
-.cx-sb-item[data-active="true"], .cx-sb-item[aria-current="page"] { background: var(--selected-soft); color: var(--selected); font-weight: 500; }
+.cx-sb-item[data-active="true"], .cx-sb-item[aria-current="page"], .cx-sb-item[aria-current="true"], .cx-sb-item.is-active { background: var(--selected-soft); color: var(--selected); font-weight: 500; }
 .cx-sb-item { position: relative; text-decoration: none; }   /* the count sits inside its own row, never past its edge */
 .cx-sb-item > .mu-icon { width: 16px; height: 16px; flex: none; }
 .cx-sb-label { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
@@ -2591,12 +2630,19 @@ a.cx-bc-item:hover { color: var(--foreground); }
 .cx-insp-head:hover { background: color-mix(in srgb, var(--muted) 50%, transparent); }
 .cx-insp-head .cx-acc-chev { width: 14px; height: 14px; color: var(--muted-foreground); transition: rotate 200ms ease; }
 .cx-insp-head[aria-expanded="false"] .cx-acc-chev { rotate: -90deg; }
-.cx-insp-body { display: flex; flex-direction: column; gap: 8px; padding: 2px 12px 12px; }
+.cx-insp-body { display: flex; flex-direction: column; gap: 8px; padding: 4px 12px 12px; }
 .cx-insp-row { display: grid; grid-template-columns: 84px minmax(0, 1fr); align-items: center; gap: 10px; }
 .cx-insp-label { font-size: 13px; color: var(--muted-foreground); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .cx-insp-ctl { display: flex; flex-direction: row; align-items: center; min-width: 0; }
-.cx-insp-ctl .cx-nf, .cx-insp-ctl .cx-vector { max-width: 100%; }
-.cx-tree-host { display: block; width: 100%; max-width: 320px; }
+.cx-tree-host { display: block; width: 100%; max-width: 320px; min-width: 220px; }
+/* a folder's group folds like the accordion (no rebuild, no jump): rows 0fr ↔ 1fr, its rows fade with it */
+.cx-tree-fold { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 200ms var(--ease-out); }
+.cx-tree-row[aria-expanded="true"] + .cx-tree-fold { grid-template-rows: 1fr; }
+.cx-tree-inner { display: flex; flex-direction: column; min-height: 0; overflow: clip; overflow-clip-margin: 2px; opacity: 0; transition: opacity 160ms ease; }
+.cx-tree-row[aria-expanded="true"] + .cx-tree-fold > .cx-tree-inner { opacity: 1; }
+.cx-tree-chev svg { transition: rotate 200ms var(--ease-out); }
+.cx-tree-row[aria-expanded="true"] > .cx-tree-chev svg { rotate: 90deg; }
+@media (prefers-reduced-motion: reduce) { .cx-tree-fold, .cx-tree-inner, .cx-tree-chev svg { transition: none; } }
 .cx-tree { display: flex; flex-direction: column; padding: 4px; border: 1px solid var(--border); border-radius: calc(var(--radius) * 1.2); }
 .cx-tree-row { display: flex; align-items: center; gap: 6px; width: 100%; height: 30px; padding-right: 8px; border: 0; border-radius: calc(var(--radius) * .6); background: none; color: inherit; font: inherit; font-size: 13px; text-align: left; cursor: pointer; outline: none; }
 .cx-tree-row:hover { background: var(--accent); }
@@ -2808,7 +2854,7 @@ a.cx-bc-item:hover { color: var(--foreground); }
 
 /* ── LiveStack: news that keeps arriving; the newest in front, the older ones step back behind it ── */
 .cx-live { position: relative; display: block; width: 100%; max-width: 380px; height: var(--live-h, 200px); }
-.cx-live-card { position: absolute; left: 0; right: 0; top: 0; z-index: calc(10 - var(--i, 0)); display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-radius: calc(var(--radius) * 1.6); border: 1px solid var(--border); background: var(--card); color: var(--card-foreground); box-shadow: 0 18px 36px -24px rgb(11 11 13 / .45); transform-origin: top center; transform: translateY(calc(var(--i, 0) * 14px)) scale(calc(1 - var(--i, 0) * 0.05)); opacity: calc(1 - var(--i, 0) * 0.28); transition: transform 560ms cubic-bezier(.23, 1, .32, 1), opacity 420ms ease, filter 420ms ease; }
+.cx-live-card { position: absolute; left: 0; right: 0; top: 0; z-index: calc(10 - var(--i, 0)); display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-radius: calc(var(--radius) * 1.6); border: 1px solid var(--border); background: var(--card); color: var(--card-foreground); box-shadow: 0 18px 36px -24px rgb(11 11 13 / .45); transform-origin: top center; transform: translateY(calc(var(--i, 0) * 14px)) scale(calc(1 - var(--i, 0) * 0.05)); opacity: calc(1 - var(--i, 0) * 0.28); transition: transform 560ms var(--ease-out), opacity 420ms ease, filter 420ms ease; }
 .cx-live-card[data-enter] { transform: translateY(-28px) scale(.96); opacity: 0; filter: blur(4px); }
 .cx-live-card + .cx-live-card + .cx-live-card + .cx-live-card { opacity: 0; }
 .cx-live-ic { display: grid; place-items: center; flex: none; width: 36px; height: 36px; border-radius: 10px; background: var(--muted); color: var(--foreground); }
@@ -2823,8 +2869,13 @@ a.cx-bc-item:hover { color: var(--foreground); }
 @media (prefers-reduced-motion: reduce) { .cx-live-card { transition: none; } }
 
 /* ── Press: anything you press gives way a little (0.97), so the page feels it heard you ── */
-.style-nova .cn-button { transition-property: color, background-color, border-color, box-shadow, transform; transition-duration: 160ms; transition-timing-function: cubic-bezier(.23, 1, .32, 1); }
-.style-nova .cn-button:active:not(:disabled) { transform: scale(0.97); }
+/* HOVER IS INSTANT (shadcn's menus and Emil's rule for what is seen tens of times a day): a row, a menu item or a
+   button changes colour the moment the pointer is on it and the moment it leaves. A fade there leaves trails when the
+   pointer sweeps a list (the last row still fading out, the next fading in, all of them dimming in the gap between
+   two rows), which reads as the whole menu blinking. Only what moves keeps its motion: the press, the focus ring. */
+.style-nova .cn-button { transition-property: box-shadow, transform; transition-duration: 160ms; transition-timing-function: var(--ease-out); }
+.style-nova :is(.cx-sb-item, .cx-tree-row, .cx-app-row, .cx-navmenu-link, .cn-sidebar-menu-button, .cn-dropdown-menu-item, .cn-context-menu-item, .cn-menubar-item, .cn-menubar-trigger, .cn-navigation-menu-trigger, .cn-navigation-menu-link, .cn-command-item, .cn-select-item, .cn-item, .cn-toggle, .cn-tabs-trigger), :is(.cx-sb-item, .cx-tree-row, .cx-app-row, .cx-navmenu-link, .cn-sidebar-menu-button, .cn-dropdown-menu-item, .cn-context-menu-item, .cn-menubar-item, .cn-menubar-trigger, .cn-navigation-menu-trigger, .cn-navigation-menu-link, .cn-command-item, .cn-select-item, .cn-item, .cn-toggle, .cn-tabs-trigger) { transition-property: none; }   /* .style-nova: beats Nova's own transition-all */
+/* pressing a button: Nova's own 1px drop (active:translate-y-px), as shadcn; no scale (it changed the button's size) */
 
 /* contrast: the label of the hour groups (Mañana, Tarde) and an appointment's second line read at 4.5:1 */
 .cx-hours-h { margin: 0; font-size: 12px; font-weight: 600; color: var(--muted-foreground); }
@@ -2876,13 +2927,13 @@ a.cx-bc-item:hover { color: var(--foreground); }
   .cx-play[data-in] .cx-bkp-ok { animation: cx-bkp-ok 9s infinite; }
 }
 @media (prefers-reduced-motion: reduce) { .cx-bkp-on { opacity: 1; transform: none; } }
-@keyframes cx-bkp-day { 0%, 12% { opacity: 0; transform: scale(.92); } 16%, 86% { opacity: 1; transform: none; animation-timing-function: cubic-bezier(.23, 1, .32, 1); } 92%, 100% { opacity: 0; transform: scale(.92); } }
+@keyframes cx-bkp-day { 0%, 12% { opacity: 0; transform: scale(.92); } 16%, 86% { opacity: 1; transform: none; animation-timing-function: var(--ease-out); } 92%, 100% { opacity: 0; transform: scale(.92); } }
 @keyframes cx-bkp-hour { 0%, 26% { opacity: 0; transform: scale(.92); } 30%, 86% { opacity: 1; transform: none; } 92%, 100% { opacity: 0; transform: scale(.92); } }
 @keyframes cx-bkp-tap1 { 0%, 12% { opacity: 0; transform: scale(.4); } 14% { opacity: 1; transform: scale(.8); } 22%, 100% { opacity: 0; transform: scale(2); } }
 @keyframes cx-bkp-tap2 { 0%, 26% { opacity: 0; transform: scale(.4); } 28% { opacity: 1; transform: scale(.8); } 36%, 100% { opacity: 0; transform: scale(2); } }
 @keyframes cx-bkp-tap3 { 0%, 39% { opacity: 0; transform: scale(.4); } 41% { opacity: 1; transform: scale(.8); } 49%, 100% { opacity: 0; transform: scale(2.4); } }
 @keyframes cx-bkp-press { 0%, 39% { transform: none; } 41% { transform: scale(.97); } 44%, 100% { transform: none; } }
-@keyframes cx-bkp-done { 0%, 45% { opacity: 0; transform: translateY(16px); } 51%, 84% { opacity: 1; transform: none; animation-timing-function: cubic-bezier(.23, 1, .32, 1); } 90%, 100% { opacity: 0; transform: translateY(16px); } }
+@keyframes cx-bkp-done { 0%, 45% { opacity: 0; transform: translateY(16px); } 51%, 84% { opacity: 1; transform: none; animation-timing-function: var(--ease-out); } 90%, 100% { opacity: 0; transform: translateY(16px); } }
 @keyframes cx-bkp-ok { 0%, 48% { transform: scale(.4); } 56%, 100% { transform: none; } }
 
 /* DayPlan (10s) */
@@ -2926,7 +2977,7 @@ a.cx-bc-item:hover { color: var(--foreground); }
 }
 @media (prefers-reduced-motion: reduce) { .cx-dp-free { display: none; } }
 @keyframes cx-dp-free { 0%, 28% { opacity: 1; } 34%, 88% { opacity: 0; } 94%, 100% { opacity: 1; } }
-@keyframes cx-dp-new { 0%, 30% { opacity: 0; transform: translateY(-8px) scale(.98); } 36%, 88% { opacity: 1; transform: none; animation-timing-function: cubic-bezier(.23, 1, .32, 1); } 94%, 100% { opacity: 0; transform: translateY(-8px) scale(.98); } }
+@keyframes cx-dp-new { 0%, 30% { opacity: 0; transform: translateY(-8px) scale(.98); } 36%, 88% { opacity: 1; transform: none; animation-timing-function: var(--ease-out); } 94%, 100% { opacity: 0; transform: translateY(-8px) scale(.98); } }
 @keyframes cx-dp-ring { 0%, 34% { opacity: 0; } 38% { opacity: 1; } 60%, 100% { opacity: 0; } }
 @keyframes cx-dp-dot { 0%, 34% { opacity: 0; } 38%, 88% { opacity: 1; } 94%, 100% { opacity: 0; } }
 @keyframes cx-dp-out { 0%, 36% { opacity: 1; transform: none; } 40%, 88% { opacity: 0; transform: translateY(-100%); } 94%, 100% { opacity: 1; transform: none; } }
@@ -2999,8 +3050,8 @@ a.cx-bc-item:hover { color: var(--foreground); }
    it comes near the viewport. */
 .cx-device-link { position: absolute; inset: 0; z-index: 4; border-radius: inherit; }
 .cx-device-link:focus-visible { outline: 3px solid var(--ring, #6B46F2); outline-offset: 4px; }
-.cx-device[data-link="true"] { transition: transform .25s cubic-bezier(.2, .8, .2, 1); }
-@media (hover: hover) { .cx-device[data-link="true"]:has(> .cx-device-link:hover) { transform: translateY(-4px); } }
+.cx-device[data-link="true"] { transition: transform .25s var(--ease-out); }
+@media (hover: hover) { .cx-device[data-link="true"]:has(> .cx-device-link:hover) { transform: translateY(-4px); } .cx-device-link:hover::after { content: ""; position: absolute; left: 0; right: 0; top: calc(100% - 2px); height: 10px; } }   /* the strip fills the gap it lifts from: no blinking hover on its bottom edge */
 @media (prefers-reduced-motion: reduce) { .cx-device[data-link="true"] { transition: none; transform: none !important; } }
 .cx-device[data-shot="true"] > .cx-device-screen { background: #111; content-visibility: auto; }
 .cx-device-shot { position: absolute; inset: 0; background: var(--shot) top center / cover no-repeat; }
@@ -3211,7 +3262,7 @@ a.cx-bc-item:hover { color: var(--foreground); }
   .cx-play[data-in] .cx-odp-go[data-next] .cx-odp-g2, .cx-play[data-in] .cx-odp-badge[data-next] .cx-odp-b2 { animation: cx-odp-in 9s infinite; }
 }
 @keyframes cx-odp-out { 0%, 42% { opacity: 1; transform: none; } 47%, 88% { opacity: 0; transform: translateY(-100%); } 94%, 100% { opacity: 1; transform: none; } }
-@keyframes cx-odp-in { 0%, 42% { opacity: 0; transform: translateY(100%); } 47%, 88% { opacity: 1; transform: none; animation-timing-function: cubic-bezier(.23, 1, .32, 1); } 94%, 100% { opacity: 0; transform: translateY(100%); } }
+@keyframes cx-odp-in { 0%, 42% { opacity: 0; transform: translateY(100%); } 47%, 88% { opacity: 1; transform: none; animation-timing-function: var(--ease-out); } 94%, 100% { opacity: 0; transform: translateY(100%); } }
 
 /* a play fills its bento cell: the two twins end at the same line */
 .cx-bento-cell .cx-play { flex: 1; }
@@ -3260,7 +3311,7 @@ a.cx-bc-item:hover { color: var(--foreground); }
 /* The native accordion opens and closes to its content's height (browsers with ::details-content; the rest snap). */
 @media (prefers-reduced-motion: no-preference) {
   .cn-accordion > details.cn-accordion-item { interpolate-size: allow-keywords; }
-  .cn-accordion > details.cn-accordion-item::details-content { height: 0; overflow: clip; transition: height 200ms cubic-bezier(.23, 1, .32, 1), content-visibility 200ms allow-discrete; }
+  .cn-accordion > details.cn-accordion-item::details-content { height: 0; overflow: clip; transition: height 200ms var(--ease-out), content-visibility 200ms allow-discrete; }
   .cn-accordion > details.cn-accordion-item[open]::details-content { height: auto; }
 }
 
@@ -4157,12 +4208,12 @@ a.cx-bc-item:hover { color: var(--foreground); }
 .cx-nav-fixed .cx-navpill-wrap { position: relative; top: auto; }
 
 .cx-nav-sheet { position: fixed; inset: 0; z-index: var(--z-sheet, 50); display: flex; flex-direction: column; padding: 12px 16px calc(20px + env(safe-area-inset-bottom, 0px)); box-sizing: border-box; background: var(--background); color: var(--foreground); font-family: var(--font-sans); visibility: hidden; opacity: 0; transform: translateY(-8px); transition: opacity 200ms ease, transform 200ms ease, visibility 0s linear 200ms; }
-.cx-nav-sheet[data-open] { visibility: visible; opacity: 1; transform: none; transition: opacity 250ms ease, transform 300ms cubic-bezier(.23, 1, .32, 1); }
+.cx-nav-sheet[data-open] { visibility: visible; opacity: 1; transform: none; transition: opacity 250ms ease, transform 300ms var(--ease-out); }
 @media (min-width: 641px) { .cx-nav-sheet { display: none; } }
 .cx-nav-sheet-top { display: flex; flex-direction: row; align-items: center; justify-content: space-between; height: 58px; padding: 0 8px 0 16px; border: 1px solid var(--border); border-radius: 18px; box-sizing: border-box; }
 .cx-nav-sheet-top img { height: 14px; width: auto; display: block; }
 .cx-nav-sheet-list { display: flex; flex-direction: column; margin-top: 22px; }
-.cx-nav-sheet-item { display: flex; flex-direction: row; align-items: center; justify-content: space-between; gap: 16px; padding: 18px 6px; border-bottom: 1px solid var(--border); color: var(--foreground); text-decoration: none; opacity: 0; transform: translateY(6px); transition: opacity 250ms ease, transform 300ms cubic-bezier(.23, 1, .32, 1); }
+.cx-nav-sheet-item { display: flex; flex-direction: row; align-items: center; justify-content: space-between; gap: 16px; padding: 18px 6px; border-bottom: 1px solid var(--border); color: var(--foreground); text-decoration: none; opacity: 0; transform: translateY(6px); transition: opacity 250ms ease, transform 300ms var(--ease-out); }
 .cx-nav-sheet[data-open] .cx-nav-sheet-item { opacity: 1; transform: none; }
 .cx-nav-sheet[data-open] .cx-nav-sheet-item:nth-child(2) { transition-delay: 50ms; }
 .cx-nav-sheet[data-open] .cx-nav-sheet-item:nth-child(3) { transition-delay: 100ms; }
@@ -4223,10 +4274,10 @@ a.cx-bc-item:hover { color: var(--foreground); }
 .cx-tour-hit { position: absolute; inset: 0; z-index: 1; margin: 0; padding: 0; border: 0; border-radius: inherit; background: transparent; cursor: pointer; }
 .cx-tour-hit:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
 /* the open step's line unfolds to its height and the others fold, so the list glides instead of jumping */
-.cx-tour-desc { display: grid; grid-template-rows: 0fr; opacity: 0; transition: grid-template-rows 420ms cubic-bezier(.23, 1, .32, 1), opacity 260ms ease; }
+.cx-tour-desc { display: grid; grid-template-rows: 0fr; opacity: 0; transition: grid-template-rows 420ms var(--ease-out), opacity 260ms ease; }
 .cx-tour-desc > .cx-stp-desc { overflow: hidden; min-height: 0; margin: 0; }
 .cx-tour-steps > li[data-state="now"] .cx-tour-desc { grid-template-rows: 1fr; opacity: 1; transition-delay: 0ms, 120ms; }
-.cx-tour-steps .cx-stp-label, .cx-tour-steps .cx-stp-dot { transition: color 260ms ease, background-color 260ms ease, transform 260ms cubic-bezier(.23, 1, .32, 1); }
+.cx-tour-steps .cx-stp-label, .cx-tour-steps .cx-stp-dot { transition: color 260ms ease, background-color 260ms ease, transform 260ms var(--ease-out); }
 .cx-tour-steps > li[data-state="now"] .cx-stp-dot { transform: scale(1.06); }
 .cx-tour-steps > li { position: relative; }
 .cx-tour-steps > li > .cx-stp-bar { display: none; position: absolute; left: 40px; right: 0; bottom: 6px; height: 3px; overflow: hidden; border-radius: 3px; background: var(--muted); }
@@ -4243,15 +4294,15 @@ a.cx-bc-item:hover { color: var(--foreground); }
 .cx-device[data-kind="phone"] > .cx-device-screen.cx-tour-screen > .cx-tour-tap { width: 34px; height: 34px; }
 .cx-device[data-kind="phone"] > .cx-device-screen.cx-tour-screen > img { width: 100%; }
 .cx-tour-screen { position: relative; aspect-ratio: 390 / 844; overflow: hidden; background: var(--muted); }
-.cx-tour-screen > img { position: absolute; left: 0; top: 0; width: 100%; height: auto; display: block; opacity: 0; transform: scale(1.015); transition: opacity 480ms cubic-bezier(.23, 1, .32, 1), transform 620ms cubic-bezier(.23, 1, .32, 1); will-change: opacity; }
+.cx-tour-screen > img { position: absolute; left: 0; top: 0; width: 100%; height: auto; display: block; opacity: 0; transform: scale(1.015); transition: opacity 480ms var(--ease-out), transform 620ms var(--ease-out); will-change: opacity; }
 .cx-tour-screen > img:not([data-long]) { height: 100%; object-fit: cover; object-position: top; }
 .cx-tour-screen > img[data-on="1"] { opacity: 1; transform: none; }
 .cx-tour-tap { position: absolute; z-index: 3; width: 34px; height: 34px; margin: -17px 0 0 -17px; border-radius: 50%; background: rgb(255 255 255 / .55); box-shadow: 0 0 0 2px rgb(255 255 255 / .9), 0 6px 16px rgb(0 0 0 / .25); opacity: 0; pointer-events: none; }
-.cx-tour-tap[data-go] { animation: cx-tour-tap 1.1s cubic-bezier(.23, 1, .32, 1) 1.2s both; }
+.cx-tour-tap[data-go] { animation: cx-tour-tap 1.1s var(--ease-out) 1.2s both; }
 @keyframes cx-tour-tap { 0% { opacity: 0; transform: scale(1.4); } 30% { opacity: 1; transform: scale(1); } 45% { transform: scale(.82); } 60% { transform: scale(1); } 100% { opacity: 0; transform: scale(1); } }
 .cx-tour-done { position: absolute; inset: 0; z-index: 4; display: flex; align-items: flex-end; background: rgb(11 11 13 / 0); pointer-events: none; transition: background 300ms ease; }
 .cx-tour-done[data-on="1"] { background: rgb(11 11 13 / .35); }
-.cx-tour-sheet { width: 100%; padding: 10px 18px 22px; border-radius: 22px 22px 0 0; background: var(--card, #fff); color: var(--foreground); display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center; transform: translateY(100%); transition: transform 420ms cubic-bezier(.23, 1, .32, 1); font-family: var(--font-sans); }
+.cx-tour-sheet { width: 100%; padding: 10px 18px 22px; border-radius: 22px 22px 0 0; background: var(--card, #fff); color: var(--foreground); display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center; transform: translateY(100%); transition: transform 420ms var(--ease-out); font-family: var(--font-sans); }
 .cx-tour-done[data-on="1"] .cx-tour-sheet { transform: none; }
 .cx-tour-grab { width: 36px; height: 4px; border-radius: 4px; background: var(--border); }
 .cx-tour-ok { width: 44px; height: 44px; border-radius: 50%; background: var(--success); color: #fff; display: grid; place-items: center; }
@@ -4566,7 +4617,7 @@ a.cx-bc-item:hover { color: var(--foreground); }
 .cx-cp[data-skin] .cx-cp-t, .cx-cp[data-skin] .cx-cp-s { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 /* never blank: no hide-and-show loop with a skin, only a rise when it comes into view */
 @media (prefers-reduced-motion: no-preference) {
-  .cx-cp[data-skin][data-in] :is(.cx-cp-msg, .cx-cp-card, .cx-cp-btns, .cx-cp-note) { opacity: 1; animation: cx-cp-rise 420ms cubic-bezier(.23, 1, .32, 1) both; }
+  .cx-cp[data-skin][data-in] :is(.cx-cp-msg, .cx-cp-card, .cx-cp-btns, .cx-cp-note) { opacity: 1; animation: cx-cp-rise 420ms var(--ease-out) both; }
   .cx-cp[data-skin][data-in] [data-step="2"] { animation-delay: 120ms; } .cx-cp[data-skin][data-in] [data-step="3"] { animation-delay: 240ms; }
   .cx-cp[data-skin][data-in] [data-step="4"] { animation-delay: 360ms; } .cx-cp[data-skin][data-in] [data-step="5"] { animation-delay: 480ms; }
 }
@@ -4880,6 +4931,9 @@ a.cx-bc-item:hover { color: var(--foreground); }
 /* the time now: the line runs from each today column's edge, its dot on the first, and the time sits in the hours gutter */
 .cx-ag-col > .cx-ag-now { left: 0; right: 0; }
 .cx-ag-col > .cx-ag-now i { left: -5px; }
+.cx-ag-col > .cx-ag-now-past { opacity: .35; } /* the days already gone: the same hour, faint */
+/* the pill and the line are one: a short tail from the pill to the hour column's edge, where the first day's line starts */
+.cx-ag-nowtime::after { content: ""; position: absolute; left: 100%; top: 50%; width: 6px; border-top: 2px solid var(--destructive); transform: translateY(-1px); }
 .cx-ag-nowtime { position: absolute; right: 4px; z-index: 3; transform: translateY(-50%); padding: 1px 5px; border-radius: 6px; background: var(--destructive); color: var(--destructive-foreground, #fff); font-size: 10px; font-weight: 600; line-height: 1.4; white-space: nowrap; font-variant-numeric: tabular-nums; }
 /* the crossed-citas alert sits under the strip, full width, with its button */
 .cx-ag-top > [data-ag-alert] { margin: 0; }
@@ -4926,7 +4980,7 @@ a.cx-bc-item:hover { color: var(--foreground); }
 .cx-pbar-cell[data-side="center"]::-webkit-scrollbar { display: none; }
 .cx-pbar-cell[data-side="right"] { justify-self: end; }
 .cx-pbar-cell:empty { visibility: hidden; }
-.cx-pbar-btn { position: relative; flex: none; display: grid; place-items: center; width: 2.75rem; height: 2.75rem; padding: 0; border: 0; border-radius: .9rem; background: transparent; color: var(--muted-foreground); cursor: pointer; font: inherit; transition: transform .12s cubic-bezier(.22,1,.36,1), background-color .15s; }
+.cx-pbar-btn { position: relative; flex: none; display: grid; place-items: center; width: 2.75rem; height: 2.75rem; padding: 0; border: 0; border-radius: .9rem; background: transparent; color: var(--muted-foreground); cursor: pointer; font: inherit; transition: transform .12s var(--ease-out), background-color .15s; }
 .cx-pbar-btn .mu-icon, .cx-pbar-btn svg { font-size: 1.3rem; width: 1.3rem; height: 1.3rem; }
 .cx-pbar-btn:hover { background: color-mix(in oklab, var(--foreground) 6%, transparent); color: var(--foreground); }
 .cx-pbar-btn:active { transform: scale(.92); }
@@ -4946,25 +5000,43 @@ a.cx-bc-item:hover { color: var(--foreground); }
 /* THE FOLD GLIDES. Nothing pops and nothing moves sideways: the width shrinks (200 ms) to exactly the icon column
    (the inner padding, the row's padding, the 16 px icon, and back), and the words fade where they are. */
 .cx-sidebar { --sb-pad: 8px; }
-.cx-sidebar[data-collapsed="true"] { width: 64px; }
-.cx-sidebar .cx-sb-item, .cx-sidebar[data-collapsed="true"] .cx-sb-item { justify-content: flex-start; padding: 0 var(--sb-pad); transition: padding .2s cubic-bezier(.22, 1, .36, 1), background-color .15s ease; }
+/* exactly the icon column: 8 inner + 8 group + 8 row + 16 icon + 8 + 8 + 8, plus the 1 px border on the right, so the
+   icon and its hover/current square sit on the rail's centre */
+.cx-sidebar[data-collapsed="true"] { width: 65px; }
+/* ANY PIECE GOES IN. Whatever sits in a row where the icon goes (an Avatar, a dot, an image, a Kbd) keeps its own size and
+   never squeezes; an avatar there takes 20 px so the rows stay 32 high. Folded, what the header or footer holds keeps
+   its width too (a Who, a button with words, a select) and the rail clips it at its edge, instead of crushing it into
+   the 16 px column. */
+.cx-sb-item > :not(.cx-sb-label):not(.cx-sb-count) { flex: none; }
+.cx-sb-item > .cn-avatar { width: 20px; height: 20px; margin-inline: -2px; font-size: 10px; }
+.cx-sb-item > img { width: 16px; height: 16px; border-radius: 4px; object-fit: cover; }
+/* the header and footer keep the OPEN width in both states (248 less the inner and group padding and the border), so
+   folding or unfolding never rewraps their words: the rail only shows more or less of them, and the words fade */
+.cx-sidebar :is(.cx-sb-head, .cx-sb-foot) > .cx-who { flex: none; width: 215px; max-width: none; }   /* only the name block: a button there (the fold toggle) keeps its own size and stays in the icon column */
+.cx-sidebar .cx-who-t { min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; transition: opacity .16s ease; }
+.cx-sidebar[data-collapsed="true"] .cx-who-t { opacity: 0; }
+.cx-sidebar .cx-sb-item, .cx-sidebar[data-collapsed="true"] .cx-sb-item { justify-content: flex-start; padding: 0 var(--sb-pad); transition: padding .2s var(--ease-out); }
 .cx-sb-label, .cx-sb-glabel, .cx-sb-count { transition: opacity .16s ease; }
+/* unfolding, the words wait for the rail (it grows in 200 ms) and then fade in whole, instead of being uncovered a few
+   letters at a time; folding, they go at once */
+.cx-sidebar:not([data-collapsed="true"]) :is(.cx-sb-label, .cx-sb-count, .cx-who-t) { transition: opacity .14s ease .14s; }
+.cx-sidebar:not([data-collapsed="true"]) .cx-sb-glabel { transition: color .14s ease .14s, height .2s var(--ease-out), padding .2s var(--ease-out); }
 .cx-sb-label { white-space: nowrap; overflow: hidden; }
 .cx-sidebar[data-collapsed="true"] .cx-sb-label, .cx-sidebar[data-collapsed="true"] .cx-sb-glabel { display: block; opacity: 0; pointer-events: none; }
 .cx-sidebar[data-collapsed="true"] .cx-sb-count:not(:empty) { display: inline-grid; opacity: 0; }
 /* FOLDED, A SECTION'S TITLE BECOMES A SHORT LINE between its icons and the ones above: its words fade where they are and
    its height closes with the fold (200 ms), so the icon column has no holes where the titles were. A group with no
    title (the first) takes no room at all. */
-.cx-sidebar .cx-sb-glabel { position: relative; transition: opacity .16s ease, height .2s cubic-bezier(.22, 1, .36, 1), padding .2s cubic-bezier(.22, 1, .36, 1); }
+.cx-sidebar .cx-sb-glabel { position: relative; transition: opacity .16s ease, height .2s var(--ease-out), padding .2s var(--ease-out); }
 .cx-sidebar[data-collapsed="true"] .cx-sb-glabel { height: 17px; padding-top: 0; padding-bottom: 0; overflow: hidden; color: transparent; opacity: 1; }
 .cx-sidebar[data-collapsed="true"] .cx-sb-glabel::after { content: ""; position: absolute; left: 50%; top: 8px; width: 20px; height: 1px; margin-left: -10px; background: var(--border); }
 .cx-sidebar[data-collapsed="true"] .cx-sb-glabel:empty { display: none; }
-.cx-sidebar .cx-sb-group { transition: padding .2s cubic-bezier(.22, 1, .36, 1); }
+.cx-sidebar .cx-sb-group { transition: padding .2s var(--ease-out); }
 .cx-sidebar[data-collapsed="true"] .cx-sb-group { padding-top: 2px; padding-bottom: 2px; }
 /* A SECTION THAT LOADS: while its page is on its way (the router marks the link with data-loading), the row's icon
    turns into a small ring that spins, and turns back when the page is there. */
 @keyframes cx-sb-spin { to { transform: rotate(360deg); } }
-.cx-sb-item > .mu-icon { transition: opacity .15s ease, transform .2s cubic-bezier(.22, 1, .36, 1); }
+.cx-sb-item > .mu-icon { transition: opacity .15s ease, transform .2s var(--ease-out); }
 .cx-sb-item[data-loading] > .mu-icon { opacity: 0; transform: scale(.4) rotate(-90deg); }
 .cx-sb-item[data-loading]::before { content: ""; position: absolute; left: var(--sb-pad, 8px); top: 50%; width: 16px; height: 16px; margin-top: -8px; box-sizing: border-box; border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%; animation: cx-sb-spin .7s linear infinite; }
 @media (prefers-reduced-motion: reduce) {
@@ -5059,18 +5131,24 @@ a.cx-bc-item:hover { color: var(--foreground); }
 .mu-chart-s6 { --series: oklch(0.62 0.05 260); }
 .mu-chart-s7 { --series: oklch(0.8 0.1 120); }
 [data-tone="brand"] { --series: var(--selected, var(--primary)); }
+/* the status tones are colours too (a Progress, the password's strength bars): without these a tone left no colour */
+[data-tone="ok"] { --series: var(--success); }
+[data-tone="wait"] { --series: var(--warning); }
+[data-tone="bad"] { --series: var(--destructive); }
+[data-tone="info"] { --series: var(--info, var(--primary)); }
+[data-tone="note"] { --series: var(--selected, var(--primary)); }
 :is(.mu-chart-bar, .mu-chart-dot, .mu-chart-slice)[class*="mu-chart-s"] { fill: var(--series); }
 .mu-chart-legend { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 6px 18px; font-size: 13px; color: var(--muted-foreground); }
 .mu-chart-legend-item { display: flex; flex-direction: row; align-items: center; gap: 7px; }
 .mu-chart-swatch { width: 10px; height: 10px; border-radius: 3px; background: var(--series); flex: none; }
 
 /* Progress with a tone: the bar takes the series colour */
-.cn-progress[data-tone]:not([data-tone=""]) > .cn-progress-indicator { background: var(--series); }
+.cn-progress[data-tone]:not([data-tone=""]) > .cn-progress-indicator { background: var(--series, var(--primary)); }
 
 /* ShareBar (share-bar.muten): one whole cut into its parts, each part's value and name under it */
 .cx-split { display: flex; flex-direction: column; gap: 14px; width: 100%; min-width: 0; }
 .cx-split-bar { display: flex; flex-direction: row; gap: 3px; height: 12px; border-radius: 999px; overflow: hidden; background: var(--muted); }
-.cx-split-seg { flex: var(--f, 0) 1 0; min-width: 0; background: var(--series, var(--primary)); transition: flex-grow .5s cubic-bezier(.22, 1, .36, 1); }
+.cx-split-seg { flex: var(--f, 0) 1 0; min-width: 0; background: var(--series, var(--primary)); transition: flex-grow calc(var(--t-move) * 2) var(--ease-out); }
 .cx-split-seg[style*="--f: 0;"], .cx-split-seg[style*="--f:0;"] { display: none; }
 .cx-split-keys { display: flex; flex-direction: row; flex-wrap: wrap; gap: 10px 32px; }
 .cx-split-key { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
@@ -5112,7 +5190,7 @@ a.cx-bc-item:hover { color: var(--foreground); }
 .cx-stb-bar { height: 100%; display: flex; flex-direction: column; justify-content: flex-end; padding: 0; border: 0; background: none; cursor: pointer; border-radius: 6px; }
 .cx-stb-bar:disabled { cursor: default; }
 .cx-stb-bar:focus-visible { outline: 2px solid var(--ring); outline-offset: 3px; }
-.cx-stb-stack { display: flex; flex-direction: column-reverse; gap: 2px; border-radius: 6px 6px 3px 3px; overflow: hidden; transform-origin: bottom; opacity: .55; transition: height .5s cubic-bezier(.22, 1, .36, 1), opacity .2s; }
+.cx-stb-stack { display: flex; flex-direction: column-reverse; gap: 2px; border-radius: 6px 6px 3px 3px; overflow: hidden; transform-origin: bottom; opacity: .55; transition: height .5s var(--ease-out), opacity .2s; }
 .cx-stb-bars:not(:has([aria-pressed="true"])) .cx-stb-stack, .cx-stb-bar[aria-pressed="true"] .cx-stb-stack, .cx-stb-bar:not(:disabled):hover .cx-stb-stack { opacity: 1; }
 .cx-stb-bar:disabled { pointer-events: none; }
 .cx-stb-seg { display: block; flex: 1 1 0; min-height: 2px; background: var(--series); }
@@ -5297,3 +5375,130 @@ a.cx-bc-item:hover { color: var(--foreground); }
 /* ChatPlay(face: "host"): an empty face slot the page fills with its own face (a brand mascot, say). The kit sends
    cx-cp:think / cx-cp:answer / cx-cp:rest on it on the play's clock, so that face can act along with the chat. */
 .cx-cp-face.cx-cp-face-host { position: relative; background: none; overflow: visible; }
+
+/* ═════ Button & ButtonGroup · RTL, menus and selects inside a group ═════ */
+/* right to left: a block (or the page, with dir="rtl") flows the other way; flex rows, icon sides and groups follow.
+   An icon that points somewhere (an arrow) takes cx-flip and mirrors itself. */
+.cx-rtl { direction: rtl; }
+:is([dir="rtl"], .cx-rtl) .cx-flip { scale: -1 1; }
+/* a horizontal group in RTL: Nova cuts the left/right corners by side; here they are cut by order instead */
+:is([dir="rtl"], .cx-rtl) .cn-button-group-orientation-horizontal.cn-button-group-orientation-horizontal > * { border-radius: var(--radius-lg, .5rem); border-left-width: 1px; border-right-width: 1px; }
+:is([dir="rtl"], .cx-rtl) .cn-button-group-orientation-horizontal.cn-button-group-orientation-horizontal > *:not(:first-child) { border-top-right-radius: 0; border-bottom-right-radius: 0; border-right-width: 0; }
+:is([dir="rtl"], .cx-rtl) .cn-button-group-orientation-horizontal.cn-button-group-orientation-horizontal > *:not(:last-child) { border-top-left-radius: 0; border-bottom-left-radius: 0; }
+/* Nova rounds the last segment's right side with !important (its outer edge left to right); right to left the outer
+   edge of the last one is its left */
+:is([dir="rtl"], .cx-rtl) .cn-button-group-orientation-horizontal > [data-slot]:not(:has(~ [data-slot])):not(:first-child) { border-top-right-radius: 0 !important; border-bottom-right-radius: 0 !important; border-top-left-radius: var(--radius-lg, .5rem) !important; border-bottom-left-radius: var(--radius-lg, .5rem) !important; }
+/* a DropdownMenu in a vertical group: its trigger joins the button above (the horizontal case is in the 2026-10-10 audit block) */
+.cn-button-group-orientation-vertical > .cx-ov:not(:first-child) .cx-ov-trigger > .cn-button { border-top-left-radius: 0; border-top-right-radius: 0; border-top-width: 0; }
+.cn-button-group-orientation-vertical > .cx-ov:not(:last-child) .cx-ov-trigger > .cn-button { border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
+/* a native select as a group member (muten's Select with class cx-select): an outline button with its chevron */
+.cx-select { appearance: none; height: 32px; padding: 0 30px 0 10px; border: 1px solid var(--border); border-radius: var(--radius-lg, .5rem); background: var(--background) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 9px center; color: var(--foreground); font: 500 14px var(--font-sans); cursor: pointer; outline: none; }
+.cx-select:hover { background-color: var(--muted); }
+.cx-select:focus-visible { border-color: var(--ring); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 50%, transparent); position: relative; z-index: 1; }
+:is([dir="rtl"], .cx-rtl) .cx-select { padding: 0 10px 0 30px; background-position: left 9px center; }
+
+
+/* ═════ Motion · the pieces that did not move (tokens in :root, docs in AGENTS.md «Motion») ═════ */
+/* Switch: the track's colour and the thumb travel together; pressed, the thumb stretches toward where it will go */
+.style-nova .cn-switch { transition: background-color var(--t-move) var(--ease-out); }
+/* its colour changes with the track, not ahead of it (in dark it flipped at once and blinked) */
+.style-nova .cn-switch-thumb { transition: translate var(--t-move) var(--ease-out), transform var(--t-move) var(--ease-out), width var(--t-micro) var(--ease-out), margin var(--t-micro) var(--ease-out), background-color var(--t-move) var(--ease-out); }
+/* PRESSED, THE THUMB WIDENS 4 px TOWARD WHERE IT WILL GO (as the reference does), with its width and margin: never a
+   scale with a transform-origin that flips with the state, which on release threw the thumb 2.5 px outside the
+   track for a frame. Checked, its position is calc(100% - 2px) of its own width, so the 4 px it gains move it right
+   by 4 more: a -8 px margin keeps its right edge where it was. */
+.style-nova .cn-switch:active:not(:disabled) .cn-switch-thumb { width: calc(1rem + 4px); }
+.style-nova .cn-switch[data-size="sm"]:active:not(:disabled) .cn-switch-thumb { width: calc(.75rem + 4px); }
+.style-nova .cn-switch[data-checked]:not([data-checked="false"]):active:not(:disabled) .cn-switch-thumb { margin-left: -8px; }
+/* Checkbox: the box fills and the check grows in from its middle; it gives a little under the press */
+/* a transition, not an animation: it runs only when the box is ticked, never on the first paint nor when its row moves */
+.cx-checkbox > input[type="checkbox"] { background-size: 4px; transition: background-color var(--t-micro) var(--ease-out), border-color var(--t-micro) var(--ease-out), background-size var(--t-micro) var(--ease-out), scale var(--t-press) var(--ease-out); }
+.cx-checkbox > input[type="checkbox"]:checked { background-size: 12px; }
+/* Tab panels: once the person has switched tabs (not on the first paint), the new panel comes in from the side they
+   went toward, with a short blur that joins the two states. TabsBehavior sets data-moved and data-dir on the root. */
+[data-tabs-moved] .cx-tab-panel:not(.hidden) { animation: cx-panel-in var(--t-move) var(--ease-out); }
+[data-tabs-moved][data-tabs-dir="back"] .cx-tab-panel:not(.hidden) { --panel-dx: -8px; }
+@keyframes cx-panel-in { from { opacity: 0; translate: var(--panel-dx, 8px) 0; filter: blur(2px); } }
+
+/* Btn loading: the button keeps its width (nothing beside it moves); its content fades where it is and the spinner
+   comes in centred on top of it */
+/* only while loading, and only if the button is not placed already: every Btn carries data-loading ("false"), and a
+   blanket position: relative pulled the dialogs' absolute close button into the flow */
+.cn-button[data-loading="true"]:not(.absolute):not([class*="close"]) { position: relative; }
+.cn-button[data-loading="true"] > :not(.cn-spinner) { transition: opacity var(--t-micro) var(--ease-out); }
+.cn-button[data-loading="true"] > :not(.cn-spinner) { opacity: 0; }
+.cn-button[data-loading="true"] > .cn-spinner { position: absolute; left: 50%; top: 50%; translate: -50% -50%; margin: 0; animation: pg-spin 1s linear infinite, cx-fade var(--t-micro) var(--ease-out); }
+/* SaveButton: «Guardando…» and «Guardado» come in with a short blur (the width is fixed already) */
+.cx-save:is([data-status="saving"], [data-status="saved"]) .cx-btn-label { animation: cx-label-in var(--t-micro) var(--ease-out); }
+@keyframes cx-label-in { from { opacity: 0; filter: blur(2px); translate: 0 4px; } }
+
+/* A label or icon that changes to say what happened (Copiar → Copiado, the copy icon → its check) swaps in: the new
+   one grows from its middle out of a short blur, so the change reads as one thing turning into another */
+.cx-swap-in { display: inline-flex; align-items: center; gap: inherit; animation: cx-swap-in var(--t-micro) var(--ease-out); }
+@keyframes cx-swap-in { from { opacity: 0; scale: .6; filter: blur(2px); } }
+
+/* CountUp: digits that roll. Every character is a 1em box on one line; a digit is a 0-9 column that slides to its
+   value (only the ones that change move). The plain text is for screen readers. */
+.cx-countup { display: inline-flex; }
+.cx-roll { display: inline-flex; align-items: flex-start; font-variant-numeric: tabular-nums; line-height: 1; height: 1em; }
+.cx-roll-d { display: inline-block; height: 1em; overflow: hidden; }
+.cx-roll-d > span { display: flex; flex-direction: column; transition: translate calc(var(--t-move) * 2) var(--ease-out); }
+.cx-roll-d em, .cx-roll-s { font-style: normal; display: block; height: 1em; line-height: 1; white-space: pre; }
+.cx-roll-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.cx-countup { position: relative; }
+
+/* List rows (ListMotion, inside every ItemGroup): a new row opens its place and fades in; a leaving row closes its
+   gap. The height goes from/to its own size (interpolate-size; where a browser lacks it, the row only fades). */
+:root { interpolate-size: allow-keywords; }
+.cx-list-motion { display: none; }
+.cx-row-enter { animation: cx-row-in var(--t-move) var(--ease-out); overflow: clip; }
+@keyframes cx-row-in { from { opacity: 0; height: 0; padding-block: 0; margin-block: 0; translate: 0 -4px; } }
+.cx-row-leave { animation: cx-row-out calc(var(--t-move) * .75) var(--ease-out) forwards; overflow: clip; pointer-events: none; }
+@keyframes cx-row-out { from { height: var(--mu-h, auto); } to { opacity: 0; height: 0; padding-block: 0; margin-block: 0; border-width: 0; } }
+
+/* Entrances after the first paint (core.js sets data-kit-live once the page has painted): an Alert that appears
+   opens to its height and fades in; one taken away by a `when` closes its gap (muten's .mu-leave, --mu-h). */
+.cn-alert { transition: opacity var(--t-move) var(--ease-out), height var(--t-move) var(--ease-out), translate var(--t-move) var(--ease-out); }
+:root[data-kit-live] .cn-alert { @starting-style { opacity: 0; height: 0; translate: 0 -4px; } }
+.cn-alert.mu-leave { animation: cx-row-out calc(var(--t-move) * .75) var(--ease-out) forwards; overflow: clip; }
+
+/* Calendar: a month (or a year) changed by its arrow slides in from that side; the title stays put */
+.cx-cal-months[data-slide] .cx-cal-month > :not(.cx-cal-head), .cx-cal-picker[data-slide] > :not(.cx-cal-head) { animation: cx-cal-in var(--t-move) var(--ease-out); }
+.cx-cal-months[data-slide="prev"], .cx-cal-picker[data-slide="prev"] { --cal-dx: -12px; }
+@keyframes cx-cal-in { from { opacity: 0; translate: var(--cal-dx, 12px) 0; } }
+.cx-row-swap { animation: cx-fade var(--t-move) var(--ease-out); }
+.cx-app-page[data-in] { animation: cx-fade var(--t-micro) var(--ease-out); }   /* a section opened from the menu: a short fade, no slide */
+
+/* Toggle: the hover stays instant (no trails across a toggle group), but turning it ON fades in; turning it off is
+   instant like the hover. Same for a pressed ToggleGroup item. */
+.style-nova .cn-toggle[aria-pressed="true"], .style-nova .cn-toggle[data-state="on"] { transition-property: background-color, color, box-shadow; transition-duration: var(--t-micro); transition-timing-function: var(--ease-out); }
+
+/* SidebarTrigger: in the icon column (its 32 px square sits where the rows' icons sit), folded or open */
+.cx-sb-trigger { align-self: flex-start; flex: none; margin-left: 0; }
+.cx-sidebar[data-collapsed="true"] .cx-sb-trigger { align-self: flex-start; }
+
+/* Sheet: its content arrives a moment after the panel, one row after another; leaving, it goes with the panel */
+.cx-modal[data-mode="sheet"] .cx-modal-body > * { transition: opacity var(--t-pop) var(--ease-out), translate calc(var(--t-sheet) * .8) var(--ease-out); }
+.cx-modal-root:not([data-open="true"]) > .cx-modal[data-mode="sheet"] .cx-modal-body > * { opacity: 0; translate: 12px 0; transition-duration: 0s; transition-delay: calc(var(--t-sheet) * .7); }   /* reset only once the panel is gone */
+.cx-modal-root[data-open="true"] > .cx-modal[data-mode="sheet"] .cx-modal-body > :nth-child(1) { transition-delay: 60ms; }
+.cx-modal-root[data-open="true"] > .cx-modal[data-mode="sheet"] .cx-modal-body > :nth-child(2) { transition-delay: 90ms; }
+.cx-modal-root[data-open="true"] > .cx-modal[data-mode="sheet"] .cx-modal-body > :nth-child(3) { transition-delay: 120ms; }
+.cx-modal-root[data-open="true"] > .cx-modal[data-mode="sheet"] .cx-modal-body > :nth-child(n+4) { transition-delay: 150ms; }
+/* Command palette: opened from the keyboard (⌘K) a hundred times a day, so it opens and closes with no animation */
+.cx-modal-root.cx-palette > :is(.cx-modal, .cx-overlay), .cx-modal-root:has(.cx-cmd) > :is(.cx-modal, .cx-overlay) { transition: none !important; }
+/* Timeline and the vertical Stepper: a step that becomes the current one changes its dot on the move token */
+.cx-tl-item::before, .cx-tl-item { transition: background-color var(--t-move) var(--ease-out), box-shadow var(--t-move) var(--ease-out), opacity var(--t-move) var(--ease-out); }
+.cx-stp-dot, .cx-stp[data-orientation="vertical"] .cx-stp-step::after { transition: background-color var(--t-move) var(--ease-out), border-color var(--t-move) var(--ease-out), color var(--t-move) var(--ease-out); }
+/* Heatmap: a cell takes its new value's colour on the move token */
+.cx-heat-c { transition: background-color var(--t-move) var(--ease-out); }
+/* A field that turns invalid shakes once, where it is (FieldBehavior sets data-invalid when the check fails) */
+.cn-field[data-invalid] :is(.cn-input-group, .cn-input) { animation: cx-shake calc(var(--t-move) * 1.35) var(--ease-out); }
+
+/* NavigationMenu / Menubar: switching menus in the same bar swaps the panel in place; the old one goes at once and the
+   new one only fades in (no scale-in, no close animation crossing it) */
+.cx-ov-content[data-open][data-swap] { animation: cx-fade calc(var(--t-pop) * .8) var(--ease-out); }
+.cx-ov-content[data-closed][data-swap] { animation: none; }
+
+/* LangScope: a plain block; its host draws nothing */
+.cx-lang-scope { display: contents; }
+.cx-lang-host { display: none; }

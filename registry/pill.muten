@@ -1,6 +1,6 @@
 # Pill - the chip over a hero title (what is new, who it is for): rounder and bigger than a Badge, with an icon and a
 # line of text inside. tone "brand" tints it with the skin's --selected.
-#   Pill { Icon "lucide:sparkles"  Span "Nuevo: cobra con tarjeta" }
-#   Pill(tone: "brand") { Span "Para barberías y salones" }
+#   Pill { Icon "lucide:sparkles"  Span "New: charge by card" }
+#   Pill(tone: "brand") { Span "For barbershops and salons" }
 # shadcn-for-muten · part · no deps · kit.css (.cx-pill).
 part Pill(tone: text = "") { Stack class("cx-pill") data(slot: "pill", tone: $tone) { slot } }

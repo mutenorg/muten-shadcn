@@ -1,8 +1,8 @@
 # SplitButton - one main action and, joined to it, a chevron with the other ways to do it (save / save as draft).
 # The main action runs on its own; the menu takes DropdownItem parts.
-#   SplitButton(label: "Publicar", onClick: publish) { DropdownItem(label: "Guardar como borrador", onSelect: draft)  DropdownItem(label: "Programar…", onSelect: schedule) }
+#   SplitButton(label: "Publish", onClick: publish) { DropdownItem(label: "Save as draft", onSelect: draft)  DropdownItem(label: "Schedule…", onSelect: schedule) }
 # variant: as Btn. shadcn-for-muten · part over ButtonGroup + DropdownMenu.
-part SplitButton(label: text, onClick: action, variant: text = "default", size: text = "default", menu: text = "Más opciones") {
+part SplitButton(label: text, onClick: action, variant: text = "default", size: text = "default", menu: text = "More options") {
   ButtonGroup(label: $label) {
     Btn(variant: $variant, size: $size, onClick: $onClick) { Span "{$label}" }
     ButtonGroupSeparator()

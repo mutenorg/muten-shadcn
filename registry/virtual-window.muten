@@ -11,8 +11,8 @@
 #   The list stays the real typed list (rows keep their keys, fields and drag); only the `where` changes. In lib.ts:
 #     export function windowIds(rows: { id: string }[], seen: string): string { const [a, b] = String(seen).split(',').map(Number); return ' ' + (rows || []).slice(Number.isFinite(a) ? a : 0, Number.isFinite(b) ? b : 20).map((r) => r.id).join(' ') + ' '; }
 #     export function rowKey(id: string): string { return ` ${id} `; }
-#   (A sorted or filtered list: give windowIds the same list, in the same order, that the `each` draws. And «0,0» is a
-#   real answer, nothing on screen yet: never read a 0 as «missing».)
+#   (A sorted or filtered list: give windowIds the same list, in the same order, that the `each` draws. And “0,0” is a
+#   real answer, nothing on screen yet: never read a 0 as “missing”.)
 # It stands in for the rows above (its own height) and pads the list below, so the scrollbar keeps the whole length.
 # count = how many rows the list has (after any filter) · item = a first guess of one row's height in px (it learns the
 # real one) · over = rows kept beyond each edge (6). The list scrolls inside its nearest `overflow: auto` parent or the

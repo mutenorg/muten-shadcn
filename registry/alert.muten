@@ -1,5 +1,5 @@
 # Alert - a callout: an icon, a title, a description, an optional action at the corner. The icon carries the tone.
-#   Alert(tone: "wait") { Icon "lucide:clock"  AlertTitle(label: "Tu plan vence en 3 días")  AlertDescription(label: "…")  AlertAction { Btn(size: "xs", variant: "outline", onClick: renew) { Span "Renovar" } } }
+#   Alert(tone: "wait") { Icon "lucide:clock"  AlertTitle(label: "Your plan expires in 3 days")  AlertDescription(label: "…")  AlertAction { Btn(size: "xs", variant: "outline", onClick: renew) { Span "Renew" } } }
 # variant: default | destructive · tone: "" | info | ok | wait
 # shadcn-for-muten · part · no deps · Nova (.cn-alert) + kit.css (tone).
 part Alert(variant: text = "default", tone: text = "") { Section class("cn-alert cn-alert-variant-{$variant} group/alert") data(slot: "alert", tone: $tone) aria(role: "status") { slot } }

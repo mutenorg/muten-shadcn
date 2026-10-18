@@ -1,4 +1,4 @@
-# Indicator - the dot on a corner that says «something here needs you». Inside a Btn with a tone, or on an Avatar.
+# Indicator - the dot on a corner that says “something here needs you”. Inside a Btn with a tone, or on an Avatar.
 #   Btn(size: "icon-sm", variant: "ghost", tone: "note", onClick: open) { Icon "lucide:quote"  Indicator(tone: "note") }
 # tone: "" (selected) | wait | bad | info | note
 # shadcn-for-muten · part · no deps · kit.css (.cx-indicator).

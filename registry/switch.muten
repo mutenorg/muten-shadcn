@@ -1,16 +1,17 @@
 # Switch - on/off; the page owns the bool and the action. SwitchRow is the settings line: label, switch, the why.
-#   Switch(on: dark, onToggle: toggleDark, label: "Modo oscuro")
-#   SwitchRow(on: home, onToggle: toggleHome, label: "También a domicilio", description: "Pide la verificación de identidad…")
+#   Switch(on: dark, onToggle: toggleDark, label: "Dark mode")
+#   SwitchRow(on: home, onToggle: toggleHome, label: "Also at home", description: "Ask for identity verification…")
+# disabled: a bool (a state or a getter) - it shows its state and cannot be flipped (a locked choice, a prerequisite missing).
 # size: default | sm. shadcn-for-muten · part · no deps · Nova (.cn-switch reads data-checked / data-unchecked).
-part Switch(on: bool, onToggle: action, label: text = "", size: text = "default") {
-  Button -> $onToggle class("cn-switch group/switch") data(slot: "switch", size: $size, checked: $on, unchecked: not $on) aria(role: "switch", checked: $on, label: $label) {
+part Switch(on: bool, onToggle: action, label: text = "", size: text = "default", disabled: bool = false) {
+  Button -> $onToggle class("cn-switch group/switch") data(slot: "switch", size: $size, checked: $on, unchecked: not $on) aria(role: "switch", checked: $on, label: $label) disabled when $disabled {
     Span "" class("cn-switch-thumb") data(slot: "switch-thumb", checked: $on, unchecked: not $on)
   }
 }
-part SwitchRow(on: bool, onToggle: action, label: text, description: text = "") {
-  Stack class("cx-switch-row") {
+part SwitchRow(on: bool, onToggle: action, label: text, description: text = "", disabled: bool = false) {
+  Stack class("cx-switch-row") data(disabled: $disabled) {
     Span "{$label}" class("cn-label") data(slot: "label")
-    Switch(on: $on, onToggle: $onToggle, label: $label)
+    Switch(on: $on, onToggle: $onToggle, label: $label, disabled: $disabled)
     Text "{$description}" class("cx-switch-why")
   }
 }

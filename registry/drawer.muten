@@ -1,6 +1,6 @@
 # Drawer - a sheet that rises from the bottom, with a handle you drag down to close (the phone's way), on every width.
 # It is the adaptive Modal forced to drawer. The page owns open.
-#   Drawer(open: picking, onClose: done, title: "Elige la hora") { … ModalFooter { … } }
+#   Drawer(open: picking, onClose: done, title: "Pick the time") { … ModalFooter { … } }
 # shadcn-for-muten · part over Modal.
 part Drawer(open: bool, onClose: action, title: text = "", description: text = "", size: text = "") {
   Modal(open: $open, onClose: $onClose, title: $title, description: $description, mode: "drawer", size: $size) { slot }

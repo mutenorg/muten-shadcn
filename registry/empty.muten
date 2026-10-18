@@ -1,6 +1,6 @@
 # Empty - what a list says when it has nothing yet: the icon in the slot, a title, a description. Put the way out
 # (a button) right after it.
-#   Empty(title: "Nada por aquí", description: "Cuando te escriban, aparece aquí.") { Icon "lucide:inbox" }
+#   Empty(title: "Nothing here", description: "When someone writes to you, it shows here.") { Icon "lucide:inbox" }
 # shadcn-for-muten · part · no deps · Nova (.cn-empty).
 part Empty(title: text, description: text = "") {
   Stack class("cn-empty") data(slot: "empty") {

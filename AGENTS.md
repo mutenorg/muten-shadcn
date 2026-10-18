@@ -124,6 +124,93 @@ Rules the kit keeps: the page owns the state and gets JSON back through actions;
 (a bot's answers are `{match, text}` rules); a skeleton only shows while there is nothing to show; no native
 `<select>`, the wheels and menus instead.
 
+## Motion: one rhythm for the whole library
+
+Every component moves with the same tokens, so a store, a tool and a wellness app built on the kit feel like one
+family. The tokens live in kit.css `:root`; a component **never writes its own curve or duration**. Live reference:
+the bench page `/motion`.
+
+| Token | Value | For |
+|---|---|---|
+| `--ease-out` | `cubic-bezier(.23, 1, .32, 1)` | anything entering or appearing |
+| `--ease-in-out` | `cubic-bezier(.77, 0, .175, 1)` | something moving on screen, a panel leaving |
+| `--ease-drawer` | `cubic-bezier(.32, .72, 0, 1)` | a sheet or drawer sliding in |
+| `--t-press` | 100 ms | a control giving under the press |
+| `--t-micro` | 150 ms | tooltip, a check, an icon swap |
+| `--t-pop` | 180 ms | menu, popover, select |
+| `--t-move` | 240 ms | tab pill, switch, a fold, a list row, a value travelling |
+| `--t-modal` | 240 ms | a dialog entering |
+| `--t-sheet` | 380 ms | a sheet or drawer entering |
+
+Rules (they are what makes the components plug and play):
+- **It comes built in.** Use the part and it already moves; the page writes no CSS and picks no duration.
+- **Leaving is faster than entering**, about 0.6 to 0.7 of it (`calc(var(--t-modal) * .62)`): the thing going is no longer what matters.
+- **A hover never animates and never moves the element.** Rows, menu items, nav links and buttons change colour instantly; a `translateY` on hover blinks on the element's edge. See «Hover never blinks» in the muten-design skill.
+- **Keyboard actions do not animate** (⌘K, arrows). What is seen a hundred times a day moves less, not more.
+- **The first paint does not animate.** What moves is what changed because the person did something or a datum arrived (e.g. tab panels only slide once the person switched tabs: `data-tabs-moved`).
+- **Nesting does not double.** A dialog that enters with a list inside: only the dialog enters.
+- **A skin never touches motion.** Skins change colour, type and corners; the rhythm stays.
+- **Reduce motion lives in one place:** under `prefers-reduced-motion` the duration tokens drop to 1 ms.
+- **A state change is a transition, never an animation.** A CSS `animation` on a state (`:checked`, `[data-state]`) replays on the first paint and every time its node is moved (a row reordered), which reads as a flicker; a `transition` only runs when the state changes. Keep `animation` for something appearing (with `data-kit-live`) or leaving.
+- **Check what Nova already animates before adding motion.** A kit part sits on Nova's CSS (its own transitions, positions in %, colours per state); a second animation on top fights it. Nothing that runs together may change the reference it is measured from: a `scale` whose `transform-origin` flips with the state threw the switch thumb outside its track for a frame. Film it (press AND release, both ways) before calling it done.
+- **Select a state by its value, never by the attribute alone.** muten writes every `data()` attribute always (`data-loading="false"`), so `[data-loading]` matches every Btn: a `position: relative` there pulled the dialogs' absolute close button into the flow and broke every modal. Write `[data-loading="true"]`, and check a generic rule against Dialog, Sheet and a form before calling it done.
+- **Never take a floating panel out of the top layer to bring it back:** a menu reopened while it is still closing vanished for a frame. Raise it once (`place()` does).
+
+The pieces that make it plug and play (use them, never re-invent them):
+- **Tokens** in kit.css `:root`; from script, `ms('--t-move')` / `ease('--ease-out')` in kit/core.js (WAAPI cannot read `var()`; they read the live tokens, so reduce motion and skins apply).
+- **`data-kit-live` on `<html>`** (set by kit/core.js once the page has painted): an entrance written as `:root[data-kit-live] .x { @starting-style { … } }` plays for what appears later and never on the first paint.
+- **`ListMotion`** (inside every `ItemGroup`): rows of an `each` open their place, leave closing their gap, moves are not entrances, and a whole page swapped only fades (no height jump).
+- **`.cx-swap-in`**: wrap a label or icon that changes to say what happened (Copiar → Copiado, copy → check); it grows in from its middle out of a short blur.
+- **muten's `.mu-leave`** (with `--mu-h`): what a `when` takes away can close its gap (the Alert does).
+- A Custom's returned function is its **updater** (called with new inputs), not a cleanup: return nothing unless it updates.
+
+Done (October 2026): the tokens; every ease-out curve on `--ease-out` (CSS and the kit's WAAPI) and the drawer on
+`--ease-drawer`; popover / dropdown / context menu / menubar / hover card on `--t-pop`; tooltip on `--t-micro`,
+instant after the first; dialog (in from 6 px lower at 97 %, out faster) and its overlay; sheet (drawer curve in,
+shorter in-out out); tabs (pill on `--t-move`, panel in from the side you went, only after a switch); accordion /
+collapsible; switch (track and thumb together, the thumb stretches on press); checkbox (fills, the check grows in);
+Btn `loading` (keeps its width, the content fades, the spinner comes in centred); SaveButton labels; every copy
+feedback (`.cx-swap-in`); CountUp with rolling digits (roll "view" | "change") and StatCard's value rolling on change;
+list rows (ListMotion in ItemGroup); Loading's content landing out of a blur; Alert entering / leaving; calendar
+months and years sliding toward the arrow; bar chart bars on the tokens; the bell's nudge when unread goes up; the
+AppShell section fade; Sortable / SortableList with a ghost of the row where it will land (rows slide apart, the row settles onto the ghost, Escape puts it back); progress bars; the sidebar fold; instant hovers.
+Also done: sheet content arriving a moment after the panel, one row after another; the command palette with no
+animation (it is opened from the keyboard); navigation menu / menubar swapping the panel in place between menus; the
+Combobox on the tokens; shakes (OTP, island, a field turning invalid) on translate, never on the layout; timeline and
+vertical stepper steps changing on the move token (and new timeline steps through ListMotion); heatmap cells and the
+share bar travelling on the tokens; the SidebarTrigger.
+Deliberately different from the proposal: a Btn that loads keeps its width (nothing beside it moves) instead of its
+width travelling; the checkbox's check grows in instead of being drawn (it is a background image); a page turned by
+Pagination fades in place (ListMotion) instead of sliding, since the rows are the page's, not the nav's.
+To do: badge counts rolling (put a CountUp in it); the fixed durations still written in kit/board.js,
+structure.js, table.js, kit-widget.js and stacked-bars.js (curves already on the token); TableView's own row
+animation on the tokens. The number field does not roll: it is an input, its value must stay editable.
+
+## Language: written in English, speaks the language it is in
+
+Every word the library writes is English in the code, and the English text is its key; kit/i18n.js holds the other
+languages (Spanish today) as dictionaries from that text: `t(lang, 'Page {0} of {1}', 2, 9)`, `'One item | {0} items'`.
+A piece speaks the language of its nearest `lang` (a container's attribute, else `<html lang>`), English when there is
+none. Change a `lang` with the page open and what is on screen says it again in the new one (no reload).
+
+- **An app with its own i18n changes nothing.** It already sets `<html lang>` (Storio does, from its language pill), so
+  the library follows the app's language. Its own texts passed to a part (a label, a title) are never touched.
+- **A part of the page in another language:** `LangScope(lang: shopLang) { … }` (the public store in the shop's language).
+- **A Custom takes `lang` in its inputs** (KitWidget, Agenda, Calendar, ColorPicker…), which wins over the page's.
+- **Writing a new piece:** English text through `t()`/`T()` in JS; in a .muten, the English text plus its mark
+  (`data(tr: …)` text, `trl` aria-label, `trn` tooltip, `trp` placeholder, `trt` title; values for {0}… in `tra`,
+  split by «|»). Add the Spanish to kit/i18n.js under the piece's group. Months and days: `kit.words(lang)`; currency and
+  country names: `Intl.DisplayNames`. A Custom that renders once paints through `core.relang(el, inputs, paint)` so a
+  language change repaints it.
+- muten cannot interpolate inside `aria(label: "…")`: a label with a value is a mark (`trl` + `tra`) or set from JS.
+
+Before Storio moves to this version (it is on 0.1.15, still all Spanish):
+- Nothing to do for the app: `<html lang="es">` keeps everything Spanish, and with the app in English the library now
+  follows it (before, its own words stayed Spanish).
+- The public store (book.muten) speaks `shopLang`, not the app's language: wrap it in `LangScope(lang: shopLang)` (and
+  the Design / Store previews in `LangScope(lang: previewLang)`), or the library's words there follow the visitor's.
+- Check one screen of each in English and in Spanish: agenda, messaging, money and phone fields, the store's booking.
+
 ## PLUG-AND-PLAY (zero class props)
 - **Btn**(variant, onClick) { slot } · **LinkBtn**(to, variant) { slot } · **Input**(value, placeholder)
 - **DataTable** @rows columns(a, b) - STYLED BY DEFAULT, no class needed.
@@ -222,7 +309,7 @@ Rules the kit keeps: the page owns the state and gets JSON back through actions;
 - **textarea** - class("textarea")  ·  label: class("label")  ·  native select: class("native-select")
 - **typography** - Title "Docs" h1 class("prose-h1")   (prose-h1..h4 · prose-p|lead|large|small|muted|blockquote|code|list)
 - **table** - DataTable @rows columns(name, email, status)  -  STYLED BY DEFAULT (no class needed). `class("data-table")` still works as an explicit alias. Raw cells; for badge/formatted cells build with each + Stack.
-- **motion** - Page animations, all CSS + reduced-motion safe. Entrance: animate-fade-up|fade-in|scale-in|slide-in (+ d1..d6 stagger). Scroll: reveal|reveal-left|reveal-scale, and nav-scroll on a navbar. Hover/press: hover-lift, hover-glow, arrow-hover (nudges a trailing Icon), link-underline, press, float.
+- **motion** - Page animations, all CSS + reduced-motion safe. Entrance: animate-fade-up|fade-in|scale-in|slide-in (+ d1..d6 stagger). Scroll: reveal|reveal-left|reveal-scale, and nav-scroll on a navbar. Hover/press: hover-lift, hover-glow, arrow-hover (nudges a trailing Icon), link-underline, press, float. hover-lift carries an invisible strip under the lifted card so a pointer on its bottom edge does not make it blink; it fails on an element with overflow hidden (a Card clips it), so lift such a card with its shadow only. Never add a colour transition to a hover on a row, menu item, nav link or button: the kit's hover there is instant on purpose (a fade blinks when the pointer sweeps a list).
 
 ### Gotcha: a part can not be named after a core primitive — the **primitive wins** and any same-named plugin part is unreachable on import. The primitives include `Button/Link/Form/Image/SearchField/DataTable/Icon/Text/Title/Span` (→ this plugin uses `Btn`/`Input`/`LinkBtn`) AND `Select/Checkbox/Number/Range/Date/Chart` (→ use those primitives directly, see the note at the top). If you write a part call and the oracle says `missing-prop: X is missing the required "bind"`, X is a primitive shadowing the part — switch to the primitive's API.
 

@@ -370,8 +370,10 @@ button.cn-item { width: 100%; font: inherit; text-align: left; cursor: pointer; 
    shows nothing: the agenda behind is the context */
 .cx-modal[data-mode="anchor"] { width: min(24rem, calc(100% - 2rem)); max-height: min(38rem, calc(100dvh - 2rem)); border-radius: calc(var(--radius) * 1.4); overflow: hidden;
   box-shadow: 0 0 0 1px color-mix(in srgb, var(--foreground) 10%, transparent), 0 24px 60px -20px rgb(20 16 40 / .38);
-  transform: scale(.96); opacity: 0; transition: transform calc(var(--t-modal) * .5) ease, opacity calc(var(--t-modal) * .4) ease; }
-.cx-modal-root[data-open="true"] > .cx-modal[data-mode="anchor"] { transform: none; opacity: 1; transition: transform var(--t-pop, 180ms) var(--ease-out), opacity var(--t-pop, 180ms) var(--ease-out); }
+  transform: none; scale: .96; opacity: 0; transition: scale calc(var(--t-modal) * .5) ease, opacity calc(var(--t-modal) * .4) ease; }
+/* it grows in place with `scale`, never `transform`: a modal that was a sheet sits off-screen by its transform, and
+   animating that would fly the card in from the side */
+.cx-modal-root[data-open="true"] > .cx-modal[data-mode="anchor"] { scale: 1; opacity: 1; transition: scale var(--t-pop, 180ms) var(--ease-out), opacity var(--t-pop, 180ms) var(--ease-out); }
 .cx-modal-root:has(> .cx-modal[data-mode="anchor"]) > .cx-overlay { background: transparent; backdrop-filter: none; }
 /* teléfono = Drawer desde abajo, arrastrable */
 .cx-modal[data-mode="drawer"] { left: 0; right: 0; bottom: 0; margin-inline: auto; width: min(100%, 34rem); max-height: calc(100dvh - 3rem); border-radius: calc(var(--radius) * 1.8) calc(var(--radius) * 1.8) 0 0; overflow: hidden;

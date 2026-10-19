@@ -21,9 +21,11 @@ export function mount(el, inputs, on) {
   let anchor = String(inputs.anchor || '');
   // `want` is the mode the page asked for; `mode` is what it is now (an anchor with nothing to hold on to is a dialog)
   const wantsAnchor = () => mdl.dataset.want === 'anchor';
+  // what an earlier opening as a card left on the element: a sheet or a dialog opened next must not keep it
+  const unplace = () => { mdl.style.left = ''; mdl.style.top = ''; mdl.style.transformOrigin = ''; };
   const place = () => {
     const at = anchor.split(',').map(Number);
-    if (!wantsAnchor() || phone.matches || at.length !== 4 || at.some((n) => !Number.isFinite(n))) { if (wantsAnchor()) mdl.dataset.mode = phone.matches ? 'drawer' : 'dialog'; return; }
+    if (!wantsAnchor() || phone.matches || at.length !== 4 || at.some((n) => !Number.isFinite(n))) { unplace(); if (wantsAnchor()) mdl.dataset.mode = phone.matches ? 'drawer' : 'dialog'; return; }
     mdl.dataset.mode = 'anchor';
     const [x, y, w] = at, gap = 12, edge = 16;
     const width = mdl.offsetWidth, height = Math.min(mdl.scrollHeight, innerHeight - edge * 2);
@@ -36,7 +38,7 @@ export function mount(el, inputs, on) {
   const open = () => {
     if (isOpen) return; isOpen = true; placeFooter();
     if (auto) mdl.dataset.mode = phone.matches ? 'drawer' : 'dialog';
-    if (wantsAnchor()) place();
+    if (wantsAnchor()) place(); else unplace();
     lastFocus = document.activeElement;
     document.documentElement.classList.add('cx-locked');
     // on the phone, focusing a field would throw the keyboard over the sheet: focus the sheet itself

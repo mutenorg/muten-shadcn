@@ -72,9 +72,17 @@ export function mount(el, inputs, on) {
     };
     map = data;
     const send = (name, value) => on[name]?.(typeof value === 'string' ? value : JSON.stringify(value));
-    // WHERE A CITA IS ON SCREEN ("x,y,w,h"), so the app can open it beside itself (Modal mode "anchor"): the shown chip
-    // or row that carries its id ('' when none is visible, e.g. opened from a command)
-    const whereIs = (id) => { const box = [...el.querySelectorAll(`[data-ev="${CSS.escape(String(id))}"]`)].map((x) => x.getBoundingClientRect()).find((r) => r.width > 0 && r.height > 0); return box ? [box.left, box.top, box.width, box.height].map(Math.round).join(',') : ''; };
+    // WHERE A CITA IS ON SCREEN ("x,y,w,h"), so the app can open it beside itself (Modal mode "anchor"): the very chip,
+    // or row that was tapped; else its chip or row (never the «now» card: a band as wide as the agenda, nothing to sit by);
+    // '' when none is visible (opened from a command)
+    let tapped = null;
+    el.addEventListener('click', (e) => { tapped = e.target.closest?.('[data-ev]') ?? null; }, true);
+    const boxOf = (x) => { const r = x?.getBoundingClientRect(); return r && r.width > 0 && r.height > 0 ? [r.left, r.top, r.width, r.height].map(Math.round).join(',') : ''; };
+    const whereIs = (id) => {
+      if (tapped?.isConnected && !tapped.matches('.cx-ag-nowcard') && tapped.dataset.ev === String(id) && boxOf(tapped)) return boxOf(tapped);
+      const own = [...el.querySelectorAll(`.cx-ag-ev[data-ev="${CSS.escape(String(id))}"], .cx-ag-row[data-ev="${CSS.escape(String(id))}"]`)].map(boxOf).find(Boolean);
+      return own ?? '';
+    };
     const day1 = (x) => ({ ...x, day: x.day instanceof Date ? iso(x.day) : x.day });
     el.innerHTML = '';
     api = kit.agenda(el, {

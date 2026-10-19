@@ -1496,6 +1496,12 @@ p.cx-text { margin: 0; }
 .cx-thumb[aria-pressed="true"] { background: transparent; box-shadow: 0 0 0 2px var(--selected); }
 .cx-car-card .cn-card-header { padding: 12px 12px 4px; }
 @media (max-width: 640px) { .cx-car { --per: var(--per-sm) !important; } }
+/* only: "phone": swiped on a phone; on anything wider the same slides stand still in a grid of the wide perView, with
+   no dots and no arrows (data-only is on the root from the first paint, so a wide screen never sees a track) */
+@media (min-width: 641px) {
+  .cx-car[data-only="phone"] .cx-car-track { grid-auto-flow: row; grid-auto-columns: auto; grid-template-columns: repeat(var(--per, 3), minmax(0, 1fr)); overflow: visible; scroll-snap-type: none; padding-block: 0; margin-block: 0; }
+  .cx-car[data-only="phone"] .cx-car-bar, .cx-car[data-only="phone"] .cx-car-arrow { display: none; }
+}
 
 /* filters on the phone: search fills the row, «Filtros» beside it; chips scroll sideways */
 .cx-dt-host:has(.cx-fbtn-m) .cx-dt-tools { width: 100%; flex-wrap: nowrap; }

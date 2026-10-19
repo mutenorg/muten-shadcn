@@ -1,11 +1,12 @@
 # Carousel - one component, options instead of copies. The slides are your muten content (CarouselSlide).
 #   perView "4" or "2,4" (phone, wider) · center "on" (the active one centred, neighbours peeking) · loop "on" ·
 #   autoplay ms (pauses on hover, focus, touch, hidden tab; off with reduced motion; its own pause button) ·
-#   indicator dots | progress | count | thumbs · arrows bar | overlay
+#   indicator dots | progress | count | thumbs · arrows bar | overlay | none ·
+#   only "phone" (a carousel on a phone; on a wider screen the same slides sit still in a grid of perView's wide count)
 #   Carousel(label: "Products", perView: "2,4") { each products as p { CarouselSlide { … } } }
 # shadcn-for-muten · part + Custom (CarouselBehavior, kit collections) · kit.css (.cx-car).
-part Carousel(label: text, perView: text = "1", center: text = "", loop: text = "", autoplay: number = 0, indicator: text = "dots", arrows: text = "bar") {
-  Section class("cx-car") aria(label: $label, roledescription: "carrusel") {
+part Carousel(label: text, perView: text = "1", center: text = "", loop: text = "", autoplay: number = 0, indicator: text = "dots", arrows: text = "bar", only: text = "") {
+  Section class("cx-car") data(only: $only) aria(label: $label, roledescription: "carrusel") {
     Stack class("cx-car-view") { Stack class("cx-car-track") { slot } }
     Custom Carousel inputs(perView: $perView, center: $center, loop: $loop, autoplay: $autoplay, indicator: $indicator, arrows: $arrows) class("cx-car-behavior")
   }

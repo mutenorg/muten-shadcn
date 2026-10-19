@@ -72,6 +72,9 @@ export function mount(el, inputs, on) {
     };
     map = data;
     const send = (name, value) => on[name]?.(typeof value === 'string' ? value : JSON.stringify(value));
+    // WHERE A CITA IS ON SCREEN ("x,y,w,h"), so the app can open it beside itself (Modal mode "anchor"): the shown chip
+    // or row that carries its id ('' when none is visible, e.g. opened from a command)
+    const whereIs = (id) => { const box = [...el.querySelectorAll(`[data-ev="${CSS.escape(String(id))}"]`)].map((x) => x.getBoundingClientRect()).find((r) => r.width > 0 && r.height > 0); return box ? [box.left, box.top, box.width, box.height].map(Math.round).join(',') : ''; };
     const day1 = (x) => ({ ...x, day: x.day instanceof Date ? iso(x.day) : x.day });
     el.innerHTML = '';
     api = kit.agenda(el, {
@@ -83,7 +86,7 @@ export function mount(el, inputs, on) {
       resize: inputs.resize === 'off' ? 'off' : 'on', moveAcross: inputs.moveAcross === 'off' ? 'off' : 'on', hour12: yes(inputs.hour12), timeZone: inputs.timeZone || '', phoneStrip: inputs.phoneStrip === 'dots' ? 'dots' : '', phoneView: ['list', 'day'].includes(inputs.phoneView) ? inputs.phoneView : '', blockScope: inputs.blockScope === 'all' ? 'all' : 'each',
       onAction: (id) => send('action', id),
       onCreate: (x) => send('create', day1(x)),
-      onOpen: on.open ? (e) => send('open', day1({ id: e.id, resource: e.resource, day: e.day, start: e.start, dur: e.dur, status: e.status || '' })) : null,
+      onOpen: on.open ? (e) => send('open', day1({ id: e.id, resource: e.resource, day: e.day, start: e.start, dur: e.dur, status: e.status || '', at: whereIs(e.id) })) : null,
       onBlock: on.block ? (b) => send('block', day1(b)) : null,
       onMove: (m) => send('move', day1(m)),
       onRange: (r) => send('range', { from: iso(r.from), to: iso(r.to), view: r.view }),

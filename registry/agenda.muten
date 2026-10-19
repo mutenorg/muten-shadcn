@@ -35,6 +35,7 @@ part AgendaDemo(resources: list, hours: list, events: list, blocks: list, action
 #   a appointment takes its resource plus every id in `with`. overlap "never" | "allow" overrides all capacities.
 #   resize "off" · moveAcross "off" (a backend that only moves day and time) · hour12 "yes" (3:00 PM) · timeZone (the shop's today and now) · phoneView "list" · phoneStrip "dots" (the phone's week: a dot per appointment in its colour) · blockScope "all" · placing [{…}]
 #   (the dashed appointment while the app's new-cita sheet is open) · events take tags [words] and photo; resources role, hideEmpty
+#   onOpen's json also carries `at` ("x,y,w,h", where the cita is on screen): give it to a Modal's `anchor` (mode "anchor")
 #   events take by "agent" (made by the app's assistant): agentMark (an image url) goes before their name, and agentLabel
 #   ("Booked by your assistant") under it on the phone's list and in what a screen reader says
 #   AgendaLive(resources: @team, hours: @hours, events: @citas, blocks: @blocks, free: @free, queue: @queue, closed: @closed,

@@ -366,6 +366,13 @@ button.cn-item { width: 100%; font: inherit; text-align: left; cursor: pointer; 
 /* entering is slower than leaving: it comes up from 6 px lower at 97 %, and goes in about 0.6 of the time */
 .cx-modal[data-mode="dialog"][data-state="open"], .cx-modal-root[data-open="true"] > .cx-modal[data-mode="dialog"] { transition: transform var(--t-modal) var(--ease-out), opacity calc(var(--t-modal) * .75) var(--ease-out); }
 .cx-modal[data-mode="dialog"][data-state="open"] { transform: translate(-50%, -50%); opacity: 1; }
+/* anchor = a card beside what was tapped (ModalBehavior places it); the backdrop stays to close on a tap outside, but
+   shows nothing: the agenda behind is the context */
+.cx-modal[data-mode="anchor"] { width: min(24rem, calc(100% - 2rem)); max-height: min(38rem, calc(100dvh - 2rem)); border-radius: calc(var(--radius) * 1.4); overflow: hidden;
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--foreground) 10%, transparent), 0 24px 60px -20px rgb(20 16 40 / .38);
+  transform: scale(.96); opacity: 0; transition: transform calc(var(--t-modal) * .5) ease, opacity calc(var(--t-modal) * .4) ease; }
+.cx-modal-root[data-open="true"] > .cx-modal[data-mode="anchor"] { transform: none; opacity: 1; transition: transform var(--t-pop, 180ms) var(--ease-out), opacity var(--t-pop, 180ms) var(--ease-out); }
+.cx-modal-root:has(> .cx-modal[data-mode="anchor"]) > .cx-overlay { background: transparent; backdrop-filter: none; }
 /* teléfono = Drawer desde abajo, arrastrable */
 .cx-modal[data-mode="drawer"] { left: 0; right: 0; bottom: 0; margin-inline: auto; width: min(100%, 34rem); max-height: calc(100dvh - 3rem); border-radius: calc(var(--radius) * 1.8) calc(var(--radius) * 1.8) 0 0; overflow: hidden;
   transform: translateY(100%); transition: transform 450ms var(--ease-drawer); touch-action: none; }

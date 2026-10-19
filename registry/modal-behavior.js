@@ -16,9 +16,27 @@ export function mount(el, inputs, on) {
   const placeFooter = () => { const f = body.querySelector('.cx-modal-foot'); if (f) mdl.appendChild(f); };
   const focusables = () => [...mdl.querySelectorAll('button:not([disabled]), input, textarea, select, [tabindex]:not([tabindex="-1"])')].filter((x) => x.offsetParent !== null);
   const close = () => on.close?.();
+  // ANCHORED: a card beside what was tapped ("x,y,w,h" in the viewport): on its right when it fits, else its left, and
+  // kept on screen; it grows from that side. No anchor (or a phone) makes it the dialog.
+  let anchor = String(inputs.anchor || '');
+  // `want` is the mode the page asked for; `mode` is what it is now (an anchor with nothing to hold on to is a dialog)
+  const wantsAnchor = () => mdl.dataset.want === 'anchor';
+  const place = () => {
+    const at = anchor.split(',').map(Number);
+    if (!wantsAnchor() || phone.matches || at.length !== 4 || at.some((n) => !Number.isFinite(n))) { if (wantsAnchor()) mdl.dataset.mode = phone.matches ? 'drawer' : 'dialog'; return; }
+    mdl.dataset.mode = 'anchor';
+    const [x, y, w] = at, gap = 12, edge = 16;
+    const width = mdl.offsetWidth, height = Math.min(mdl.scrollHeight, innerHeight - edge * 2);
+    const right = x + w + gap + width <= innerWidth - edge;
+    const left = right ? x + w + gap : Math.max(edge, x - gap - width);
+    const top = Math.min(Math.max(edge, y - 24), innerHeight - height - edge);
+    mdl.style.left = `${left}px`; mdl.style.top = `${top}px`;
+    mdl.style.transformOrigin = `${right ? 'left' : 'right'} ${Math.max(0, y - top + 12)}px`;
+  };
   const open = () => {
     if (isOpen) return; isOpen = true; placeFooter();
     if (auto) mdl.dataset.mode = phone.matches ? 'drawer' : 'dialog';
+    if (wantsAnchor()) place();
     lastFocus = document.activeElement;
     document.documentElement.classList.add('cx-locked');
     // on the phone, focusing a field would throw the keyboard over the sheet: focus the sheet itself
@@ -87,5 +105,9 @@ export function mount(el, inputs, on) {
   const endPull = () => { if (!pull) return; const d = pull; pull = null; if (!d.live) return; mdl.classList.remove('dragging'); ov?.classList.remove('dragging'); const v = d.dy / (performance.now() - d.t); if (d.dy > mdl.offsetHeight * 0.3 || v > 0.5) close(); else { mdl.style.transform = ''; if (ov) ov.style.opacity = ''; } };
   mdl.addEventListener('touchend', endPull); mdl.addEventListener('touchcancel', endPull);
   if (inputs.open === true || inputs.open === 'true') open();
-  return (next) => { (next.open === true || next.open === 'true') ? open() : shut(); };
+  // the card follows the window, and its own height when a step inside changes it (it only moves when it would leave
+  // the screen: the top stays by the cita while there is room below)
+  addEventListener('resize', () => { if (isOpen && wantsAnchor()) place(); });
+  new ResizeObserver(() => { if (isOpen && mdl.dataset.mode === 'anchor') place(); }).observe(body);
+  return (next) => { anchor = String(next.anchor || ''); (next.open === true || next.open === 'true') ? open() : shut(); };
 }

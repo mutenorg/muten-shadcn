@@ -67,6 +67,7 @@ export function mount(el, inputs, on) {
         from: Number(i.from) || 9, to: Number(i.to) || 19,
         // the language passed (Storio passes it), else the page's (the nearest lang), English by default
         lang: i.lang === 'en' || i.lang === 'es' ? i.lang : (langOf(el) === 'es' ? 'es' : 'en'), overlap: ['never', 'allow'].includes(i.overlap) ? i.overlap : 'auto', currency: i.currency || '', locale: i.locale || '', cents: yes(i.cents),
+        agentMark: i.agentMark || '', agentLabel: i.agentLabel || '',
       };
     };
     map = data;

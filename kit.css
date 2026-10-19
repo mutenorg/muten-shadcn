@@ -390,7 +390,8 @@ button.cn-item { width: 100%; font: inherit; text-align: left; cursor: pointer; 
 .cx-sw i { width: 22px; height: 22px; border-radius: 6px; box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--foreground) 15%, transparent); flex: none; }
 
 /* ── 44 px touch target without changing the drawn size ── */
-@media (pointer: coarse) { .cn-button { position: relative; } .cn-button::before { content: ""; position: absolute; left: 50%; top: 50%; width: max(100%, 44px); height: max(100%, 44px); transform: translate(-50%, -50%); } }
+/* :where() keeps it at zero specificity: a button placed on purpose (the modal ✕, a pinned action) keeps its position */
+@media (pointer: coarse) { :where(.cn-button) { position: relative; } .cn-button::before { content: ""; position: absolute; left: 50%; top: 50%; width: max(100%, 44px); height: max(100%, 44px); transform: translate(-50%, -50%); } }
 
 /* ── page scaffolding for this preview (not part of the library) ── */
 .cx-lib { display: flex; flex-direction: column; gap: 18px; }
@@ -1597,6 +1598,10 @@ p.cx-text { margin: 0; }
 /* ═════ Agenda ═════ */
 .cx-agenda { display: flex; flex-direction: column; gap: 12px; width: 100%; max-width: var(--agenda-max, none); margin: 0 auto; }
 .cx-ag-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; }
+/* Today · the date · Day/List stay on ONE row: the date gives way (ellipsis), the view switch never drops below */
+.cx-ag-bar:not(:has(> .cx-text[data-variant="heading"])) { flex-wrap: nowrap; }
+.cx-ag-bar > .cx-ag-title { flex: 0 1 auto; }
+.cx-ag-bar > .cx-tabs, .cx-ag-bar > .cn-button { flex: none; }
 .cx-ag-scroll { max-height: 520px; overflow: auto; }
 .cx-ag { position: relative; display: grid; grid-template-rows: 36px 1fr; min-width: calc(56px + var(--cols) * 140px); }
 .cx-ag-head { position: sticky; top: 0; z-index: 3; display: grid; grid-template-columns: 56px repeat(var(--cols), 1fr); background: var(--background); border-bottom: 1px solid var(--border); }
@@ -1616,6 +1621,11 @@ p.cx-text { margin: 0; }
 .cx-ag-ev[data-dragging] { transition: none; cursor: grabbing; z-index: 2; box-shadow: 0 10px 24px -10px rgb(0 0 0 / .4); }
 .cx-ag-ev:focus-visible { outline: 2px solid var(--ring); outline-offset: 1px; }
 .cx-ag-ev .cx-text { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+/* what the app's assistant did (event by "agent"): its mark before the name, ringed so it reads on any tone; on the
+   phone's list, a line under the service. --cx-ag-by-ink colours that line (the app's assistant colour). */
+.cx-ag-by { display: inline-block; flex: none; width: 13px; height: 13px; margin-right: 4px; vertical-align: -2px; border-radius: 50%; box-shadow: 0 0 0 1.5px var(--background); }
+.cx-ag-byline { display: inline-flex; align-items: center; gap: 5px; margin-top: 2px; font-size: 12.5px; font-weight: 600; line-height: 1.3; color: var(--cx-ag-by-ink, var(--primary)); }
+.cx-ag-byline .cx-ag-by { width: 14px; height: 14px; margin: 0; box-shadow: none; }
 .cx-ag-now { position: absolute; left: 56px; right: 0; height: 0; margin-top: -1px; border-top: 2px solid var(--destructive); z-index: 2; pointer-events: none; } /* the 2px border centred ON the hour, like the pill and its tail */
 .cx-ag-now i { position: absolute; left: -5px; top: -6px; width: 10px; height: 10px; border-radius: 99px; background: var(--destructive); }
 
@@ -1816,7 +1826,10 @@ p.cx-text { margin: 0; }
 .cx-ag-who .cn-button .cn-avatar { width: 20px; height: 20px; }
 .cx-ag-who .cn-button .cn-avatar .cn-avatar-fallback { font-size: 9px; }
 .cx-ag-who .cn-button[aria-checked="true"][aria-checked][aria-checked] { background: var(--selected-soft); color: var(--selected); border-color: transparent; }
-.cx-ag-strip { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+.cx-ag-strip { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
+/* a narrow phone: the seven days always fit (a long «TODAY» clips instead of pushing the week off the screen) */
+.cx-ag-strip .cx-ag-day { min-width: 0; padding-inline: 2px; }
+.cx-ag-strip .cx-ag-day small { max-width: 100%; overflow: hidden; text-overflow: clip; white-space: nowrap; }
 .cx-ag-day small { font-size: 11px; color: var(--muted-foreground); text-transform: uppercase; letter-spacing: .04em; }
 .cx-ag-day b { font-size: 16px; font-weight: 600; font-variant-numeric: tabular-nums; }
 /* a day with nothing booked has no count line: its name and number sit in the middle of the pill, not at its top */
@@ -4935,6 +4948,8 @@ a.cx-bc-item:hover { color: var(--foreground); }
 /* the pill and the line are one: a short tail from the pill to the hour column's edge, where the first day's line starts */
 .cx-ag-nowtime::after { content: ""; position: absolute; left: 100%; top: 50%; width: 6px; border-top: 2px solid var(--destructive); transform: translateY(-1px); }
 .cx-ag-nowtime { position: absolute; right: 4px; z-index: 3; transform: translateY(-50%); padding: 1px 5px; border-radius: 6px; background: var(--destructive); color: var(--destructive-foreground, #fff); font-size: 10px; font-weight: 600; line-height: 1.4; white-space: nowrap; font-variant-numeric: tabular-nums; }
+/* «12:36 PM», «10:59 AM»: the longest hours are wider than the hour column; only they tighten, so they fit whole */
+.cx-ag-nowtime[data-long] { right: 2px; padding-inline: 3px; font-size: 9.5px; letter-spacing: -.02em; }
 /* the crossed-citas alert sits under the strip, full width, with its button */
 .cx-ag-top > [data-ag-alert] { margin: 0; }
 /* no view picked (a range is on): the tabs show none, not the first */
@@ -5313,7 +5328,9 @@ a.cx-bc-item:hover { color: var(--foreground); }
 .cx-ag-ev { position: absolute; }
 .cx-ag-evprice { position: absolute; top: 5px; right: 7px; font-size: 11.5px; font-weight: 650; font-variant-numeric: tabular-nums; opacity: .85; }
 .cx-ag-dots { display: flex; flex-direction: row; justify-content: center; gap: 3px; min-height: 6px; }
-.cx-ag-dots > i { width: 6px; height: 6px; border-radius: 99px; flex: none; }
+/* ONE dot: «this day has appointments»; how many is in the day's name for a screen reader, and on the day itself */
+.cx-ag-dots > i { width: 6px; height: 6px; border-radius: 99px; flex: none; background: var(--selected, var(--primary)); }
+.cx-ag-day[aria-pressed="true"] .cx-ag-dots > i { background: currentColor; }
 .cx-ag-ev:has(> .cx-ag-evprice) { padding-right: 62px; }
 /* a narrow column (the week on a laptop) keeps the client's name: the price shows only where there is room for both */
 .cx-ag-col { container-type: inline-size; }

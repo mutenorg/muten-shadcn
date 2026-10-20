@@ -1006,7 +1006,9 @@
 .style-nova .cn-card-title { @apply text-base leading-snug font-medium group-data-[size=sm]/card:text-sm; }
 .style-nova .cn-card-description { @apply text-muted-foreground text-sm; }
 .style-nova .cn-card-content { @apply px-(--card-spacing); }
-.style-nova .cn-card-footer { @apply bg-muted/50 rounded-b-xl border-t p-(--card-spacing); }
+/* the foot takes its card's corners (inherit), never a radius of its own: an app that rounds the card otherwise saw the
+   foot's wider curve inside the card's edge */
+.style-nova .cn-card-footer { @apply bg-muted/50 rounded-b-[inherit] border-t p-(--card-spacing); }
 .style-nova .cn-carousel-previous { @apply rounded-full; }
 .style-nova .cn-carousel-next { @apply rounded-full; }
 .style-nova .cn-chart-tooltip { @apply border-border/50 bg-background gap-1.5 rounded-lg border px-2.5 py-1.5 text-xs shadow-xl; }

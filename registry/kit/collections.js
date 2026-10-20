@@ -134,8 +134,13 @@ export function carouselBehavior(root, i, core) {
   track.tabIndex = 0;
   track.addEventListener('keydown', (e) => { if (e.key === 'ArrowRight') { e.preventDefault(); go(current() + 1); } if (e.key === 'ArrowLeft') { e.preventDefault(); go(current() - 1); } });
   let drag = null;
-  track.addEventListener('pointerdown', (e) => { if (e.pointerType !== 'mouse' || e.button > 0) return; drag = { x: e.clientX, left: track.scrollLeft, moved: false }; track.classList.add('dragging'); });
-  addEventListener('pointermove', (e) => { if (!drag) return; const dx = e.clientX - drag.x; if (Math.abs(dx) > 4) drag.moved = true; track.scrollLeft = drag.left - dx; });
+  // a track with nothing to scroll (only: "phone" on a wide screen) is not dragged at all
+  track.addEventListener('pointerdown', (e) => { if (e.pointerType !== 'mouse' || e.button > 0 || track.scrollWidth <= track.clientWidth + 1) return; drag = { x: e.clientX, left: track.scrollLeft, moved: false }; track.classList.add('dragging'); });
+  // A slide that is a link or a picture starts the browser's own drag: it ends in pointercancel, never pointerup, and the
+  // track went on following the mouse with the button already up. So the browser's drag is refused inside the track,
+  // and a move with no button down (released outside the window, or a lost pointerup) ends the drag too.
+  track.addEventListener('dragstart', (e) => e.preventDefault());
+  addEventListener('pointermove', (e) => { if (!drag) return; if (!(e.buttons & 1)) { release(); return; } const dx = e.clientX - drag.x; if (Math.abs(dx) > 4) drag.moved = true; track.scrollLeft = drag.left - dx; });
   // A drag lets go between two pages (snapping is off while dragging): settle on the nearest one, as a swipe does,
   // or the track rests half-way and the dots and arrows disagree about where it is.
   const nearest = () => {
@@ -143,7 +148,11 @@ export function carouselBehavior(root, i, core) {
     if (track.scrollLeft >= track.scrollWidth - track.clientWidth - 4) return pages() - 1;
     return Math.max(0, Math.min(pages() - 1, Math.round(track.scrollLeft / (step() * perPage()))));
   };
-  addEventListener('pointerup', () => { if (!drag) return; const moved = drag.moved; drag = null; track.classList.remove('dragging'); if (moved) { go(nearest()); track.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); }, { capture: true, once: true }); } });
+  function release() { if (!drag) return; const moved = drag.moved; drag = null; track.classList.remove('dragging'); if (moved) { go(nearest()); swallowClick(); } }
+  // the click that ends a drag is not a tap on the slide; only that one: a drag that ended without a click (pointercancel)
+  // must not leave the next real tap swallowed
+  function swallowClick() { const eat = (e) => { e.preventDefault(); e.stopPropagation(); }; track.addEventListener('click', eat, { capture: true, once: true }); setTimeout(() => track.removeEventListener('click', eat, { capture: true }), 0); }
+  ['pointerup', 'pointercancel', 'blur'].forEach((type) => addEventListener(type, release));
   let playing = !!autoplay && !matchMedia('(prefers-reduced-motion: reduce)').matches, hold = false;
   if (autoplay) {
     if (!playing) { const b = $('[data-car="play"]', root); b.innerHTML = ui.icon('play'); b.setAttribute('aria-label', T('Play')); }

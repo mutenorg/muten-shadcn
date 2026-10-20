@@ -1471,7 +1471,7 @@ p.cx-text { margin: 0; }
 .cx-car-slide { scroll-snap-align: start; min-width: 0; }
 /* a scrolling track clips both axes: 6 px of room above and below keeps a card's ring and shadow whole (it was cut at
    the top), taken back with a negative margin so the carousel does not grow */
-.cx-car-track { padding-block: 6px; margin-block: -6px; }
+.cx-car-track { padding-block: var(--car-room, 6px); margin-block: calc(-1 * var(--car-room, 6px)); }
 /* while the mouse drags the track it follows the hand; on release kit core settles it on the nearest page */
 .cx-car-track.dragging { scroll-snap-type: none; scroll-behavior: auto; cursor: grabbing; user-select: none; }
 /* centred like Embla's containScroll: the first slide sits at the start and the last at the end (no empty strip
@@ -1498,6 +1498,12 @@ p.cx-text { margin: 0; }
 @media (max-width: 640px) { .cx-car { --per: var(--per-sm) !important; } }
 /* only: "phone": swiped on a phone; on anything wider the same slides stand still in a grid of the wide perView, with
    no dots and no arrows (data-only is on the root from the first paint, so a wide screen never sees a track) */
+/* bleed: "on": a scrolling track clips at its own edges, so on a phone the slide that peeks was cut at the text's margin.
+   The track reaches out to the screen's edges by --car-bleed (the page's side gutter) and pads it back: the first slide
+   still lines up with the text, the next one runs off the screen as it should */
+@media (max-width: 640px) {
+  .cx-car[data-bleed="on"] .cx-car-track { margin-inline: calc(-1 * var(--car-bleed, 16px)); padding-inline: var(--car-bleed, 16px); scroll-padding-inline: var(--car-bleed, 16px); }
+}
 @media (min-width: 641px) {
   .cx-car[data-only="phone"] .cx-car-track { grid-auto-flow: row; grid-auto-columns: auto; grid-template-columns: repeat(var(--per, 3), minmax(0, 1fr)); overflow: visible; scroll-snap-type: none; padding-block: 0; margin-block: 0; }
   .cx-car[data-only="phone"] .cx-car-bar, .cx-car[data-only="phone"] .cx-car-arrow { display: none; }

@@ -771,12 +771,16 @@ input[type="search"]::-webkit-search-cancel-button, input[type="search"]::-webki
   .cx-dt td.cx-dt-check { grid-area: c; align-self: center; width: auto; }
   .cx-dt td.cx-dt-who { grid-area: who; }
   .cx-dt td.cx-dt-svc { grid-area: meta; color: var(--muted-foreground); font-size: 13px; }
+  /* the narrow row holds one text column in its place; any other text column gets a line of its own under it */
+  .cx-dt td.cx-dt-svc ~ td.cx-dt-svc { grid-area: auto; grid-column: 2 / -1; }
+  .cx-dt tbody tr { grid-auto-rows: min-content; }
   .cx-dt td.cx-dt-when { display: none; }
   .cx-dt td.cx-dt-st { grid-area: st; justify-self: end; }
   .cx-dt td.cx-dt-num { grid-area: amt; }
   .cx-dt td.cx-dt-act { display: none; }
   .cx-dt-who small { display: none; }
-  .cx-dt td.cx-dt-svc::after { content: " · " attr(data-when); }
+  .cx-dt td.cx-dt-svc[data-when]:not([data-when=""])::after { content: " · " attr(data-when); }
+  .cx-dt td.cx-dt-svc ~ td.cx-dt-svc::after { content: none; }
 }
 
 /* ── Board ── */
@@ -5540,3 +5544,6 @@ a.cx-bc-item:hover { color: var(--foreground); }
 /* LangScope: a plain block; its host draws nothing */
 .cx-lang-scope { display: contents; }
 .cx-lang-host { display: none; }
+
+/* ── Field: a field that must be filled says so at its label ── */
+.cn-label.cx-required::after { content: " *"; color: var(--destructive); }

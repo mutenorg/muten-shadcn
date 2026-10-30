@@ -48,12 +48,14 @@ export function mount(el, inputs, on) {
       el.addEventListener('input', () => on.action?.(JSON.stringify(wh.value())));
     },
   };
-  RENDER.table = (core, i) => import('@muten/shadcn/registry/kit/table.js').then(({ dataTable }) => dataTable(el, { columns: i.columns, rows: i.rows, filters: i.filters, statuses: i.statuses, noun: [i.one || 'fila', i.many || 'filas'], bulk: i.bulk }, core, on));
+  RENDER.table = (core, i) => import('@muten/shadcn/registry/kit/table.js').then(({ dataTable }) => (shown = dataTable(el, { columns: i.columns, rows: i.rows, filters: i.filters, statuses: i.statuses, noun: [i.one || 'fila', i.many || 'filas'], bulk: i.bulk }, core, on)));
   // until the kit arrives the host keeps its final size with a shimmer (kit.css, :empty), then the widget fades in
   el.classList.add('cx-kw-wait');
   // its language: inputs.lang, else the nearest lang (the page's); a lang that changes repaints it in the new one
   if (inputs.lang) el.setAttribute('lang', inputs.lang);
   let core0 = null;
+  // what a widget hands back to be fed later (the table's setRows)
+  let shown = null;
   import('@muten/shadcn/registry/kit/core.js').then((core) => {
     core0 = core;
     const render = RENDER[inputs.name]; if (!render) return;
@@ -80,5 +82,6 @@ export function mount(el, inputs, on) {
     el.addEventListener('pointerdown', () => { stopped = true; clearTimeout(timer); }, { once: true, capture: true });
     timer = setTimeout(tick, d.every);
   }
-  return () => {};
+  // muten calls this when a bound state changes: a table takes its new rows in place, the rest keep their snapshot
+  return (next) => { if (inputs.name === 'table' && next && shown?.setRows) shown.setRows(next.rows); };
 }

@@ -3,15 +3,15 @@
 #   Field(label: "Description", description: "Shows in your shop.") { TextArea(value: desc) }
 # Two short fields side by side: FieldRow { Field(…) { … }  Field(…) { … } } (one column on a phone).
 # error: a message that replaces the description in the same place (nothing jumps) and marks the field invalid.
-# orientation: vertical | horizontal.
+# orientation: vertical | horizontal. required: true marks the label (a red asterisk) for a field that must be filled.
 # FieldSet - sets the size and the look of every field inside it, the kit's own too (PasswordField, PhoneField…):
 #   FieldSet(size: "2xl", variant: "filled") { Field(label: "Email") { … }  PasswordField(label: "Password") }
 # FieldSeparator - a line with a word in the middle, between two ways in:   FieldSeparator(label: "or with your email")
 # FieldHead - a label with an action beside it:   FieldHead(label: "Password") { LinkBtn(to: "/recover", variant: "link", size: "sm") { Span "Forgot it?" } }
 # shadcn-for-muten · part · no deps · Nova (.cn-field) + kit.css.
-part Field(label: text = "", description: text = "", error: text = "", orientation: text = "vertical") {
+part Field(label: text = "", description: text = "", error: text = "", orientation: text = "vertical", required: bool = false) {
   Stack class("cn-field cn-field-orientation-{$orientation} group/field") data(slot: "field", orientation: $orientation, invalid: $error != "") {
-    Span "{$label}" class("cn-label") data(slot: "label")
+    Span "{$label}" class("cn-label", "cx-required" when $required) data(slot: "label")
     slot
     when $error == "" { Text "{$description}" class("cn-field-description") data(slot: "field-description") }
     when $error != "" { Text "{$error}" class("cn-field-error") data(slot: "field-error") aria(role: "alert") }

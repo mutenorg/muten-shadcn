@@ -39,8 +39,12 @@ export function dataTable(root, cfg, core, on) {
   const cbHtml = (label, on) => `<button data-slot="checkbox" role="checkbox" data-state="${on ? 'checked' : 'unchecked'}" aria-checked="${on}" class="cn-checkbox" aria-label="${label}"><span data-slot="checkbox-indicator" class="cn-checkbox-indicator"><svg class="cb-mark" viewBox="0 0 24 24">${CB_CHECK}</svg></span></button>`;
   const firstSort = dateCol ? { key: dateCol.key, dir: 1 } : { key: COLS[0]?.key, dir: 1 };
   const bulk = list(cfg.bulk);
+  // rows are selectable only when there is something to do with them: without bulk actions, no checkbox column
+  const picks = bulk.length > 0;
+  // the phone's «Filters» sheet only when there is a filter besides the search
+  const sheetFilters = () => FILTERS.some((f) => f.type !== 'search');
   const CELL_CLASS = { person: 'cx-dt-who', text: 'cx-dt-svc', date: 'cx-dt-when', status: 'cx-dt-st', money: 'cx-dt-num' };
-  root.innerHTML = `<div class="cx-dt-host"><div class="cx-dt-toolbar"><div class="cx-hstack cx-dt-tools" role="toolbar" aria-label="${T('Filters')}"></div><span class="cx-text" data-variant="caption" data-dt-shown aria-live="polite"></span></div><div class="cx-hstack cx-dt-chips" hidden></div><div class="cx-dt-bulk" aria-live="polite"><div><span data-dt-count></span><div class="cx-hstack" style="gap:6px">${bulk.map((b) => ui.button({ label: b.label, variant: b.variant || 'outline', size: 'xs', attrs: `data-dt-bulk="${b.id}"` })).join('')}${ui.button({ label: T('Clear selection'), variant: 'ghost', size: 'xs', attrs: 'data-dt-unselect' })}</div></div></div><div class="cx-dt-scroll cx-scroll"><table class="cx-dt"><thead><tr><th class="cx-dt-check">${cbHtml(T('Select all'), false).replace('class="cn-checkbox"', 'class="cn-checkbox" data-dt-all')}</th>${COLS.map((c) => `<th aria-sort="${c.key === firstSort.key ? 'ascending' : 'none'}" ${c.type === 'money' ? 'class="cx-dt-num"' : ''}>${c.sortable === false ? ui.text(c.label, 'label') : `<button class="cn-button cn-button-variant-ghost cn-button-size-xs cx-th" data-sort="${c.key}">${c.label}<svg><use href="#${c.key === firstSort.key ? 'arrowup' : 'sort'}"/></svg></button>`}</th>`).join('')}</tr></thead><tbody></tbody></table></div></div>`;
+  root.innerHTML = `<div class="cx-dt-host"><div class="cx-dt-toolbar"><div class="cx-hstack cx-dt-tools" role="toolbar" aria-label="${T('Filters')}"></div><span class="cx-text" data-variant="caption" data-dt-shown aria-live="polite"></span></div><div class="cx-hstack cx-dt-chips" hidden></div><div class="cx-dt-bulk" aria-live="polite"><div><span data-dt-count></span><div class="cx-hstack" style="gap:6px">${bulk.map((b) => ui.button({ label: b.label, variant: b.variant || 'outline', size: 'xs', attrs: `data-dt-bulk="${b.id}"` })).join('')}${ui.button({ label: T('Clear selection'), variant: 'ghost', size: 'xs', attrs: 'data-dt-unselect' })}</div></div></div><div class="cx-dt-scroll cx-scroll"><table class="cx-dt"><thead><tr>${picks ? `<th class="cx-dt-check">${cbHtml(T('Select all'), false).replace('class="cn-checkbox"', 'class="cn-checkbox" data-dt-all')}</th>` : ''}${COLS.map((c) => `<th aria-sort="${c.key === firstSort.key ? 'ascending' : 'none'}" ${c.type === 'money' ? 'class="cx-dt-num"' : ''}>${c.sortable === false ? ui.text(c.label, 'label') : `<button class="cn-button cn-button-variant-ghost cn-button-size-xs cx-th" data-sort="${c.key}">${c.label}<svg><use href="#${c.key === firstSort.key ? 'arrowup' : 'sort'}"/></svg></button>`}</th>`).join('')}</tr></thead><tbody></tbody></table></div></div>`;
   const host = $('.cx-dt-host', root), dtTools = $('.cx-dt-tools', root), dtChips = $('.cx-dt-chips', root), dtCountEl = $('[data-dt-shown]', root), dtBody = $('tbody', root), dtAll = $('[data-dt-all]', root), dtBulk = $('.cx-dt-bulk', root);
   const dtSel = new Set(); let dtSort = firstSort;
   const passes = (r, except) => FILTERS.every((f) => f.id === except || PASS[f.type](f, fState[f.id], r));
@@ -53,7 +57,7 @@ export function dataTable(root, cfg, core, on) {
   const paintTools = () => {
     if (dtMobile) {
       const n = activeCount(), focused = document.activeElement?.dataset?.filter === searchF?.id;
-      dtTools.innerHTML = searchHtml() + ui.button({ label: `${ui.icon('filter')}${T('Filters')}${n ? ui.badge(String(n), { variant: 'default' }) : ''}`, size: 'sm', cls: 'cx-fbtn-m', attrs: 'data-fmobile aria-haspopup="dialog"' });
+      dtTools.innerHTML = searchHtml() + (sheetFilters() ? ui.button({ label: `${ui.icon('filter')}${T('Filters')}${n ? ui.badge(String(n), { variant: 'default' }) : ''}`, size: 'sm', cls: 'cx-fbtn-m', attrs: 'data-fmobile aria-haspopup="dialog"' }) : '');
       if (focused) { const i = dtTools.querySelector('[data-filter]'); i.focus(); i.setSelectionRange(i.value.length, i.value.length); }
       return;
     }
@@ -146,7 +150,7 @@ export function dataTable(root, cfg, core, on) {
     return `<td class="cx-dt-svc" ${dateCol ? `data-when="${whenText(r[dateCol.key])}"` : ''}>${v ?? ''}</td>`;
   };
   const who = (r) => r[colOf('person')?.key ?? COLS[0]?.key] ?? '';
-  const rowCells = (r) => `<td class="cx-dt-check">${cbHtml(T('Select {0}', who(r)), dtSel.has(r.id))}</td>${COLS.map((c) => cell(c, r)).join('')}`;
+  const rowCells = (r) => `${picks ? `<td class="cx-dt-check">${cbHtml(T('Select {0}', who(r)), dtSel.has(r.id))}</td>` : ''}${COLS.map((c) => cell(c, r)).join('')}`;
   const EASE = 'cubic-bezier(.23, 1, .32, 1)';
   let dtAnim = 0;
   const dtPaint = () => {
@@ -170,7 +174,7 @@ export function dataTable(root, cfg, core, on) {
     };
     if (leaving.length && dtBody.children.length) { leaving.forEach((tr) => tr.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 130, easing: 'ease-out', fill: 'forwards' })); setTimeout(apply, 130); } else apply();
     dtCountEl.textContent = rows.length === DT.length ? `${DT.length} ${DT.length === 1 ? ONE : MANY}` : `${rows.length} de ${DT.length} ${MANY}`; paintChips();
-    setCheck(dtAll, dtSel.size === 0 ? false : dtSel.size === DT.length ? true : 'mixed');
+    if (dtAll) setCheck(dtAll, dtSel.size === 0 ? false : dtSel.size === DT.length ? true : 'mixed');
     dtBulk.toggleAttribute('data-open', dtSel.size > 0);
     if (dtSel.size) $('[data-dt-count]', root).textContent = `${dtSel.size} ${dtSel.size === 1 ? 'seleccionada' : 'seleccionadas'}`;
     syncMobileCount(rows.length);
@@ -181,10 +185,10 @@ export function dataTable(root, cfg, core, on) {
     $$('thead [data-sort]', root).forEach((b) => { const on = b.dataset.sort === key; b.parentElement.setAttribute('aria-sort', on ? (dtSort.dir === 1 ? 'ascending' : 'descending') : 'none'); $('use', b).setAttribute('href', on ? (dtSort.dir === 1 ? '#arrowup' : '#arrowdown') : '#sort'); });
     dtPaint();
   });
-  dtAll.addEventListener('click', () => { if (dtSel.size === DT.length) dtSel.clear(); else DT.forEach((r) => dtSel.add(r.id)); dtPaint(); });
+  dtAll?.addEventListener('click', () => { if (dtSel.size === DT.length) dtSel.clear(); else DT.forEach((r) => dtSel.add(r.id)); dtPaint(); });
   dtBody.addEventListener('click', (e) => {
     if (e.target.closest('[data-fclear-empty]')) { dtTools.querySelector('[data-fclear]')?.click(); return; }
-    const tr = e.target.closest('tr'); if (!tr || tr.dataset.id === 'empty') return;
+    const tr = e.target.closest('tr'); if (!picks || !tr || tr.dataset.id === 'empty') return;
     if (!e.target.closest('.cn-checkbox') && !host.hasAttribute('data-narrow') && !matchMedia('(max-width: 640px)').matches) return;
     const raw = tr.dataset.id, id = DT.find((r) => String(r.id) === raw)?.id; dtSel.has(id) ? dtSel.delete(id) : dtSel.add(id); dtPaint();
   });
@@ -196,5 +200,12 @@ export function dataTable(root, cfg, core, on) {
     dtSel.clear(); dtPaint(); on?.action?.(JSON.stringify({ action: b.dataset.dtBulk, ids }));
   });
   paintTools(); dtPaint();
-  return { refresh: () => { dtPaint(); paintTools(); } };
+  // new rows from the page (a live list): the same table takes them, keeping its sort, filters and selection
+  const setRows = (rows) => {
+    DT.splice(0, DT.length, ...list(rows).map((r, i) => ({ id: r.id ?? i, ...r })));
+    const ids = new Set(DT.map((r) => r.id));
+    [...dtSel].forEach((id) => { if (!ids.has(id)) dtSel.delete(id); });
+    dtPaint(); paintTools();
+  };
+  return { refresh: () => { dtPaint(); paintTools(); }, setRows };
 }

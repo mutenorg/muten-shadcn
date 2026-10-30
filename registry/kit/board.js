@@ -98,7 +98,8 @@ export function orderBoard(root, i, core, on) {
   };
 
   const brd = $('.cx-board', root) || document.createElement('div'), brdLive = $('.cx-board-live', root);
-  brd.innerHTML = LANES_B.map((l) => `<section class="cx-blane" data-lane="${l.id}" aria-label="${l.title}"><div class="cx-lane-h"><span>${l.title}</span><span class="cx-count"></span></div><div class="cx-lane-list">${l.cards.map((id) => `<div data-slot="card" data-size="sm" class="cn-card group/card cx-bcard" tabindex="0" data-card="${id}" aria-roledescription="tarjeta que se puede mover" aria-label="Pedido ${id} de ${CARDS[id].who}">${cardInner(id)}</div>`).join('')}</div></section>`).join('');
+  const cardHtml = (id) => `<div data-slot="card" data-size="sm" class="cn-card group/card cx-bcard" tabindex="0" data-card="${id}" aria-roledescription="tarjeta que se puede mover" aria-label="Pedido ${id} de ${CARDS[id].who}">${cardInner(id)}</div>`;
+  brd.innerHTML = LANES_B.map((l) => `<section class="cx-blane" data-lane="${l.id}" aria-label="${l.title}"><div class="cx-lane-h"><span>${l.title}</span><span class="cx-count"></span></div><div class="cx-lane-list">${l.cards.map(cardHtml).join('')}</div></section>`).join('');
   const lanesEls = () => $$('.cx-blane', brd);
   const syncLanes = () => lanesEls().forEach((l) => {
     const list = $('.cx-lane-list', l), n = $$('.cx-bcard', list).length;
@@ -299,4 +300,19 @@ export function orderBoard(root, i, core, on) {
       redraw(replyFor); replyFor = null; closeModal();
     }
   });
-  syncLanes();}
+  syncLanes();
+  // The page sends the cards again (a live list, a refetch, another device's change): the same board takes them in place,
+  // without rebuilding itself (its listeners stay one). Nothing moves under a hand that is dragging a card.
+  return {
+    update(next) {
+      if ($('[data-lifted]', brd)) return;
+      for (const id of Object.keys(CARDS)) delete CARDS[id];
+      for (const c of list(next.cards)) CARDS[c.id] = { actions: [], ...copy(c) };
+      lanesEls().forEach((laneEl) => {
+        const want = list(next.cards).filter((c) => c.lane === laneEl.dataset.lane).map((c) => c.id);
+        $('.cx-lane-list', laneEl).innerHTML = want.map(cardHtml).join('');
+      });
+      syncLanes();
+    },
+  };
+}

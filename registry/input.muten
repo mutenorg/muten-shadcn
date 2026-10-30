@@ -1,8 +1,12 @@
 # Input - a text field bound to a page text state. TextArea - the same for several lines (`Textarea` is muten's
 # primitive, so the part is TextArea).
 #   Input(value: name, placeholder: "Name or phone")      TextArea(value: notes, placeholder: "Notes for the team")
+# SecretInput - the same field for a password, bound to a page text state (masked). PasswordField is the kit's
+# show/hide + strength widget for CHOOSING a password; this one is for typing it in a sign-in.
+#   SecretInput(value: password, placeholder: "Your password", size: "xl", variant: "filled")
 # size: default (32) | xl (44) | 2xl (52) · variant: default (a line) | filled (the soft field of a landing: muted fill, no line).
 #   For a whole form, set them once on a FieldSet around it instead (field.muten).
 # shadcn-for-muten · part · no deps · Nova (.cn-input, .cn-textarea).
 part Input(value: text, placeholder: text = "", size: text = "default", variant: text = "default") { SearchField bind($value) "{$placeholder}" class("cn-input") data(slot: "input", size: $size, variant: $variant) }
 part TextArea(value: text, placeholder: text = "") { Textarea bind($value) "{$placeholder}" class("cn-textarea") data(slot: "textarea") }
+part SecretInput(value: text, placeholder: text = "", size: text = "default", variant: text = "default") { Password bind($value) "{$placeholder}" class("cn-input") data(slot: "input", size: $size, variant: $variant) }

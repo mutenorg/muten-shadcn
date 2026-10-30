@@ -1,3 +1,4 @@
 # Bell - the system's notifications: tap to see them, mark all read.   Bell(items: @notices)   items: {icon, tone, title, desc, time, unread}
+# bare: "on" draws only the bell button (no heading, no caption), for an app's top bar:  Bell(items: @notices, bare: "on")
 # shadcn-for-muten · part over KitWidget (kit core).
-part Bell(items: list) { Custom KitWidget inputs(name: "bell", items: $items) class("cx-bell-host") }
+part Bell(items: list, bare: text = "") { Custom KitWidget inputs(name: "bell", items: $items, bare: $bare) class("cx-bell-host") }

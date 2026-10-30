@@ -743,7 +743,7 @@ input[type="search"]::-webkit-search-cancel-button, input[type="search"]::-webki
 .cx-dt-bulk[data-open] { grid-template-rows: 1fr; }
 .cx-dt-bulk > div { overflow: hidden; min-height: 0; display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 13px; font-weight: 500; }
 .cx-dt-bulk[data-open] > div { padding: 0 4px 10px; }
-.cx-dt-scroll { max-height: 380px; overflow: auto; border-radius: calc(var(--radius) * 1.2); box-shadow: 0 0 0 1px var(--border); }
+.cx-dt-scroll { max-height: var(--dt-h, 380px); overflow: auto; border-radius: calc(var(--radius) * 1.2); box-shadow: 0 0 0 1px var(--border); }
 .cx-dt { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 14px; }
 .cx-dt th { position: sticky; top: 0; z-index: 1; background: var(--muted); text-align: left; font-weight: 500; color: var(--muted-foreground); height: 40px; padding: 0 12px; border-bottom: 1px solid var(--border); white-space: nowrap; }
 .cx-dt td { height: 52px; padding: 0 12px; border-bottom: 1px solid var(--border); vertical-align: middle; }
@@ -1726,7 +1726,8 @@ p.cx-text { margin: 0; }
 
 /* ═════ Settings ═════ */
 .cx-settings { width: 100%; max-width: 760px; }
-.cx-set-form { position: relative; display: flex; flex-direction: column; gap: 0; padding-bottom: 72px; }
+/* the sections fold to one column under 600px of the FORM (not the window): it is their container, so it needs its width */
+.cx-set-form { position: relative; width: 100%; container-type: inline-size; display: flex; flex-direction: column; gap: 0; padding-bottom: 72px; }
 .cx-set-sec { display: grid; grid-template-columns: 220px 1fr; gap: 16px 32px; padding: 20px 0; border-top: 1px solid var(--border); }
 .cx-set-sec:first-child { border-top: 0; padding-top: 0; }
 @container (max-width: 600px) { .cx-set-sec { grid-template-columns: 1fr; } }

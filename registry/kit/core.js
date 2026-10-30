@@ -1485,7 +1485,7 @@ let wheelsNow = [];
   // ── Checklist { title, steps [{title, desc, done, action}] } ──
   kit.checklist = (root, { title, steps }) => {
     const T = (k, ...a) => tx(root, k, ...a);
-    const paint = () => { const n = steps.filter((s) => s.done).length; root.innerHTML = `<div data-slot="card" data-size="sm" class="cn-card"><div class="cx-vstack" style="gap:8px;padding:14px 14px 4px">${ui.text(title, 'heading')}<div class="cx-hstack" style="flex-wrap:nowrap;gap:10px">${ui.progress((n / steps.length) * 100, `$%n de ${steps.length} pasos`)}${ui.text(`$%n/${steps.length}`, 'caption')}</div></div><div class="cn-card-content" style="padding:0 12px 8px"><div class="cn-item-group">${steps.map((s, i) => ui.item({ media: `<div class="cn-item-media"><span class="cx-check-dot" ${s.done ? 'data-done' : ''}>${s.done ? ui.icon('i-tick') : i + 1}</span></div>`, title: s.title, description: s.desc, actions: s.done ? '' : ui.button({ label: s.action, size: 'xs', attrs: `data-step="${i}"` }) })).join(ui.itemSeparator())}</div></div></div>`; };
+    const paint = () => { const n = steps.filter((s) => s.done).length; root.innerHTML = `<div data-slot="card" data-size="sm" class="cn-card"><div class="cx-vstack" style="gap:8px;padding:14px 14px 4px">${ui.text(title, 'heading')}<div class="cx-hstack" style="flex-wrap:nowrap;gap:10px">${ui.progress((n / steps.length) * 100, T('{0} of {1} steps', n, steps.length))}${ui.text(`${n}/${steps.length}`, 'caption')}</div></div><div class="cn-card-content" style="padding:0 12px 8px"><div class="cn-item-group">${steps.map((s, i) => ui.item({ media: `<div class="cn-item-media"><span class="cx-check-dot" ${s.done ? 'data-done' : ''}>${s.done ? ui.icon('i-tick') : i + 1}</span></div>`, title: s.title, description: s.desc, actions: s.done ? '' : ui.button({ label: s.action, size: 'xs', attrs: `data-step="${i}"` }) })).join(ui.itemSeparator())}</div></div></div>`; };
     root.addEventListener('click', (e) => { const b = e.target.closest('[data-step]'); if (!b) return; steps[+b.dataset.step].done = true; easeHeight(root, paint); });
     paint();
   };
@@ -1591,9 +1591,11 @@ let wheelsNow = [];
   };
 
   // ── Notifications bell { items [{icon,tone,title,desc,time,unread}] } ──
-  kit.bell = (root, { items }) => {
+  kit.bell = (root, { items, bare }) => {
     const T = (k, ...a) => tx(root, k, ...a);
-    root.innerHTML = `<div class="cx-hstack" style="gap:12px">${ui.text(T('Notices'), 'heading')}<span class="cx-grow"></span><span class="cx-bell-wrap">${ui.button({ icon: 'i-bell', variant: 'outline', size: 'icon', cls: 'cx-has-indicator', attrs: 'data-bell aria-haspopup="dialog" aria-label="Avisos"' })}</span></div>${ui.text(T('The system bell: tap to see the notices.'), 'caption', 'p')}`;
+    const wrap = `<span class="cx-bell-wrap">${ui.button({ icon: 'i-bell', variant: 'outline', size: 'icon', cls: 'cx-has-indicator', attrs: 'data-bell aria-haspopup="dialog" aria-label="Avisos"' })}</span>`;
+    // bare: only the bell, for a top bar (no heading, no caption)
+    root.innerHTML = bare ? wrap : `<div class="cx-hstack" style="gap:12px">${ui.text(T('Notices'), 'heading')}<span class="cx-grow"></span>${wrap}</div>${ui.text(T('The system bell: tap to see the notices.'), 'caption', 'p')}`;
     const pop = document.createElement('div'); pop.className = 'cn-popover-content pg-pop cx-bellpop'; pop.setAttribute('role', 'dialog'); pop.setAttribute('aria-label', T('Notices')); pop.hidden = true; lib.appendChild(pop);
     const btnEl = $('[data-bell]', root);
     const unread = () => items.filter((i) => i.unread).length;

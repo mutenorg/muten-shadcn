@@ -2,6 +2,20 @@
 // the Modal part's (muten state + kit.css). This only does what markup cannot: history (Back closes), Esc, the focus
 // trap, the scroll lock, the auto mode (dialog on a wide screen, drawer on a phone) and the drawer's drag to close.
 // Same rules as the reference artifact's modal.
+// MODALS STACK (a receipt opened over a cita): Back, Esc and the focus trap belong to the TOP one only, and the page's
+// scroll is unlocked when the last one closes. Each modal used to listen to every Back: closing the receipt went back
+// in history and that Back also closed the cita under it, leaving the agenda without its buttons (21-10-2026).
+const stack = (globalThis.__cxModals ||= { list: [], skip: 0, wired: false });
+if (!stack.wired) {
+  stack.wired = true;
+  addEventListener('popstate', () => {
+    // the history.back() a modal makes when it closes itself is its own, not a Back for the one under it
+    if (stack.skip > 0) { stack.skip -= 1; return; }
+    stack.list.at(-1)?.onPop();
+  });
+}
+const isTop = (me) => stack.list.at(-1) === me;
+
 export function mount(el, inputs, on) {
   const mdl = el.closest('.cx-modal'), root = mdl.parentElement, ov = root.querySelector(':scope > .cx-overlay');
   const body = mdl.querySelector(':scope > .cx-modal-body');
@@ -11,6 +25,7 @@ export function mount(el, inputs, on) {
   // of opening: a dialog that only learns it is a dialog as it opens animates its centring from the corner
   const resolve = () => { if (auto && !isOpen) mdl.dataset.mode = phone.matches ? 'drawer' : 'dialog'; };
   let isOpen = false, pushed = false, lastFocus = null;
+  const me = { onPop: () => { if (isOpen) { pushed = false; close(); } } };
   queueMicrotask(() => resolve()); phone.addEventListener('change', resolve);
   // the footer sticks under the scrolling body, not inside it
   const placeFooter = () => { const f = body.querySelector('.cx-modal-foot'); if (f) mdl.appendChild(f); };
@@ -40,6 +55,7 @@ export function mount(el, inputs, on) {
     if (auto) mdl.dataset.mode = phone.matches ? 'drawer' : 'dialog';
     if (wantsAnchor()) place(); else unplace();
     lastFocus = document.activeElement;
+    stack.list.push(me);
     document.documentElement.classList.add('cx-locked');
     // on the phone, focusing a field would throw the keyboard over the sheet: focus the sheet itself
     requestAnimationFrame(() => { ((mdl.dataset.mode === 'dialog' && focusables().find((x) => x.matches('input, textarea'))) || mdl).focus({ preventScroll: true }); });
@@ -48,9 +64,10 @@ export function mount(el, inputs, on) {
   const shut = () => {
     if (!isOpen) return; isOpen = false;
     mdl.style.transform = ''; if (ov) ov.style.opacity = '';
-    document.documentElement.classList.remove('cx-locked');
+    stack.list = stack.list.filter((one) => one !== me);
+    if (stack.list.length === 0) document.documentElement.classList.remove('cx-locked');
     lastFocus?.focus?.({ preventScroll: true });
-    if (pushed) { pushed = false; history.back(); }
+    if (pushed) { pushed = false; stack.skip += 1; history.back(); }
   };
   mdl.tabIndex = -1;
   // A link inside (a menu in a drawer): close first, then go. Closing undoes the history entry the modal pushed, and
@@ -64,9 +81,8 @@ export function mount(el, inputs, on) {
     pushed = false; addEventListener('popstate', go);
     close(); history.back();
   }, true);
-  addEventListener('popstate', () => { if (isOpen) { pushed = false; close(); } });
   document.addEventListener('keydown', (e) => {
-    if (!isOpen) return;
+    if (!isOpen || !isTop(me)) return;
     if (e.key === 'Escape') { e.preventDefault(); close(); }
     if (e.key === 'Tab') { const f = focusables(); if (!f.length) return; const first = f[0], last = f[f.length - 1]; if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); } else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); } }
   });

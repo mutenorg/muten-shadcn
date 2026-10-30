@@ -31,6 +31,7 @@ its own bugs, and is one more thing to fix. So before you write any UI piece, wa
 | a button / icon button / link that looks like one | `Btn(variant, size, label, onClick, disabled)`, `LinkBtn(to, variant)` | `Button … class("cn-button …")` |
 | buttons joined in a row, an action with a menu | `ButtonGroup`, `SplitButton` | two buttons with their own borders |
 | a text field, with an icon, a currency or a country | `Input`, `InputGroup` + `GroupInput`, `MoneyField`, `PhoneField` | a select drawn inside an input |
+| a password to type in (sign-in), one to choose (sign-up) | `SecretInput(value)`, `PasswordField` (show/hide + strength) | a SearchField showing the password |
 | a label, help text and error around a control | `Field(label, description, error)` | spans with margins |
 | a person's face or initials, a name with a subtitle | `Avatar`, `AvatarImage`, `Who` | a circle div with a letter |
 | **a phone or browser mockup** (screenshot, live screen, store preview) | **`DeviceFrame`** (`island`, `width`, `href`, `label`, `shot`, `kind: "browser"`, `url`) | any frame of your own: it is the one phone, the iPhone 18 Pro to scale |
@@ -38,6 +39,7 @@ its own bugs, and is one more thing to fix. So before you write any UI piece, wa
 | a conversation column | `MessageScroller` + `Message` + `Marker` | a scrolling div of bubbles |
 | a dialog, a drawer, a side sheet | `Modal(mode: "auto" \| "drawer" \| …)` | a fixed div with a backdrop |
 | a short notice, an alert, a band | `Island`, `Alert`, `Band` | a toast of your own |
+| the notifications bell in a top bar | `Bell(items, bare: "on")` | a bell icon with its own popover |
 | a loading state | `Loading(busy, kind) { … }`, `Skeletons(kind)`, `Skeleton` | grey boxes by hand |
 | an empty state | `Empty(title, description)` | a centred paragraph |
 | tabs, a segmented switch | `Tabs`, `SegmentedControl` | buttons with an active class |

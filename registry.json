@@ -464,7 +464,7 @@
       "deps": [],
       "part": "Input",
       "file": "registry/input.muten",
-      "description": "Input(value, placeholder) and TextArea(value, placeholder): Nova fields bound to a page text state."
+      "description": "Input(value, placeholder), TextArea(value, placeholder) and SecretInput(value, placeholder): Nova fields bound to a page text state (SecretInput masked, for a sign-in)."
     },
     {
       "name": "inspector",

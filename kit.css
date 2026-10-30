@@ -713,7 +713,7 @@ input[type="search"]::-webkit-search-cancel-button, input[type="search"]::-webki
 .cx-pagination .cx-pg-num .cn-button, .cx-pg-gap { width: 32px; }
 .cx-pg-gap { display: flex; justify-content: center; }
 .cx-pg-list { transition: opacity 160ms ease; }
-.cx-pg-list[data-loading] { opacity: .45; }
+.cx-pg-list[data-loading="true"] { opacity: .45; }   /* muten writes "false" too: only true dims */
 .cx-pg-empty { border-top-color: transparent; }
 /* virtual list */
 .cx-vlist { height: 364px; overflow-y: auto; border-radius: calc(var(--radius) * 1.2); box-shadow: 0 0 0 1px var(--border); overscroll-behavior: contain; }

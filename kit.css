@@ -780,7 +780,7 @@ input[type="search"]::-webkit-search-cancel-button, input[type="search"]::-webki
   .cx-dt td.cx-dt-act { display: none; }
   .cx-dt-who small { display: none; }
   .cx-dt td.cx-dt-svc[data-when]:not([data-when=""])::after { content: " · " attr(data-when); }
-  .cx-dt td.cx-dt-svc ~ td.cx-dt-svc::after { content: none; }
+  .cx-dt td.cx-dt-svc ~ td.cx-dt-svc[data-when]::after { content: none; }
 }
 
 /* ── Board ── */

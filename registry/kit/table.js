@@ -2,7 +2,7 @@
 // and bulk actions are data. Everything else is the artifact's: filters from their type (search · facet · date ·
 // range) with counts, chips that leave with a fade, rows that fade out / slide / enter, the height easing, sort by
 // header, selection with its own bulk bar, the phone's “search + Filters” sheet, and a narrow box becoming Items.
-//   columns  [{key, label, type: person|text|date|status|money, sub (person: the key under the name), sortable}]
+//   columns  [{key, label, type: person|text|date|status|money, sub (person: the key under the name), sortable, sort: "desc" (opens newest first)}]
 //   rows     [{id, …keys}]   (a date is "yyyy-mm-ddTHH:MM"; a row's date may be "+N" days from today too)
 //   filters  [{id, type: search|facet|date|range, label, key | keys (search)}]
 //   statuses [{id, label, tone: ok|wait|info|bad}] · noun ["appointment", "appointments"] · bulk [{id, label, variant}]
@@ -37,14 +37,16 @@ export function dataTable(root, cfg, core, on) {
   };
   const SORTERS = Object.fromEntries(COLS.map((c) => [c.key, c.type === 'status' ? (r) => ST_ORDER.indexOf(r[c.key]) : c.type === 'date' ? (r) => +asDate(r[c.key]) : (r) => r[c.key]]));
   const cbHtml = (label, on) => `<button data-slot="checkbox" role="checkbox" data-state="${on ? 'checked' : 'unchecked'}" aria-checked="${on}" class="cn-checkbox" aria-label="${label}"><span data-slot="checkbox-indicator" class="cn-checkbox-indicator"><svg class="cb-mark" viewBox="0 0 24 24">${CB_CHECK}</svg></span></button>`;
-  const firstSort = dateCol ? { key: dateCol.key, dir: 1 } : { key: COLS[0]?.key, dir: 1 };
+  // the table opens sorted by its date column (else the first); a column with sort: "desc" opens newest first (a log)
+  const opening = dateCol ?? COLS[0];
+  const firstSort = { key: opening?.key, dir: opening?.sort === 'desc' ? -1 : 1 };
   const bulk = list(cfg.bulk);
   // rows are selectable only when there is something to do with them: without bulk actions, no checkbox column
   const picks = bulk.length > 0;
   // the phone's «Filters» sheet only when there is a filter besides the search
   const sheetFilters = () => FILTERS.some((f) => f.type !== 'search');
   const CELL_CLASS = { person: 'cx-dt-who', text: 'cx-dt-svc', date: 'cx-dt-when', status: 'cx-dt-st', money: 'cx-dt-num' };
-  root.innerHTML = `<div class="cx-dt-host"><div class="cx-dt-toolbar"><div class="cx-hstack cx-dt-tools" role="toolbar" aria-label="${T('Filters')}"></div><span class="cx-text" data-variant="caption" data-dt-shown aria-live="polite"></span></div><div class="cx-hstack cx-dt-chips" hidden></div><div class="cx-dt-bulk" aria-live="polite"><div><span data-dt-count></span><div class="cx-hstack" style="gap:6px">${bulk.map((b) => ui.button({ label: b.label, variant: b.variant || 'outline', size: 'xs', attrs: `data-dt-bulk="${b.id}"` })).join('')}${ui.button({ label: T('Clear selection'), variant: 'ghost', size: 'xs', attrs: 'data-dt-unselect' })}</div></div></div><div class="cx-dt-scroll cx-scroll"><table class="cx-dt"><thead><tr>${picks ? `<th class="cx-dt-check">${cbHtml(T('Select all'), false).replace('class="cn-checkbox"', 'class="cn-checkbox" data-dt-all')}</th>` : ''}${COLS.map((c) => `<th aria-sort="${c.key === firstSort.key ? 'ascending' : 'none'}" ${c.type === 'money' ? 'class="cx-dt-num"' : ''}>${c.sortable === false ? ui.text(c.label, 'label') : `<button class="cn-button cn-button-variant-ghost cn-button-size-xs cx-th" data-sort="${c.key}">${c.label}<svg><use href="#${c.key === firstSort.key ? 'arrowup' : 'sort'}"/></svg></button>`}</th>`).join('')}</tr></thead><tbody></tbody></table></div></div>`;
+  root.innerHTML = `<div class="cx-dt-host"><div class="cx-dt-toolbar"><div class="cx-hstack cx-dt-tools" role="toolbar" aria-label="${T('Filters')}"></div><span class="cx-text" data-variant="caption" data-dt-shown aria-live="polite"></span></div><div class="cx-hstack cx-dt-chips" hidden></div><div class="cx-dt-bulk" aria-live="polite"><div><span data-dt-count></span><div class="cx-hstack" style="gap:6px">${bulk.map((b) => ui.button({ label: b.label, variant: b.variant || 'outline', size: 'xs', attrs: `data-dt-bulk="${b.id}"` })).join('')}${ui.button({ label: T('Clear selection'), variant: 'ghost', size: 'xs', attrs: 'data-dt-unselect' })}</div></div></div><div class="cx-dt-scroll cx-scroll"><table class="cx-dt"><thead><tr>${picks ? `<th class="cx-dt-check">${cbHtml(T('Select all'), false).replace('class="cn-checkbox"', 'class="cn-checkbox" data-dt-all')}</th>` : ''}${COLS.map((c) => `<th aria-sort="${c.key === firstSort.key ? (firstSort.dir === 1 ? 'ascending' : 'descending') : 'none'}" ${c.type === 'money' ? 'class="cx-dt-num"' : ''}>${c.sortable === false ? ui.text(c.label, 'label') : `<button class="cn-button cn-button-variant-ghost cn-button-size-xs cx-th" data-sort="${c.key}">${c.label}<svg><use href="#${c.key === firstSort.key ? (firstSort.dir === 1 ? 'arrowup' : 'arrowdown') : 'sort'}"/></svg></button>`}</th>`).join('')}</tr></thead><tbody></tbody></table></div></div>`;
   const host = $('.cx-dt-host', root), dtTools = $('.cx-dt-tools', root), dtChips = $('.cx-dt-chips', root), dtCountEl = $('[data-dt-shown]', root), dtBody = $('tbody', root), dtAll = $('[data-dt-all]', root), dtBulk = $('.cx-dt-bulk', root);
   const dtSel = new Set(); let dtSort = firstSort;
   const passes = (r, except) => FILTERS.every((f) => f.id === except || PASS[f.type](f, fState[f.id], r));

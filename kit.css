@@ -5548,3 +5548,15 @@ a.cx-bc-item:hover { color: var(--foreground); }
 
 /* ── Field: a field that must be filled says so at its label ── */
 .cn-label.cx-required::after { content: " *"; color: var(--destructive); }
+
+/* ── Alert with an action: the action takes its own column (Nova's absolute corner reserves 72 px, and a wider button
+   covered the title); on a phone it goes under the text ── */
+.style-nova .cn-alert:has(> .cn-alert-action) { padding-right: 10px; grid-template-columns: 1fr auto; }
+.style-nova .cn-alert:has(> :is(svg, .mu-icon)):has(> .cn-alert-action) { grid-template-columns: auto 1fr auto; }
+.style-nova .cn-alert > .cn-alert-action { position: static; grid-column: -2; grid-row: 1 / span 9; align-self: center; margin-left: 8px; }
+@media (max-width: 560px) {
+  .style-nova .cn-alert:has(> .cn-alert-action) { grid-template-columns: 1fr; }
+  .style-nova .cn-alert:has(> :is(svg, .mu-icon)):has(> .cn-alert-action) { grid-template-columns: auto 1fr; }
+  .style-nova .cn-alert > .cn-alert-action { grid-column: 1 / -1; grid-row: auto; justify-self: start; margin: 8px 0 0; }
+  .style-nova .cn-alert:has(> :is(svg, .mu-icon)) > .cn-alert-action { grid-column: 2; }
+}

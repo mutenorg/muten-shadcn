@@ -5,12 +5,17 @@
 // MODALS STACK (a receipt opened over a cita): Back, Esc and the focus trap belong to the TOP one only, and the page's
 // scroll is unlocked when the last one closes. Each modal used to listen to every Back: closing the receipt went back
 // in history and that Back also closed the cita under it, leaving the agenda without its buttons (21-10-2026).
-const stack = (globalThis.__cxModals ||= { list: [], skip: 0, wired: false });
+// ONE CLOSES AS THE NEXT OPENS («Añadir» → the link's editor): the closing one's history.back() lands after the new one's
+// pushState, and Chrome counts that Back from where it was asked, so it stepped over the new entry. The new modal then
+// closed with a Back that was not its own and took the page one screen back (/shop/import, 31-10-2026). So a modal that
+// opens while a closing Back is still on its way pushes its entry once that Back has landed (`after`).
+const stack = (globalThis.__cxModals ||= { list: [], skip: 0, after: [], wired: false });
+stack.after ||= [];
 if (!stack.wired) {
   stack.wired = true;
   addEventListener('popstate', () => {
     // the history.back() a modal makes when it closes itself is its own, not a Back for the one under it
-    if (stack.skip > 0) { stack.skip -= 1; return; }
+    if (stack.skip > 0) { stack.skip -= 1; if (stack.skip === 0) stack.after.splice(0).forEach((push) => push()); return; }
     stack.list.at(-1)?.onPop();
   });
 }
@@ -59,7 +64,8 @@ export function mount(el, inputs, on) {
     document.documentElement.classList.add('cx-locked');
     // on the phone, focusing a field would throw the keyboard over the sheet: focus the sheet itself
     requestAnimationFrame(() => { ((mdl.dataset.mode === 'dialog' && focusables().find((x) => x.matches('input, textarea'))) || mdl).focus({ preventScroll: true }); });
-    history.pushState({ cxModal: 1 }, ''); pushed = true;
+    const push = () => { if (!isOpen || pushed) return; history.pushState({ cxModal: 1 }, ''); pushed = true; };
+    if (stack.skip > 0) stack.after.push(push); else push();
   };
   const shut = () => {
     if (!isOpen) return; isOpen = false;

@@ -5639,3 +5639,13 @@ a.cx-bc-item:hover { color: var(--foreground); }
 .cx-sidebar[data-collapsed="true"] .cx-sb-fold > .cx-sb-fold-in { visibility: visible; }
 .cx-sidebar[data-collapsed="true"] :is(.cx-sb-rowtoggle, .cx-sb-chev) { display: none; }
 @media (prefers-reduced-motion: reduce) { .cx-sb-fold, .cx-sb-chev { transition: none; } }
+
+/* ═════ EVERYTHING YOU CAN CLICK SHOWS THE HAND ═════ */
+/* A browser gives a <button> the arrow, and shadcn gives menu items, options and selects `cursor: default` (the desktop-app
+   convention). On the web the hand is what says «this does something», so every enabled control takes it: buttons,
+   tabs, menu items, options, switches, checkboxes, toggles, triggers, labels of a box. Disabled ones keep the arrow, and a
+   modal's backdrop (a button that fills the screen) too. The :is() weighs as an element plus an attribute, so it wins
+   over the single-class `cursor: default` rules above. */
+:is(button, a[href], summary, select, label[for], input[type="checkbox"], input[type="radio"], input[type="range"], input[type="color"], input[type="file"],
+  [role="button"], [role="tab"], [role="menuitem"], [role="menuitemradio"], [role="menuitemcheckbox"], [role="option"], [role="switch"], [role="checkbox"], [role="radio"], [data-slot$="trigger"]):not(:disabled, [aria-disabled="true"], [data-disabled], .cx-overlay) { cursor: pointer; }
+:is(button, [role="button"], [role="menuitem"], [role="option"], [role="switch"], [role="tab"]):is(:disabled, [aria-disabled="true"], [data-disabled]) { cursor: not-allowed; }

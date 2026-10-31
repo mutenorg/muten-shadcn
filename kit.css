@@ -5607,3 +5607,26 @@ a.cx-bc-item:hover { color: var(--foreground); }
 .cn-badge[data-compact="true"]:hover .cx-tone-words, .cn-badge[data-compact="true"]:focus-within .cx-tone-words { grid-template-columns: 1fr; opacity: 1; }
 @media (hover: none) { .cn-badge[data-compact="true"] { gap: 8px; padding-inline: 12px; } .cn-badge[data-compact="true"] .cx-tone-words { grid-template-columns: 1fr; opacity: 1; } }
 @media (prefers-reduced-motion: reduce) { .cx-sb-ring, .cx-tone-ring { animation-duration: 1.6s; } .cn-badge[data-compact="true"], .cn-badge[data-compact="true"] .cx-tone-words, .cx-sb-hint { transition: none; } }
+
+/* ═════ SIDEBAR FOLDS · groups and levels that open and close (SidebarFoldGroup, SidebarFold, SidebarRowToggle) ═════
+   What opens and closes folds to its exact height (its row grows from 0fr) while the chevron turns; closed, it is out
+   of reach of the keyboard too. A row's chevron sits over the row's right end. Folded to icons, everything shows. */
+.cx-sb-fold { display: grid; grid-template-rows: 1fr; transition: grid-template-rows .2s var(--ease-out); }
+.cx-sb-fold[data-open="false"] { grid-template-rows: 0fr; }
+.cx-sb-fold-in { min-height: 0; overflow: hidden; display: flex; flex-direction: column; }
+.cx-sb-fold[data-open="false"] > .cx-sb-fold-in { visibility: hidden; transition: visibility 0s .2s; }
+.cx-sb-chev { width: 15px; height: 15px; flex: none; color: var(--muted-foreground); transition: transform .2s var(--ease-out); }
+[aria-expanded="false"] > .cx-sb-chev { transform: rotate(-90deg); }
+.cx-sb-gtoggle { display: flex; flex-direction: row; align-items: center; justify-content: space-between; width: 100%; border: 0; background: none; font: inherit; text-align: left; cursor: pointer; border-radius: calc(var(--radius) * .6); }
+.cx-sb-gtoggle:hover { color: var(--foreground); }
+.cx-sb-gtoggle:focus-visible, .cx-sb-rowtoggle:focus-visible { outline: 2px solid var(--ring); outline-offset: -2px; }
+.cx-sb-rowtoggle { align-self: flex-end; position: relative; z-index: 1; width: 24px; height: 24px; margin: -28px 4px 4px 0; display: grid; place-items: center; padding: 0; border: 0; border-radius: calc(var(--radius) * .6); background: none; cursor: pointer; }
+.cx-sb-menu > .cx-sb-rowtoggle { margin-top: -32px; }
+.cx-sb-rowtoggle:hover { background: var(--accent); }
+.cx-sb-rowtoggle:active { transform: scale(.94); }
+:is(.cx-sb-item, .cx-sb-subitem):has(+ .cx-sb-rowtoggle) { padding-right: 34px; }
+.cx-sb-subitem:has(+ .cx-sb-rowtoggle) { font-weight: 600; }
+.cx-sidebar[data-collapsed="true"] .cx-sb-fold { grid-template-rows: 1fr; }
+.cx-sidebar[data-collapsed="true"] .cx-sb-fold > .cx-sb-fold-in { visibility: visible; }
+.cx-sidebar[data-collapsed="true"] :is(.cx-sb-rowtoggle, .cx-sb-chev) { display: none; }
+@media (prefers-reduced-motion: reduce) { .cx-sb-fold, .cx-sb-chev { transition: none; } }

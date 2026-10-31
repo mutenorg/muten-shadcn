@@ -20,6 +20,14 @@
 #     SidebarSubLink(label: "api", to: "/services/api", tone: "ok", busy: "{building}", hint: "Building v24")
 #     SidebarSub(label: "api") { SidebarSubLink(label: "Logs", to: "/services/api?tab=logs", active: "{tab == "logs"}") { Icon "lucide:terminal" } }
 #   }
+# Folding parts of the menu: SidebarFoldGroup is a SidebarGroup whose title opens and closes it; SidebarFold holds what
+# opens and closes under a row (a SidebarSub), and SidebarRowToggle is that row's chevron, placed right after it. They
+# fold to their height in 200 ms while the chevron turns; the page owns each `open` (persist it to keep the menu as
+# it was left). Folded to icons, every group shows its icons and the chevrons go.
+#   SidebarFoldGroup(label: "Panel", open: panelOpen, onToggle: togglePanel) { SidebarLink(…) }
+#   SidebarLink(label: "Services", to: "/services") { Icon "lucide:layers" }
+#   SidebarRowToggle(label: "Show or hide your services", open: listOpen, onToggle: toggleList)
+#   SidebarFold(open: listOpen) { SidebarSub { … } }
 # The name AppSidebar avoids muten's own Sidebar primitive. shadcn-for-muten · parts · no deps · Nova (.cn-sidebar-*) + kit.css.
 part AppSidebar(collapsed: bool, label: text = "Menu") {
   Nav class("cx-sidebar") data(slot: "sidebar", collapsed: $collapsed) aria(label: $label) { Stack class("cn-sidebar-inner cx-sb-inner") data(slot: "sidebar-inner") { slot } }
@@ -63,4 +71,16 @@ part SidebarSubLink(label: text, to: text, active: text = "", count: text = "", 
     when $hint != "" { Span "{$hint}" class("cx-sb-hint") aria(hidden: "true") }
     when $count != "" { Span "{$count}" class("cn-sidebar-menu-badge cx-sb-count") data(slot: "sidebar-menu-badge") }
   }
+}
+part SidebarFoldGroup(label: text, open: bool, onToggle: action) {
+  Stack class("cn-sidebar-group cx-sb-group cx-sb-foldgroup") data(slot: "sidebar-group") aria(role: "group", label: $label) {
+    Button -> $onToggle class("cn-sidebar-group-label cx-sb-glabel cx-sb-gtoggle") data(slot: "sidebar-group-label") aria(expanded: $open) { Span "{$label}"  Icon "lucide:chevron-down" class("cx-sb-chev") }
+    Stack class("cx-sb-fold") data(open: $open) { Stack class("cx-sb-fold-in") { Stack class("cn-sidebar-menu cx-sb-menu") data(slot: "sidebar-menu") { slot } } }
+  }
+}
+part SidebarFold(open: bool) {
+  Stack class("cx-sb-fold") data(open: $open) { Stack class("cx-sb-fold-in") { slot } }
+}
+part SidebarRowToggle(label: text, open: bool, onToggle: action) {
+  Button -> $onToggle class("cx-sb-rowtoggle") aria(expanded: $open, label: $label) { Icon "lucide:chevron-down" class("cx-sb-chev") }
 }

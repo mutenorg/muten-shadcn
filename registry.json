@@ -936,7 +936,7 @@
       "deps": [],
       "part": "AppSidebar",
       "file": "registry/sidebar.muten",
-      "description": "AppSidebar - a collapsible nav panel (SidebarHeader / SidebarGroup / SidebarItem / SidebarLink), with SidebarSub / SidebarSubLink for the level below an item (active, a status dot or spinning ring, a hint on hover). Named AppSidebar so it never shadows muten's core Sidebar <aside> primitive."
+      "description": "AppSidebar - a collapsible nav panel (SidebarHeader / SidebarGroup / SidebarItem / SidebarLink), with SidebarSub / SidebarSubLink for the level below an item (active, a status dot or spinning ring, a hint on hover), and SidebarFoldGroup / SidebarFold / SidebarRowToggle for what opens and closes. Named AppSidebar so it never shadows muten's core Sidebar <aside> primitive."
     },
     {
       "name": "site-footer",

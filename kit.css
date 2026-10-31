@@ -5519,6 +5519,15 @@ a.cx-bc-item:hover { color: var(--foreground); }
 /* SidebarTrigger: in the icon column (its 32 px square sits where the rows' icons sit), folded or open */
 .cx-sb-trigger { align-self: flex-start; flex: none; margin-left: 0; }
 .cx-sidebar[data-collapsed="true"] .cx-sb-trigger { align-self: flex-start; }
+.cx-sidebar .cx-sb-trigger { width: 32px; height: 32px; }   /* the rows' square, so its centre is the column's */
+/* THE HEADER AND THE FOOTER USE THE ICON COLUMN TOO. Whatever leads a link or a menu button there (a logo, an avatar,
+   an icon) sits centred in a 32 px box exactly over the rows' icons, open or folded, so the logo, the trigger, every icon
+   and the avatar make one straight line and nothing moves sideways when the rail folds. Folded, a menu button closes
+   to that box (its words fade and the rail never crops the avatar). */
+.cx-sidebar :is(.cx-sb-head, .cx-sb-foot) > a, .cx-sidebar :is(.cx-sb-head, .cx-sb-foot) .cn-sidebar-menu-button { justify-content: flex-start; padding-left: 0; }
+.cx-sidebar :is(.cx-sb-head, .cx-sb-foot) > a > :first-child, .cx-sidebar :is(.cx-sb-head, .cx-sb-foot) .cn-sidebar-menu-button > :first-child { flex: none; width: 32px; display: flex; justify-content: center; object-fit: contain; }
+.cx-sidebar :is(.cx-sb-head, .cx-sb-foot) .cn-sidebar-menu-button { transition: width .2s var(--ease-out), padding .2s var(--ease-out); }
+.cx-sidebar[data-collapsed="true"] :is(.cx-sb-head, .cx-sb-foot) .cn-sidebar-menu-button { width: 32px; padding-right: 0; }
 
 /* Sheet: its content arrives a moment after the panel, one row after another; leaving, it goes with the panel */
 .cx-modal[data-mode="sheet"] .cx-modal-body > * { transition: opacity var(--t-pop) var(--ease-out), translate calc(var(--t-sheet) * .8) var(--ease-out); }

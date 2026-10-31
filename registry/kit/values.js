@@ -157,7 +157,14 @@ export function phoneField(root, i, core, on) {
 export function otpField(root, i, core, on) {
   const { $ } = core, T = (k, ...a) => core.t(core.langOf(root), k, ...a);
   const len = Number(i.length) || 6, half = Math.ceil(len / 2);
-  root.innerHTML = `<div class="cx-vline cx-otp-stack"><div class="cx-otp"><input class="cx-otp-input" inputmode="numeric" autocomplete="one-time-code" maxlength="${len}" aria-label="${T('{0}-digit code', len)}"><div data-slot="input-otp" class="cn-input-otp" aria-hidden="true"><div data-slot="input-otp-group" class="cn-input-otp-group"></div><div data-slot="input-otp-separator" class="cn-input-otp-separator cx-otp-sep"><span></span></div><div data-slot="input-otp-group" class="cn-input-otp-group"></div></div></div><p class="cx-note" data-otp-msg></p><button data-slot="button" class="cn-button cn-button-variant-link cn-button-size-sm group/button" data-otp-resend disabled></button></div>`;
+  // letters: a code people copy from another screen (KQ4M-7T2X), so letters and digits, shown in capitals, and room in the
+  // field for a pasted dash or spaces, which are dropped (maxlength would otherwise cut the paste before the cleanup)
+  const letters = i.letters === true || i.letters === 'true';
+  const keep = letters ? (v) => v.toUpperCase().replace(/[^A-Z0-9]/g, '') : (v) => v.replace(/\D/g, '');
+  const field = letters
+    ? `inputmode="text" autocapitalize="characters" autocomplete="off" spellcheck="false" maxlength="${len * 2}" aria-label="${T('{0}-character code', len)}"`
+    : `inputmode="numeric" autocomplete="one-time-code" maxlength="${len}" aria-label="${T('{0}-digit code', len)}"`;
+  root.innerHTML = `<div class="cx-vline cx-otp-stack"><div class="cx-otp"><input class="cx-otp-input" ${field}><div data-slot="input-otp" class="cn-input-otp" aria-hidden="true"><div data-slot="input-otp-group" class="cn-input-otp-group"></div><div data-slot="input-otp-separator" class="cn-input-otp-separator cx-otp-sep"><span></span></div><div data-slot="input-otp-group" class="cn-input-otp-group"></div></div></div><p class="cx-note" data-otp-msg></p><button data-slot="button" class="cn-button cn-button-variant-link cn-button-size-sm group/button" data-otp-resend disabled></button></div>`;
   const otpIn = $('.cx-otp-input', root), otpBox = $('.cx-otp', root), otpMsg = $('[data-otp-msg]', root), resend = $('[data-otp-resend]', root);
   const slots = [];
   root.querySelectorAll('.cn-input-otp-group').forEach((g, gi) => { const n = gi ? len - half : half; for (let k = 0; k < n; k++) { const s = document.createElement('div'); s.className = 'cn-input-otp-slot'; s.dataset.slot = 'input-otp-slot'; g.appendChild(s); slots.push(s); } });
@@ -166,16 +173,20 @@ export function otpField(root, i, core, on) {
   const paint = () => { const v = otpIn.value, focused = document.activeElement === otpIn, at = Math.min(v.length, len - 1); slots.forEach((s, k) => { s.textContent = v[k] || ''; const act = focused && k === at && !busy; s.dataset.active = act; if (act && !v[k]) s.innerHTML = '<span class="cx-caret"></span>'; }); };
   const toEnd = () => { const n = otpIn.value.length; otpIn.setSelectionRange(n, n); };
   otpIn.addEventListener('input', () => {
-    otpIn.value = otpIn.value.replace(/\D/g, '').slice(0, len); delete otpBox.dataset.state; otpMsg.removeAttribute('data-tone'); otpMsg.textContent = hint; paint();
+    otpIn.value = keep(otpIn.value).slice(0, len); delete otpBox.dataset.state; otpMsg.removeAttribute('data-tone'); otpMsg.textContent = hint; paint();
     if (otpIn.value.length === len) { busy = true; otpIn.readOnly = true; otpMsg.textContent = T('Checking…'); paint(); on?.complete?.(otpIn.value); }
   });
   ['focus', 'blur', 'click', 'keyup'].forEach((t) => otpIn.addEventListener(t, () => { toEnd(); paint(); }));
   otpIn.addEventListener('select', toEnd);
+  // resendIn 0: a code that is not sent again (one a shop gave you, one a terminal shows), so no resend button at all
   let left = Number(i.resendIn ?? 30), rt = 0;
+  const resends = left > 0;
+  resend.hidden = !resends;
   const tick = () => { left--; resend.disabled = left > 0; resend.textContent = left > 0 ? T('Resend in 0:{0}', String(left).padStart(2, '0')) : T('Resend code'); if (left > 0) rt = setTimeout(tick, 1000); };
   resend.textContent = T('Resend in 0:{0}', String(left).padStart(2, '0'));
   resend.onclick = () => { left = Number(i.resendIn ?? 30) + 1; clearTimeout(rt); tick(); otpMsg.removeAttribute('data-tone'); otpMsg.textContent = T('We sent you a new code'); otpIn.value = ''; delete otpBox.dataset.state; otpIn.focus(); on?.resend?.(); };
-  rt = setTimeout(tick, 1000); paint();
+  if (resends) rt = setTimeout(tick, 1000);
+  paint();
   const answer = (st, msg) => {
     if (!st || st === 'checking') return;
     busy = false; otpIn.readOnly = false;

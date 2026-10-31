@@ -606,8 +606,8 @@ input[type="search"]::-webkit-search-cancel-button, input[type="search"]::-webki
 .cx-otp[data-state="bad"] .cn-input-otp-slot { border-color: var(--destructive); }
 .cx-otp[data-state="bad"] { animation: cx-shake calc(var(--t-move) * 1.35) var(--ease-out); }
 .cx-otp[data-state="ok"] .cn-input-otp-slot { border-color: var(--success); color: var(--success); }
-#otp-msg[data-tone="bad"] { color: var(--destructive); }
-#otp-msg[data-tone="ok"] { color: var(--success); }
+[data-otp-msg][data-tone="bad"] { color: var(--destructive); }
+[data-otp-msg][data-tone="ok"] { color: var(--success); }
 
 /* ── Color picker ── */
 .cx-swatch-row { display: flex; flex-wrap: wrap; gap: 10px; }

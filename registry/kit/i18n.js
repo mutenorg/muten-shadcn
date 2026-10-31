@@ -90,7 +90,7 @@ Object.assign(ES, {
   'maximum': 'máximo', 'minimum': 'mínimo', 'Currency': 'Moneda', 'Country': 'País', '{0} (it has no minor unit)': '{0} (no tiene unidad menor)', 'cents of {0}': 'centavos de {0}',
   'Saved as: {0} {1}': 'Se guarda: {0} {1}', 'Type a price': 'Escribe un precio', 'Search currency': 'Buscar moneda', 'Search country': 'Buscar país',
   'Saved as +{0}': 'Se guarda como +{0}', '{0} digits short for a number from {1}': 'Faltan {0} dígitos para un número de {1}', '{0} digits, without the {1}': '{0} dígitos, sin el {1}',
-  '{0}-digit code': 'Código de {0} dígitos', 'Checking…': 'Verificando…', 'Resend in 0:{0}': 'Reenviar en 0:{0}', 'Resend code': 'Reenviar código',
+  '{0}-digit code': 'Código de {0} dígitos', '{0}-character code': 'Código de {0} caracteres', 'Checking…': 'Verificando…', 'Resend in 0:{0}': 'Reenviar en 0:{0}', 'Resend code': 'Reenviar código',
   'We sent you a new code': 'Te enviamos un código nuevo', 'Done, it is verified': 'Listo, quedó verificado', 'That is not the code': 'Ese código no es',
 });
 

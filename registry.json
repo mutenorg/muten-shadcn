@@ -457,7 +457,7 @@
       "part": "InputOtp",
       "file": "registry/input-otp.muten",
       "component": "InputOtp",
-      "description": "InputOtp(value, length, hint, state, message, resendIn, onInput): slots, caret, ok/bad, resend countdown."
+      "description": "InputOtp(value, length, letters, hint, state, message, resendIn, onInput): slots, caret, ok/bad, resend countdown (none with resendIn 0); letters for a code like KQ4M-7T2X."
     },
     {
       "name": "input",

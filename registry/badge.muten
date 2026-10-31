@@ -19,10 +19,15 @@ part StatusBadge(label: text, tone: text = "") { Span "{$label}" class("cn-badge
 # ToneBadge - a state with its tone, tinted, with or without a dot: new | ok | wait | bad | pro (PRO uses --selected).
 #   The word is the tone mixed toward the ink, so it reads on its tint in light and dark.
 #   ToneBadge(label: "Confirmed", tone: "ok")    ToneBadge(label: "Pending", tone: "wait", dot: "dot")
-part ToneBadge(label: text, tone: text, dot: text = "") {
-  Stack class("cn-badge group/badge cx-tone-{$tone}") data(slot: "badge") {
-    when $dot != "" { Span "" class("cx-dot") }
-    Span "{$label}"
+#   busy: a ring that spins instead of the dot (something on its way). compact: only the dot or the ring, the words open
+#   beside it on hover or focus (where there is no hover they always show; a screen reader always reads them).
+#   size "lg": the state beside a page's title.
+#   ToneBadge(label: "Building v24", tone: "wait", busy: true, compact: true, size: "lg")
+part ToneBadge(label: text, tone: text, dot: text = "", busy: bool = false, compact: bool = false, size: text = "") {
+  Stack class("cn-badge group/badge cx-tone-{$tone}") data(slot: "badge", busy: $busy, compact: $compact, size: $size) {
+    when $busy { Span "" class("cx-tone-ring") aria(hidden: "true") }
+    when not $busy and $dot != "" { Span "" class("cx-dot") }
+    Stack class("cx-tone-words") { Span "{$label}" }
   }
 }
 # Chip - a value the person can take away with its ×; it fades out (no jump). The page owns the list.

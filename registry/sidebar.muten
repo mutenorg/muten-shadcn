@@ -9,6 +9,17 @@
 # SidebarLink is the same item as a link to a route: the app marks where you are by itself (no `current` to keep), also
 # below it (on /schedule/42 the “Appointments” link stays marked). `match` lists other pages it stands for ("/a /b").
 #   SidebarLink(label: "Appointments", to: "/schedule", count: "6") { Icon "lucide:calendar-days" }
+# SidebarSub is the level below an item (shadcn's SidebarMenuSub): indented, with a line on its left. Nest one inside
+# another for one more level. SidebarSubLink is an item in it; the app says which one is `active` (a tab, a query: a
+# route alone cannot tell), `tone` puts a status dot before it (ok · wait · bad · idle), `busy` a ring that spins
+# instead, and `hint` says that state in words: on hover beside the name, always for a screen reader. `active` and
+# `busy` are "true" or anything else (text, so a row's own call can fill them: "{isOpen(s.name)}"). An item with its
+# own level open below it is set in bold.
+#   SidebarLink(label: "Services", to: "/services") { Icon "lucide:layers" }
+#   SidebarSub(label: "Your services") {
+#     SidebarSubLink(label: "api", to: "/services/api", tone: "ok", busy: "{building}", hint: "Building v24")
+#     SidebarSub(label: "api") { SidebarSubLink(label: "Logs", to: "/services/api?tab=logs", active: "{tab == "logs"}") { Icon "lucide:terminal" } }
+#   }
 # The name AppSidebar avoids muten's own Sidebar primitive. shadcn-for-muten · parts · no deps · Nova (.cn-sidebar-*) + kit.css.
 part AppSidebar(collapsed: bool, label: text = "Menu") {
   Nav class("cx-sidebar") data(slot: "sidebar", collapsed: $collapsed) aria(label: $label) { Stack class("cn-sidebar-inner cx-sb-inner") data(slot: "sidebar-inner") { slot } }
@@ -38,5 +49,18 @@ part SidebarLink(label: text, to: text, count: text = "", match: text = "") {
     slot
     Span "{$label}" class("cx-sb-label")
     Span "{$count}" class("cn-sidebar-menu-badge cx-sb-count") data(slot: "sidebar-menu-badge")
+  }
+}
+part SidebarSub(label: text = "") {
+  Stack class("cn-sidebar-menu-sub cx-sb-sub") data(slot: "sidebar-menu-sub") aria(role: "group", label: $label) { slot }
+}
+part SidebarSubLink(label: text, to: text, active: text = "", count: text = "", tone: text = "", busy: text = "", hint: text = "") {
+  Link -> "{$to}" class("cn-sidebar-menu-sub-button cx-sb-subitem") data(slot: "sidebar-menu-sub-button", active: "{$active == "true"}", tone: $tone, busy: "{$busy == "true"}", name: $label) aria(current: "{$active == "true" ? "page" : "false"}", label: "{$label}{$hint == "" ? "" : ", {$hint}"}") {
+    when $busy == "true" { Span "" class("cx-sb-ring") aria(hidden: "true") }
+    when $busy != "true" and $tone != "" { Span "" class("cx-sb-dot") aria(hidden: "true") }
+    slot
+    Span "{$label}" class("cx-sb-label")
+    when $hint != "" { Span "{$hint}" class("cx-sb-hint") aria(hidden: "true") }
+    when $count != "" { Span "{$count}" class("cn-sidebar-menu-badge cx-sb-count") data(slot: "sidebar-menu-badge") }
   }
 }

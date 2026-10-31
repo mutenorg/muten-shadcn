@@ -5560,3 +5560,50 @@ a.cx-bc-item:hover { color: var(--foreground); }
   .style-nova .cn-alert > .cn-alert-action { grid-column: 1 / -1; grid-row: auto; justify-self: start; margin: 8px 0 0; }
   .style-nova .cn-alert:has(> :is(svg, .mu-icon)) > .cn-alert-action { grid-column: 2; }
 }
+
+/* ═════ SIDEBAR SUB · the level below an item (SidebarSub, SidebarSubLink) ═════
+   Indented under its parent with a hairline on the left; an item holds an optional status dot or a spinning ring, the
+   name, a hint in words that opens on hover (always shown where there is no hover), and a count. */
+.cx-sb-sub { display: flex; flex-direction: column; gap: 1px; margin: 2px 0 4px 15px; padding-left: 10px; border-left: 1px solid var(--border); min-width: 0; }
+.cx-sidebar[data-collapsed="true"] .cx-sb-sub { display: none; }
+.cx-sb-subitem { position: relative; display: flex; align-items: center; gap: 8px; min-height: 30px; padding: 0 8px; border-radius: calc(var(--radius) * .7); color: var(--muted-foreground); font-size: 13.5px; text-decoration: none; white-space: nowrap; min-width: 0; transition: background-color .15s ease, color .15s ease; }
+.cx-sb-subitem:hover { background: var(--accent); color: var(--foreground); }
+.cx-sb-subitem[data-active="true"] { background: var(--selected-soft); color: var(--selected); font-weight: 500; }
+.cx-sb-subitem:focus-visible { outline: 2px solid var(--ring); outline-offset: -2px; }
+.cx-sb-subitem > .mu-icon { width: 15px; height: 15px; flex: none; }
+.cx-sb-subitem > .cx-sb-count { margin-left: auto; }
+.cx-sb-sub > .cx-sb-subitem[data-tone] { color: var(--foreground); font-size: 14px; }
+.cx-sb-subitem:has(+ .cx-sb-sub) { font-weight: 600; }
+.cx-sb-dot { width: 8px; height: 8px; border-radius: 99px; flex: none; background: var(--muted-foreground); }
+.cx-sb-subitem[data-tone="ok"] > .cx-sb-dot { background: var(--success); }
+.cx-sb-subitem[data-tone="wait"] > .cx-sb-dot { background: var(--warning); }
+.cx-sb-subitem[data-tone="bad"] > .cx-sb-dot { background: var(--destructive); }
+.cx-sb-ring { width: 12px; height: 12px; flex: none; box-sizing: border-box; border-radius: 99px; border: 2px solid var(--warning); border-right-color: transparent; animation: cx-sb-spin .7s linear infinite; }
+.cx-sb-hint { margin-left: auto; font-size: 12px; color: var(--warning); opacity: 0; transform: translateX(4px); transition: opacity .15s ease, transform .2s var(--ease-out); flex: none; }
+.cx-sb-subitem:hover > .cx-sb-hint, .cx-sb-subitem:focus-visible > .cx-sb-hint { opacity: 1; transform: none; }
+/* with a mouse the words take the name's place on hover (the name fades, they fade in where it was): the row never
+   changes size and nothing shows cut. Without hover they sit after the name. */
+@media (hover: hover) {
+  .cx-sb-subitem { --hint-x: 28px; }
+  .cx-sb-subitem:has(> .cx-sb-dot) { --hint-x: 24px; }
+  .cx-sb-hint { position: absolute; left: var(--hint-x); right: 8px; top: 50%; translate: 0 -50%; margin: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13.5px; pointer-events: none; }
+  .cx-sb-label { transition: opacity .15s ease; }
+  .cx-sb-subitem:hover > .cx-sb-label:has(+ .cx-sb-hint), .cx-sb-subitem:focus-visible > .cx-sb-label:has(+ .cx-sb-hint) { opacity: 0; }
+}
+@media (hover: none) { .cx-sb-hint { opacity: 1; transform: none; } }
+
+/* ═════ TONE BADGE · busy, compact and lg (ToneBadge) ═════
+   busy swaps the dot for a ring that spins; compact keeps only the dot or the ring and opens the words beside it on
+   hover or focus (their column grows from 0fr, so nothing jumps); without hover they always show. lg sits beside a
+   page's title. */
+.cn-badge[class*="cx-tone-"] .cx-tone-words { display: grid; grid-template-columns: 1fr; overflow: hidden; }
+.cn-badge[class*="cx-tone-"] .cx-tone-words > span { min-width: 0; white-space: nowrap; }
+.cn-badge[data-size="lg"] { height: 28px; padding: 0 12px; gap: 8px; font-size: 14px; font-weight: 600; border: 1px solid color-mix(in oklch, var(--tone, var(--muted-foreground)) 30%, transparent); }
+.cn-badge[data-size="lg"] .cx-dot { width: 8px; height: 8px; }
+.cx-tone-ring { width: 12px; height: 12px; flex: none; box-sizing: border-box; border-radius: 99px; border: 2px solid var(--tone, currentColor); border-right-color: transparent; animation: cx-sb-spin .7s linear infinite; }
+.cn-badge[data-compact="true"] { gap: 0; padding-inline: 8px; transition: gap .2s var(--ease-out), padding .2s var(--ease-out); }
+.cn-badge[data-compact="true"] .cx-tone-words { grid-template-columns: 0fr; opacity: 0; transition: grid-template-columns .2s var(--ease-out), opacity .15s ease; }
+.cn-badge[data-compact="true"]:hover, .cn-badge[data-compact="true"]:focus-within { gap: 8px; padding-inline: 12px; }
+.cn-badge[data-compact="true"]:hover .cx-tone-words, .cn-badge[data-compact="true"]:focus-within .cx-tone-words { grid-template-columns: 1fr; opacity: 1; }
+@media (hover: none) { .cn-badge[data-compact="true"] { gap: 8px; padding-inline: 12px; } .cn-badge[data-compact="true"] .cx-tone-words { grid-template-columns: 1fr; opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .cx-sb-ring, .cx-tone-ring { animation-duration: 1.6s; } .cn-badge[data-compact="true"], .cn-badge[data-compact="true"] .cx-tone-words, .cx-sb-hint { transition: none; } }

@@ -29,7 +29,8 @@ export function mount(el, inputs, on) {
   // the auto mode is resolved NOW (and again when the width crosses the phone line while closed), never at the moment
   // of opening: a dialog that only learns it is a dialog as it opens animates its centring from the corner
   const resolve = () => { if (auto && !isOpen) mdl.dataset.mode = phone.matches ? 'drawer' : 'dialog'; };
-  let isOpen = false, pushed = false, lastFocus = null;
+  // pushedAt: the address when this modal added its step; a page that moves the address to close it took that step's place
+  let isOpen = false, pushed = false, pushedAt = '', lastFocus = null;
   const me = { onPop: () => { if (isOpen) { pushed = false; close(); } } };
   queueMicrotask(() => resolve()); phone.addEventListener('change', resolve);
   // the footer sticks under the scrolling body, not inside it
@@ -64,7 +65,7 @@ export function mount(el, inputs, on) {
     document.documentElement.classList.add('cx-locked');
     // on the phone, focusing a field would throw the keyboard over the sheet: focus the sheet itself
     requestAnimationFrame(() => { ((mdl.dataset.mode === 'dialog' && focusables().find((x) => x.matches('input, textarea'))) || mdl).focus({ preventScroll: true }); });
-    const push = () => { if (!isOpen || pushed) return; history.pushState({ cxModal: 1 }, ''); pushed = true; };
+    const push = () => { if (!isOpen || pushed) return; history.pushState({ cxModal: 1 }, ''); pushed = true; pushedAt = location.href; };
     if (stack.skip > 0) stack.after.push(push); else push();
   };
   const shut = () => {
@@ -73,7 +74,10 @@ export function mount(el, inputs, on) {
     stack.list = stack.list.filter((one) => one !== me);
     if (stack.list.length === 0) document.documentElement.classList.remove('cx-locked');
     lastFocus?.focus?.({ preventScroll: true });
-    if (pushed) { pushed = false; stack.skip += 1; history.back(); }
+    // A PAGE THAT CLOSES IT BY MOVING THE ADDRESS (a sheet kept in ?sheet=, closed with url.set): its new step already
+    // stands where the modal's was, and going back from it lands on the address that opened the sheet, which opened it
+    // again (Platform's «Avisar» never closed, 1 Nov 2026). The modal goes back only from its own step.
+    if (pushed) { pushed = false; if (location.href === pushedAt) { stack.skip += 1; history.back(); } }
   };
   mdl.tabIndex = -1;
   // A link inside (a menu in a drawer): close first, then go. Closing undoes the history entry the modal pushed, and

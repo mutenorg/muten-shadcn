@@ -2,11 +2,12 @@
 # slide / enter, the height easing, sort by header, selection with a bulk bar in its own space, the phone's
 # “buscar + Filtros” sheet, and Items when its box is narrow. (`DataTable` is muten's raw table primitive.)
 #   TableView(columns: @cols, rows: @appointments, filters: @filters, statuses: @statuses, bulk: @bulk, one: "appointment", many: "appointments", onAction: act)
-# columns {key, label, type: person|text|date|status|money, sub} · filters {id, type, label, key | keys} ·
+# columns {key, label, type: person|text|date|status|money|number|meter|actions, sub, spark, actions, allowed} · filters {id, type, label, key | keys} ·
 # statuses {id, label, tone} · bulk {id, label, variant, set {…}} → onAction gets {"action", "ids"}.
 # The rows scroll inside the table (the header stays) past 380 px; a page that IS the table gives it more: --dt-h.
 #   TableView(…) class("clients-table")   +   .clients-table { --dt-h: calc(100vh - 240px); }
 # shadcn-for-muten · part over KitWidget (kit core + kit/table.js).
-part TableView(columns: list, rows: list, filters: list, statuses: list, bulk: list, one: text = "row", many: text = "rows", onAction: action) {
-  Custom KitWidget inputs(name: "table", columns: $columns, rows: $rows, filters: $filters, statuses: $statuses, bulk: $bulk, one: $one, many: $many) on(action: $onAction) class("cx-table-host")
+# pageSize: rows per page (0: all, scrolling). Every value a row brings is shown as text, never as markup.
+part TableView(columns: list, rows: list, filters: list, statuses: list, bulk: list, one: text = "row", many: text = "rows", pageSize: number = 0, onAction: action) {
+  Custom KitWidget inputs(name: "table", columns: $columns, rows: $rows, filters: $filters, statuses: $statuses, bulk: $bulk, one: $one, many: $many, pageSize: $pageSize) on(action: $onAction) class("cx-table-host")
 }

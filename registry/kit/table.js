@@ -2,7 +2,12 @@
 // and bulk actions are data. Everything else is the artifact's: filters from their type (search · facet · date ·
 // range) with counts, chips that leave with a fade, rows that fade out / slide / enter, the height easing, sort by
 // header, selection with its own bulk bar, the phone's “search + Filters” sheet, and a narrow box becoming Items.
-//   columns  [{key, label, type: person|text|date|status|money, sub (person: the key under the name), sortable, sort: "desc" (opens newest first)}]
+//   columns  [{key, label, type: person|text|date|status|money|number|meter|actions, sub (person: the key under the name), sortable, sort: "desc" (opens newest first)}]
+//            meter: a 0-100 value as a number and a bar (ok, then wait from `warn` (70), bad from `bad` (85)); null reads
+//            «No reading»; `spark`: the key of a "3,5,4" series drawn beside it as its trend.
+//            actions: a menu per row: `actions` [{id, label, danger}], `allowed` (optional): the key of a row's
+//            comma list of the action ids it offers → on.action({action, ids: [the row's id]}).
+//   pageSize  rows per page (0: all, scrolling); the page goes back to the first when the filters or the sort change.
 //   rows     [{id, …keys}]   (a date is "yyyy-mm-ddTHH:MM"; a row's date may be "+N" days from today too)
 //   filters  [{id, type: search|facet|date|range, label, key | keys (search)}]
 //   statuses [{id, label, tone: ok|wait|info|bad}] · noun ["appointment", "appointments"] · bulk [{id, label, variant}]
@@ -10,6 +15,8 @@
 export function dataTable(root, cfg, core, on) {
   const { ui, $, $$, lib, place, show, hide, easeHeight, setCheck, CB_CHECK, money0, fold, reformat, groupThousands, today, addDays, DAY, openModal, CONTENT, body, foot } = core;
   const list = (v) => (Array.isArray(v) ? v : []);
+  // every value a row brings is text, never markup: a name a customer typed must not become HTML in someone else's page
+  const esc = (v) => String(v ?? '').replace(/[&<>"']/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[ch]);
   const COLS = list(cfg.columns), STATUS = Object.fromEntries(list(cfg.statuses).map((s) => [s.id, s]));
   // its language: the nearest lang (the page's), English by default
   const L = core.langOf(root), T = (k, ...a) => core.t(L, k, ...a), DAYS = core.kit.words(L).dayS;
@@ -25,7 +32,7 @@ export function dataTable(root, cfg, core, on) {
   const FILTERS = list(cfg.filters).map((f) => ({
     ...f,
     read: f.type === 'search' ? (r) => list(f.keys || [f.key]).map((k) => r[k]).join(' ') : f.type === 'date' ? (r) => dayOf(r[f.key]) : (r) => r[f.key],
-    name: (v) => (f.key === statusCol?.key && STATUS[v] ? STATUS[v].label : v),
+    name: (v) => esc(f.key === statusCol?.key && STATUS[v] ? STATUS[v].label : v),
     fmt: f.money === false ? (v) => v : money0,
   }));
   const fState = Object.fromEntries(FILTERS.map((f) => [f.id, f.type === 'search' ? '' : f.type === 'facet' ? new Set() : null]));
@@ -35,7 +42,10 @@ export function dataTable(root, cfg, core, on) {
     date: (f, v, r) => !v || DATE_PRESETS[v][1](f.read(r)),
     range: (f, v, r) => !v || ((v[0] == null || f.read(r) >= v[0]) && (v[1] == null || f.read(r) <= v[1])),
   };
-  const SORTERS = Object.fromEntries(COLS.map((c) => [c.key, c.type === 'status' ? (r) => ST_ORDER.indexOf(r[c.key]) : c.type === 'date' ? (r) => +asDate(r[c.key]) : (r) => r[c.key]]));
+  const reading = (v) => (v == null || v === '' || !Number.isFinite(Number(v)) ? null : Number(v));
+  const SORTERS = Object.fromEntries(COLS.map((c) => [c.key, c.type === 'status' ? (r) => ST_ORDER.indexOf(r[c.key]) : c.type === 'date' ? (r) => +asDate(r[c.key]) : c.type === 'meter' || c.type === 'number' ? (r) => reading(r[c.key]) ?? -1 : (r) => r[c.key]]));
+  const PAGE = Math.max(0, Math.floor(Number(cfg.pageSize) || 0));
+  let page = 0, pageKey = '';
   const cbHtml = (label, on) => `<button data-slot="checkbox" role="checkbox" data-state="${on ? 'checked' : 'unchecked'}" aria-checked="${on}" class="cn-checkbox" aria-label="${label}"><span data-slot="checkbox-indicator" class="cn-checkbox-indicator"><svg class="cb-mark" viewBox="0 0 24 24">${CB_CHECK}</svg></span></button>`;
   // the table opens sorted by its date column (else the first); a column with sort: "desc" opens newest first (a log)
   const opening = dateCol ?? COLS[0];
@@ -46,7 +56,7 @@ export function dataTable(root, cfg, core, on) {
   // the phone's «Filters» sheet only when there is a filter besides the search
   const sheetFilters = () => FILTERS.some((f) => f.type !== 'search');
   const CELL_CLASS = { person: 'cx-dt-who', text: 'cx-dt-svc', date: 'cx-dt-when', status: 'cx-dt-st', money: 'cx-dt-num' };
-  root.innerHTML = `<div class="cx-dt-host"><div class="cx-dt-toolbar"><div class="cx-hstack cx-dt-tools" role="toolbar" aria-label="${T('Filters')}"></div><span class="cx-text" data-variant="caption" data-dt-shown aria-live="polite"></span></div><div class="cx-hstack cx-dt-chips" hidden></div><div class="cx-dt-bulk" aria-live="polite"><div><span data-dt-count></span><div class="cx-hstack" style="gap:6px">${bulk.map((b) => ui.button({ label: b.label, variant: b.variant || 'outline', size: 'xs', attrs: `data-dt-bulk="${b.id}"` })).join('')}${ui.button({ label: T('Clear selection'), variant: 'ghost', size: 'xs', attrs: 'data-dt-unselect' })}</div></div></div><div class="cx-dt-scroll cx-scroll"><table class="cx-dt"><thead><tr>${picks ? `<th class="cx-dt-check">${cbHtml(T('Select all'), false).replace('class="cn-checkbox"', 'class="cn-checkbox" data-dt-all')}</th>` : ''}${COLS.map((c) => `<th aria-sort="${c.key === firstSort.key ? (firstSort.dir === 1 ? 'ascending' : 'descending') : 'none'}" ${c.type === 'money' ? 'class="cx-dt-num"' : ''}>${c.sortable === false ? ui.text(c.label, 'label') : `<button class="cn-button cn-button-variant-ghost cn-button-size-xs cx-th" data-sort="${c.key}">${c.label}<svg><use href="#${c.key === firstSort.key ? (firstSort.dir === 1 ? 'arrowup' : 'arrowdown') : 'sort'}"/></svg></button>`}</th>`).join('')}</tr></thead><tbody></tbody></table></div></div>`;
+  root.innerHTML = `<div class="cx-dt-host"><div class="cx-dt-toolbar"><div class="cx-hstack cx-dt-tools" role="toolbar" aria-label="${T('Filters')}"></div><span class="cx-text" data-variant="caption" data-dt-shown aria-live="polite"></span></div><div class="cx-hstack cx-dt-chips" hidden></div><div class="cx-dt-bulk" aria-live="polite"><div><span data-dt-count></span><div class="cx-hstack" style="gap:6px">${bulk.map((b) => ui.button({ label: b.label, variant: b.variant || 'outline', size: 'xs', attrs: `data-dt-bulk="${b.id}"` })).join('')}${ui.button({ label: T('Clear selection'), variant: 'ghost', size: 'xs', attrs: 'data-dt-unselect' })}</div></div></div><div class="cx-dt-scroll cx-scroll"><table class="cx-dt"><thead><tr>${picks ? `<th class="cx-dt-check">${cbHtml(T('Select all'), false).replace('class="cn-checkbox"', 'class="cn-checkbox" data-dt-all')}</th>` : ''}${COLS.map((c) => `<th aria-sort="${c.key === firstSort.key ? (firstSort.dir === 1 ? 'ascending' : 'descending') : 'none'}" ${c.type === 'money' || c.type === 'number' ? 'class="cx-dt-num"' : c.type === 'actions' ? 'class="cx-dt-act"' : ''}>${c.sortable === false || c.type === 'actions' ? ui.text(c.label ?? '', 'label') : `<button class="cn-button cn-button-variant-ghost cn-button-size-xs cx-th" data-sort="${c.key}">${c.label}<svg><use href="#${c.key === firstSort.key ? (firstSort.dir === 1 ? 'arrowup' : 'arrowdown') : 'sort'}"/></svg></button>`}</th>`).join('')}</tr></thead><tbody></tbody></table></div><div class="cx-dt-pager" hidden><span class="cx-text" data-variant="caption" data-dt-range></span><span class="cx-hstack" style="gap:6px">${ui.button({ label: T('Previous'), variant: 'outline', size: 'xs', attrs: 'data-dt-page="-1"' })}<span class="cx-text cx-num" data-variant="caption" data-dt-pages></span>${ui.button({ label: T('Next'), variant: 'outline', size: 'xs', attrs: 'data-dt-page="1"' })}</span></div></div>`;
   const host = $('.cx-dt-host', root), dtTools = $('.cx-dt-tools', root), dtChips = $('.cx-dt-chips', root), dtCountEl = $('[data-dt-shown]', root), dtBody = $('tbody', root), dtAll = $('[data-dt-all]', root), dtBulk = $('.cx-dt-bulk', root);
   const dtSel = new Set(); let dtSort = firstSort;
   const passes = (r, except) => FILTERS.every((f) => f.id === except || PASS[f.type](f, fState[f.id], r));
@@ -72,8 +82,8 @@ export function dataTable(root, cfg, core, on) {
   const fClose = (refocus) => { if (!fOpen) return; hide(fPop, 120); fBtn?.setAttribute('aria-expanded', 'false'); if (refocus) fBtn?.focus(); fOpen = null; };
   const rangeInputs = (f, prefix) => { const v = fState[f.id] || [null, null]; return `<div class="cx-frange">${[T('From'), T('To')].map((lab, i) => ui.field({ id: `${prefix}${f.id}${i}`, label: lab, control: `<div data-slot="input-group" class="cn-input-group"><div class="cn-input-group-addon cn-input-group-addon-align-inline-start">$</div><input class="cn-input cn-input-group-input cx-num" id="${prefix}${f.id}${i}" inputmode="numeric" data-frange="${i}" data-frid="${f.id}" value="${v[i] != null ? groupThousands(String(v[i]), '.') : ''}" placeholder="${i ? T('No limit') : '0'}"></div>` })).join('')}</div>`; };
   const facetItems = (f, sheet) => { const counts = new Map(); DT.filter((r) => passes(r, f.id)).forEach((r) => counts.set(f.read(r), (counts.get(f.read(r)) || 0) + 1)); return [...new Set(DT.map(f.read))].map((v) => sheet
-    ? `<button type="button" class="cn-command-item cx-fsheet-opt" role="checkbox" aria-checked="${fState[f.id].has(v)}" data-fs-facet="${f.id}" data-fval="${v}"><span data-slot="checkbox" class="cn-checkbox" data-state="${fState[f.id].has(v) ? 'checked' : 'unchecked'}"><span class="cn-checkbox-indicator"><svg class="cb-mark" viewBox="0 0 24 24">${CB_CHECK}</svg></span></span>${ui.text(f.name(v))}<span class="cx-fcount">${counts.get(v) || 0}</span></button>`
-    : `<div data-slot="command-item" class="cn-command-item group/command-item" role="option" aria-selected="${fState[f.id].has(v)}" data-fval="${v}" tabindex="-1"><span data-slot="checkbox" class="cn-checkbox" data-state="${fState[f.id].has(v) ? 'checked' : 'unchecked'}"><span class="cn-checkbox-indicator"><svg class="cb-mark" viewBox="0 0 24 24">${CB_CHECK}</svg></span></span>${ui.text(f.name(v))}<span class="cx-fcount">${counts.get(v) || 0}</span></div>`).join(''); };
+    ? `<button type="button" class="cn-command-item cx-fsheet-opt" role="checkbox" aria-checked="${fState[f.id].has(v)}" data-fs-facet="${f.id}" data-fval="${esc(v)}"><span data-slot="checkbox" class="cn-checkbox" data-state="${fState[f.id].has(v) ? 'checked' : 'unchecked'}"><span class="cn-checkbox-indicator"><svg class="cb-mark" viewBox="0 0 24 24">${CB_CHECK}</svg></span></span>${ui.text(f.name(v))}<span class="cx-fcount">${counts.get(v) || 0}</span></button>`
+    : `<div data-slot="command-item" class="cn-command-item group/command-item" role="option" aria-selected="${fState[f.id].has(v)}" data-fval="${esc(v)}" tabindex="-1"><span data-slot="checkbox" class="cn-checkbox" data-state="${fState[f.id].has(v) ? 'checked' : 'unchecked'}"><span class="cn-checkbox-indicator"><svg class="cb-mark" viewBox="0 0 24 24">${CB_CHECK}</svg></span></span>${ui.text(f.name(v))}<span class="cx-fcount">${counts.get(v) || 0}</span></div>`).join(''); };
   const popBody = (f) => {
     if (f.type === 'facet') return `<div data-slot="command" class="cn-command"><div data-slot="command-input-wrapper" class="cn-command-input-wrapper"><div data-slot="input-group" class="cn-input-group cn-command-input-group group/input-group"><input data-slot="input-group-control" class="cn-command-input cn-input-group-input" placeholder="${f.label}…" data-fsearch aria-label="${T('Search in {0}', f.label)}"><div class="cn-input-group-addon cn-input-group-addon-align-inline-start" data-align="inline-start"><svg class="cn-command-input-icon"><use href="#search"/></svg></div></div></div><div data-slot="command-list" class="cn-command-list" role="listbox" aria-multiselectable="true">${facetItems(f)}</div>${fState[f.id].size ? `<div data-slot="separator" class="cn-separator cn-separator-horizontal"></div><button class="cn-command-item cx-fclear-one" data-fclear-one>${T('Remove filter')}</button>` : ''}</div>`;
     if (f.type === 'date') return `<div class="cx-vstack" style="gap:4px">${Object.entries(DATE_PRESETS).map(([k, [n]]) => ui.button({ label: n, variant: 'ghost', size: 'sm', cls: 'cx-fill cx-left', attrs: `aria-pressed="${fState[f.id] === k}" data-fdate="${k}"` })).join('')}${fState[f.id] ? ui.button({ label: T('Any date'), variant: 'ghost', size: 'sm', cls: 'cx-fill cx-left', attrs: 'data-fdate=""' }) : ''}</div>`;
@@ -129,7 +139,7 @@ export function dataTable(root, cfg, core, on) {
   addEventListener('scroll', () => { if (fOpen && fBtn) place(fPop, fBtn, 'start', 6); }, { passive: true });
   const paintChips = () => {
     const chips = [];
-    FILTERS.forEach((f) => { if (f.type === 'facet') fState[f.id].forEach((v) => chips.push([`${f.label}: ${f.name(v)}`, `${f.id}|${v}`])); else if (f.type !== 'search' && isActive(f)) chips.push([`${f.label}: ${summary(f)}`, f.id]); });
+    FILTERS.forEach((f) => { if (f.type === 'facet') fState[f.id].forEach((v) => chips.push([`${f.label}: ${f.name(v)}`, `${f.id}|${esc(v)}`])); else if (f.type !== 'search' && isActive(f)) chips.push([`${f.label}: ${summary(f)}`, f.id]); });
     const have = new Map($$('.cx-chip', dtChips).map((c) => [c.dataset.key, c])), want = new Set(chips.map(([, k]) => k));
     have.forEach((c, k) => { if (!want.has(k) && !c.classList.contains('out')) { c.classList.add('out'); c.addEventListener('animationend', () => easeHeight(dtChips, () => { c.remove(); dtChips.hidden = !dtChips.children.length; }), { once: true }); } });
     easeHeight(dtChips, () => {
@@ -143,21 +153,56 @@ export function dataTable(root, cfg, core, on) {
     });
   };
   dtChips.addEventListener('click', (e) => { const b = e.target.closest('[data-fchip]'); if (!b) return; b.closest('.cx-chip').classList.add('out'); const [id, v] = b.dataset.fchip.split('|'); const f = FILTERS.find((x) => x.id === id); if (f.type === 'facet') fState[id].delete(v); else fState[id] = null; refresh(); });
+  // a trend: the series as a line scaled to its own range, its last point marked; drawn here, no library
+  const SPARK_W = 64, SPARK_H = 20;
+  const sparkSvg = (series, tone) => {
+    const ys = String(series ?? '').split(',').map(Number).filter(Number.isFinite);
+    if (ys.length < 2) return '';
+    const lo = Math.min(...ys), hi = Math.max(...ys), span = hi - lo || 1;
+    const at = (y, i) => [(i / (ys.length - 1)) * (SPARK_W - 4) + 2, SPARK_H - 3 - ((y - lo) / span) * (SPARK_H - 6)];
+    const pts = ys.map((y, i) => at(y, i).map((n) => n.toFixed(1)).join(',')).join(' ');
+    const [ex, ey] = at(ys[ys.length - 1], ys.length - 1);
+    return `<svg class="cx-dt-spark" data-tone="${tone}" viewBox="0 0 ${SPARK_W} ${SPARK_H}" width="${SPARK_W}" height="${SPARK_H}" aria-hidden="true"><polyline points="${pts}"/><circle cx="${ex.toFixed(1)}" cy="${ey.toFixed(1)}" r="2"/></svg>`;
+  };
+  const meterTone = (c, v) => (v >= (c.bad ?? 85) ? 'bad' : v >= (c.warn ?? 70) ? 'wait' : 'ok');
+  const actionsOf = (c, r) => { const allowed = c.allowed ? new Set(String(r[c.allowed] ?? '').split(',').filter(Boolean)) : null; return list(c.actions).filter((a) => !allowed || allowed.has(a.id)); };
   const cell = (c, r) => {
     const v = r[c.key];
-    if (c.type === 'person') return `<td class="cx-dt-who"><b>${v}</b>${c.sub ? `<small class="cx-num">${r[c.sub] ?? ''}</small>` : ''}</td>`;
+    if (c.type === 'person') return `<td class="cx-dt-who"><b>${esc(v)}</b>${c.sub ? `<small class="cx-num">${esc(r[c.sub])}</small>` : ''}</td>`;
     if (c.type === 'date') return `<td class="cx-dt-when">${whenText(v)}</td>`;
-    if (c.type === 'status') return `<td class="cx-dt-st">${STATUS[v] ? ui.badge(STATUS[v].label, { tone: STATUS[v].tone }) : ''}</td>`;
+    if (c.type === 'status') return `<td class="cx-dt-st">${STATUS[v] ? ui.badge(esc(STATUS[v].label), { tone: STATUS[v].tone }) : ''}</td>`;
     if (c.type === 'money') return `<td class="cx-dt-num">${money0(v)}</td>`;
-    return `<td class="cx-dt-svc" ${dateCol ? `data-when="${whenText(r[dateCol.key])}"` : ''}>${v ?? ''}</td>`;
+    if (c.type === 'number') return `<td class="cx-dt-num">${reading(v) ?? '·'}</td>`;
+    if (c.type === 'meter') {
+      const n = reading(v);
+      if (n == null) return `<td class="cx-dt-meter" data-label="${esc(c.label)}"><span class="cx-dt-none">${T('No reading')}</span></td>`;
+      const tone = meterTone(c, n), pct = Math.max(0, Math.min(100, n));
+      return `<td class="cx-dt-meter" data-label="${esc(c.label)}"><span class="cx-dt-mrow"><span class="cx-num">${Math.round(n)} %</span>${c.spark ? sparkSvg(r[c.spark], tone) : ''}</span><span class="cx-dt-bar" data-tone="${tone}" role="img" aria-label="${esc(c.label)}: ${Math.round(n)} %"><i style="--w:${pct}%"></i></span></td>`;
+    }
+    if (c.type === 'actions') return `<td class="cx-dt-act">${actionsOf(c, r).length ? ui.button({ label: '···', variant: 'ghost', size: 'icon-sm', attrs: `data-dt-menu="${esc(r.id)}" data-dt-col="${esc(c.key)}" aria-haspopup="menu" aria-expanded="false" aria-label="${T('Actions for {0}', esc(who(r)))}"` }) : ''}</td>`;
+    return `<td class="cx-dt-svc" ${dateCol ? `data-when="${whenText(r[dateCol.key])}"` : ''}>${esc(v)}</td>`;
   };
   const who = (r) => r[colOf('person')?.key ?? COLS[0]?.key] ?? '';
-  const rowCells = (r) => `${picks ? `<td class="cx-dt-check">${cbHtml(T('Select {0}', who(r)), dtSel.has(r.id))}</td>` : ''}${COLS.map((c) => cell(c, r)).join('')}`;
+  const rowCells = (r) => `${picks ? `<td class="cx-dt-check">${cbHtml(T('Select {0}', esc(who(r))), dtSel.has(r.id))}</td>` : ''}${COLS.map((c) => cell(c, r)).join('')}`;
   const EASE = 'cubic-bezier(.23, 1, .32, 1)';
   let dtAnim = 0;
   const dtPaint = () => {
     const f = SORTERS[dtSort.key] || (() => 0);
-    const rows = DT.filter((r) => passes(r)).sort((a, b) => (f(a) > f(b) ? 1 : f(a) < f(b) ? -1 : 0) * dtSort.dir);
+    const matching = DT.filter((r) => passes(r)).sort((a, b) => (f(a) > f(b) ? 1 : f(a) < f(b) ? -1 : 0) * dtSort.dir);
+    // another filter or sort starts again at the first page; a new page of rows from the server keeps the page
+    const key = JSON.stringify([dtSort, FILTERS.map((x) => (fState[x.id] instanceof Set ? [...fState[x.id]] : fState[x.id]))]);
+    if (key !== pageKey) { pageKey = key; page = 0; }
+    const pages = PAGE ? Math.max(1, Math.ceil(matching.length / PAGE)) : 1;
+    page = Math.min(page, pages - 1);
+    const rows = PAGE ? matching.slice(page * PAGE, page * PAGE + PAGE) : matching;
+    const pager = $('.cx-dt-pager', root);
+    pager.hidden = !PAGE || matching.length <= PAGE;
+    if (PAGE) {
+      $('[data-dt-range]', root).textContent = matching.length ? T('{0}–{1} of {2}', page * PAGE + 1, page * PAGE + rows.length, matching.length) : '';
+      $('[data-dt-pages]', root).textContent = T('Page {0} of {1}', page + 1, pages);
+      $('[data-dt-page="-1"]', root).disabled = page === 0;
+      $('[data-dt-page="1"]', root).disabled = page >= pages - 1;
+    }
     const token = ++dtAnim, scroller = dtBody.closest('.cx-dt-scroll');
     const before = new Map([...dtBody.children].map((tr) => [tr.dataset.id, tr.getBoundingClientRect().top]));
     const keep = new Set(rows.map((r) => String(r.id)));
@@ -175,12 +220,33 @@ export function dataTable(root, cfg, core, on) {
       const toH = scroller.offsetHeight; if (fromH !== toH) scroller.animate([{ height: fromH + 'px' }, { height: toH + 'px' }], { duration: 240, easing: EASE });
     };
     if (leaving.length && dtBody.children.length) { leaving.forEach((tr) => tr.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 130, easing: 'ease-out', fill: 'forwards' })); setTimeout(apply, 130); } else apply();
-    dtCountEl.textContent = rows.length === DT.length ? `${DT.length} ${DT.length === 1 ? ONE : MANY}` : `${rows.length} de ${DT.length} ${MANY}`; paintChips();
+    dtCountEl.textContent = matching.length === DT.length ? `${DT.length} ${DT.length === 1 ? ONE : MANY}` : T('{0} of {1} {2}', matching.length, DT.length, MANY); paintChips();
     if (dtAll) setCheck(dtAll, dtSel.size === 0 ? false : dtSel.size === DT.length ? true : 'mixed');
     dtBulk.toggleAttribute('data-open', dtSel.size > 0);
     if (dtSel.size) $('[data-dt-count]', root).textContent = `${dtSel.size} ${dtSel.size === 1 ? 'seleccionada' : 'seleccionadas'}`;
-    syncMobileCount(rows.length);
+    syncMobileCount(matching.length);
   };
+  $('.cx-dt-pager', root).addEventListener('click', (e) => { const b = e.target.closest('[data-dt-page]'); if (!b || b.disabled) return; page += Number(b.dataset.dtPage); dtPaint(); $('.cx-dt-scroll', root).scrollTop = 0; });
+  // a row's actions: a small menu beside its button; the page hears {action, ids: [that row]}
+  const aPop = document.createElement('div'); aPop.dataset.slot = 'dropdown-menu-content'; aPop.className = 'cn-dropdown-menu-content pg-pop cx-dt-menu'; aPop.setAttribute('role', 'menu'); aPop.hidden = true; lib.appendChild(aPop);
+  let aBtn = null;
+  const aClose = (refocus) => { if (!aBtn) return; hide(aPop, 120); aBtn.setAttribute('aria-expanded', 'false'); if (refocus) aBtn.focus(); aBtn = null; };
+  const aOpen = (btn) => {
+    const r = DT.find((x) => String(x.id) === btn.dataset.dtMenu), c = COLS.find((x) => x.key === btn.dataset.dtCol);
+    if (!r || !c) return;
+    aClose(); aBtn = btn;
+    aPop.innerHTML = actionsOf(c, r).map((a) => `<button type="button" role="menuitem" class="cn-dropdown-menu-item cx-dt-mi" ${a.danger ? 'data-danger' : ''} data-dt-do="${esc(a.id)}" data-dt-row="${esc(r.id)}" tabindex="-1">${esc(a.label)}</button>`).join('');
+    aPop.hidden = false; place(aPop, btn, 'end', 4); show(aPop); btn.setAttribute('aria-expanded', 'true');
+    aPop.querySelector('[data-dt-do]')?.focus({ preventScroll: true });
+  };
+  aPop.addEventListener('click', (e) => { const b = e.target.closest('[data-dt-do]'); if (!b) return; const id = DT.find((x) => String(x.id) === b.dataset.dtRow)?.id; aClose(true); on?.action?.(JSON.stringify({ action: b.dataset.dtDo, ids: [id] })); });
+  aPop.addEventListener('keydown', (e) => {
+    const items = $$('[data-dt-do]', aPop), i = items.indexOf(document.activeElement);
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { e.preventDefault(); items[(i + (e.key === 'ArrowDown' ? 1 : -1) + items.length) % items.length]?.focus(); }
+    if (e.key === 'Escape') { e.stopPropagation(); aClose(true); }
+  });
+  document.addEventListener('pointerdown', (e) => { if (aBtn && !aPop.contains(e.target) && !aBtn.contains(e.target)) aClose(); });
+  addEventListener('scroll', () => { if (aBtn) place(aPop, aBtn, 'end', 4); }, { passive: true });
   $('thead', root).addEventListener('click', (e) => {
     const th = e.target.closest('[data-sort]'); if (!th) return;
     const key = th.dataset.sort; dtSort = { key, dir: dtSort.key === key ? -dtSort.dir : 1 };
@@ -190,6 +256,7 @@ export function dataTable(root, cfg, core, on) {
   dtAll?.addEventListener('click', () => { if (dtSel.size === DT.length) dtSel.clear(); else DT.forEach((r) => dtSel.add(r.id)); dtPaint(); });
   dtBody.addEventListener('click', (e) => {
     if (e.target.closest('[data-fclear-empty]')) { dtTools.querySelector('[data-fclear]')?.click(); return; }
+    const menu = e.target.closest('[data-dt-menu]'); if (menu) { if (aBtn === menu) aClose(); else aOpen(menu); return; }
     const tr = e.target.closest('tr'); if (!picks || !tr || tr.dataset.id === 'empty') return;
     if (!e.target.closest('.cn-checkbox') && !host.hasAttribute('data-narrow') && !matchMedia('(max-width: 640px)').matches) return;
     const raw = tr.dataset.id, id = DT.find((r) => String(r.id) === raw)?.id; dtSel.has(id) ? dtSel.delete(id) : dtSel.add(id); dtPaint();

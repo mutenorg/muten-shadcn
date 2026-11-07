@@ -754,6 +754,27 @@ input[type="search"]::-webkit-search-cancel-button, input[type="search"]::-webki
 .cx-dt .cx-dt-num { text-align: right; }
 .cx-dt td.cx-dt-num { font-variant-numeric: tabular-nums; font-weight: 600; }
 .cx-dt .cx-dt-act { width: 44px; padding: 0 6px; }
+/* a usage meter: the number, its trend, and a bar coloured by how full it is (ok, wait from 70 %, bad from 85 %) */
+.cx-dt td.cx-dt-meter { min-width: 120px; }
+.cx-dt-mrow { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-variant-numeric: tabular-nums; font-size: 13px; font-weight: 500; white-space: nowrap; }
+.cx-dt-bar { display: block; height: 6px; margin-top: 5px; border-radius: 999px; background: var(--muted); overflow: hidden; }
+.cx-dt-bar i { display: block; height: 100%; width: var(--w); border-radius: inherit; background: var(--chart-2, #16a34a); transition: width 240ms var(--ease-out); }
+.cx-dt-bar[data-tone="wait"] i { background: var(--chart-4, #d97706); }
+.cx-dt-bar[data-tone="bad"] i { background: var(--destructive); }
+.cx-dt-spark { flex: none; overflow: visible; }
+.cx-dt-spark polyline { fill: none; stroke: var(--muted-foreground); stroke-width: 1.5; stroke-linejoin: round; stroke-linecap: round; }
+.cx-dt-spark circle { fill: var(--muted-foreground); }
+.cx-dt-spark[data-tone="wait"] polyline { stroke: var(--chart-4, #d97706); }
+.cx-dt-spark[data-tone="wait"] circle { fill: var(--chart-4, #d97706); }
+.cx-dt-spark[data-tone="bad"] polyline { stroke: var(--destructive); }
+.cx-dt-spark[data-tone="bad"] circle { fill: var(--destructive); }
+.cx-dt-none { color: var(--muted-foreground); font-size: 13px; }
+.cx-dt td.cx-dt-act { text-align: right; }
+.cx-dt-menu { min-width: 180px; padding: 4px; display: grid; gap: 1px; z-index: var(--z-pop, 60); }
+.cx-dt-mi { text-align: left; width: 100%; }
+.cx-dt-mi[data-danger] { color: var(--destructive); }
+.cx-dt-pager { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding: 10px 2px 0; }
+@media (prefers-reduced-motion: reduce) { .cx-dt-bar i { transition: none; } }
 
 
 
@@ -777,7 +798,11 @@ input[type="search"]::-webkit-search-cancel-button, input[type="search"]::-webki
   .cx-dt td.cx-dt-when { display: none; }
   .cx-dt td.cx-dt-st { grid-area: st; justify-self: end; }
   .cx-dt td.cx-dt-num { grid-area: amt; }
-  .cx-dt td.cx-dt-act { display: none; }
+  /* a row with actions keeps its menu on a phone: a column of its own at the right */
+  .cx-dt tbody tr:has(> td.cx-dt-act) { grid-template-columns: auto 1fr auto auto; grid-template-areas: "c who amt act" "c meta st act"; }
+  .cx-dt td.cx-dt-act { grid-area: act; align-self: center; width: auto; padding: 0; }
+  .cx-dt td.cx-dt-meter { grid-column: 2 / 4; min-width: 0; }
+  .cx-dt td.cx-dt-meter::before { content: attr(data-label); display: block; font-size: 11px; color: var(--muted-foreground); }
   .cx-dt-who small { display: none; }
   .cx-dt td.cx-dt-svc[data-when]:not([data-when=""])::after { content: " · " attr(data-when); }
   .cx-dt td.cx-dt-svc ~ td.cx-dt-svc[data-when]::after { content: none; }

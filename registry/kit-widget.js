@@ -48,7 +48,7 @@ export function mount(el, inputs, on) {
       el.addEventListener('input', () => on.action?.(JSON.stringify(wh.value())));
     },
   };
-  RENDER.table = (core, i) => import('@muten/shadcn/registry/kit/table.js').then(({ dataTable }) => (shown = dataTable(el, { columns: i.columns, rows: i.rows, filters: i.filters, statuses: i.statuses, noun: [i.one || 'fila', i.many || 'filas'], bulk: i.bulk }, core, on)));
+  RENDER.table = (core, i) => import('@muten/shadcn/registry/kit/table.js').then(({ dataTable }) => (shown = dataTable(el, { columns: i.columns, rows: i.rows, filters: i.filters, statuses: i.statuses, noun: [i.one || 'fila', i.many || 'filas'], bulk: i.bulk, pageSize: i.pageSize }, core, on)));
   // until the kit arrives the host keeps its final size with a shimmer (kit.css, :empty), then the widget fades in
   el.classList.add('cx-kw-wait');
   // its language: inputs.lang, else the nearest lang (the page's); a lang that changes repaints it in the new one

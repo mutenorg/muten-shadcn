@@ -96,6 +96,7 @@ Object.assign(ES, {
 
 // menus and collections: combobox, row menu, store QR, tags, pagination, virtual list, carousel
 Object.assign(ES, {
+  'No reading': 'Sin lectura', 'Actions for {0}': 'Acciones de {0}', '{0}–{1} of {2}': '{0}–{1} de {2}', '{0} of {1} {2}': '{0} de {1} {2}',
   'Use “{0}”': 'Usar «{0}»', 'Type to search': 'Escribe para buscar', 'QR code of {0}': 'Código QR de {0}', 'Copy link': 'Copiar enlace',
   'You reached the limit of {0}': 'Llegaste al tope de {0}', 'Add and press Enter': 'Agrega y presiona Enter',
   'Previous page': 'Página anterior', 'Next page': 'Página siguiente', 'Page {0}': 'Página {0}', 'Page {0} of {1}': 'Página {0} de {1}', '{0}–{1} of {2} {3}': '{0}–{1} de {2} {3}',

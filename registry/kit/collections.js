@@ -4,13 +4,13 @@
 // Tags: chips animate in and out, the field's height eases; suggestions; a cap with its count. i {label, tags
 // "Beard,Classic cut", suggestions "Fade,Razor", max, hint} → on.change("Beard,Classic cut,Fade")
 export function tagInput(root, i, core, on) {
-  const { $, $$, fold, easeHeight } = core, T = (k, ...a) => core.t(core.langOf(root), k, ...a);
+  const { $, $$, fold, easeHeight, esc } = core, T = (k, ...a) => core.t(core.langOf(root), k, ...a);
   const split = (s) => String(s || '').split(',').map((x) => x.trim()).filter(Boolean);
   const MAXT = Number(i.max) || 8, SUG = split(i.suggestions), id = 'tg' + Math.random().toString(36).slice(2, 7);
   let tags = split(i.tags);
   root.innerHTML = `<div data-slot="field" class="cn-field cn-field-orientation-vertical group/field"><label data-slot="label" class="cn-label" for="${id}">${T(i.label || 'Tags')}</label><div class="cx-taginput"><input id="${id}" class="cx-tag-field" placeholder="${i.placeholder || 'Agrega y presiona Enter'}" autocomplete="off"></div><p data-slot="field-description" class="cn-field-description cx-count-line"><span>${i.hint || ''}</span><span data-tg-n></span></p></div>${SUG.length ? `<div class="cx-suggest"><span>${T('Suggestions')}</span><div class="cx-line" style="justify-content:flex-start" data-tg-sug></div></div>` : ''}`;
   const tgBox = $('.cx-taginput', root), tgIn = $('input', root), tgN = $('[data-tg-n]', root), tgSug = $('[data-tg-sug]', root);
-  const chipHtml = (t) => `<span data-slot="badge" class="cn-badge cn-badge-variant-secondary cx-chip" data-tag="${t}">${t}<button class="cn-button cn-button-variant-ghost cn-button-size-icon-xs cx-chip-x" aria-label="${T('Remove {0}', t)}" title="Quitar" tabindex="-1"><svg style="width:12px;height:12px"><use href="#x"/></svg></button></span>`;
+  const chipHtml = (t) => `<span data-slot="badge" class="cn-badge cn-badge-variant-secondary cx-chip" data-tag="${esc(t)}">${esc(t)}<button class="cn-button cn-button-variant-ghost cn-button-size-icon-xs cx-chip-x" aria-label="${esc(T('Remove {0}', t))}" title="Quitar" tabindex="-1"><svg style="width:12px;height:12px"><use href="#x"/></svg></button></span>`;
   const emit = () => on?.change?.(tags.join(','));
   const tgMeta = () => {
     tgN.textContent = `${tags.length}/${MAXT}`; tgN.parentElement.toggleAttribute('data-near', tags.length >= MAXT);
@@ -24,7 +24,7 @@ export function tagInput(root, i, core, on) {
     if (tags.length >= MAXT) return;
     const tag = t[0].toUpperCase() + t.slice(1); tags.push(tag); tgIn.value = '';
     easeHeight(tgBox, () => { tgIn.insertAdjacentHTML('beforebegin', chipHtml(tag)); tgMeta(); });
-    $(`[data-tag="${tag}"]`, tgBox).classList.add('in'); emit();
+    $(`[data-tag="${CSS.escape(tag)}"]`, tgBox).classList.add('in'); emit();
   };
   const tgRemove = (chip) => { tags = tags.filter((t) => t !== chip.dataset.tag); tgMeta(); chip.classList.add('out'); chip.addEventListener('animationend', () => easeHeight(tgBox, () => chip.remove()), { once: true }); emit(); };
   tgIn.addEventListener('keydown', (e) => {
@@ -63,7 +63,7 @@ export function paginationNav(root, i, core, on) {
 // Virtual list: only the visible rows (+ a margin) exist in the DOM. i {rows [{title, subtitle, value}], total
 // (rows repeat up to it, for a long demo), rowHeight, label} → on.jump not needed: “Go to n” via inputs.jump.
 export function virtualList(root, i, core) {
-  const { $ } = core, L = core.langOf(root), T = (k, ...a) => core.t(L, k, ...a), loc = L === 'es' ? 'es-CO' : 'en-US';
+  const { esc, $ } = core, L = core.langOf(root), T = (k, ...a) => core.t(L, k, ...a), loc = L === 'es' ? 'es-CO' : 'en-US';
   const rows = Array.isArray(i.rows) ? i.rows : [];
   const VTOTAL = Math.max(Number(i.total) || 0, rows.length), VROW = Number(i.rowHeight) || 52, VOVER = 6;
   root.innerHTML = `<div class="cx-pages-wrap"><div class="cx-vlist cx-scroll" tabindex="0" role="list" aria-label="${T(i.label || 'List')}"><div class="cx-vspace"><div class="cx-vwin"></div></div></div><div class="cx-pg-foot"><span class="cx-num" data-vl-info></span>${i.jump ? `<button data-slot="button" class="cn-button cn-button-variant-outline cn-button-size-sm group/button" data-vl-jump>${T('Go to {0}', Number(i.jump).toLocaleString(loc))}</button>` : ''}</div></div>`;
@@ -76,7 +76,7 @@ export function virtualList(root, i, core) {
     if (first !== vFirst) {
       vFirst = first; vWin.style.transform = `translateY(${first * VROW}px)`;
       let html = '';
-      for (let k = first; k < last; k++) { const c = rows[k % rows.length] || {}; html += `<div class="cx-vrow" role="listitem" aria-setsize="${VTOTAL}" aria-posinset="${k + 1}"><span class="cx-vn cx-num">${(k + 1).toLocaleString('es-CO')}</span><span>${c.title ?? ''}<small>${c.subtitle ?? ''}</small></span><b>${c.value ?? ''}</b></div>`; }
+      for (let k = first; k < last; k++) { const c = rows[k % rows.length] || {}; html += `<div class="cx-vrow" role="listitem" aria-setsize="${VTOTAL}" aria-posinset="${k + 1}"><span class="cx-vn cx-num">${(k + 1).toLocaleString('es-CO')}</span><span>${esc(c.title ?? '')}<small>${esc(c.subtitle ?? '')}</small></span><b>${esc(c.value ?? '')}</b></div>`; }
       vWin.innerHTML = html;
     }
     const a = Math.floor(top / VROW) + 1, b = Math.min(VTOTAL, Math.ceil((top + h) / VROW));

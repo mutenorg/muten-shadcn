@@ -8,7 +8,7 @@
 //   sizes [{title, description, card}]  renders those cards side by side (static) instead of a board.
 // on.change(json [{id, lane}]) after a card moves; on.action(json {id, action}) for every card button.
 export function orderBoard(root, i, core, on) {
-  const { ui, $, $$, lib, openModal: open, closeModal, CONTENT, body, foot, easeHeight, money0, hue, ini } = core;
+  const { ui, $, $$, lib, openModal: open, closeModal, CONTENT, body, foot, easeHeight, money0, hue, ini, esc } = core;
   // its language: the nearest lang (the page's), English by default; the card data the page passes is said as is
   const L = core.langOf(root), T = (k, ...a) => core.t(L, k, ...a);
   const list = (v) => (Array.isArray(v) ? v : []);
@@ -49,20 +49,20 @@ export function orderBoard(root, i, core, on) {
       return ui.item({
         media: ui.itemMedia(ui.icon('card')),
         title: `<span>Pago · ${money0(c.total)}</span>`,
-        description: p.detail || '',
-        actions: ui.badge(p.label, { tone: TONE[p.tone] }),
+        description: esc(p.detail || ''),
+        actions: ui.badge(esc(p.label), { tone: TONE[p.tone] }),
         footer: action ? ui.button({ label: action[1], icon: action[2], attrs: `data-bact="${action[0]}"`, cls: 'cx-fill' }) : '',
       });
     },
     delivery: (d) => {
-      const info = d.track ? `<b>${d.track.steps[d.track.at]}</b> · ${d.track.courier.split(' ')[0]}, ${d.track.eta}` : d.map ? d.map.address : '';
+      const info = d.track ? `<b>${esc(d.track.steps[d.track.at])}</b> · ${esc(d.track.courier.split(' ')[0])}, ${esc(d.track.eta)}` : d.map ? esc(d.map.address) : '';
       const more = (d.track || d.map) ? ui.button({ label: d.track ? T('See delivery') : T('See map'), size: 'xs', attrs: 'data-bact="delivery"' }) : '';
       return ui.item({
         media: ui.itemMedia(ui.icon(d.mode === 'pickup' ? 'store' : 'truck')),
-        title: `${d.label}${d.when ? ` · ${d.when}` : ''}`,
+        title: `${esc(d.label)}${d.when ? ` · ${esc(d.when)}` : ''}`,
         description: info,
         actions: more,
-        footer: d.track ? ui.progress((d.track.at / (d.track.steps.length - 1)) * 100, `Entrega: ${d.track.steps[d.track.at]}`) : '',
+        footer: d.track ? ui.progress((d.track.at / (d.track.steps.length - 1)) * 100, `Entrega: ${esc(d.track.steps[d.track.at])}`) : '',
       });
     },
   };
@@ -70,7 +70,7 @@ export function orderBoard(root, i, core, on) {
   const SIGNAL_TONE = { wait: 'wait', bad: 'bad', info: 'info' };
   const signals = (c) => {
     const list = c.request ? (Array.isArray(c.request) ? c.request : [c.request]) : [];
-    const items = list.map((r, i) => ui.button({ icon: r.icon, size: 'icon-sm', variant: 'ghost', tone: SIGNAL_TONE[r.tone] || 'info', cls: 'cx-has-indicator', attrs: `data-bact="request" data-i="${i}" data-name="${r.title}" aria-haspopup="dialog" aria-label="${r.title}${r.text ? ': ' + r.text : ''}"` }).replace('</button>', `${ui.indicator(SIGNAL_TONE[r.tone] || 'info')}</button>`));
+    const items = list.map((r, i) => ui.button({ icon: r.icon, size: 'icon-sm', variant: 'ghost', tone: SIGNAL_TONE[r.tone] || 'info', cls: 'cx-has-indicator', attrs: `data-bact="request" data-i="${i}" data-name="${esc(r.title)}" aria-haspopup="dialog" aria-label="${esc(r.title)}${r.text ? ': ' + r.text : ''}"` }).replace('</button>', `${ui.indicator(SIGNAL_TONE[r.tone] || 'info')}</button>`));
     if (c.note) items.push(ui.button({ icon: 'quote', size: 'icon-sm', variant: 'ghost', tone: 'note', cls: 'cx-has-indicator', attrs: `data-bact="note" data-name="${T('Client note')}" aria-haspopup="dialog" aria-label="${T('{0}\'s note: {1}', c.who.split(' ')[0], c.note)}"` }).replace('</button>', `${ui.indicator('note')}</button>`));
     return items.length ? `<div class="cx-hstack" role="group" aria-label="${T('Pending')}">${items.join('')}</div>` : '';
   };
@@ -85,10 +85,10 @@ export function orderBoard(root, i, core, on) {
     const contact = via ? ui.button({ icon: via.icon, size: 'icon-sm', variant: 'ghost', tone: 'brand', attrs: `style="--brand:${via.color}" data-bact="contact" aria-label="${T('Contact {0} on {1}, as they asked', c.who, via.name)}" title="${T('Prefers {0}', via.name)}"` }) : '';
     const person = ui.item({
       media: ui.itemMedia(ui.avatar(c.who), 'default'),
-      title: `<span class="cx-ellipsis" title="${c.who}">${c.who}</span>`,
-      description: `<span class="cx-ellipsis" title="${c.sub}">${c.sub}</span>`,
-      actions: contact || (c.status ? ui.badge(c.status[1], { tone: TONE[c.status[0]] }) : (c.pay ? '' : `<span class="cx-num cx-strong">${money0(c.total)}</span>`)),
-      footer: (c.status && contact ? ui.badge(c.status[1], { tone: TONE[c.status[0]] }) : '') + signals(c),
+      title: `<span class="cx-ellipsis" title="${esc(c.who)}">${esc(c.who)}</span>`,
+      description: `<span class="cx-ellipsis" title="${esc(c.sub)}">${esc(c.sub)}</span>`,
+      actions: contact || (c.status ? ui.badge(esc(c.status[1]), { tone: TONE[c.status[0]] }) : (c.pay ? '' : `<span class="cx-num cx-strong">${money0(c.total)}</span>`)),
+      footer: (c.status && contact ? ui.badge(esc(c.status[1]), { tone: TONE[c.status[0]] }) : '') + signals(c),
     });
     const groups = GROUP_ORDER.filter((k) => c[k]).map((k) => GROUPS[k](c[k], c));
     const next = c.actions.find(([a]) => a === 'advance');
@@ -98,8 +98,8 @@ export function orderBoard(root, i, core, on) {
   };
 
   const brd = $('.cx-board', root) || document.createElement('div'), brdLive = $('.cx-board-live', root);
-  const cardHtml = (id) => `<div data-slot="card" data-size="sm" class="cn-card group/card cx-bcard" tabindex="0" data-card="${id}" aria-roledescription="tarjeta que se puede mover" aria-label="Pedido ${id} de ${CARDS[id].who}">${cardInner(id)}</div>`;
-  brd.innerHTML = LANES_B.map((l) => `<section class="cx-blane" data-lane="${l.id}" aria-label="${l.title}"><div class="cx-lane-h"><span>${l.title}</span><span class="cx-count"></span></div><div class="cx-lane-list">${l.cards.map(cardHtml).join('')}</div></section>`).join('');
+  const cardHtml = (id) => `<div data-slot="card" data-size="sm" class="cn-card group/card cx-bcard" tabindex="0" data-card="${id}" aria-roledescription="tarjeta que se puede mover" aria-label="Pedido ${id} de ${esc(CARDS[id].who)}">${cardInner(id)}</div>`;
+  brd.innerHTML = LANES_B.map((l) => `<section class="cx-blane" data-lane="${esc(l.id)}" aria-label="${esc(l.title)}"><div class="cx-lane-h"><span>${esc(l.title)}</span><span class="cx-count"></span></div><div class="cx-lane-list">${l.cards.map(cardHtml).join('')}</div></section>`).join('');
   const lanesEls = () => $$('.cx-blane', brd);
   const syncLanes = () => lanesEls().forEach((l) => {
     const list = $('.cx-lane-list', l), n = $$('.cx-bcard', list).length;
@@ -108,7 +108,7 @@ export function orderBoard(root, i, core, on) {
     if (!n && !$('.cx-bph', list) && !empty) list.insertAdjacentHTML('beforeend', `<div class="cx-lane-empty-b">${T('Drop an order here')}</div>`);
     if ((n || $('.cx-bph', list)) && empty) empty.remove();
   });
-  const sayCard = (card) => { const lane = card.closest('.cx-blane'), list = $$('.cx-bcard', lane); brdLive.textContent = `Pedido ${card.dataset.card}: ${lane.getAttribute('aria-label')}, posición ${list.indexOf(card) + 1} de ${list.length}`; };
+  const sayCard = (card) => { const lane = card.closest('.cx-blane'), list = $$('.cx-bcard', lane); brdLive.textContent = `Pedido ${card.dataset.card}: ${esc(lane.getAttribute('aria-label'))}, posición ${list.indexOf(card) + 1} de ${list.length}`; };
   const flip = (els, change) => { // animate siblings from their old place to the new one
     const before = new Map(els.map((x) => [x, x.getBoundingClientRect()])); change();
     before.forEach((r, x) => { const n = x.getBoundingClientRect(); const dx = r.left - n.left, dy = r.top - n.top; if (dx || dy) x.animate([{ transform: `translate(${dx}px, ${dy}px)` }, { transform: 'none' }], { duration: 200, easing: 'cubic-bezier(.23, 1, .32, 1)' }); });
@@ -160,7 +160,7 @@ export function orderBoard(root, i, core, on) {
     const card = e.target.closest('.cx-bcard'); if (!card || e.target !== card) return;
     if (e.key === ' ' || e.key === 'Enter') {
       e.preventDefault();
-      if (lifted === card) { card.removeAttribute('data-lifted'); lifted = null; brdLive.textContent = `Soltado. ${brdLive.textContent}`; sayCard(card); emit(); return; }
+      if (lifted === card) { card.removeAttribute('data-lifted'); lifted = null; brdLive.textContent = `Soltado. ${esc(brdLive.textContent)}`; sayCard(card); emit(); return; }
       lifted = card; card.setAttribute('data-lifted', ''); card._home = { list: card.parentElement, next: card.nextSibling };
       brdLive.textContent = `Levantaste el pedido ${card.dataset.card}. Flechas para moverlo, Espacio para soltar, Esc para cancelar.`; return;
     }
@@ -205,7 +205,7 @@ export function orderBoard(root, i, core, on) {
   KINDS.request = () => {
     const c = CARDS[requestFor], list = Array.isArray(c.request) ? c.request : [c.request], r = list[requestIdx] || list[0];
     $('#mdl-title').textContent = r.title; $('#mdl-desc').textContent = `${T('{0} · order {1}', c.who, requestFor)}${r.when ? ' · ' + r.when : ''}`;
-    body.innerHTML = `${r.text ? `<blockquote class="cx-req-full" data-tone="${r.tone}">${r.text}</blockquote>` : `<p class="cx-note" style="text-align:left">${T('No message from the client.')}</p>`}${r.photo ? `<span class="cx-bc-ph" style="width:96px;background:${r.photo}"></span>` : ''}${list.length > 1 ? `<div class="cx-req-next"><b>${T('Also to solve')}</b>${list.filter((x) => x !== r).map((x) => `<span><svg><use href="#${x.icon}"/></svg>${x.title}</span>`).join('')}</div>` : ''}`;
+    body.innerHTML = `${r.text ? `<blockquote class="cx-req-full" data-tone="${esc(r.tone)}">${esc(r.text)}</blockquote>` : `<p class="cx-note" style="text-align:left">${T('No message from the client.')}</p>`}${r.photo ? `<span class="cx-bc-ph" style="width:96px;background:${esc(r.photo)}"></span>` : ''}${list.length > 1 ? `<div class="cx-req-next"><b>${T('Also to solve')}</b>${list.filter((x) => x !== r).map((x) => `<span><svg><use href="#${esc(x.icon)}"/></svg>${esc(x.title)}</span>`).join('')}</div>` : ''}`;
     const [yes, no] = r.actions;
     foot.innerHTML = (no ? btn('outline', no[1], `data-req-act="${no[0]}"`) : btn('outline', T('Close'), 'data-dismiss')) + (yes ? btn('default', yes[1], `data-req-act="${yes[0]}"`) : '');
     foot.firstElementChild.classList.add('cx-exit'); foot.lastElementChild.classList.add('cx-go');
@@ -220,7 +220,7 @@ export function orderBoard(root, i, core, on) {
   KINDS.note = () => {
     const c = CARDS[noteFor];
     $('#mdl-title').textContent = T('{0}\'s note', c.who.split(' ')[0]); $('#mdl-desc').textContent = T('{0} · order {1}', c.who, noteFor);
-    body.innerHTML = `<blockquote class="cx-req-full" data-tone="note">${c.note}</blockquote>`;
+    body.innerHTML = `<blockquote class="cx-req-full" data-tone="note">${esc(c.note)}</blockquote>`;
     foot.innerHTML = btn('outline', T('Close'), 'data-dismiss') + btn('default', T('Copy note'), 'data-note-copy');
     foot.firstElementChild.classList.add('cx-exit'); foot.lastElementChild.classList.add('cx-go');
   };
@@ -240,8 +240,8 @@ export function orderBoard(root, i, core, on) {
     const c = CARDS[deliveryFor], d = c.delivery;
     $('#mdl-title').textContent = d.label; $('#mdl-desc').textContent = `${T('{0} · order {1}', c.who, deliveryFor)}${d.when ? ' · ' + d.when : ''}`;
     const steps = d.track ? `<div class="cx-dl-steps" style="--n:${d.track.steps.length}">${d.track.steps.map((st, i) => `<div ${i < d.track.at ? 'data-done' : i === d.track.at ? 'data-now aria-current="step"' : ''}><i></i><span>${st}</span></div>`).join('')}</div>` : '';
-    const courier = d.track ? `<div class="cx-dl-courier"><span data-slot="avatar" data-size="default" class="cn-avatar cx-av" style="--h:${hue(d.track.courier)}"><span class="cn-avatar-fallback">${ini(d.track.courier)}</span></span><div><b>${d.track.courier}</b><small>Domiciliario · ${d.track.vehicle}</small></div><div class="cx-dl-eta"><small>${T('Arrives in')}</small><b>${d.track.eta}</b></div></div>` : '';
-    body.innerHTML = `<div class="cx-dl">${d.map ? `<div class="cx-dl-map">${miniMap(d.map)}</div><div class="cx-dl-addr"><svg><use href="#mappin"/></svg><div><b>${d.map.address}</b><small>${d.map.detail}</small></div></div>` : ''}${steps}${courier}</div>`;
+    const courier = d.track ? `<div class="cx-dl-courier"><span data-slot="avatar" data-size="default" class="cn-avatar cx-av" style="--h:${hue(d.track.courier)}"><span class="cn-avatar-fallback">${esc(ini(d.track.courier))}</span></span><div><b>${esc(d.track.courier)}</b><small>Domiciliario · ${esc(d.track.vehicle)}</small></div><div class="cx-dl-eta"><small>${T('Arrives in')}</small><b>${esc(d.track.eta)}</b></div></div>` : '';
+    body.innerHTML = `<div class="cx-dl">${d.map ? `<div class="cx-dl-map">${miniMap(d.map)}</div><div class="cx-dl-addr"><svg><use href="#mappin"/></svg><div><b>${esc(d.map.address)}</b><small>${esc(d.map.detail)}</small></div></div>` : ''}${steps}${courier}</div>`;
     foot.innerHTML = btn('outline', T('Close'), 'data-dismiss') + (d.map ? `<a data-slot="button" class="cn-button cn-button-variant-default cn-button-size-default group/button cx-go" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(d.map.address)}" target="_blank" rel="noopener"><svg><use href="#mappin"/></svg>${T('Open in Maps')}</a>` : '');
     foot.firstElementChild.classList.add('cx-exit');
   };
@@ -263,7 +263,7 @@ export function orderBoard(root, i, core, on) {
     if (act === 'request') { requestFor = id; requestIdx = +(b.dataset.i || 0); openModal('request', 'auto'); }
     if (act === 'note') { noteFor = id; openModal('note', 'auto'); }
     if (act === 'stripe') { stripeFor = id; openModal('stripe', 'auto'); }
-    if (act === 'contact') brdLive.textContent = `Abriendo ${CONTACT[c.contact].name} con ${c.who}`;
+    if (act === 'contact') brdLive.textContent = `Abriendo ${esc(CONTACT[c.contact].name)} con ${esc(c.who)}`;
     if (act === 'reply') { replyFor = id; openModal('reply', 'auto'); }
     if (act === 'cancel-yes') { delete c.request; c.status = ['bad', T('Canceled')]; c.pay = { ...c.pay, tone: 'muted', label: T('Refunded {0}', money0(c.total)) }; delete c.delivery; c.actions = []; if (!card.closest('.cx-board')) { redraw(id); return; } const to = $('[data-lane=cancel] .cx-lane-list', brd); flip($$('.cx-bcard', brd), () => { to.prepend(card); card.innerHTML = cardInner(id); syncLanes(); }); to.closest('.cx-blane').scrollIntoView({ block: 'nearest', inline: 'nearest', behavior: 'smooth' }); brdLive.textContent = `Pedido ${id} cancelado y devuelto`; emit(); }
     if (act === 'cancel-no') { const rest = Array.isArray(c.request) ? c.request.filter((_, i) => i !== +(b.dataset.i || 0)) : []; if (rest.length) c.request = rest.length === 1 ? rest[0] : rest; else delete c.request; c.actions = [['advance', T('Prepare'), 'secondary']]; redraw(id); }
@@ -271,18 +271,18 @@ export function orderBoard(root, i, core, on) {
   };
   root.addEventListener('click', onCardButton);
   
-  const sizes = $('.cx-card-sizes', root); if (sizes) sizes.innerHTML = SIZES.map(([t, d, id]) => `<div class="cx-cs-col"><div class="cx-cs-h"><b>${t}</b><span>${d}</span></div><div data-slot="card" data-size="sm" class="cn-card group/card cx-bcard cx-bcard-static" data-card="${id}" aria-label="${t}">${cardInner(id)}</div></div>`).join('');
+  const sizes = $('.cx-card-sizes', root); if (sizes) sizes.innerHTML = SIZES.map(([t, d, id]) => `<div class="cx-cs-col"><div class="cx-cs-h"><b>${esc(t)}</b><span>${esc(d)}</span></div><div data-slot="card" data-size="sm" class="cn-card group/card cx-bcard cx-bcard-static" data-card="${id}" aria-label="${t}">${cardInner(id)}</div></div>`).join('');
   KINDS.receipt = () => {
     const c = CARDS[receiptFor];
     $('#mdl-title').textContent = T('Payment proof'); $('#mdl-desc').textContent = T('{0} · order {1}', c.who, receiptFor);
-    body.innerHTML = `<div class="cx-rcpt"><div class="cx-rcpt-shot" role="img" aria-label="${T('Screenshot of the transfer')}"><span class="cx-rcpt-ok"><svg><use href="#check"/></svg></span><b>${T('Transfer successful')}</b><span class="cx-rcpt-amt">${money0(c.total)}</span><dl><dt>${T('To')}</dt><dd>Barbería El Roble</dd><dt>${T('From')}</dt><dd>${c.who}</dd><dt>${T('Reference')}</dt><dd class="cx-num">M${receiptFor.slice(1)}7731</dd><dt>${T('Date')}</dt><dd>${T('Oct 8, 2026')} · 10:42</dd></dl></div><div class="cx-rcpt-check"><span>${T('Order amount')}</span><b class="cx-num">${money0(c.total)}</b><span data-slot="badge" class="cn-badge group/badge cx-tone-ok"><span class="cx-dot"></span>${T('Matches')}</span></div></div>`;
+    body.innerHTML = `<div class="cx-rcpt"><div class="cx-rcpt-shot" role="img" aria-label="${T('Screenshot of the transfer')}"><span class="cx-rcpt-ok"><svg><use href="#check"/></svg></span><b>${T('Transfer successful')}</b><span class="cx-rcpt-amt">${money0(c.total)}</span><dl><dt>${T('To')}</dt><dd>Barbería El Roble</dd><dt>${T('From')}</dt><dd>${esc(c.who)}</dd><dt>${T('Reference')}</dt><dd class="cx-num">M${receiptFor.slice(1)}7731</dd><dt>${T('Date')}</dt><dd>${T('Oct 8, 2026')} · 10:42</dd></dl></div><div class="cx-rcpt-check"><span>${T('Order amount')}</span><b class="cx-num">${money0(c.total)}</b><span data-slot="badge" class="cn-badge group/badge cx-tone-ok"><span class="cx-dot"></span>${T('Matches')}</span></div></div>`;
     foot.innerHTML = btn('outline', T('Reject'), 'data-rcpt="no"') + btn('default', T('Approve payment'), 'data-rcpt="yes"');
     foot.firstElementChild.classList.add('cx-exit'); foot.lastElementChild.classList.add('cx-go');
   };
   KINDS.reply = () => {
     const c = CARDS[replyFor];
     $('#mdl-title').textContent = T('Answer {0}', c.who); $('#mdl-desc').textContent = T('Complaint about order {0}', replyFor);
-    body.innerHTML = `<div class="cx-bc-req" data-tone="bad" style="margin:0"><div class="cx-bc-req-h"><svg><use href="#info"/></svg><b>${T('Complaint')}</b><small>${(c.request.when ?? c.request[0]?.when)}</small></div><p>«${(c.request.text ?? c.request[0]?.text)}»</p></div><div data-slot="field" class="cn-field cn-field-orientation-vertical group/field"><label data-slot="label" class="cn-label" for="rp-t">${T('Your answer')}</label><textarea data-slot="textarea" class="cn-textarea" id="rp-t" rows="4">${T('Hi {0}, I am so sorry. We are sending you a new one today at no cost.', c.who.split(' ')[0])}</textarea><p data-slot="field-description" class="cn-field-description">${T('It reaches them on WhatsApp.')}</p></div>`;
+    body.innerHTML = `<div class="cx-bc-req" data-tone="bad" style="margin:0"><div class="cx-bc-req-h"><svg><use href="#info"/></svg><b>${T('Complaint')}</b><small>${esc((c.request.when ?? c.request[0]?.when))}</small></div><p>«${esc((c.request.text ?? c.request[0]?.text))}»</p></div><div data-slot="field" class="cn-field cn-field-orientation-vertical group/field"><label data-slot="label" class="cn-label" for="rp-t">${T('Your answer')}</label><textarea data-slot="textarea" class="cn-textarea" id="rp-t" rows="4">${T('Hi {0}, I am so sorry. We are sending you a new one today at no cost.', c.who.split(' ')[0])}</textarea><p data-slot="field-description" class="cn-field-description">${T('It reaches them on WhatsApp.')}</p></div>`;
     foot.innerHTML = btn('outline', T('Cancel'), 'data-dismiss') + btn('default', T('Send answer'), 'data-reply-send');
     foot.firstElementChild.classList.add('cx-exit'); foot.lastElementChild.classList.add('cx-go');
   };

@@ -68,9 +68,11 @@ export function dataTable(root, cfg, core, on) {
   const searchHtml = () => (searchF ? `<div data-slot="input-group" class="cn-input-group group/input-group cx-dt-search"><div data-slot="input-group-addon" class="cn-input-group-addon cn-input-group-addon-align-inline-start">${ui.icon('search')}</div><input data-slot="input-group-control" class="cn-input cn-input-group-input" data-filter="${esc(searchF.id)}" placeholder="${esc(searchF.label)}" aria-label="${esc(searchF.label)}" value="${String(fState[searchF.id]).replace(/"/g, '&quot;')}"></div>` : '');
   const paintTools = () => {
     if (dtMobile) {
-      const n = activeCount(), focused = document.activeElement?.dataset?.filter === searchF?.id;
+      // the search box had the focus (a table without one never did: undefined is not a match)
+      const n = activeCount(), focused = !!searchF && document.activeElement?.dataset?.filter === searchF.id;
       dtTools.innerHTML = searchHtml() + (sheetFilters() ? ui.button({ label: `${ui.icon('filter')}${T('Filters')}${n ? ui.badge(String(n), { variant: 'default' }) : ''}`, size: 'sm', cls: 'cx-fbtn-m', attrs: 'data-fmobile aria-haspopup="dialog"' }) : '');
-      if (focused) { const i = dtTools.querySelector('[data-filter]'); i.focus(); i.setSelectionRange(i.value.length, i.value.length); }
+      const i = focused ? dtTools.querySelector('[data-filter]') : null;
+      if (i) { i.focus(); i.setSelectionRange(i.value.length, i.value.length); }
       return;
     }
     dtTools.innerHTML = FILTERS.map((f) => (f.type === 'search' ? searchHtml()

@@ -771,8 +771,6 @@ input[type="search"]::-webkit-search-cancel-button, input[type="search"]::-webki
 .cx-dt-none { color: var(--muted-foreground); font-size: 13px; }
 .cx-dt td.cx-dt-act { text-align: right; }
 .cx-dt-menu { min-width: 180px; padding: 4px; display: grid; gap: 1px; z-index: var(--z-pop, 60); }
-.cx-dt-mi { text-align: left; width: 100%; }
-.cx-dt-mi[data-danger] { color: var(--destructive); }
 .cx-dt-pager { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding: 10px 2px 0; }
 @media (prefers-reduced-motion: reduce) { .cx-dt-bar i { transition: none; } }
 

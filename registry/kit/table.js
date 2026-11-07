@@ -237,15 +237,22 @@ export function dataTable(root, cfg, core, on) {
     const r = DT.find((x) => String(x.id) === btn.dataset.dtMenu), c = COLS.find((x) => x.key === btn.dataset.dtCol);
     if (!r || !c) return;
     aClose(); aBtn = btn;
-    aPop.innerHTML = actionsOf(c, r).map((a) => `<button type="button" role="menuitem" class="cn-dropdown-menu-item cx-dt-mi" ${a.danger ? 'data-danger' : ''} data-dt-do="${esc(a.id)}" data-dt-row="${esc(r.id)}" tabindex="-1">${esc(a.label)}</button>`).join('');
+    // the same item as every other menu of the library (menus.js): shadcn's dropdown item, its destructive variant in red
+    aPop.innerHTML = actionsOf(c, r).map((a) => `<div data-slot="dropdown-menu-item" ${a.danger ? 'data-variant="destructive"' : ''} class="cn-dropdown-menu-item group/dropdown-menu-item" role="menuitem" tabindex="-1" data-dt-do="${esc(a.id)}" data-dt-row="${esc(r.id)}">${esc(a.label)}</div>`).join('');
     aPop.hidden = false; place(aPop, btn, 'end', 4); show(aPop); btn.setAttribute('aria-expanded', 'true');
     aPop.querySelector('[data-dt-do]')?.focus({ preventScroll: true });
   };
   aPop.addEventListener('click', (e) => { const b = e.target.closest('[data-dt-do]'); if (!b) return; const id = DT.find((x) => String(x.id) === b.dataset.dtRow)?.id; aClose(true); on?.action?.(JSON.stringify({ action: b.dataset.dtDo, ids: [id] })); });
+  // as in every shadcn menu, the item under the pointer is the focused one (its highlight is the focus style)
+  aPop.addEventListener('pointermove', (e) => { const m = e.target.closest('[role=menuitem]'); if (m && document.activeElement !== m) m.focus({ preventScroll: true }); });
   aPop.addEventListener('keydown', (e) => {
     const items = $$('[data-dt-do]', aPop), i = items.indexOf(document.activeElement);
-    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { e.preventDefault(); items[(i + (e.key === 'ArrowDown' ? 1 : -1) + items.length) % items.length]?.focus(); }
-    if (e.key === 'Escape') { e.stopPropagation(); aClose(true); }
+    const to = { ArrowDown: i + 1, ArrowUp: i - 1, Home: 0, End: items.length - 1 }[e.key];
+    if (to !== undefined) { e.preventDefault(); items[(to + items.length) % items.length]?.focus(); return; }
+    if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); aClose(true); return; }
+    if (e.key === 'Tab') { aClose(); return; }
+    // an item is not a button: Enter and Space choose it as a click would
+    if ((e.key === 'Enter' || e.key === ' ') && items[i]) { e.preventDefault(); items[i].click(); }
   });
   document.addEventListener('pointerdown', (e) => { if (aBtn && !aPop.contains(e.target) && !aBtn.contains(e.target)) aClose(); });
   addEventListener('scroll', () => { if (aBtn) place(aPop, aBtn, 'end', 4); }, { passive: true });

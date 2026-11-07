@@ -60,11 +60,15 @@ export function mount(el, inputs, on) {
     if (isOpen) return; isOpen = true; placeFooter();
     if (auto) mdl.dataset.mode = phone.matches ? 'drawer' : 'dialog';
     if (wantsAnchor()) place(); else unplace();
+    // a transform running on a parent (a page rising in as it arrives) makes the modal center on that parent, and it
+    // jumped to the middle of the window when the rise ended: the rise ends now, behind the overlay
+    for (let up = root.parentElement; up; up = up.parentElement) for (const run of up.getAnimations()) if (run.effect?.getKeyframes?.().some((k) => 'transform' in k || 'translate' in k)) run.finish();
     lastFocus = document.activeElement;
     stack.list.push(me);
     document.documentElement.classList.add('cx-locked');
-    // on the phone, focusing a field would throw the keyboard over the sheet: focus the sheet itself
-    requestAnimationFrame(() => { ((mdl.dataset.mode === 'dialog' && focusables().find((x) => x.matches('input, textarea'))) || mdl).focus({ preventScroll: true }); });
+    // the window itself takes the focus, never its first field: a field focused on opening opens already ringed (a
+    // field shows its ring for any focus), and on the phone it throws the keyboard over the sheet. Tab starts inside.
+    requestAnimationFrame(() => { mdl.focus({ preventScroll: true }); });
     const push = () => { if (!isOpen || pushed) return; history.pushState({ cxModal: 1 }, ''); pushed = true; pushedAt = location.href; };
     if (stack.skip > 0) stack.after.push(push); else push();
   };
